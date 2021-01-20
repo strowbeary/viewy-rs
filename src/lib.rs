@@ -1,26 +1,23 @@
-#[macro_use]
-extern crate view;
 extern crate minifier;
 extern crate grass;
 
-
-
-pub use view::*;
 pub mod components;
 mod template_compilation_tools;
-
+mod helper_fn;
+use components::View;
 pub use template_compilation_tools::StyleRegistery;
 use crate::template_compilation_tools::ScriptRegistry;
 
-pub trait View {
+pub trait Renderable {
     fn get_html(&self) -> String;
     fn register_css(&self, style_registery: &mut StyleRegistery);
     fn register_js(&self, script_registery: &mut ScriptRegistry);
 }
 
-pub struct Component<S, R: View>(pub fn (S) -> R);
 
-impl<S, R: View>  Component<S, R> {
+pub struct Component<S>(pub fn (S) -> View);
+
+impl<S>  Component<S> {
     pub fn compile(&self, state: S) -> (String, String, String) {
         let mut style_registery = StyleRegistery::new();
         let mut script_registery = ScriptRegistry::new();

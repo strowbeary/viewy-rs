@@ -1,8 +1,15 @@
 .v-stack {
   display: flex;
-  flex-direction: column;
-
-  &--align-center {
-    align-content: center;
+  &--vertical {
+    flex-direction: column;
+    &--align-center {
+      align-content: center;
+    }
   }
+
+  &--horizontal {
+    flex-direction: row;
+  }
+
+
 }
