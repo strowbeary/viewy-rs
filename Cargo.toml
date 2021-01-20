@@ -1,5 +1,5 @@
 [package]
-name = "viewy_rs"
+name = "viewy-rs"
 version = "0.0.0"
 authors = ["Rémi Caillot <r.caillot@maformationofficinale.com>"]
 description = "A `cargo generate` template for quick-starting a procedural macro crate"

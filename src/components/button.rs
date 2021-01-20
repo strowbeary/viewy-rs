@@ -16,14 +16,16 @@ pub struct Button {
     pub class_list: Vec<String>,
     pub label: String,
     pub style: ButtonStyle,
+    pub href: String,
 }
 
 impl Button {
     pub fn new(label: &str) -> Self {
         Button {
-            class_list: vec!["button".to_string()],
+            class_list: vec!["button".to_string(), "text--button".to_string()],
             label: label.to_string(),
             style: ButtonStyle::Outlined,
+            href: "".to_string()
         }
     }
     pub fn destructive(&mut self) -> Self {
@@ -36,16 +38,22 @@ impl Button {
         }
         self.clone()
     }
+    pub fn action(&mut self, url: &str) -> Self {
+        self.href = url.to_string();
+        self.clone()
+    }
 }
 
 impl View for Button {
     fn get_html(&self) -> String {
         let classes = self.class_list.join(" ");
         let style_class = format!("button--{:?}", self.style).to_lowercase();
-        format!("<button class=\"{} {}\">{}</div>",
-                classes,
-                style_class,
-                self.label,
+        format!(
+            "<a href=\"{}\" class=\"{} {}\">{}</a>",
+            self.href,
+            classes,
+            style_class,
+            self.label,
         )
     }
 
@@ -61,9 +69,10 @@ impl View for Button {
 impl Default for Button {
     fn default() -> Self {
         Button {
-            class_list: vec!["button".to_string()],
+            class_list: vec!["button".to_string(), "text--button".to_string()],
             label: "Label".to_string(),
             style: ButtonStyle::Outlined,
+            href: "".to_string()
         }
     }
 }

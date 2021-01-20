@@ -20,14 +20,20 @@ impl StyleRegistery {
 
     pub fn get_css(&self) -> String {
         let mut stylesheets: Vec<String> = self.styles.values().map(|stylesheet| stylesheet.into()).collect();
-        stylesheets.push(include_str!("../themes/default/commons.scss").to_string());
+        stylesheets.push(include_str!("themes/commons.scss").to_string());
         let joined_stylesheets: String = stylesheets.join("");
-        let css = grass::from_string(
+        match grass::from_string(
             joined_stylesheets,
             &grass::Options::default()
-                .load_path(Path::new("themes/default/")),
-        ).unwrap();
-        minifier::css::minify(css.as_str()).unwrap()
+                .load_path(Path::new("/Users/remicaillot/Projets/viewy-rs/src/themes")),
+        ) {
+            Ok(css) => minifier::css::minify(css.as_str()).unwrap(),
+            Err(err) => {
+                println!("{:?}", err);
+                String::new()
+            }
+        }
+
     }
 }
 
@@ -48,7 +54,8 @@ impl ScriptRegistry {
     }
 
     pub fn get_js(&self) -> String {
-        let mut scripts: Vec<String> = self.scripts.values().map(|script| script.into()).collect();
+        let scripts: Vec<String> = self.scripts.values()
+            .map(|script| script.into()).collect();
         let joined_scripts: String = scripts.join("");
         minifier::js::minify(joined_scripts.as_str())
     }
