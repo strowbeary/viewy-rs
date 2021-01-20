@@ -1,0 +1,21 @@
+.stack {
+  display: flex;
+  &--vertical {
+    flex-direction: column;
+    &--align-leading {
+      align-items: flex-start;
+    }
+    &--align-center {
+      align-items: center;
+    }
+    &--align-trailing {
+      align-items: flex-end;
+    }
+  }
+
+  &--horizontal {
+    flex-direction: row;
+  }
+
+
+}

@@ -1,20 +1,18 @@
-mod view;
+pub use button::*;
+pub use card::*;
+pub use page::*;
+pub use stack::*;
+
 mod stack;
 mod button;
 mod card;
 mod page;
 
-pub use stack::*;
-pub use button::*;
-pub use card::*;
-pub type View = view::View;
-pub use page::*;
-
 #[macro_export]
 macro_rules! component_style {
-    ($l:literal) => { include_str!(concat!("../../themes/default/components/" , $l, ".scss")) }
+    ($l:literal) => { include_str!(concat!("../themes/components/" , $l, ".scss")) }
 }
 #[macro_export]
 macro_rules! component_script {
-    ($l:literal) => { include_str!(concat!("../../js/components/" , $l, ".js")) }
+    ($l:literal) => { include_str!(concat!("../js/" , $l, ".js")) }
 }

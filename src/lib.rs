@@ -4,12 +4,16 @@ extern crate grass;
 pub mod components;
 mod template_compilation_tools;
 mod helper_fn;
+mod view;
+
 use components::View;
 pub use template_compilation_tools::StyleRegistery;
+
 use crate::template_compilation_tools::ScriptRegistry;
+use crate::view::View;
+
 
 pub trait Renderable {
-    fn get_html(&self) -> String;
     fn register_css(&self, style_registery: &mut StyleRegistery);
     fn register_js(&self, script_registery: &mut ScriptRegistry);
 }

@@ -1,0 +1,32 @@
+@import url('https://rsms.me/inter/inter.css');
+@import "typography";
+@import "sizing";
+@import "palette";
+@import "view";
+
+html {
+  text-rendering: optimizeLegibility;
+  font-family: 'Inter', sans-serif;
+  @supports (font-variation-settings: normal) {
+    font-family: 'Inter var', sans-serif;
+  }
+}
+
+body {
+  @include palette;
+  margin: 0;
+  font-size: sp(14);
+  background: var(--background);
+  color: var(--color-text);
+}
+
+.rootView {
+  height: 100vh;
+}
+.view.component {
+  display: contents;
+}
+
+#floating-element-wrapper {
+  display: block;
+}
