@@ -1,4 +1,4 @@
-use crate::{View, StyleRegistery};
+use crate::{View, StyleRegistery, Renderable};
 use std::sync::Mutex;
 use crate::component_style;
 use crate::template_compilation_tools::ScriptRegistry;
@@ -13,7 +13,7 @@ pub enum CardStyle {
 pub struct Card {
     pub style: CardStyle,
     pub class_list: Vec<String>,
-    pub children: Vec<Box<dyn View>>,
+    pub children: Vec<View>,
 }
 
 impl Card {
@@ -24,15 +24,12 @@ impl Card {
             children: vec![]
         }
     }
-    pub fn add_view_child<'a, T>(&'a mut self, child: T)
-        where
-            T: 'static + View,
-    {
-        self.children.push(Box::new(child));
+    pub fn add_view_child(&mut self, child: View) {
+        self.children.push(child);
     }
 }
 
-impl View for Card {
+impl Renderable for Card {
     fn get_html(&self) -> String {
         let classes = self.class_list.join(" ");
         let content: Vec<String> = self.children.iter()

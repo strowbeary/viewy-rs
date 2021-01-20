@@ -1,65 +1,24 @@
-use crate::{View, StyleRegistery};
-use std::sync::Mutex;
-use crate::component_style;
-use crate::template_compilation_tools::ScriptRegistry;
+use crate::components::View;
+use crate::helper_fn::sp;
 
-#[derive(Clone, Debug)]
+#[derive(Debug)]
 pub enum HorizontalAlignment {
     Center,
     Leading,
-    Trailing,
+    Trailing
 }
 
-pub struct VStack {
-    pub alignment: HorizontalAlignment,
-    pub gap: (u32, u32),
-    pub class_list: Vec<String>,
-    pub children: Vec<Box<dyn View>>,
-}
+pub type VStack = View;
 
 impl VStack {
-    pub fn add_view_child<'a, T>(&'a mut self, child: T)
-        where
-            T: 'static + View,
-    {
-        self.children.push(Box::new(child));
+    pub fn init(alignment: HorizontalAlignment) -> Self{
+        VStack::default()
+            .add_class("stack")
+            .add_class("stack--vertical")
+            .add_class(format!("stack--vertical--{:?}", alignment).to_lowercase().as_str())
     }
-}
-
-impl View for VStack {
-    fn get_html(&self) -> String {
-        let classes = self.class_list.join(" ");
-        let content: Vec<String> = self.children.iter()
-            .map(|child| child.get_html())
-            .collect();
-        let alignment_class = format!("v-stack--align-{:?}", self.alignment).to_lowercase();
-        format!(
-            "<div class=\"{} {}\">{}</div>",
-            classes,
-            alignment_class,
-            content.join("")
-        )
-    }
-
-    fn register_css(&self, style_registery: &mut StyleRegistery) {
-        self.children.iter()
-            .for_each(|child| child.register_css(style_registery));
-        style_registery.register_stylesheet("stack", component_style!("stack"));
-    }
-
-    fn register_js(&self, script_registery: &mut ScriptRegistry) {
-        self.children.iter()
-            .for_each(|child| child.register_js(script_registery));
-    }
-}
-
-impl Default for VStack {
-    fn default() -> Self {
-        VStack {
-            alignment: HorizontalAlignment::Center,
-            gap: (0, 0),
-            class_list: vec!["v-stack".to_string()],
-            children: vec![],
-        }
+    pub fn gap(&mut self, value: i32) -> Self {
+        self.view_style.push(("gap".to_string(), sp(value)));
+        self.clone()
     }
 }

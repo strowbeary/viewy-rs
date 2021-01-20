@@ -1,4 +1,4 @@
-use crate::{View, StyleRegistery};
+use crate::{View, StyleRegistery, Renderable};
 use std::sync::Mutex;
 use crate::{component_style, component_script};
 use crate::template_compilation_tools::ScriptRegistry;
@@ -44,7 +44,7 @@ impl Button {
     }
 }
 
-impl View for Button {
+impl Renderable for Button {
     fn get_html(&self) -> String {
         let classes = self.class_list.join(" ");
         let style_class = format!("button--{:?}", self.style).to_lowercase();
