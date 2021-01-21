@@ -1,10 +1,11 @@
 use crate::{StyleRegistery, Renderable};
 use std::sync::Mutex;
-use crate::{component_style, component_script};
 use crate::template_compilation_tools::ScriptRegistry;
-use crate::view::{View, DefaultModifiers};
+use crate::view::{View, DefaultModifiers, ViewContainer};
+use std::borrow::BorrowMut;
+use crate::components::{Text, TextStyle};
 
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone)]
 pub enum ButtonStyle {
     Link,
     Flat,
@@ -12,25 +13,30 @@ pub enum ButtonStyle {
     Filled,
 }
 
-#[derive(Clone)]
+#[derive(Debug, Clone)]
 pub struct Button {
-    view: View,
+    children: Vec<Box<dyn Renderable>>,
+    pub view: View,
     pub label: String,
     pub style: ButtonStyle,
+}
+
+impl ViewContainer for Button {
+    fn get_view(&mut self) -> &mut View {
+        self.view.borrow_mut()
+    }
 }
 
 impl DefaultModifiers<Button> for Button {}
 
 impl Button {
-    pub fn new(label: &str) -> Self {
+    pub fn new(label: &str, style: ButtonStyle) -> Self {
         Button {
+            children: vec![],
             view: View::default(),
             label: label.to_string(),
-            style: ButtonStyle::Outlined,
+            style,
         }
-            .add_class("button")
-            .add_class("text--button")
-            .tag("a")
     }
     pub fn destructive(&mut self) -> Self {
         self.add_class(format!("button--{:?}--destructive", self.style).to_lowercase().as_str())
@@ -45,14 +51,31 @@ impl Button {
     pub fn action(&mut self, url: &str) -> Self {
         self.set_attr("href", url)
     }
+
+    fn add_view_child<'a, T>(&'a mut self, child: Box<T>)
+        where
+            T: 'static + Renderable,
+    {
+        self.children.push(child);
+    }
 }
 
 impl Renderable for Button {
-    fn register_css(&self, style_registery: &mut StyleRegistery) {
-        style_registery.register_stylesheet("button", component_style!("button"));
-    }
-
-    fn register_js(&self, script_registery: &mut ScriptRegistry) {
-        script_registery.register_script("button", component_script!("button"));
+    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> View {
+        style_registery.register_stylesheet(
+            "button",
+            include_str!("../themes/components/button.scss"),
+        );
+        script_registery.register_script(
+            "button",
+            include_str!("../js/button.js"),
+        );
+        let mut button = self.clone()
+            .add_class("button")
+            .add_class(format!("button--{:?}", self.style).to_lowercase().as_str())
+            .tag("a");
+        let text = Text::new(self.label.as_str(), TextStyle::Button).render(style_registery, script_registery);
+        button.view.children.push(text);
+        button.view
     }
 }

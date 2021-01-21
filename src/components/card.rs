@@ -1,67 +1,60 @@
 use crate::{View, StyleRegistery, Renderable};
 use std::sync::Mutex;
-use crate::component_style;
 use crate::template_compilation_tools::ScriptRegistry;
+use crate::view::{DefaultModifiers, ViewContainer};
+use std::borrow::BorrowMut;
 
-#[derive(Clone, Debug)]
+#[derive(Debug, Clone)]
 pub enum CardStyle {
     Outlined,
     Filled,
     Raised,
 }
 
+#[derive(Debug, Clone)]
 pub struct Card {
+    children: Vec<Box<dyn Renderable>>,
+    pub view: View,
     pub style: CardStyle,
-    pub class_list: Vec<String>,
-    pub children: Vec<View>,
+
 }
+impl ViewContainer for Card {
+    fn get_view(&mut self) -> &mut View {
+        self.view.borrow_mut()
+    }
+}
+
+impl DefaultModifiers<Card> for Card {}
 
 impl Card {
     pub fn new(style: CardStyle) -> Self {
         Card {
+            children: vec![],
+            view: View::default(),
             style: style.clone(),
-            class_list: vec!["card".to_string()],
-            children: vec![]
         }
     }
-    pub fn add_view_child(&mut self, child: View) {
+    pub fn add_view_child<'a, T>(&'a mut self, child: Box<T>)
+        where
+            T: 'static + Renderable,
+    {
         self.children.push(child);
     }
 }
 
 impl Renderable for Card {
-    fn get_html(&self) -> String {
-        let classes = self.class_list.join(" ");
-        let content: Vec<String> = self.children.iter()
-            .map(|child| child.get_html())
-            .collect();
-        let style_class = format!("card--{:?}", self.style).to_lowercase();
-        format!(
-            "<div class=\"{} {}\">{}</div>",
-            classes,
-            style_class,
-            content.join("")
-        )
-    }
-
-    fn register_css(&self, style_registery: &mut StyleRegistery) {
+    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> View {
+        style_registery.register_stylesheet(
+            "card",
+            include_str!("../themes/components/card.scss"),
+        );
+        let mut view = self.clone()
+            .add_class("card")
+            .add_class(format!("card--{:?}", self.style).to_lowercase().as_str())
+            .view;
         self.children.iter()
-            .for_each(|child| child.register_css(style_registery));
-        style_registery.register_stylesheet("card", component_style!("card"));
-    }
-
-    fn register_js(&self, script_registery: &mut ScriptRegistry) {
-        self.children.iter()
-            .for_each(|child| child.register_js(script_registery));
-    }
-}
-
-impl Default for Card {
-    fn default() -> Self {
-        Card {
-            style: CardStyle::Outlined,
-            class_list: vec!["card".to_string()],
-            children: vec![]
-        }
+            .for_each(|child|
+                view.children.push(child.render(style_registery, script_registery)));
+        view
     }
 }

@@ -3,31 +3,45 @@ extern crate grass;
 
 pub mod components;
 mod template_compilation_tools;
-mod helper_fn;
+pub mod helper_fn;
 mod view;
 
-use components::View;
 pub use template_compilation_tools::StyleRegistery;
 
 use crate::template_compilation_tools::ScriptRegistry;
-use crate::view::View;
+pub use crate::view::*;
+use std::fmt::Debug;
 
-
-pub trait Renderable {
-    fn register_css(&self, style_registery: &mut StyleRegistery);
-    fn register_js(&self, script_registery: &mut ScriptRegistry);
+pub trait Renderable: Debug + RenderableClone {
+    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> View;
 }
 
+pub trait RenderableClone {
+    fn clone_box(&self) -> Box<dyn Renderable>;
+}
 
-pub struct Component<S>(pub fn (S) -> View);
+impl<T> RenderableClone for T
+    where
+        T: 'static + Renderable + Clone,
+{
+    fn clone_box(&self) -> Box<dyn Renderable> {
+        Box::new(self.clone())
+    }
+}
 
-impl<S>  Component<S> {
+impl Clone for Box<dyn Renderable> {
+    fn clone(&self) -> Box<dyn Renderable> {
+        self.clone_box()
+    }
+}
+
+pub struct Component<S, T: Renderable>(pub fn(S) -> T);
+
+impl<S, T: Renderable> Component<S, T> {
     pub fn compile(&self, state: S) -> (String, String, String) {
         let mut style_registery = StyleRegistery::new();
         let mut script_registery = ScriptRegistry::new();
-        let compiled_view = self.0(state);
-        compiled_view.register_css(&mut style_registery);
-        compiled_view.register_js(&mut script_registery);
-        (compiled_view.get_html(), style_registery.get_css(), script_registery.get_js())
+        let mut compiled_view = self.0(state);
+        (compiled_view.render(&mut style_registery, &mut script_registery).get_html(), style_registery.get_css(), script_registery.get_js())
     }
 }

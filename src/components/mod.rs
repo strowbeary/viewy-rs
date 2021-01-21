@@ -1,18 +1,9 @@
-pub use button::*;
-pub use card::*;
-pub use page::*;
-pub use stack::*;
-
 mod stack;
 mod button;
 mod card;
-mod page;
+mod text;
 
-#[macro_export]
-macro_rules! component_style {
-    ($l:literal) => { include_str!(concat!("../themes/components/" , $l, ".scss")) }
-}
-#[macro_export]
-macro_rules! component_script {
-    ($l:literal) => { include_str!(concat!("../js/" , $l, ".js")) }
-}
+pub use button::*;
+pub use card::*;
+pub use stack::*;
+pub use text::*;

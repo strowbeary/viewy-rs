@@ -1,0 +1,104 @@
+@import "../sizing";
+@import "../typography";
+
+.text {
+  color: var(--color-text);
+
+  &--largetitle {
+    font-size: sp(40);
+    line-height: sp(56);
+    font-weight: $fw-bold;
+    letter-spacing: sp(-0.022);
+    &::first-letter {
+      text-transform: uppercase;
+    }
+  }
+
+  &--h1 {
+    font-size: sp(24);
+    line-height: sp(32);
+    font-weight: $fw-normal;
+    letter-spacing: sp(-0.021);
+  }
+
+  &--h2 {
+    font-size: sp(20);
+    line-height: sp(28);
+    font-weight: $fw-normal;
+    letter-spacing: sp(-0.019);
+  }
+
+  &--h3 {
+    font-size: sp(18);
+    line-height: sp(25);
+    font-weight: $fw-light;
+    letter-spacing: sp(-0.014);
+  }
+
+  &--headline {
+    font-size: sp(16);
+    line-height: sp(24);
+    font-weight: $fw-bold;
+    letter-spacing: sp(-0.013);
+  }
+
+  &--subtitle1 {
+    font-size: sp(16);
+    line-height: sp(22);
+    font-weight: $fw-normal;
+    letter-spacing: sp(-0.011);
+  }
+
+  &--subtitle2 {
+    font-size: sp(14);
+    line-height: sp(20);
+    font-weight: $fw-normal;
+    letter-spacing: sp(-0.006);
+  }
+
+  &--body1 {
+    font-size: sp(16);
+    line-height: sp(22);
+    letter-spacing: sp(-0.011);
+    font-weight: $fw-normal;
+  }
+
+
+  &--body2 {
+    font-size: sp(14);
+    line-height: sp(20);
+    letter-spacing: sp(-0.006);
+    font-weight: $fw-normal;
+  }
+
+  &--button {
+    font-size: sp(14);
+    line-height: sp(20);
+    letter-spacing: sp(0.75);
+    font-weight: $fw-medium;
+    text-transform: uppercase;
+  }
+
+  &--label {
+    font-size: sp(14);
+    line-height: sp(20);
+    letter-spacing: sp(-0.006);
+    font-weight: $fw-semi-bold;
+  }
+  &--overline {
+    font-size: sp(12);
+    line-height: sp(17);
+    letter-spacing: sp(1);
+    font-weight: $fw-medium;
+    text-transform: uppercase;
+  }
+  &--caption {
+    font-size: sp(13);
+    line-height: sp(17);
+    letter-spacing: sp(0);
+    font-weight: $fw-normal;
+  }
+  &--bold {
+    font-weight: $fw-bold;
+  }
+}

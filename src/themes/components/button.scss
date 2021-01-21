@@ -19,7 +19,9 @@
       padding: sp(8) 0;
       border: none;
       background: transparent;
-      color: var(--color-primary);
+      .text {
+        color: var(--color-primary);
+      }
       &:hover .text, &:hover .icon {
         color: var(--color-primary-lighter);
       }
@@ -40,7 +42,9 @@
   &--flat {
     border: none;
     background: transparent;
-    color: var(--color-text);
+    .text {
+      color: var(--color-primary);
+    }
     .icon {
       color: var(--color-primary);
     }
@@ -64,7 +68,9 @@
   &--outlined {
     background: transparent;
     border: 1px solid var(--color-border);
-    color: var(--color-text);
+    .text {
+      color: var(--color-primary);
+    }
     .icon {
       color: var(--color-primary);
     }
