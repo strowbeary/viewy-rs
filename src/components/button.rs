@@ -1,7 +1,7 @@
 use crate::{StyleRegistery, Renderable};
 use std::sync::Mutex;
 use crate::template_compilation_tools::ScriptRegistry;
-use crate::view::{View, DefaultModifiers, ViewContainer};
+use crate::node::{Node, DefaultModifiers, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::components::{Text, TextStyle};
 
@@ -16,13 +16,13 @@ pub enum ButtonStyle {
 #[derive(Debug, Clone)]
 pub struct Button {
     children: Vec<Box<dyn Renderable>>,
-    pub view: View,
+    pub view: Node,
     pub label: String,
     pub style: ButtonStyle,
 }
 
-impl ViewContainer for Button {
-    fn get_view(&mut self) -> &mut View {
+impl NodeContainer for Button {
+    fn get_node(&mut self) -> &mut Node {
         self.view.borrow_mut()
     }
 }
@@ -33,7 +33,7 @@ impl Button {
     pub fn new(label: &str, style: ButtonStyle) -> Self {
         Button {
             children: vec![],
-            view: View::default(),
+            view: Node::default(),
             label: label.to_string(),
             style,
         }
@@ -61,7 +61,7 @@ impl Button {
 }
 
 impl Renderable for Button {
-    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> View {
+    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "button",
             include_str!("../themes/components/button.scss"),

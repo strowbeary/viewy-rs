@@ -2,6 +2,7 @@ use std::collections::HashMap;
 use grass;
 use std::path::Path;
 use grass::OutputStyle;
+use std::env;
 
 #[derive(Clone)]
 pub struct StyleRegistery {
@@ -19,13 +20,17 @@ impl StyleRegistery {
     }
 
     pub fn get_css(&self) -> String {
-        let mut stylesheets: Vec<String> = self.styles.values().map(|stylesheet| stylesheet.into()).collect();
-        stylesheets.push(include_str!("themes/commons.scss").to_string());
-        let joined_stylesheets: String = stylesheets.join("");
+        let mut stylesheets = vec![
+            include_str!("themes/palette.scss").to_string(),
+            include_str!("themes/sizing.scss").to_string(),
+            include_str!("themes/typography.scss").to_string(),
+            include_str!("themes/commons.scss").to_string(),
+            include_str!("themes/view.scss").to_string()
+        ];
+        self.styles.values().for_each(|stylesheet| stylesheets.push(stylesheet.into()));
         match grass::from_string(
-            joined_stylesheets,
-            &grass::Options::default()
-                .load_path(Path::new("/Users/remicaillot/Projets/viewy-rs/src/themes")),
+            stylesheets.join(""),
+            &grass::Options::default(),
         ) {
             Ok(css) => minifier::css::minify(css.as_str()).unwrap(),
             Err(err) => {
@@ -33,7 +38,6 @@ impl StyleRegistery {
                 String::new()
             }
         }
-
     }
 }
 

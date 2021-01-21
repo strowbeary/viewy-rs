@@ -1,7 +1,7 @@
 use crate::{StyleRegistery, Renderable};
 use std::sync::Mutex;
 use crate::template_compilation_tools::ScriptRegistry;
-use crate::view::{View, DefaultModifiers, ViewContainer};
+use crate::node::{Node, DefaultModifiers, NodeContainer};
 use std::borrow::BorrowMut;
 
 #[derive(Debug, Clone)]
@@ -23,12 +23,12 @@ pub enum TextStyle {
 
 #[derive(Debug, Clone)]
 pub struct Text {
-    pub view: View,
+    pub view: Node,
     pub content: String,
     pub style: TextStyle
 }
-impl ViewContainer for Text {
-    fn get_view(&mut self) -> &mut View {
+impl NodeContainer for Text {
+    fn get_node(&mut self) -> &mut Node {
         self.view.borrow_mut()
     }
 }
@@ -37,7 +37,7 @@ impl DefaultModifiers<Text> for Text {}
 
 impl Text {
     pub fn new(content: &str, style: TextStyle) -> Self {
-        let mut view = View::default();
+        let mut view = Node::default();
         view.text = Some(content.to_string());
         Text {
             view,
@@ -49,7 +49,7 @@ impl Text {
 }
 
 impl Renderable for Text {
-    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> View {
+    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "text",
             include_str!("../themes/components/text.scss"),

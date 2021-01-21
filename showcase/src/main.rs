@@ -3,17 +3,20 @@
 #[macro_use]
 extern crate rocket;
 extern crate viewy_rs;
+
 use rocket::response::content::Html;
 use rocket::response::Content;
 use rocket::http::ContentType;
 use viewy_rs::*;
 use viewy_rs::components::*;
+use viewy_rs::node::DefaultModifiers;
 
 fn compile_page(compiled_page: (String, String, String)) -> Html<String> {
     Html(format!(r"
         <!doctype html>
         <html>
         <head>
+            <title>Viewy-rs showcase</title>
             <style>{}</style>
             <script>{}</script>
         </head>
@@ -24,19 +27,25 @@ fn compile_page(compiled_page: (String, String, String)) -> Html<String> {
     ", compiled_page.1, compiled_page.2, compiled_page.0))
 }
 
-struct Profil {
+struct Profile {
     pub name: String,
     pub age: u8,
 }
 
 #[get("/hello/<name>/<age>")]
 fn hello(name: String, age: u8) -> Html<String> {
-    let profil = Profil {
+    let profil = Profile {
         name,
         age,
     };
-    let page = Component::<Profil, Card>(|profil| {
+    let page = Component::<Profile, Card>(|profil| {
         let mut o = Card::new(CardStyle::Raised);
+        o.add_view_child(Box::new({
+            Text::new(profil.name.as_str(), TextStyle::LargeTitle)
+        }));
+        o.add_view_child(Box::new({
+            Text::new(profil.age.to_string().as_str(), TextStyle::Subtitle1)
+        }));
         o.add_view_child(Box::new({
             Button::new("Retour", ButtonStyle::Outlined)
                 .action("/")
@@ -49,9 +58,18 @@ fn hello(name: String, age: u8) -> Html<String> {
 
 #[get("/")]
 fn goodbye() -> Html<String> {
-    let page = Component::<(), VStack>(|profil| {
-        let mut o = VStack::new(HorizontalAlignment::Center)
-            .padding(vec![30]);
+    let page = Component::<(), VStack>(|_| {
+
+        let mut o = VStack::new(Alignment::Stretch)
+            .gap(vec![30]);
+        o.add_view_child(Box::new({
+            TitleBar::new("Viewy-rs showcase")
+                .left_item(Box::new({
+                    Button::new("Hello", ButtonStyle::Link)
+                        .action("/hello/remi/50")
+                        .grid_area("left_item")
+                }))
+        }));
         o.add_view_child(Box::new({
             let mut o = Card::new(CardStyle::Raised)
                 .padding(vec![30]);
@@ -60,8 +78,8 @@ fn goodbye() -> Html<String> {
                     .margin_bottom(25)
             }));
             o.add_view_child(Box::new({
-                let mut o = VStack::new(HorizontalAlignment::Center)
-                    .gap(16);
+                let mut o = VStack::new(Alignment::Center)
+                    .gap(vec![16]);
                 o.add_view_child(Box::new({
                     Button::new("Hello", ButtonStyle::Link)
                         .action("/hello/remi/50")

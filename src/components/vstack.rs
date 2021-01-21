@@ -1,24 +1,25 @@
-use crate::view::{View, DefaultModifiers, ViewContainer};
+use crate::node::{Node, DefaultModifiers, NodeContainer};
 use crate::helper_fn::sp;
 use crate::{Renderable, StyleRegistery};
 use crate::template_compilation_tools::ScriptRegistry;
 use std::borrow::BorrowMut;
 
 #[derive(Debug, Clone)]
-pub enum HorizontalAlignment {
+pub enum Alignment {
     Center,
-    Leading,
-    Trailing,
+    Start,
+    End,
+    Stretch
 }
 
 #[derive(Debug, Clone)]
 pub struct VStack {
     children: Vec<Box<dyn Renderable>>,
-    pub view: View,
-    pub alignment: HorizontalAlignment,
+    pub view: Node,
+    pub alignment: Alignment,
 }
-impl ViewContainer for VStack {
-    fn get_view(&mut self) -> &mut View {
+impl NodeContainer for VStack {
+    fn get_node(&mut self) -> &mut Node {
         self.view.borrow_mut()
     }
 }
@@ -26,15 +27,16 @@ impl ViewContainer for VStack {
 impl DefaultModifiers<VStack> for VStack {}
 
 impl VStack {
-    pub fn new(alignment: HorizontalAlignment) -> Self {
+    pub fn new(alignment: Alignment) -> Self {
         VStack {
             children: vec![],
             view: Default::default(),
             alignment,
         }
     }
-    pub fn gap(&mut self, value: i32) -> Self {
-        self.view.view_style.push(("gap".to_string(), sp(value)));
+    pub fn gap(&mut self, gaps: Vec<i32>) -> Self {
+        let params: Vec<String> = gaps.iter().map(|size| sp(size.clone())).collect();
+        self.view.node_style.push(("grid-gap".to_string(), params.join(" ")));
         self.clone()
     }
     pub fn add_view_child<'a, T>(&'a mut self, child: Box<T>)
@@ -47,7 +49,7 @@ impl VStack {
 }
 
 impl Renderable for VStack {
-    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> View {
+    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "stack",
             include_str!("../themes/components/stack.scss"),
@@ -57,7 +59,7 @@ impl Renderable for VStack {
             .add_class("stack")
             .add_class("stack--vertical")
             .add_class(
-                format!("stack--vertical--align-{:?}", self.alignment)
+                format!("stack--align-{:?}", self.alignment)
                     .to_lowercase()
                     .as_str()
             )

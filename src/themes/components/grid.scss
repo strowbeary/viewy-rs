@@ -1,13 +1,5 @@
-.stack {
-  display: flex;
-  &--vertical {
-    flex-direction: column;
-
-  }
-  &--horizontal {
-    flex-direction: row;
-  }
-
+.grid {
+  display: grid;
   &--align-start {
     align-items: flex-start;
   }
@@ -20,5 +12,4 @@
   &--align-stretch {
     align-items: stretch;
   }
-
 }

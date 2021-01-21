@@ -4,16 +4,16 @@ extern crate grass;
 pub mod components;
 mod template_compilation_tools;
 pub mod helper_fn;
-mod view;
+pub mod node;
 
 pub use template_compilation_tools::StyleRegistery;
 
 use crate::template_compilation_tools::ScriptRegistry;
-pub use crate::view::*;
 use std::fmt::Debug;
+use crate::node::{Node, DefaultModifiers};
 
 pub trait Renderable: Debug + RenderableClone {
-    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> View;
+    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> Node;
 }
 
 pub trait RenderableClone {

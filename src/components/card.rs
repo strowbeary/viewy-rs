@@ -1,7 +1,7 @@
-use crate::{View, StyleRegistery, Renderable};
+use crate::{StyleRegistery, Renderable};
 use std::sync::Mutex;
 use crate::template_compilation_tools::ScriptRegistry;
-use crate::view::{DefaultModifiers, ViewContainer};
+use crate::node::{DefaultModifiers, NodeContainer, Node};
 use std::borrow::BorrowMut;
 
 #[derive(Debug, Clone)]
@@ -14,12 +14,12 @@ pub enum CardStyle {
 #[derive(Debug, Clone)]
 pub struct Card {
     children: Vec<Box<dyn Renderable>>,
-    pub view: View,
+    pub view: Node,
     pub style: CardStyle,
 
 }
-impl ViewContainer for Card {
-    fn get_view(&mut self) -> &mut View {
+impl NodeContainer for Card {
+    fn get_node(&mut self) -> &mut Node {
         self.view.borrow_mut()
     }
 }
@@ -30,7 +30,7 @@ impl Card {
     pub fn new(style: CardStyle) -> Self {
         Card {
             children: vec![],
-            view: View::default(),
+            view: Node::default(),
             style: style.clone(),
         }
     }
@@ -43,7 +43,7 @@ impl Card {
 }
 
 impl Renderable for Card {
-    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> View {
+    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "card",
             include_str!("../themes/components/card.scss"),

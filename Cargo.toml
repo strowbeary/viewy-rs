@@ -7,7 +7,6 @@ keywords = ["template", "proc_macro", "procmacro"]
 edition = "2018"
 
 [dependencies]
-view="0.4"
 grass = "0.10.4"
 minifier = "0.0"
 

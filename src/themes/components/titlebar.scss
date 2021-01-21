@@ -1,0 +1,13 @@
+.titlebar {
+  display: grid;
+  grid-gap: sp(8) sp(14);
+  grid-template-columns: auto 1fr auto;
+  grid-auto-rows: auto;
+  align-items: center;
+  border-bottom: sp(1) solid var(--color-border);
+  background: var(--background);
+  padding: sp(16);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
