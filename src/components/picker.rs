@@ -4,23 +4,32 @@ use crate::{Renderable, StyleRegistery};
 use crate::template_compilation_tools::ScriptRegistry;
 use std::borrow::BorrowMut;
 
+#[derive(Debug, Clone)]
+pub enum PickerStyle {
+    Segmented,
+    Dropdown,
+    RadioGroup
+}
 
 #[derive(Debug, Clone)]
-pub struct View {
+pub struct Picker {
     children: Vec<Box<dyn Renderable>>,
     pub node: Node,
+    pub style: PickerStyle,
+    pub label: String,
+
 }
-impl NodeContainer for View {
+impl NodeContainer for Picker {
     fn get_node(&mut self) -> &mut Node {
         self.node.borrow_mut()
     }
 }
 
-impl DefaultModifiers<View> for View {}
+impl DefaultModifiers<Picker> for Picker {}
 
-impl View {
+impl Picker {
     pub fn new() -> Self {
-        View {
+        Picker {
             children: vec![],
             node: Default::default(),
         }
@@ -33,9 +42,11 @@ impl View {
         self.children.push(child);
     }
 
+
+
 }
 
-impl Renderable for View {
+impl Renderable for Picker {
     fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> Node {
 
         let mut node = self.clone().node;

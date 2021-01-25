@@ -1,17 +1,17 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
+mod catchers;
+
 #[macro_use]
 extern crate rocket;
 extern crate viewy_rs;
 
 use rocket::response::content::Html;
-use rocket::response::Content;
-use rocket::http::ContentType;
 use viewy_rs::*;
 use viewy_rs::components::*;
 use viewy_rs::node::DefaultModifiers;
 
-fn compile_page(compiled_page: (String, String, String)) -> Html<String> {
+pub fn compile_page(compiled_page: (String, String, String)) -> Html<String> {
     Html(format!(r"
         <!doctype html>
         <html>
@@ -19,6 +19,7 @@ fn compile_page(compiled_page: (String, String, String)) -> Html<String> {
             <title>Viewy-rs showcase</title>
             <style>{}</style>
             <script>{}</script>
+            <meta charset='utf8' />
         </head>
         <body>
             {}
@@ -59,9 +60,7 @@ fn hello(name: String, age: u8) -> Html<String> {
 #[get("/")]
 fn goodbye() -> Html<String> {
     let page = Component::<(), VStack>(|_| {
-
-        let mut o = VStack::new(Alignment::Stretch)
-            .gap(vec![30]);
+        let mut o = VStack::new(Alignment::Stretch);
         o.add_view_child(Box::new({
             TitleBar::new("Viewy-rs showcase")
                 .left_item(Box::new({
@@ -72,9 +71,10 @@ fn goodbye() -> Html<String> {
         }));
         o.add_view_child(Box::new({
             let mut o = Card::new(CardStyle::Raised)
-                .padding(vec![30]);
+                .padding(vec![30])
+                .margin(vec![30]);
             o.add_view_child(Box::new({
-                Text::new("Ceci est un exemple de page", TextStyle::LargeTitle)
+                Text::new("Buttons", TextStyle::LargeTitle)
                     .margin_bottom(25)
             }));
             o.add_view_child(Box::new({
@@ -107,5 +107,5 @@ fn goodbye() -> Html<String> {
 }
 
 fn main() {
-    rocket::ignite().mount("/", routes![hello, goodbye]).launch();
+    rocket::ignite().mount("/", routes![hello, goodbye]).register(catchers::routes()).launch();
 }

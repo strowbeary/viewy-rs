@@ -39,6 +39,10 @@ impl VStack {
         self.view.node_style.push(("grid-gap".to_string(), params.join(" ")));
         self.clone()
     }
+    pub fn justify_content(&mut self, value: &str) -> Self {
+        self.view.node_style.push(("justify-content".to_string(), value.to_string()));
+        self.clone()
+    }
     pub fn add_view_child<'a, T>(&'a mut self, child: Box<T>)
         where
             T: 'static + Renderable,

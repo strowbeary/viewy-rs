@@ -109,6 +109,11 @@ pub trait DefaultModifiers<T=Self>: NodeContainer + Clone {
         self.get_node().node_style.push(("padding-right".to_string(), sp(value)));
         self.clone()
     }
+    fn margin(&mut self, margin: Vec<i32>) -> Self {
+        let params: Vec<String> = margin.iter().map(|size| sp(size.clone())).collect();
+        self.get_node().node_style.push(("margin".to_string(), params.join(" ")));
+        self.clone()
+    }
     fn margin_top(&mut self, value: i32) -> Self {
         self.get_node().node_style.push(("margin-top".to_string(), sp(value)));
         self.clone()
