@@ -1,4 +1,4 @@
-use crate::{StyleRegistery, Renderable};
+use crate::{StyleRegistry, Renderable};
 use std::sync::Mutex;
 use crate::template_compilation_tools::ScriptRegistry;
 use crate::node::{Node, DefaultModifiers, NodeContainer};
@@ -49,7 +49,7 @@ impl Text {
 }
 
 impl Renderable for Text {
-    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> Node {
+    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "text",
             include_str!("../themes/components/text.scss"),

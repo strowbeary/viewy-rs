@@ -5,11 +5,13 @@ mod catchers;
 #[macro_use]
 extern crate rocket;
 extern crate viewy_rs;
+extern crate view;
 
 use rocket::response::content::Html;
 use viewy_rs::*;
 use viewy_rs::components::*;
 use viewy_rs::node::DefaultModifiers;
+use view::view;
 
 pub fn compile_page(compiled_page: (String, String, String)) -> Html<String> {
     Html(format!(r"
@@ -41,16 +43,16 @@ fn hello(name: String, age: u8) -> Html<String> {
     };
     let page = Component::<Profile, Card>(|profil| {
         let mut o = Card::new(CardStyle::Raised);
-        o.add_view_child(Box::new({
+        o.add_view_child({
             Text::new(profil.name.as_str(), TextStyle::LargeTitle)
-        }));
-        o.add_view_child(Box::new({
+        });
+        o.add_view_child({
             Text::new(profil.age.to_string().as_str(), TextStyle::Subtitle1)
-        }));
-        o.add_view_child(Box::new({
+        });
+        o.add_view_child({
             Button::new("Retour", ButtonStyle::Outlined)
                 .action("/")
-        }));
+        });
         o
     });
     let compiled_page = page.compile(profil);
@@ -61,45 +63,45 @@ fn hello(name: String, age: u8) -> Html<String> {
 fn goodbye() -> Html<String> {
     let page = Component::<(), VStack>(|_| {
         let mut o = VStack::new(Alignment::Stretch);
-        o.add_view_child(Box::new({
+        o.add_view_child({
             TitleBar::new("Viewy-rs showcase")
-                .left_item(Box::new({
-                    Button::new("Hello", ButtonStyle::Link)
-                        .action("/hello/remi/50")
+                .left_item({
+                    Button::new("Back", ButtonStyle::Link)
+                        .action("/macro")
                         .grid_area("left_item")
-                }))
-        }));
-        o.add_view_child(Box::new({
+                })
+        });
+        o.add_view_child({
             let mut o = Card::new(CardStyle::Raised)
                 .padding(vec![30])
                 .margin(vec![30]);
-            o.add_view_child(Box::new({
-                Text::new("Buttons", TextStyle::LargeTitle)
+            o.add_view_child({
+                Text::new("Ceci est un exemple de page", TextStyle::LargeTitle)
                     .margin_bottom(25)
-            }));
-            o.add_view_child(Box::new({
+            });
+            o.add_view_child({
                 let mut o = VStack::new(Alignment::Center)
                     .gap(vec![16]);
-                o.add_view_child(Box::new({
+                o.add_view_child({
                     Button::new("Hello", ButtonStyle::Link)
                         .action("/hello/remi/50")
-                }));
-                o.add_view_child(Box::new({
+                });
+                o.add_view_child({
                     Button::new("Hello", ButtonStyle::Flat)
                         .action("/hello/remi/50")
-                }));
-                o.add_view_child(Box::new({
+                });
+                o.add_view_child({
                     Button::new("Hello", ButtonStyle::Outlined)
                         .action("/hello/remi/50")
-                }));
-                o.add_view_child(Box::new({
+                });
+                o.add_view_child({
                     Button::new("Hello", ButtonStyle::Filled)
                         .action("/hello/remi/50")
-                }));
+                });
                 o
-            }));
+            });
             o
-        }));
+        });
         o
     });
     let compiled_page = page.compile(());

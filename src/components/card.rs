@@ -1,4 +1,4 @@
-use crate::{StyleRegistery, Renderable};
+use crate::{StyleRegistry, Renderable};
 use std::sync::Mutex;
 use crate::template_compilation_tools::ScriptRegistry;
 use crate::node::{DefaultModifiers, NodeContainer, Node};
@@ -34,16 +34,16 @@ impl Card {
             style: style.clone(),
         }
     }
-    pub fn add_view_child<'a, T>(&'a mut self, child: Box<T>)
+    pub fn add_view_child<'a, T>(&'a mut self, child: T)
         where
             T: 'static + Renderable,
     {
-        self.children.push(child);
+        self.children.push(Box::new(child));
     }
 }
 
 impl Renderable for Card {
-    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> Node {
+    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "card",
             include_str!("../themes/components/card.scss"),

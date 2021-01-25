@@ -1,6 +1,6 @@
 use crate::node::{Node, DefaultModifiers, NodeContainer};
 use crate::helper_fn::sp;
-use crate::{Renderable, StyleRegistery};
+use crate::{Renderable, StyleRegistry};
 use crate::template_compilation_tools::ScriptRegistry;
 use std::borrow::BorrowMut;
 
@@ -14,10 +14,21 @@ pub enum Alignment {
 
 #[derive(Debug, Clone)]
 pub struct VStack {
-    children: Vec<Box<dyn Renderable>>,
+    pub children: Vec<Box<dyn Renderable>>,
     pub view: Node,
     pub alignment: Alignment,
 }
+
+impl Default for VStack {
+    fn default() -> Self {
+        VStack {
+            children: vec![],
+            view: Default::default(),
+            alignment: Alignment::Stretch
+        }
+    }
+}
+
 impl NodeContainer for VStack {
     fn get_node(&mut self) -> &mut Node {
         self.view.borrow_mut()
@@ -43,17 +54,17 @@ impl VStack {
         self.view.node_style.push(("justify-content".to_string(), value.to_string()));
         self.clone()
     }
-    pub fn add_view_child<'a, T>(&'a mut self, child: Box<T>)
+    pub fn add_view_child<'a, T>(&'a mut self, child: T)
         where
             T: 'static + Renderable,
     {
-        self.children.push(child);
+        self.children.push(Box::new(child));
     }
 
 }
 
 impl Renderable for VStack {
-    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> Node {
+    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "stack",
             include_str!("../themes/components/stack.scss"),

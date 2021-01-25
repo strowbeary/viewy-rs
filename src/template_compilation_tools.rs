@@ -5,16 +5,17 @@ use grass::OutputStyle;
 use std::env;
 
 #[derive(Clone)]
-pub struct StyleRegistery {
+pub struct StyleRegistry {
     styles: HashMap<String, String>
 }
 
-impl StyleRegistery {
+impl StyleRegistry {
     pub fn new() -> Self {
-        StyleRegistery {
+        StyleRegistry {
             styles: Default::default()
         }
     }
+
     pub fn register_stylesheet(&mut self, component_name: &str, stylesheet: &str) {
         self.styles.insert(component_name.to_string(), stylesheet.to_string());
     }
