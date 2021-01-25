@@ -1,0 +1,10 @@
+[package]
+name = "view"
+version = "0.1.0"
+authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
+edition = "2018"
+
+[lib]
+crate-type = ["proc-macro"]
+
+[dependencies]

@@ -6,36 +6,34 @@ use std::borrow::BorrowMut;
 use crate::components::{Text, TextStyle};
 
 #[derive(Debug, Clone)]
-pub enum ButtonStyle {
-    Link,
-    Flat,
-    Outlined,
-    Filled,
-}
-
-#[derive(Debug, Clone)]
-pub struct Button {
+pub struct TextField {
     children: Vec<Box<dyn Renderable>>,
     pub view: Node,
-    pub label: String,
-    pub style: ButtonStyle,
+    pub label: Option<String>,
+    pub placeholder: Option<String>,
+    pub field_type: String,
+    pub name: String,
+    pub auto_sizing: bool,
 }
 
-impl NodeContainer for Button {
+impl NodeContainer for TextField {
     fn get_node(&mut self) -> &mut Node {
         self.view.borrow_mut()
     }
 }
 
-impl DefaultModifiers<Button> for Button {}
+impl DefaultModifiers<TextField> for TextField {}
 
-impl Button {
-    pub fn new(label: &str, style: ButtonStyle) -> Self {
-        Button {
+impl TextField {
+    pub fn new(label: &str, name: &str, field_type: &str) -> Self {
+        TextField {
             children: vec![],
-            view: Node::default(),
-            label: label.to_string(),
-            style,
+            view: Default::default(),
+            label: None,
+            placeholder: None,
+            field_type: field_type.to_string(),
+            name: name.to_string(),
+            auto_sizing: false
         }
     }
     pub fn destructive(&mut self) -> Self {
@@ -60,7 +58,7 @@ impl Button {
     }
 }
 
-impl Renderable for Button {
+impl Renderable for TextField {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "button",

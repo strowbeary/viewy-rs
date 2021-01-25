@@ -3,25 +3,18 @@ use crate::helper_fn::sp;
 use crate::{Renderable, StyleRegistry};
 use crate::template_compilation_tools::ScriptRegistry;
 use std::borrow::BorrowMut;
+use crate::components::Alignment;
 
 #[derive(Debug, Clone)]
-pub enum Alignment {
-    Center,
-    Start,
-    End,
-    Stretch
-}
-
-#[derive(Debug, Clone)]
-pub struct VStack {
+pub struct HStack {
     pub children: Vec<Box<dyn Renderable>>,
     pub view: Node,
     pub alignment: Alignment,
 }
 
-impl Default for VStack {
+impl Default for HStack {
     fn default() -> Self {
-        VStack {
+        HStack {
             children: vec![],
             view: Default::default(),
             alignment: Alignment::Stretch
@@ -29,17 +22,17 @@ impl Default for VStack {
     }
 }
 
-impl NodeContainer for VStack {
+impl NodeContainer for HStack {
     fn get_node(&mut self) -> &mut Node {
         self.view.borrow_mut()
     }
 }
 
-impl DefaultModifiers<VStack> for VStack {}
+impl DefaultModifiers<HStack> for HStack {}
 
-impl VStack {
+impl HStack {
     pub fn new(alignment: Alignment) -> Self {
-        VStack {
+        HStack {
             children: vec![],
             view: Default::default(),
             alignment,
@@ -59,7 +52,7 @@ impl VStack {
 
 }
 
-impl Renderable for VStack {
+impl Renderable for HStack {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "stack",
@@ -68,7 +61,7 @@ impl Renderable for VStack {
         let mut view = self
             .clone()
             .add_class("stack")
-            .add_class("stack--vertical")
+            .add_class("stack--horizontal")
             .add_class(
                 format!("stack--align-{:?}", self.alignment)
                     .to_lowercase()

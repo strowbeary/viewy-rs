@@ -1,4 +1,4 @@
-use crate::{Renderable, StyleRegistery};
+use crate::{Renderable, StyleRegistry};
 use crate::template_compilation_tools::ScriptRegistry;
 use crate::components::{Grid, Alignment, Text, TextStyle};
 use std::borrow::BorrowMut;
@@ -35,31 +35,31 @@ impl TitleBar {
         self.view.node_style.push(("grid-template-areas".to_string(), schema.to_string()));
         self.clone()
     }
-    pub fn left_item<'a, T>(&'a mut self, item: Box<T>) -> Self
+    pub fn left_item<'a, T>(&'a mut self, item: T) -> Self
         where
             T: 'static + Renderable,
     {
-        self.left_item = Some(item);
+        self.left_item = Some(Box::new(item));
         self.clone()
     }
-    pub fn right_item<'a, T>(&'a mut self, item: Box<T>) -> Self
+    pub fn right_item<'a, T>(&'a mut self, item: T) -> Self
         where
             T: 'static + Renderable,
     {
-        self.right_item = Some(item);
+        self.right_item = Some(Box::new(item));
         self.clone()
     }
-    pub fn bottom_item<'a, T>(&'a mut self, item: Box<T>) -> Self
+    pub fn bottom_item<'a, T>(&'a mut self, item: T) -> Self
         where
             T: 'static + Renderable,
     {
-        self.bottom_item = Some(item);
+        self.bottom_item = Some(Box::new(item));
         self.clone()
     }
 }
 
 impl Renderable for TitleBar {
-    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> Node {
+    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "titlebar",
             include_str!("../themes/components/titlebar.scss"),

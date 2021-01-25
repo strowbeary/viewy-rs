@@ -1,6 +1,6 @@
 use crate::node::{Node, DefaultModifiers, NodeContainer};
 use crate::helper_fn::sp;
-use crate::{Renderable, StyleRegistery};
+use crate::{Renderable, StyleRegistry};
 use crate::template_compilation_tools::ScriptRegistry;
 use std::borrow::BorrowMut;
 use crate::components::Alignment;
@@ -53,17 +53,17 @@ impl Grid {
         self.view.node_style.push(("grid-auto-flow".to_string(), direction.to_string()));
         self.clone()
     }
-    pub fn add_view_child<'a, T>(&'a mut self, child: Box<T>)
+    pub fn add_view_child<'a, T>(&'a mut self, child: T)
         where
             T: 'static + Renderable,
     {
-        self.children.push(child);
+        self.children.push(Box::new(child));
     }
 
 }
 
 impl Renderable for Grid {
-    fn render(&self, style_registery: &mut StyleRegistery, script_registery: &mut ScriptRegistry) -> Node {
+    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "stack",
             include_str!("../themes/components/grid.scss"),
