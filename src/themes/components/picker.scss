@@ -1,0 +1,57 @@
+.picker {
+  display: flex;
+  flex-direction: column;
+  cursor: pointer;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-action: none;
+  touch-action: none;
+  width: max-content;
+  gap: sp(4);
+
+  &--segmented .stack .item{
+    flex-grow: 1;
+    text-align: center;
+    transition: background 150ms, color 150ms, border 150ms;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: sp(8) sp(12);
+    border: sp(1) solid var(--color-border);
+    border-left: none;
+    border-right: none;
+    color: var(--color-primary);
+    .icon {
+      color: var(--color-primary);
+    }
+    &:last-of-type {
+      border-right: sp(1) solid var(--color-border);
+      border-radius: 0 sp(6) sp(6) 0;
+    }
+    &:first-of-type {
+      border-left: sp(1) solid var(--color-border);
+      border-radius: sp(6) 0 0 sp(6);
+    }
+
+    &:hover {
+      border-color: var(--color-border-hover);
+      background: var(--color-hover);
+    }
+
+    &:active {
+      background: var(--color-active);
+      border-color: var(--color-border-hover);
+    }
+
+    &.selected {
+      border-color: var(--color-primary);
+      background: var(--color-primary);
+      color: white;
+      .icon {
+        color: white;
+      }
+    }
+  }
+}

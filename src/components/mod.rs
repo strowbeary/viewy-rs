@@ -17,5 +17,5 @@ pub use text::{Text, TextStyle};
 pub use titlebar::TitleBar;
 pub use grid::Grid;
 pub use view::View;
-pub use textfield::{};
-pub use picker::Picker;
+pub use textfield::TextField;
+pub use picker::{Picker, PickerStyle};

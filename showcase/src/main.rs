@@ -62,7 +62,8 @@ fn hello(name: String, age: u8) -> Html<String> {
 #[get("/")]
 fn goodbye() -> Html<String> {
     let page = Component::<(), VStack>(|_| {
-        let mut o = VStack::new(Alignment::Stretch);
+        let mut o = VStack::new(Alignment::Stretch)
+            .gap(vec![30]);
         o.add_view_child({
             TitleBar::new("Viewy-rs showcase")
                 .left_item({
@@ -72,31 +73,89 @@ fn goodbye() -> Html<String> {
                 })
         });
         o.add_view_child({
-            let mut o = Card::new(CardStyle::Raised)
-                .padding(vec![30])
-                .margin(vec![30]);
+            let mut o =
+                VStack::new(Alignment::Stretch)
+                    .gap(vec![30])
+                    .padding(vec![30]);
             o.add_view_child({
-                Text::new("Ceci est un exemple de page", TextStyle::LargeTitle)
-                    .margin_bottom(25)
+                let mut o = Card::new(CardStyle::Raised)
+                    .padding(vec![30]);
+                o.add_view_child({
+                    Text::new("Buttons", TextStyle::LargeTitle)
+                        .margin_bottom(25)
+                });
+                o.add_view_child({
+                    let mut o =
+                        HStack::new(Alignment::Center)
+                            .gap(vec![16]);
+                    o.add_view_child({
+                        Button::new("Hello", ButtonStyle::Link)
+                            .action("/hello/remi/50")
+                    });
+                    o.add_view_child({
+                        Button::new("Hello", ButtonStyle::Flat)
+                            .action("/hello/remi/50")
+                    });
+                    o.add_view_child({
+                        Button::new("Hello", ButtonStyle::Outlined)
+                            .action("/hello/remi/50")
+                    });
+                    o.add_view_child({
+                        Button::new("Hello", ButtonStyle::Filled)
+                            .action("/hello/remi/50")
+                    });
+                    o
+                });
+                o
             });
             o.add_view_child({
-                let mut o = VStack::new(Alignment::Center)
-                    .gap(vec![16]);
+                let mut o = Card::new(CardStyle::Raised)
+                    .padding(vec![30]);
                 o.add_view_child({
-                    Button::new("Hello", ButtonStyle::Link)
-                        .action("/hello/remi/50")
+                    Text::new("Text field", TextStyle::LargeTitle)
+                        .margin_bottom(25)
                 });
                 o.add_view_child({
-                    Button::new("Hello", ButtonStyle::Flat)
-                        .action("/hello/remi/50")
+                    let mut o =
+                        VStack::new(Alignment::Stretch)
+                            .gap(vec![16]);
+                    o.add_view_child({
+                        TextField::new("Hello", "text")
+                    });
+                    o.add_view_child({
+                        TextField::new("Hello", "text")
+                            .label("Label")
+                    });
+                    o.add_view_child({
+                        TextField::new("Hello", "text")
+                            .label("Label")
+                            .helper_text("Message d'aide")
+                    });
+                    o
+                });
+                o
+            });
+            o.add_view_child({
+                let mut o = Card::new(CardStyle::Raised)
+                    .padding(vec![30]);
+                o.add_view_child({
+                    Text::new("Picker", TextStyle::LargeTitle)
+                        .margin_bottom(25)
                 });
                 o.add_view_child({
-                    Button::new("Hello", ButtonStyle::Outlined)
-                        .action("/hello/remi/50")
-                });
-                o.add_view_child({
-                    Button::new("Hello", ButtonStyle::Filled)
-                        .action("/hello/remi/50")
+                    let mut o =
+                        VStack::new(Alignment::Stretch)
+                            .gap(vec![16]);
+                    o.add_view_child({
+                        Picker::new("Hello", "test1", PickerStyle::Segmented)
+                            .label("Segmented picker")
+                            .options(vec![
+                                ("Test 1", "test0"),
+                                ("Test 2", "test1"),
+                                ("Test 3", "test2"),
+                            ])
+                    });
+                    o
                 });
                 o
             });
@@ -104,10 +163,10 @@ fn goodbye() -> Html<String> {
         });
         o
     });
-    let compiled_page = page.compile(());
-    compile_page(compiled_page)
-}
+        let compiled_page = page.compile(());
+        compile_page(compiled_page)
+    }
 
-fn main() {
-    rocket::ignite().mount("/", routes![hello, goodbye]).register(catchers::routes()).launch();
-}
+    fn main() {
+        rocket::ignite().mount("/", routes![hello, goodbye]).register(catchers::routes()).launch();
+    }

@@ -11,12 +11,12 @@ pub fn not_found() -> Html<String> {
         let mut o = VStack::new(Alignment::Center)
             .justify_content("center")
             .height("100vh");
-        o.add_view_child(Box::new({
+        o.add_view_child({
             Text::new("404", TextStyle::LargeTitle)
-        }));
-        o.add_view_child(Box::new({
+        });
+        o.add_view_child({
             Text::new("Not found", TextStyle::H2)
-        }));
+        });
         o
     });
     let compiled_page = page.compile(());
@@ -29,12 +29,12 @@ pub fn unauthorized() -> Html<String> {
         let mut o = VStack::new(Alignment::Center)
             .justify_content("center")
             .height("100vh");
-        o.add_view_child(Box::new({
+        o.add_view_child({
             Text::new("403", TextStyle::LargeTitle)
-        }));
-        o.add_view_child(Box::new({
+        });
+        o.add_view_child({
             Text::new("Unauthorized", TextStyle::H1)
-        }));
+        });
         o
     });
     let compiled_page = page.compile(());
