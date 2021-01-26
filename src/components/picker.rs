@@ -35,12 +35,12 @@ pub enum PickerStyle {
 
 #[derive(Debug, Clone)]
 pub struct Picker {
-    pub node: Node,
-    pub style: PickerStyle,
-    pub label: Option<String>,
-    pub name: String,
-    pub value: String,
-    pub options: Vec<PickerOption>,
+    node: Node,
+    style: PickerStyle,
+    label: Option<String>,
+    name: String,
+    value: String,
+    options: Vec<PickerOption>,
 }
 
 impl NodeContainer for Picker {
@@ -79,10 +79,7 @@ impl Renderable for Picker {
             "picker",
             include_str!("../themes/components/picker.scss"),
         );
-        script_registery.register_script(
-            "picker",
-            include_str!("../js/picker.js"),
-        );
+
         let mut picker = self.clone()
             .add_class("picker")
             .add_class(format!("picker--{:?}", self.style).to_lowercase().as_str());
@@ -93,6 +90,10 @@ impl Renderable for Picker {
         }
         match self.style {
             PickerStyle::Segmented => {
+                script_registery.register_script(
+                    "picker-segmented",
+                    include_str!("../js/picker-segmented.js"),
+                );
                 picker.node.children.push({
                     let mut option_list = HStack::new(Alignment::Stretch)
                         .add_class("picker__option-list");
@@ -112,7 +113,9 @@ impl Renderable for Picker {
                     option_list.render(style_registery, script_registery)
                 })
             }
-            PickerStyle::Dropdown => {}
+            PickerStyle::Dropdown => {
+
+            }
             PickerStyle::RadioGroup => {}
         }
 

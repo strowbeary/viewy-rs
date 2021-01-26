@@ -8,6 +8,7 @@ mod vstack;
 mod hstack;
 mod textfield;
 mod picker;
+mod icon;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};

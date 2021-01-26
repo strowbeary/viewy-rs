@@ -7,13 +7,13 @@ use crate::components::{Text, TextStyle, View};
 
 #[derive(Debug, Clone)]
 pub struct TextField {
-    pub node: Node,
-    pub label: Option<String>,
-    pub helper_text: Option<String>,
-    pub placeholder: Option<String>,
-    pub field_type: String,
-    pub name: String,
-    pub auto_sizing: bool,
+    node: Node,
+    label: Option<String>,
+    helper_text: Option<String>,
+    placeholder: Option<String>,
+    field_type: String,
+    name: String,
+    auto_sizing: bool,
 }
 
 impl NodeContainer for TextField {
@@ -44,6 +44,10 @@ impl TextField {
 
     pub fn helper_text(&mut self, helper_text: &str) -> Self {
         self.helper_text = Some(helper_text.to_string());
+        self.clone()
+    }
+    pub fn placeholder(&mut self, placeholder: &str) -> Self {
+        self.placeholder = Some(placeholder.to_string());
         self.clone()
     }
 }

@@ -14,13 +14,13 @@ pub enum CardStyle {
 #[derive(Debug, Clone)]
 pub struct Card {
     children: Vec<Box<dyn Renderable>>,
-    pub view: Node,
-    pub style: CardStyle,
+    node: Node,
+    style: CardStyle,
 
 }
 impl NodeContainer for Card {
     fn get_node(&mut self) -> &mut Node {
-        self.view.borrow_mut()
+        self.node.borrow_mut()
     }
 }
 
@@ -30,7 +30,7 @@ impl Card {
     pub fn new(style: CardStyle) -> Self {
         Card {
             children: vec![],
-            view: Node::default(),
+            node: Node::default(),
             style: style.clone(),
         }
     }
@@ -51,7 +51,7 @@ impl Renderable for Card {
         let mut view = self.clone()
             .add_class("card")
             .add_class(format!("card--{:?}", self.style).to_lowercase().as_str())
-            .view;
+            .node;
         self.children.iter()
             .for_each(|child|
                 view.children.push(child.render(style_registery, script_registery)));

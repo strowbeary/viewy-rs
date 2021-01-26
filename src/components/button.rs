@@ -73,6 +73,7 @@ impl Renderable for Button {
         let mut button = self.clone()
             .add_class("button")
             .add_class(format!("button--{:?}", self.style).to_lowercase().as_str())
+            .set_attr("role", "button")
             .tag("a");
         let text = Text::new(self.label.as_str(), TextStyle::Button).render(style_registery, script_registery);
         button.view.children.push(text);

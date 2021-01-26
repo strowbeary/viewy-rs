@@ -7,16 +7,16 @@ use crate::components::Alignment;
 
 #[derive(Debug, Clone)]
 pub struct HStack {
-    pub children: Vec<Box<dyn Renderable>>,
-    pub view: Node,
-    pub alignment: Alignment,
+    children: Vec<Box<dyn Renderable>>,
+    node: Node,
+    alignment: Alignment,
 }
 
 impl Default for HStack {
     fn default() -> Self {
         HStack {
             children: vec![],
-            view: Default::default(),
+            node: Default::default(),
             alignment: Alignment::Stretch
         }
     }
@@ -24,7 +24,7 @@ impl Default for HStack {
 
 impl NodeContainer for HStack {
     fn get_node(&mut self) -> &mut Node {
-        self.view.borrow_mut()
+        self.node.borrow_mut()
     }
 }
 
@@ -34,13 +34,13 @@ impl HStack {
     pub fn new(alignment: Alignment) -> Self {
         HStack {
             children: vec![],
-            view: Default::default(),
+            node: Default::default(),
             alignment,
         }
     }
     pub fn gap(&mut self, gaps: Vec<i32>) -> Self {
         let params: Vec<String> = gaps.iter().map(|size| sp(size.clone())).collect();
-        self.view.node_style.push(("grid-gap".to_string(), params.join(" ")));
+        self.node.node_style.push(("grid-gap".to_string(), params.join(" ")));
         self.clone()
     }
     pub fn add_view_child<'a, T>(&'a mut self, child: T)
@@ -67,7 +67,7 @@ impl Renderable for HStack {
                     .to_lowercase()
                     .as_str()
             )
-            .view;
+            .node;
         self.children.iter()
             .for_each(|child|
                 view.children.push(child.render(style_registery, script_registery)));

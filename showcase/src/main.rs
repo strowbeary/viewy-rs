@@ -62,8 +62,7 @@ fn hello(name: String, age: u8) -> Html<String> {
 #[get("/")]
 fn goodbye() -> Html<String> {
     let page = Component::<(), VStack>(|_| {
-        let mut o = VStack::new(Alignment::Stretch)
-            .gap(vec![30]);
+        let mut o = VStack::new(Alignment::Stretch);
         o.add_view_child({
             TitleBar::new("Viewy-rs showcase")
                 .left_item({
@@ -131,6 +130,7 @@ fn goodbye() -> Html<String> {
                             .gap(vec![16]);
                     o.add_view_child({
                         TextField::new("Hello", "text")
+                            .placeholder("Optional placeholder")
                     });
                     o.add_view_child({
                         TextField::new("Hello", "text")
@@ -159,7 +159,10 @@ fn goodbye() -> Html<String> {
                     o.add_view_child({
                         let mut o = Picker::new("Hello", "2", PickerStyle::Segmented)
                             .label("Segmented picker");
-                        o.add_view_child(PickerOption::new("Test 1", "1"));
+                        o.add_view_child({
+                            PickerOption::new("Test 1", "1")
+                                .icon("user")
+                        });
                         o.add_view_child(PickerOption::new("Test 2", "2"));
                         o.add_view_child(PickerOption::new("Test 3", "3"));
                         o
