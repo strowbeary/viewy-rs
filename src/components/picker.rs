@@ -6,10 +6,31 @@ use std::borrow::BorrowMut;
 use crate::components::{Text, TextStyle, HStack, Alignment};
 
 #[derive(Debug, Clone)]
+pub struct PickerOption {
+    icon: Option<String>,
+    label: String,
+    value: String,
+}
+
+impl PickerOption {
+    pub fn new(label: &str, value: &str) -> Self {
+        PickerOption {
+            icon: None,
+            label: label.to_string(),
+            value: value.to_string(),
+        }
+    }
+    pub fn icon(&mut self, name: &str) -> Self {
+        self.icon = Some(name.to_string());
+        self.clone()
+    }
+}
+
+#[derive(Debug, Clone)]
 pub enum PickerStyle {
     Segmented,
     Dropdown,
-    RadioGroup
+    RadioGroup,
 }
 
 #[derive(Debug, Clone)]
@@ -19,9 +40,9 @@ pub struct Picker {
     pub label: Option<String>,
     pub name: String,
     pub value: String,
-    pub options: Vec<(String, String)>
-
+    pub options: Vec<PickerOption>,
 }
+
 impl NodeContainer for Picker {
     fn get_node(&mut self) -> &mut Node {
         self.node.borrow_mut()
@@ -37,8 +58,8 @@ impl Picker {
             style: picker_style,
             label: None,
             name: name.to_string(),
-            value: value.to_string(),
-            options: vec![]
+            value: "".to_string(),
+            options: vec![],
         }
     }
 
@@ -47,14 +68,8 @@ impl Picker {
         self.clone()
     }
 
-
-    pub fn options(&mut self, options: Vec<(&str, &str)>) -> Self {
-        self.options = options.iter()
-            .map(|&(label, value)| {
-                (label.to_string(), value.to_string())
-            })
-            .collect();
-        self.clone()
+    pub fn add_view_child(&mut self, child: PickerOption) {
+        self.options.push(child);
     }
 }
 
@@ -63,6 +78,10 @@ impl Renderable for Picker {
         style_registery.register_stylesheet(
             "picker",
             include_str!("../themes/components/picker.scss"),
+        );
+        script_registery.register_script(
+            "picker",
+            include_str!("../js/picker.js"),
         );
         let mut picker = self.clone()
             .add_class("picker")
@@ -79,12 +98,15 @@ impl Renderable for Picker {
                         .add_class("picker__option-list");
                     for option in picker.options {
                         option_list.add_view_child({
-                            let mut option_label = Text::new(option.0.as_str(), TextStyle::Button)
-                                .add_class("item");
-                            if picker.value.eq(option.1.as_str()) {
-                                option_label.add_class("selected");
+                            let mut item = HStack::new(Alignment::Center).add_class("item");
+                            if let Some(icon) = option.icon {
+                                // item.add_view_child(Text::new(option.label.as_str(), TextStyle::Button));
                             }
-                            option_label
+                            item.add_view_child(Text::new(option.label.as_str(), TextStyle::Button));
+                            if picker.value.eq(option.value.as_str()) {
+                                item.add_class("selected");
+                            }
+                            item
                         })
                     }
                     option_list.render(style_registery, script_registery)

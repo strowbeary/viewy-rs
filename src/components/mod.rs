@@ -18,4 +18,4 @@ pub use titlebar::TitleBar;
 pub use grid::Grid;
 pub use view::View;
 pub use textfield::TextField;
-pub use picker::{Picker, PickerStyle};
+pub use picker::{Picker, PickerStyle, PickerOption};

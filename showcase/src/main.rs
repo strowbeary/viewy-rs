@@ -71,6 +71,16 @@ fn goodbye() -> Html<String> {
                         .action("/macro")
                         .grid_area("left_item")
                 })
+                .bottom_item({
+                    Button::new("Back", ButtonStyle::Link)
+                        .action("/macro")
+                        .grid_area("left_item")
+                })
+                .right_item({
+                    Button::new("Back", ButtonStyle::Link)
+                        .action("/macro")
+                        .grid_area("left_item")
+                })
         });
         o.add_view_child({
             let mut o =
@@ -147,13 +157,12 @@ fn goodbye() -> Html<String> {
                         VStack::new(Alignment::Stretch)
                             .gap(vec![16]);
                     o.add_view_child({
-                        Picker::new("Hello", "test1", PickerStyle::Segmented)
-                            .label("Segmented picker")
-                            .options(vec![
-                                ("Test 1", "test0"),
-                                ("Test 2", "test1"),
-                                ("Test 3", "test2"),
-                            ])
+                        let mut o = Picker::new("Hello", "2", PickerStyle::Segmented)
+                            .label("Segmented picker");
+                        o.add_view_child(PickerOption::new("Test 1", "1"));
+                        o.add_view_child(PickerOption::new("Test 2", "2"));
+                        o.add_view_child(PickerOption::new("Test 3", "3"));
+                        o
                     });
                     o
                 });
@@ -163,10 +172,10 @@ fn goodbye() -> Html<String> {
         });
         o
     });
-        let compiled_page = page.compile(());
-        compile_page(compiled_page)
-    }
+    let compiled_page = page.compile(());
+    compile_page(compiled_page)
+}
 
-    fn main() {
-        rocket::ignite().mount("/", routes![hello, goodbye]).register(catchers::routes()).launch();
-    }
+fn main() {
+    rocket::ignite().mount("/", routes![hello, goodbye]).register(catchers::routes()).launch();
+}

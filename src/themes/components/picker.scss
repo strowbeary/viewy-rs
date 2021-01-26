@@ -11,10 +11,10 @@
   width: max-content;
   gap: sp(4);
 
-  &--segmented .stack .item{
+  &--segmented .stack .item {
     flex-grow: 1;
     text-align: center;
-    transition: background 150ms, color 150ms, border 150ms;
+    transition: background 150ms, border 150ms;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -22,8 +22,8 @@
     border: sp(1) solid var(--color-border);
     border-left: none;
     border-right: none;
-    color: var(--color-primary);
-    .icon {
+    .icon, .text {
+      transition: color 150ms;
       color: var(--color-primary);
     }
     &:last-of-type {
@@ -49,7 +49,7 @@
       border-color: var(--color-primary);
       background: var(--color-primary);
       color: white;
-      .icon {
+      .icon, .text  {
         color: white;
       }
     }
