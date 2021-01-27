@@ -3,7 +3,8 @@ use std::sync::Mutex;
 use crate::template_compilation_tools::ScriptRegistry;
 use crate::node::{Node, DefaultModifiers, NodeContainer};
 use std::borrow::BorrowMut;
-use crate::components::{Text, TextStyle};
+use crate::components::{Text, TextStyle, Icon};
+use crate::helper_fn::scale;
 
 #[derive(Debug, Clone)]
 pub enum ButtonStyle {
@@ -16,14 +17,15 @@ pub enum ButtonStyle {
 #[derive(Debug, Clone)]
 pub struct Button {
     children: Vec<Box<dyn Renderable>>,
-    pub view: Node,
-    pub label: String,
-    pub style: ButtonStyle,
+    node: Node,
+    label: String,
+    style: ButtonStyle,
+    icon: Option<String>,
 }
 
 impl NodeContainer for Button {
     fn get_node(&mut self) -> &mut Node {
-        self.view.borrow_mut()
+        self.node.borrow_mut()
     }
 }
 
@@ -33,9 +35,10 @@ impl Button {
     pub fn new(label: &str, style: ButtonStyle) -> Self {
         Button {
             children: vec![],
-            view: Node::default(),
+            node: Node::default(),
             label: label.to_string(),
             style,
+            icon: None,
         }
     }
     pub fn destructive(&mut self) -> Self {
@@ -50,6 +53,11 @@ impl Button {
     }
     pub fn action(&mut self, url: &str) -> Self {
         self.set_attr("href", url)
+    }
+
+    pub fn icon(&mut self, name: &str) -> Self {
+        self.icon = Some(name.to_string());
+        self.clone()
     }
 
     fn add_view_child<'a, T>(&'a mut self, child: T)
@@ -75,8 +83,15 @@ impl Renderable for Button {
             .add_class(format!("button--{:?}", self.style).to_lowercase().as_str())
             .set_attr("role", "button")
             .tag("a");
+        if let Some(icon) = button.icon {
+            let icon = Icon::new(icon.as_str())
+                .size(16)
+                .margin_right(scale(2))
+                .render(style_registery, script_registery);
+            button.node.children.push(icon);
+        }
         let text = Text::new(self.label.as_str(), TextStyle::Button).render(style_registery, script_registery);
-        button.view.children.push(text);
-        button.view
+        button.node.children.push(text);
+        button.node
     }
 }

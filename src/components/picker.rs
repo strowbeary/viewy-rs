@@ -1,9 +1,9 @@
 use crate::node::{Node, DefaultModifiers, NodeContainer};
-use crate::helper_fn::sp;
+use crate::helper_fn::{sp, scale};
 use crate::{Renderable, StyleRegistry};
 use crate::template_compilation_tools::ScriptRegistry;
 use std::borrow::BorrowMut;
-use crate::components::{Text, TextStyle, HStack, Alignment};
+use crate::components::{Text, TextStyle, HStack, Alignment, Icon};
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
@@ -101,7 +101,11 @@ impl Renderable for Picker {
                         option_list.add_view_child({
                             let mut item = HStack::new(Alignment::Center).add_class("item");
                             if let Some(icon) = option.icon {
-                                // item.add_view_child(Text::new(option.label.as_str(), TextStyle::Button));
+                                item.add_view_child({
+                                    Icon::new(icon.as_str())
+                                        .size(16)
+                                        .margin_right(scale(2))
+                                });
                             }
                             item.add_view_child(Text::new(option.label.as_str(), TextStyle::Button));
                             if picker.value.eq(option.value.as_str()) {

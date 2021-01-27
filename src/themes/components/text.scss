@@ -14,22 +14,44 @@
   &--h1 {
     font-size: sp(24);
     line-height: sp(32);
-    font-weight: $fw-normal;
+    font-weight: $fw-bold;
     letter-spacing: sp(-0.021);
+  }
+
+  &--subtitle1 {
+    font-size: sp(16);
+    line-height: sp(22);
+    font-weight: $fw-semi-bold;
+    letter-spacing: sp(-0.011);
   }
 
   &--h2 {
     font-size: sp(20);
     line-height: sp(28);
-    font-weight: $fw-normal;
+    font-weight: $fw-semi-bold;
     letter-spacing: sp(-0.019);
+  }
+
+
+  &--subtitle2 {
+    font-size: sp(16);
+    line-height: sp(20);
+    font-weight: $fw-medium;
+    letter-spacing: sp(-0.006);
   }
 
   &--h3 {
     font-size: sp(18);
     line-height: sp(25);
-    font-weight: $fw-light;
+    font-weight: $fw-medium;
     letter-spacing: sp(-0.014);
+  }
+
+  &--subtitle3 {
+    font-size: sp(14);
+    line-height: sp(20);
+    font-weight: $fw-normal;
+    letter-spacing: sp(-0.006);
   }
 
   &--headline {
@@ -39,33 +61,20 @@
     letter-spacing: sp(-0.013);
   }
 
-  &--subtitle1 {
-    font-size: sp(16);
-    line-height: sp(22);
-    font-weight: $fw-normal;
-    letter-spacing: sp(-0.011);
-  }
-
-  &--subtitle2 {
-    font-size: sp(14);
-    line-height: sp(20);
-    font-weight: $fw-normal;
-    letter-spacing: sp(-0.006);
-  }
-
-  &--body1 {
-    font-size: sp(16);
+  &--body {
+    font-size: sp(17);
     line-height: sp(22);
     letter-spacing: sp(-0.011);
     font-weight: $fw-normal;
-  }
-
-
-  &--body2 {
-    font-size: sp(14);
-    line-height: sp(20);
-    letter-spacing: sp(-0.006);
-    font-weight: $fw-normal;
+    code {
+      font-family: 'Fira Mono', monospace;
+      height: sp(20);
+      font-size: sp(15);
+      padding: 0 sp(4);
+      border: sp(1) solid var(--color-border-hover);
+      background: var(--color-hover);
+      border-radius: sp(4);
+    }
   }
 
   &--button {
@@ -94,8 +103,5 @@
     line-height: sp(17);
     letter-spacing: sp(0);
     font-weight: $fw-normal;
-  }
-  &--bold {
-    font-weight: $fw-bold;
   }
 }

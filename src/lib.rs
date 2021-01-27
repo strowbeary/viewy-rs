@@ -1,5 +1,8 @@
 extern crate minifier;
 extern crate grass;
+extern crate serde;
+extern crate serde_json;
+extern crate html_escape;
 
 mod template_compilation_tools;
 
@@ -33,6 +36,28 @@ impl Clone for Box<dyn Renderable> {
     fn clone(&self) -> Box<dyn Renderable> {
         self.clone_box()
     }
+}
+
+pub fn compile_page((content, style, script): (String, String, String), theme_variant: &str) -> String {
+    format!(r"
+        <!doctype html>
+        <html>
+        <head>
+            <title>Viewy-rs showcase</title>
+            <style>{style}</style>
+            <script>{script}</script>
+            <meta charset='utf8' />
+        </head>
+        <body class='app-theme--{theme_variant}'>
+            {content}
+        </body>
+        </html>
+    ",
+        style = style,
+        script = script,
+        content = content,
+        theme_variant = theme_variant
+    )
 }
 
 pub struct Component<S, T: Renderable>(pub fn(S) -> T);

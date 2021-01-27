@@ -6,12 +6,28 @@ use std::borrow::BorrowMut;
 use crate::components::{Text, TextStyle, View};
 
 #[derive(Debug, Clone)]
+pub enum FieldType {
+    Text,
+    Password,
+    Email,
+    Number,
+    Tel,
+    Date,
+    DateTimeLocal,
+    Month,
+    Search,
+    Time,
+    Url,
+    Week,
+}
+
+#[derive(Debug, Clone)]
 pub struct TextField {
     node: Node,
     label: Option<String>,
     helper_text: Option<String>,
     placeholder: Option<String>,
-    field_type: String,
+    field_type: FieldType,
     name: String,
     auto_sizing: bool,
 }
@@ -25,13 +41,13 @@ impl NodeContainer for TextField {
 impl DefaultModifiers<TextField> for TextField {}
 
 impl TextField {
-    pub fn new(name: &str, field_type: &str) -> Self {
+    pub fn new(name: &str, field_type: FieldType) -> Self {
         TextField {
             node: Default::default(),
             label: None,
             helper_text: None,
             placeholder: None,
-            field_type: field_type.to_string(),
+            field_type,
             name: name.to_string(),
             auto_sizing: false
         }
@@ -64,14 +80,17 @@ impl Renderable for TextField {
         let mut input = View::new()
             .tag("input")
             .add_class("textfield__input")
-            .set_attr("type", field.field_type.as_str());
+            .set_attr("type", format!("{:?}", field.field_type).to_lowercase().as_str())
+            .set_attr("id", self.name.as_str());
 
         if let Some(placeholder) = field.placeholder {
             input.set_attr("placeholder", placeholder.as_str());
         }
 
         if let Some(label) = field.label {
-            let text = Text::new(label.as_str(), TextStyle::Label);
+            let text = Text::new(label.as_str(), TextStyle::Label)
+                .set_attr("for", self.name.as_str())
+                .tag("label");
             field.node.children.push(text.render(style_registery, script_registery));
         }
         field.node.children.push(input.render(style_registery, script_registery));

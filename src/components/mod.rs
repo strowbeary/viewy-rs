@@ -18,5 +18,6 @@ pub use text::{Text, TextStyle};
 pub use titlebar::TitleBar;
 pub use grid::Grid;
 pub use view::View;
-pub use textfield::TextField;
+pub use textfield::{TextField, FieldType};
 pub use picker::{Picker, PickerStyle, PickerOption};
+pub use icon::Icon;

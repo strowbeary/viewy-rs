@@ -1,33 +1,38 @@
 @use "sass:color";
 
-@mixin palette {
-  $primary: #1d5dea;
-  $on-primary: #ffffff;
-  $background: #ffffff;
-  $on-background: #000000;
-  $surface: #bababa;
-  $destructive : #ef5a70;
+@function toggle($condition, $a, $b) {
+  @if($condition) {
+    @return $a;
+  } @else {
+    @return $b;
+  }
+}
 
-  $themed-on-background: color.mix($on-background, $primary, $weight: 85%);
+@mixin palette($variant, $primary, $destructive) {
+  @if($variant == "dark") {
+    $on-primary: #ffffff;
+    $background: #121212;
+    $on-background: #ffffff;
+    $surface: #181818;
+    $themed-on-background: color.mix($on-background, $primary, $weight: 90%);
 
-  @media (prefers-color-scheme: light) {
-    --color-primary: #{$primary};
-    --color-primary-light: #{color.adjust($primary, $lightness: -15%)};
-    --color-primary-lighter: #{color.adjust($primary, $lightness: -30%)};
+    --color-primary: #{color.adjust($primary, $lightness: +5%)};
+    --color-primary-light: #{color.adjust($primary, $lightness: +20%)};
+    --color-primary-lighter: #{color.adjust($primary, $lightness: +35%)};
     --surface-blue: #{color.adjust($surface, $alpha: -0.85)};
     --surface-red: #{color.adjust($destructive, $alpha: -0.9)};
     --color-border-blue: #{color.adjust($primary, $alpha: -0.25)};
-    --background: white;
+    --background: $background;
     --background-raised: #{color.adjust($themed-on-background, $lightness: +85%)};
     --surface: #{$surface};
     --surface-dark: #{color.adjust($surface, $darkness: +10%)};
     --backdrop: #{color.adjust($themed-on-background, $alpha: -0.5)};
     --color-text: #{$themed-on-background};
-    --color-text-secondary: #{color.adjust($themed-on-background, $lightness: +20%, $saturation: -50%)};
-    --color-border: #{color.adjust($themed-on-background, $lightness: +85%, $saturation: -50%)};
-    --color-border-hover: #{color.adjust($themed-on-background, $lightness: +80%, $saturation: -50%)};
-    --color-hover: rgba(0, 0, 0, 0.04);
-    --color-active: rgba(0, 0, 0, 0.06);
+    --color-text-secondary: #{color.adjust($themed-on-background, $lightness: -20%, $saturation: -70%)};
+    --color-border: #{color.adjust($themed-on-background, $lightness: -78%, $saturation: -70%)};
+    --color-border-hover: #{color.adjust($themed-on-background, $lightness: -73%, $saturation: -70%)};
+    --color-hover: #{color.adjust($themed-on-background, $alpha: -0.94)};
+    --color-active: #{color.adjust($themed-on-background, $alpha: -0.90)};
     --color-focus: #1d5dea99;
     --color-shadow: rgba(0, 0, 0, 0.1);
     --color-success: #3DA144;
@@ -37,32 +42,37 @@
     --color-warning: #D86F48;
     --color-text-disabled: #{color.adjust($themed-on-background, $lightness: -50%)};
   }
-  @media (prefers-color-scheme: dark) {
-    --color-primary: #0a84ff;
-    --color-primary-light: #3399ff;
-    --color-primary-lighter: #4da6ff;
-    --surface-blue: #0a84ff11;
+  @else {
+    $on-primary: #ffffff;
+    $background: #ffffff;
+    $on-background: #000000;
+    $surface: #e5e5e5;
+    $themed-on-background: color.mix($on-background, $primary, $weight: 85%);
+
+    --color-primary: #{$primary};
+    --color-primary-light: #{color.adjust($primary, $lightness: -15%)};
+    --color-primary-lighter: #{color.adjust($primary, $lightness: -30%)};
+    --surface-blue: #{color.adjust($primary, $alpha: -0.85)};
     --surface-red: #{color.adjust($destructive, $alpha: -0.9)};
-    --color-border-blue: #0a84ff33;
-    --background: #161616;
-    --background-raised: #252526;
-    --surface: rgba(255, 255, 255, 0.05);
-    --surface-dark: rgba(0, 0, 0, 0.3);
-    --backdrop: rgba(0, 0, 0, 0.5);
-    --color-text: #f0f0ff;
-    --color-text-secondary: #b1b1bc;
-    --color-border: rgba(255, 255, 255, 0.09);
-    --color-border-hover: rgba(255, 255, 255, 0.09);
-    --color-hover: rgba(255, 255, 255, 0.03);
-    --color-active: rgba(255, 255, 255, 0.05);
-    --color-focus: #0a84ff66;
+    --color-border-blue: #{color.adjust($primary, $alpha: -0.25)};
+    --background: $background;
+    --background-raised: #{color.adjust($themed-on-background, $lightness: +85%)};
+    --surface: #{$surface};
+    --surface-dark: #{color.adjust($surface, $darkness: +10%)};
+    --backdrop: #{color.adjust($themed-on-background, $alpha: -0.5)};
+    --color-text: #{$themed-on-background};
+    --color-text-secondary: #{color.adjust($themed-on-background, $lightness: +20%, $saturation: -50%)};
+    --color-border: #{color.adjust($themed-on-background, $lightness: +78%, $saturation: -50%)};
+    --color-border-hover: #{color.adjust($themed-on-background, $lightness: +73%, $saturation: -50%)};
+    --color-hover: #{color.adjust($themed-on-background, $alpha: -0.94)};
+    --color-active: #{color.adjust($themed-on-background, $alpha: -0.90)};
+    --color-focus: #1d5dea99;
     --color-shadow: rgba(0, 0, 0, 0.1);
     --color-success: #3DA144;
     --color-destructive: #{$destructive};
-    --color-destructive-light: #{color.adjust($destructive, $lightness: -10%)};;
-    --color-destructive-lighter: #{color.adjust($destructive, $lightness: -20%)};;
+    --color-destructive-light: #{color.adjust($destructive, $lightness: 10%)};;
+    --color-destructive-lighter: #{color.adjust($destructive, $lightness: 20%)};;
     --color-warning: #D86F48;
-    --color-text-disabled: #6e6e73;
+    --color-text-disabled: #{color.adjust($themed-on-background, $lightness: -50%)};
   }
-
 }

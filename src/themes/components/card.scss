@@ -9,7 +9,7 @@
     background: var(--surface);
   }
   &--raised {
-    border: sp(1) solid var(--color-border-hover);
+    border: sp(1) solid var(--color-border);
     background: var(--background);
     box-shadow: 0 sp(4) sp(8) 0 var(--color-shadow);
   }

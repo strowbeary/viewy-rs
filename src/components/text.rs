@@ -3,6 +3,7 @@ use std::sync::Mutex;
 use crate::template_compilation_tools::ScriptRegistry;
 use crate::node::{Node, DefaultModifiers, NodeContainer};
 use std::borrow::BorrowMut;
+use html_escape::encode_text;
 
 #[derive(Debug, Clone)]
 pub enum TextStyle {
@@ -13,8 +14,8 @@ pub enum TextStyle {
     Headline,
     Subtitle1,
     Subtitle2,
-    Body1,
-    Body2,
+    Subtitle3,
+    Body,
     Button,
     Label,
     Overline,
@@ -23,13 +24,14 @@ pub enum TextStyle {
 
 #[derive(Debug, Clone)]
 pub struct Text {
-    pub view: Node,
-    pub content: String,
-    pub style: TextStyle
+    node: Node,
+    content: String,
+    style: TextStyle,
 }
+
 impl NodeContainer for Text {
     fn get_node(&mut self) -> &mut Node {
-        self.view.borrow_mut()
+        self.node.borrow_mut()
     }
 }
 
@@ -37,15 +39,17 @@ impl DefaultModifiers<Text> for Text {}
 
 impl Text {
     pub fn new(content: &str, style: TextStyle) -> Self {
-        let mut view = Node::default();
-        view.text = Some(content.to_string());
+        let mut node = Node::default();
+        node.text = Some(match style {
+            TextStyle::Body => markdown::to_html(content.as_ref()),
+            _ => encode_text(content).to_string()
+        });
         Text {
-            view,
+            node,
             content: content.to_string(),
-            style: style
+            style,
         }
     }
-
 }
 
 impl Renderable for Text {
@@ -61,6 +65,6 @@ impl Renderable for Text {
         let text = self.clone()
             .add_class("text")
             .add_class(format!("text--{:?}", self.style).to_lowercase().as_str());
-        text.view
+        text.node
     }
 }

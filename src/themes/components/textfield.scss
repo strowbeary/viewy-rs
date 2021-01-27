@@ -4,7 +4,7 @@
   gap: sp(4);
   &__input {
     padding: sp(9) sp(13);
-    background: var(--background);
+    background: inherit;
     border-radius: sp(8);
     font-size: sp(16);
     border: sp(1) solid var(--color-border);

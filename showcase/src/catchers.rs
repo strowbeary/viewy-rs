@@ -20,7 +20,7 @@ pub fn not_found() -> Html<String> {
         o
     });
     let compiled_page = page.compile(());
-    compile_page(compiled_page)
+    Html(compile_page(compiled_page, "auto"))
 }
 
 #[catch(403)]
@@ -38,7 +38,7 @@ pub fn unauthorized() -> Html<String> {
         o
     });
     let compiled_page = page.compile(());
-    compile_page(compiled_page)
+    Html(compile_page(compiled_page, "auto"))
 }
 
 pub fn routes() -> Vec<Catcher> {

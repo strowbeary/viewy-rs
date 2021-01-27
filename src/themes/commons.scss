@@ -1,4 +1,5 @@
 @import url('https://rsms.me/inter/inter.css');
+@import url('https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap');
 
 html {
   text-rendering: optimizeLegibility;
@@ -9,11 +10,29 @@ html {
 }
 
 body {
-  @include palette;
   margin: 0;
   font-size: sp(14);
   background: var(--background);
   color: var(--color-text);
+
+  &.app-theme {
+    &--auto {
+      @media (prefers-color-scheme: light) {
+        @include palette("light", #1d5dea, #ef5a70);
+      }
+      @media (prefers-color-scheme: dark) {
+        @include palette("dark", #1d5dea, #ef5a70);
+      }
+    }
+
+    &--light {
+      @include palette("light", #1d5dea, #ef5a70);
+    }
+
+    &--dark {
+      @include palette("dark", #1d5dea, #ef5a70);
+    }
+  }
 }
 
 .rootView {

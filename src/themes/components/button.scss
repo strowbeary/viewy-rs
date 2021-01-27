@@ -17,7 +17,7 @@
       padding: sp(8) 0;
       border: none;
       background: transparent;
-      .text {
+      .text, .icon {
         color: var(--color-primary);
       }
       &:hover .text, &:hover .icon {
