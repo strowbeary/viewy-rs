@@ -46,6 +46,7 @@ pub fn compile_page((content, style, script): (String, String, String), theme_va
             <title>Viewy-rs showcase</title>
             <style>{style}</style>
             <script>{script}</script>
+            <script src='https://unpkg.com/@popperjs/core@2'></script>
             <meta charset='utf8' />
         </head>
         <body class='app-theme--{theme_variant}'>

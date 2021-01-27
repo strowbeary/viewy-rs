@@ -27,6 +27,8 @@ pub struct TextField {
     label: Option<String>,
     helper_text: Option<String>,
     placeholder: Option<String>,
+    leading_icon: Option<String>,
+    trailing_icon: Option<String>,
     field_type: FieldType,
     name: String,
     auto_sizing: bool,
@@ -47,6 +49,8 @@ impl TextField {
             label: None,
             helper_text: None,
             placeholder: None,
+            leading_icon: None,
+            trailing_icon: None,
             field_type,
             name: name.to_string(),
             auto_sizing: false
@@ -64,6 +68,16 @@ impl TextField {
     }
     pub fn placeholder(&mut self, placeholder: &str) -> Self {
         self.placeholder = Some(placeholder.to_string());
+        self.clone()
+    }
+
+    pub fn trailing_icon(&mut self, name: &str) -> Self {
+        self.trailing_icon = Some(name.to_string());
+        self.clone()
+    }
+
+    pub fn leading_icon(&mut self, name: &str) -> Self {
+        self.leading_icon = Some(name.to_string());
         self.clone()
     }
 }
