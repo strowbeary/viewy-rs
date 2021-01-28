@@ -1,9 +1,9 @@
 use rocket::response::content::Html;
 use rocket::Catcher;
-use viewy_rs::Component;
-use viewy_rs::components::{VStack, Alignment, Text, TextStyle};
+use viewy::Component;
+use viewy::components::{VStack, Alignment, Text, TextStyle};
 use crate::compile_page;
-use viewy_rs::node::DefaultModifiers;
+use viewy::node::DefaultModifiers;
 
 #[catch(404)]
 pub fn not_found() -> Html<String> {

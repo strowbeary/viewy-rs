@@ -68,16 +68,16 @@
       background: none;
       width: sp(20);
       height: sp(20);
-      border-radius: 10px;
+      border-radius: sp(10);
       display: flex;
       align-items: center;
       justify-content: center;
-      border: 2px solid var(--color-border);
+      border: sp(2) solid var(--color-border);
       &:hover {
-        border: 2px solid var(--color-border-hover);
+        border: sp(2) solid var(--color-border-hover);
       }
       &:focus {
-        box-shadow: 0 0 0 2px var(--color-focus);
+        box-shadow: 0 0 0 sp(2) var(--color-focus);
       }
       &:checked {
         background: var(--color-primary);
@@ -86,7 +86,7 @@
           content: "";
           width: sp(6);
           height: sp(6);
-          border-radius: 4px;
+          border-radius: sp(4);
           background: white;
         }
       }

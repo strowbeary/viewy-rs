@@ -1,7 +1,5 @@
 use crate::helper_fn::sp;
 use std::collections::HashSet;
-use crate::{Renderable, StyleRegistry};
-use crate::template_compilation_tools::ScriptRegistry;
 
 #[derive(Debug, Clone)]
 pub enum NodeType {

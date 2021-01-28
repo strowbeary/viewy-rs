@@ -1,5 +1,5 @@
-use viewy_rs::{StyleRegistery, Component};
-use viewy_rs::components::*;
+use viewy::{StyleRegistery, Component};
+use viewy::components::*;
 use view::view;
 
 struct UserProfile {

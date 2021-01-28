@@ -1,6 +1,6 @@
 use crate::{Renderable, StyleRegistry};
 use crate::template_compilation_tools::ScriptRegistry;
-use crate::components::{Grid, Alignment, Text, TextStyle};
+use crate::components::*;
 use std::borrow::BorrowMut;
 use crate::node::{Node, DefaultModifiers, NodeContainer};
 

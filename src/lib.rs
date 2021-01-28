@@ -13,7 +13,7 @@ pub mod node;
 use template_compilation_tools::StyleRegistry;
 use template_compilation_tools::ScriptRegistry;
 use std::fmt::Debug;
-use crate::node::{Node, DefaultModifiers};
+use crate::node::{Node};
 
 pub trait Renderable: Debug + RenderableClone {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node;
@@ -67,7 +67,7 @@ impl<S, T: Renderable> Component<S, T> {
     pub fn compile(&self, state: S) -> (String, String, String) {
         let mut style_registery = StyleRegistry::new();
         let mut script_registery = ScriptRegistry::new();
-        let mut compiled_view = self.0(state);
+        let compiled_view = self.0(state);
         (compiled_view.render(&mut style_registery, &mut script_registery).get_html(), style_registery.get_css(), script_registery.get_js())
     }
 }

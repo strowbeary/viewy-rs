@@ -1,5 +1,5 @@
 use crate::node::{Node, DefaultModifiers, NodeContainer};
-use crate::helper_fn::{sp, scale};
+use crate::helper_fn::scale;
 use crate::{Renderable, StyleRegistry};
 use crate::template_compilation_tools::ScriptRegistry;
 use std::borrow::BorrowMut;
@@ -58,7 +58,7 @@ impl Picker {
             style: picker_style,
             label: None,
             name: name.to_string(),
-            value: "".to_string(),
+            value: value.to_string(),
             options: vec![],
         }
     }

@@ -1,5 +1,4 @@
 use crate::{StyleRegistry, Renderable};
-use std::sync::Mutex;
 use crate::template_compilation_tools::ScriptRegistry;
 use crate::node::{DefaultModifiers, NodeContainer, Node};
 use std::borrow::BorrowMut;

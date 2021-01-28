@@ -1,16 +1,15 @@
 use crate::Renderable;
 use crate::node::{Node, NodeContainer, DefaultModifiers};
 use std::collections::HashMap;
-use serde::{Deserialize, Serialize};
-use serde_json::Result;
 use crate::template_compilation_tools::{StyleRegistry, ScriptRegistry};
+use crate::helper_fn::sp;
 
 #[derive(Debug, Clone)]
 pub struct Icon {
     node: Node,
     pub name: String,
     pub stroke_width: String,
-    pub size: String
+    pub size: i32
 }
 
 impl Icon {
@@ -19,12 +18,12 @@ impl Icon {
             node: Default::default(),
             name: name.to_string(),
             stroke_width: "3".to_string(),
-            size: "24".to_string()
+            size: 24
         }
     }
 
     pub fn size(&mut self, size: i32) -> Self {
-        self.size = size.to_string();
+        self.size = size;
         self.clone()
     }
 
@@ -43,11 +42,11 @@ impl NodeContainer for Icon {
 impl DefaultModifiers<Icon> for Icon {}
 
 impl Renderable for Icon {
-    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
+    fn render(&self, _style_registery: &mut StyleRegistry, _script_registery: &mut ScriptRegistry) -> Node {
         let mut icon = self.clone()
             .add_class("icon")
-            .set_attr("width", self.size.as_str())
-            .set_attr("height", self.size.as_str())
+            .set_attr("width", sp(self.size).as_str())
+            .set_attr("height", sp(self.size).as_str())
             .set_attr("viewBox", "0 0 24 24")
             .set_attr("fill", "none")
             .set_attr("stroke", "currentColor")

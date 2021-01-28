@@ -1,8 +1,5 @@
 use std::collections::HashMap;
 use grass;
-use std::path::Path;
-use grass::OutputStyle;
-use std::env;
 
 #[derive(Clone)]
 pub struct StyleRegistry {
