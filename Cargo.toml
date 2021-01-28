@@ -5,6 +5,9 @@ authors = ["Rémi Caillot <r.caillot@maformationofficinale.com>"]
 description = "A `cargo generate` template for quick-starting a procedural macro crate"
 keywords = ["template", "proc_macro", "procmacro"]
 edition = "2018"
+readme = "README.md"
+repository = "https://github.com/strowbeary/viewy-rs"
+licence = "MIT"
 
 [dependencies]
 grass = "0.10.4"
