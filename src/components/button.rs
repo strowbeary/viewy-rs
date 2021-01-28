@@ -43,6 +43,7 @@ impl Button {
     pub fn destructive(&mut self) -> Self {
         self.add_class(format!("button--{:?}--destructive", self.style).to_lowercase().as_str())
     }
+
     pub fn disabled(&mut self, is_disabled: bool) -> Self {
         if is_disabled {
             self.add_class(format!("button--{:?}--disabled", self.style).to_lowercase().as_str())
@@ -50,6 +51,7 @@ impl Button {
             self.clone()
         }
     }
+
     pub fn action(&mut self, url: &str) -> Self {
         self.set_attr("href", url)
     }
