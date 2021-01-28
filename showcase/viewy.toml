@@ -1,0 +1,14 @@
+[colors]
+primary = "#1d5dea"
+on-primary = "#ffffff"
+background = "#ffffff"
+on-background = "#000000"
+surface = "#000000"
+destructive = "#EF5A70"
+
+[shapes]
+corner-radius = 8
+smallest-spacing = 4
+
+[animations]
+time = "150ms"

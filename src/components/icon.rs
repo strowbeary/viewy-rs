@@ -1,15 +1,14 @@
-use crate::Renderable;
-use crate::node::{Node, NodeContainer, DefaultModifiers};
+use crate::node::{Node, NodeContainer};
 use std::collections::HashMap;
-use crate::template_compilation_tools::{StyleRegistry, ScriptRegistry};
-use crate::helper_fn::sp;
+use crate::{DefaultModifiers, sp};
+use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
 
 #[derive(Debug, Clone)]
 pub struct Icon {
     node: Node,
     pub name: String,
     pub stroke_width: String,
-    pub size: i32
+    pub size: i32,
 }
 
 impl Icon {
@@ -18,7 +17,7 @@ impl Icon {
             node: Default::default(),
             name: name.to_string(),
             stroke_width: "3".to_string(),
-            size: 24
+            size: 24,
         }
     }
 
@@ -40,6 +39,8 @@ impl NodeContainer for Icon {
 }
 
 impl DefaultModifiers<Icon> for Icon {}
+
+impl ToHtml for Icon {}
 
 impl Renderable for Icon {
     fn render(&self, _style_registery: &mut StyleRegistry, _script_registery: &mut ScriptRegistry) -> Node {

@@ -1,9 +1,8 @@
-use crate::node::{Node, DefaultModifiers, NodeContainer};
-use crate::helper_fn::sp;
-use crate::{Renderable, StyleRegistry};
-use crate::template_compilation_tools::ScriptRegistry;
-use std::borrow::BorrowMut;
+use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
+use crate::node::{Node, NodeContainer};
 use crate::components::Alignment;
+use std::borrow::BorrowMut;
+use crate::{sp, DefaultModifiers};
 
 #[derive(Debug, Clone)]
 pub struct HStack {
@@ -17,7 +16,7 @@ impl Default for HStack {
         HStack {
             children: vec![],
             node: Default::default(),
-            alignment: Alignment::Stretch
+            alignment: Alignment::Stretch,
         }
     }
 }
@@ -29,6 +28,8 @@ impl NodeContainer for HStack {
 }
 
 impl DefaultModifiers<HStack> for HStack {}
+
+impl ToHtml for HStack {}
 
 impl HStack {
     pub fn new(alignment: Alignment) -> Self {
@@ -49,7 +50,6 @@ impl HStack {
     {
         self.children.push(Box::new(child));
     }
-
 }
 
 impl Renderable for HStack {

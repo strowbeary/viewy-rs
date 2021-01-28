@@ -1,8 +1,8 @@
-use crate::{Renderable, StyleRegistry};
-use crate::template_compilation_tools::ScriptRegistry;
-use crate::components::*;
+use crate::node::{Node, NodeContainer};
+use crate::renderer::{Renderable, StyleRegistry, ScriptRegistry, ToHtml};
 use std::borrow::BorrowMut;
-use crate::node::{Node, DefaultModifiers, NodeContainer};
+use crate::DefaultModifiers;
+use crate::components::{TextStyle, Text};
 
 #[derive(Debug, Clone)]
 pub struct TitleBar {
@@ -20,6 +20,8 @@ impl NodeContainer for TitleBar {
 }
 
 impl DefaultModifiers<TitleBar> for TitleBar {}
+
+impl ToHtml for TitleBar {}
 
 impl TitleBar {
     pub fn new(title: &str) -> Self {

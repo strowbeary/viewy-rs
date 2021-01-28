@@ -1,10 +1,8 @@
-use crate::node::{Node, DefaultModifiers, NodeContainer};
-use crate::helper_fn::sp;
-use crate::{Renderable, StyleRegistry};
-use crate::template_compilation_tools::ScriptRegistry;
-use std::borrow::BorrowMut;
+use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
+use crate::node::{Node, NodeContainer};
 use crate::components::Alignment;
-
+use std::borrow::BorrowMut;
+use crate::{DefaultModifiers, sp};
 
 #[derive(Debug, Clone)]
 pub struct Grid {
@@ -12,6 +10,7 @@ pub struct Grid {
     node: Node,
     pub alignment: Alignment,
 }
+
 impl NodeContainer for Grid {
     fn get_node(&mut self) -> &mut Node {
         self.node.borrow_mut()
@@ -19,6 +18,8 @@ impl NodeContainer for Grid {
 }
 
 impl DefaultModifiers<Grid> for Grid {}
+
+impl ToHtml for Grid {}
 
 impl Grid {
     pub fn new(alignment: Alignment) -> Self {
@@ -59,7 +60,6 @@ impl Grid {
     {
         self.children.push(Box::new(child));
     }
-
 }
 
 impl Renderable for Grid {

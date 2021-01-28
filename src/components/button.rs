@@ -1,9 +1,8 @@
-use crate::{StyleRegistry, Renderable};
-use crate::template_compilation_tools::ScriptRegistry;
-use crate::node::{Node, DefaultModifiers, NodeContainer};
+use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
+use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
-use crate::components::{Text, TextStyle, Icon};
-use crate::helper_fn::scale;
+use crate::{DefaultModifiers, scale};
+use crate::components::{Icon, Text, TextStyle};
 
 #[derive(Debug, Clone)]
 pub enum ButtonStyle {
@@ -29,6 +28,7 @@ impl NodeContainer for Button {
 }
 
 impl DefaultModifiers<Button> for Button {}
+impl ToHtml for Button {}
 
 impl Button {
     pub fn new(label: &str, style: ButtonStyle) -> Self {

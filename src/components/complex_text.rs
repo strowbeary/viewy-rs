@@ -1,10 +1,8 @@
-use crate::{StyleRegistry, Renderable};
-use std::sync::Mutex;
-use crate::template_compilation_tools::ScriptRegistry;
-use crate::node::{Node, DefaultModifiers, NodeContainer};
-use std::borrow::BorrowMut;
+use crate::node::{Node, NodeContainer};
 use crate::components::TextStyle;
-
+use std::borrow::BorrowMut;
+use crate::DefaultModifiers;
+use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
 
 #[derive(Debug, Clone)]
 pub struct ComplexText {
@@ -20,6 +18,8 @@ impl NodeContainer for ComplexText {
 }
 
 impl DefaultModifiers<ComplexText> for ComplexText {}
+
+impl ToHtml for ComplexText {}
 
 impl ComplexText {
     pub fn new(content: &str, style: TextStyle) -> Self {

@@ -1,8 +1,8 @@
-use crate::{StyleRegistry, Renderable};
-use crate::template_compilation_tools::ScriptRegistry;
-use crate::node::{Node, DefaultModifiers, NodeContainer};
+use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
-use crate::components::{Text, TextStyle, View};
+use crate::DefaultModifiers;
+use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
+use crate::components::{View, TextStyle, Text};
 
 #[derive(Debug, Clone)]
 pub enum FieldType {
@@ -80,6 +80,8 @@ impl TextField {
         self.clone()
     }
 }
+
+impl ToHtml for TextField {}
 
 impl Renderable for TextField {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {

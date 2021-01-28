@@ -1,8 +1,7 @@
-use crate::node::{Node, DefaultModifiers, NodeContainer};
-use crate::{Renderable, StyleRegistry};
-use crate::template_compilation_tools::ScriptRegistry;
+use crate::renderer::{Renderable, StyleRegistry, ScriptRegistry, ToHtml};
+use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
-
+use crate::DefaultModifiers;
 
 #[derive(Debug, Clone)]
 pub struct View {
@@ -16,6 +15,9 @@ impl NodeContainer for View {
 }
 
 impl DefaultModifiers<View> for View {}
+
+
+impl ToHtml for View {}
 
 impl View {
     pub fn new() -> Self {

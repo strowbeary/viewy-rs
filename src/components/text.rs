@@ -1,7 +1,7 @@
-use crate::{StyleRegistry, Renderable};
-use crate::template_compilation_tools::ScriptRegistry;
-use crate::node::{Node, DefaultModifiers, NodeContainer};
+use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
+use crate::DefaultModifiers;
+use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
 use html_escape::encode_text;
 
 #[derive(Debug, Clone)]
@@ -35,6 +35,7 @@ impl NodeContainer for Text {
 }
 
 impl DefaultModifiers<Text> for Text {}
+impl ToHtml for Text {}
 
 impl Text {
     pub fn new(content: &str, style: TextStyle) -> Self {

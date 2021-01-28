@@ -1,8 +1,7 @@
-use crate::node::{Node, DefaultModifiers, NodeContainer};
-use crate::helper_fn::scale;
-use crate::{Renderable, StyleRegistry};
-use crate::template_compilation_tools::ScriptRegistry;
+use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
+use crate::{DefaultModifiers, scale};
+use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
 use crate::components::{Text, TextStyle, HStack, Alignment, Icon, VStack, View};
 
 #[derive(Debug, Clone)]
@@ -50,6 +49,8 @@ impl NodeContainer for Picker {
 }
 
 impl DefaultModifiers<Picker> for Picker {}
+
+impl ToHtml for Picker {}
 
 impl Picker {
     pub fn new(name: &str, value: &str, picker_style: PickerStyle) -> Self {

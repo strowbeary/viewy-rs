@@ -1,7 +1,7 @@
-use crate::{StyleRegistry, Renderable};
-use crate::template_compilation_tools::ScriptRegistry;
-use crate::node::{DefaultModifiers, NodeContainer, Node};
+use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
+use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
+use crate::DefaultModifiers;
 
 #[derive(Debug, Clone)]
 pub enum CardStyle {
@@ -24,6 +24,7 @@ impl NodeContainer for Card {
 }
 
 impl DefaultModifiers<Card> for Card {}
+impl ToHtml for Card {}
 
 impl Card {
     pub fn new(style: CardStyle) -> Self {

@@ -1,8 +1,7 @@
-use crate::node::{Node, DefaultModifiers, NodeContainer};
-use crate::{Renderable, StyleRegistry};
-use crate::template_compilation_tools::ScriptRegistry;
+use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
-
+use crate::DefaultModifiers;
+use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
 
 #[derive(Debug, Clone)]
 pub struct Image {
@@ -26,6 +25,8 @@ impl Image {
         }
     }
 }
+
+impl ToHtml for Image {}
 
 impl Renderable for Image {
     fn render(&self, style_registery: &mut StyleRegistry, _script_registery: &mut ScriptRegistry) -> Node {
