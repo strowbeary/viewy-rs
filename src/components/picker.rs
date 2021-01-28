@@ -3,13 +3,13 @@ use crate::helper_fn::{sp, scale};
 use crate::{Renderable, StyleRegistry};
 use crate::template_compilation_tools::ScriptRegistry;
 use std::borrow::BorrowMut;
-use crate::components::{Text, TextStyle, HStack, Alignment, Icon};
+use crate::components::{Text, TextStyle, HStack, Alignment, Icon, VStack, View};
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
-    icon: Option<String>,
-    label: String,
-    value: String,
+    pub icon: Option<String>,
+    pub label: String,
+    pub value: String,
 }
 
 impl PickerOption {
@@ -117,10 +117,40 @@ impl Renderable for Picker {
                     option_list.render(style_registery, script_registery)
                 })
             }
-            PickerStyle::Dropdown => {
+            PickerStyle::Dropdown => {}
+            PickerStyle::RadioGroup => {
+                picker.node.children.push({
+                    let mut option_list = VStack::new(Alignment::Stretch)
+                        .add_class("picker__option-list")
+                        .gap(vec![scale(3)]);
+                    for option in picker.options {
+                        option_list.add_view_child({
+                            let mut radio_row = HStack::new(Alignment::Center)
+                                .gap(vec![scale(2)]);
+                            let radio_id = format!("picker-radio-{}-{}", self.name.as_str(), option.label);
+                            let mut radio_button = View::new()
+                                .tag("input")
+                                .set_attr("type", "radio")
+                                .set_attr("name", self.name.as_str())
+                                .set_attr("id", radio_id.as_str());
+                            if picker.value.eq(option.value.as_str()) {
+                                radio_button.set_attr("checked", "checked");
+                            }
+                            radio_row.add_view_child(
+                                radio_button
+                            );
+                            radio_row.add_view_child(
+                                Text::new(option.label.as_str(), TextStyle::Body)
+                                    .set_attr("for", radio_id.as_str())
+                                    .tag("label")
+                            );
 
+                            radio_row
+                        })
+                    }
+                    option_list.render(style_registery, script_registery)
+                })
             }
-            PickerStyle::RadioGroup => {}
         }
 
         picker.node

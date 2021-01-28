@@ -15,7 +15,7 @@ pub enum CardStyle {
 pub struct Card {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
-    style: CardStyle,
+    pub style: CardStyle,
 
 }
 impl NodeContainer for Card {

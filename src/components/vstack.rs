@@ -14,8 +14,8 @@ pub enum Alignment {
 
 #[derive(Debug, Clone)]
 pub struct VStack {
-    pub children: Vec<Box<dyn Renderable>>,
-    pub view: Node,
+    children: Vec<Box<dyn Renderable>>,
+    view: Node,
     pub alignment: Alignment,
 }
 

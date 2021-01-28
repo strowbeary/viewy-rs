@@ -25,8 +25,8 @@ pub enum TextStyle {
 #[derive(Debug, Clone)]
 pub struct Text {
     node: Node,
-    content: String,
-    style: TextStyle,
+    pub content: String,
+    pub style: TextStyle,
 }
 
 impl NodeContainer for Text {
@@ -41,7 +41,7 @@ impl Text {
     pub fn new(content: &str, style: TextStyle) -> Self {
         let mut node = Node::default();
         node.text = Some(match style {
-            TextStyle::Body => markdown::to_html(content.as_ref()),
+            TextStyle::Body => encode_text(content).to_string(), //markdown::to_html(content.as_ref()),
             _ => encode_text(content).to_string()
         });
         Text {

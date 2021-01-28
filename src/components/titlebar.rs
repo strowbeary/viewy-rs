@@ -8,9 +8,9 @@ use crate::node::{Node, DefaultModifiers, NodeContainer};
 pub struct TitleBar {
     view: Node,
     pub title: String,
-    left_item: Option<Box<dyn Renderable>>,
-    right_item: Option<Box<dyn Renderable>>,
-    bottom_item: Option<Box<dyn Renderable>>,
+    pub left_item: Option<Box<dyn Renderable>>,
+    pub right_item: Option<Box<dyn Renderable>>,
+    pub bottom_item: Option<Box<dyn Renderable>>,
 }
 
 impl NodeContainer for TitleBar {

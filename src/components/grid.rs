@@ -10,7 +10,7 @@ use crate::components::Alignment;
 pub struct Grid {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
-    alignment: Alignment,
+    pub alignment: Alignment,
 }
 impl NodeContainer for Grid {
     fn get_node(&mut self) -> &mut Node {

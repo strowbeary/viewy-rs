@@ -158,7 +158,7 @@ It is a *long established* fact that a reader will be **distracted** by the read
                 let mut o = Card::new(CardStyle::Raised)
                     .padding(vec![30]);
                 o.add_view_child({
-                    Text::new("Text field", TextStyle::H1)
+                    Text::new("Text Field", TextStyle::H1)
                         .margin_bottom(25)
                 });
                 o.add_view_child({
@@ -186,7 +186,7 @@ It is a *long established* fact that a reader will be **distracted** by the read
                 let mut o = Card::new(CardStyle::Raised)
                     .padding(vec![30]);
                 o.add_view_child({
-                    Text::new("Picker", TextStyle::H1)
+                    Text::new("Pickers", TextStyle::H1)
                         .margin_bottom(25)
                 });
                 o.add_view_child({
@@ -198,6 +198,17 @@ It is a *long established* fact that a reader will be **distracted** by the read
                             .label("Segmented picker");
                         o.add_view_child({
                             PickerOption::new("Test 1", "1")
+                                .icon("user")
+                        });
+                        o.add_view_child(PickerOption::new("Test 2", "2"));
+                        o.add_view_child(PickerOption::new("Test 3", "3"));
+                        o
+                    });
+                    o.add_view_child({
+                        let mut o = Picker::new("Hello", "2", PickerStyle::RadioGroup)
+                            .label("Radio group picker");
+                        o.add_view_child({
+                            PickerOption::new("Test 1 - ignored icon", "1")
                                 .icon("user")
                         });
                         o.add_view_child(PickerOption::new("Test 2", "2"));

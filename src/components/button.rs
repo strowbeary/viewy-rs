@@ -18,9 +18,9 @@ pub enum ButtonStyle {
 pub struct Button {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
-    label: String,
-    style: ButtonStyle,
-    icon: Option<String>,
+    pub label: String,
+    pub style: ButtonStyle,
+    pub icon: Option<String>,
 }
 
 impl NodeContainer for Button {

@@ -1,5 +1,5 @@
 window.addEventListener("load", () => {
-    let pickers = document.querySelectorAll(".picker");
+    let pickers = document.querySelectorAll(".picker--segmented");
     for (const picker of pickers) {
         console.log(picker);
         let options = picker.querySelectorAll(".item");

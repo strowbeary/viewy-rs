@@ -8,9 +8,9 @@ use crate::template_compilation_tools::{StyleRegistry, ScriptRegistry};
 #[derive(Debug, Clone)]
 pub struct Icon {
     node: Node,
-    name: String,
-    stroke_width: String,
-    size: String
+    pub name: String,
+    pub stroke_width: String,
+    pub size: String
 }
 
 impl Icon {

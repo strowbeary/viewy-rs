@@ -24,14 +24,14 @@ pub enum FieldType {
 #[derive(Debug, Clone)]
 pub struct TextField {
     node: Node,
-    label: Option<String>,
-    helper_text: Option<String>,
-    placeholder: Option<String>,
-    leading_icon: Option<String>,
-    trailing_icon: Option<String>,
-    field_type: FieldType,
-    name: String,
-    auto_sizing: bool,
+    pub label: Option<String>,
+    pub helper_text: Option<String>,
+    pub placeholder: Option<String>,
+    pub leading_icon: Option<String>,
+    pub trailing_icon: Option<String>,
+    pub field_type: FieldType,
+    pub name: String,
+    pub auto_sizing: bool,
 }
 
 impl NodeContainer for TextField {

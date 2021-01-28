@@ -9,7 +9,7 @@ use crate::components::Alignment;
 pub struct HStack {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
-    alignment: Alignment,
+    pub alignment: Alignment,
 }
 
 impl Default for HStack {
