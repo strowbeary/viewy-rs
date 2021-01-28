@@ -3,6 +3,8 @@ name = "view"
 version = "0.1.0"
 authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
 edition = "2018"
+repository = "https://github.com/strowbeary/viewy-rs"
+licence = "MIT"
 
 [lib]
 crate-type = ["proc-macro"]
