@@ -3,6 +3,7 @@ extern crate grass;
 extern crate serde;
 extern crate serde_json;
 extern crate html_escape;
+extern crate uuid;
 
 mod helper_fn;
 mod node;

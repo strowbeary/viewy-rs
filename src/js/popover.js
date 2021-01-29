@@ -2,7 +2,7 @@ window.addEventListener("load", () => {
     document.querySelectorAll(".popover")
         .forEach(popover => {
             const el = document.getElementById(popover.getAttribute("data-attach-to"));
-            Popper.createPopper(el, popover, {
+            let popperInstance = Popper.createPopper(el, popover, {
                 placement: "right",
                 modifiers: [
                     {
@@ -18,6 +18,12 @@ window.addEventListener("load", () => {
                         },
                     },
                 ],
-            })
+            });
+            console.log(popover.style.display);
+            el.addEventListener("click", e => {
+                popover.style.display = popover.style.display === "none" ? "block" : "none";
+                popperInstance.update();
+            });
+
         })
 })

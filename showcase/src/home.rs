@@ -217,6 +217,15 @@ It is a *long established* fact that a reader will be **distracted** by the read
                             o
                         })
                 });
+                o.add_view_child({
+                    Button::new("Open popover 2", ButtonStyle::Filled)
+                        .popover({
+                            let mut o = Popover::new()
+                                .placement("bottom-end");
+                            o.add_view_child(Text::new("Popover content 2", TextStyle::H1));
+                            o
+                        })
+                });
                 o
             });
             o

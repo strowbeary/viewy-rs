@@ -6,6 +6,7 @@
   box-shadow: 0 4px 8px 0 var(--color-shadow);
   padding: sp(14);
   border-radius: sp(8);
+  display: none;
   .arrow,
   .arrow::before {
     position: absolute;

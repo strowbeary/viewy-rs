@@ -8,7 +8,8 @@ use crate::components::View;
 pub struct Popover {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
-    pub el_to_attach_to: String
+    pub el_to_attach_to: String,
+    pub placement: String
 }
 
 impl NodeContainer for Popover {
@@ -27,12 +28,18 @@ impl Popover {
         Popover {
             children: vec![],
             node: Default::default(),
-            el_to_attach_to: "".to_string()
+            el_to_attach_to: "".to_string(),
+            placement: "auto".to_string()
         }
     }
 
     pub fn attach_to(&mut self, el: &str) -> Self {
         self.el_to_attach_to = el.to_string();
+        self.clone()
+    }
+
+    pub fn placement(&mut self, placement: &str) -> Self {
+        self.placement = placement.to_string();
         self.clone()
     }
 

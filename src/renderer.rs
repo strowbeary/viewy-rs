@@ -97,7 +97,6 @@ pub trait ToHtml : Renderable {
             .map(|popover| popover.render(&mut style_registery, &mut script_registery))
             .map(|node| node.get_html())
             .collect();
-        println!("{:?}", popovers_html);
         (
             format!("{view} {popover}", view = root_node.get_html(), popover = popovers_html.join("")),
             style_registery.get_css(),

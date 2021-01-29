@@ -1,6 +1,7 @@
 use crate::node::{NodeContainer, NodeType};
 use crate::sp;
 use crate::components::Popover;
+use uuid::Uuid;
 
 pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
     fn color(&mut self, color: &str) -> Self {
@@ -123,10 +124,10 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
         self.clone()
     }
     fn popover(&mut self, popover: Popover) -> Self {
-        let id = "HelloTestPopover";
-        self.set_attr("id", id);
+        let id = Uuid::new_v4().to_hyphenated().to_string();
+        self.set_attr("id", id.as_str());
         self.get_node().popover = Box::new(Some(
-            popover.clone().attach_to(id)
+            popover.clone().attach_to(id.as_str())
         ));
         self.clone()
     }
