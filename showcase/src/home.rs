@@ -67,6 +67,32 @@ It is a *long established* fact that a reader will be **distracted** by the read
             let mut o = Card::new(CardStyle::Raised)
                 .padding(vec![30]);
             o.add_view_child({
+                Text::new("Form", TextStyle::H1)
+                    .margin_bottom(25)
+            });
+            o.add_view_child({
+                let mut o =
+                    VStack::new(Alignment::Start)
+                        .gap(vec![16])
+                        .width("50%");
+                o.add_view_child({
+                    let mut o = Form::new("/").async_form();
+                    o.add_view_child(TextField::new("input2", FieldType::Text)
+                        .label("Label"));
+                    o.add_view_child(
+                        Button::new("submit", ButtonStyle::Filled)
+                        .set_attr("type", "submit")
+                    );
+                    o
+                });
+                o
+            });
+            o
+        });
+        o.add_view_child({
+            let mut o = Card::new(CardStyle::Raised)
+                .padding(vec![30]);
+            o.add_view_child({
                 Text::new("Buttons", TextStyle::H1)
                     .margin_bottom(25)
             });

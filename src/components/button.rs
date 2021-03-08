@@ -39,7 +39,9 @@ impl Button {
             style,
             icon: None,
         }
+            .tag("button")
     }
+
     pub fn destructive(&mut self) -> Self {
         self.add_class(format!("button--{:?}--destructive", self.style).to_lowercase().as_str())
     }
@@ -52,8 +54,16 @@ impl Button {
         }
     }
 
+    pub fn attach_to_form(&mut self, form_id: &str) -> Self {
+        self
+            .set_attr("form", form_id)
+            .set_attr("type", "submit")
+    }
+
     pub fn action(&mut self, url: &str) -> Self {
-        self.set_attr("href", url)
+        self
+            .set_attr("href", url)
+            .tag("a")
     }
 
     pub fn icon(&mut self, name: &str) -> Self {
@@ -82,8 +92,8 @@ impl Renderable for Button {
         let mut button = self.clone()
             .add_class("button")
             .add_class(format!("button--{:?}", self.style).to_lowercase().as_str())
-            .set_attr("role", "button")
-            .tag("a");
+            .set_attr("role", "button");
+
         if let Some(icon) = button.icon {
             let icon = Icon::new(icon.as_str())
                 .size(16)

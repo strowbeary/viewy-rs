@@ -1,11 +1,11 @@
 #![feature(proc_macro_hygiene, decl_macro)]
 
-mod catchers;
-mod home;
-
 #[macro_use]
 extern crate rocket;
 extern crate viewy;
+
+mod catchers;
+mod home;
 
 use rocket::response::content::Html;
 use viewy::*;

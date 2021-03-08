@@ -96,7 +96,8 @@ impl Renderable for TextField {
             .tag("input")
             .add_class("textfield__input")
             .set_attr("type", format!("{:?}", field.field_type).to_lowercase().as_str())
-            .set_attr("id", self.name.as_str());
+            .set_attr("id", self.name.as_str())
+            .set_attr("name", self.name.as_str());
 
         if let Some(placeholder) = field.placeholder {
             input.set_attr("placeholder", placeholder.as_str());

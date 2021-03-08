@@ -12,6 +12,7 @@ mod icon;
 mod image;
 mod complex_text;
 mod popover;
+mod form;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
@@ -27,3 +28,4 @@ pub use image::Image;
 pub use popover::Popover;
 pub use hstack::HStack;
 pub use text::{Text, TextStyle};
+pub use form::Form;
