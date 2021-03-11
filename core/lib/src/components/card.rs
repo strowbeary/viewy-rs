@@ -34,7 +34,7 @@ impl Card {
             style: style.clone(),
         }
     }
-    pub fn add_view_child<'a, T>(&'a mut self, child: T)
+    pub fn append_child<'a, T>(&'a mut self, child: T)
         where
             T: 'static + Renderable,
     {

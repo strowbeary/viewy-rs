@@ -46,7 +46,7 @@ impl VStack {
         self.node.node_style.push(("justify-content".to_string(), value.to_string()));
         self.clone()
     }
-    pub fn add_view_child<'a, T>(&'a mut self, child: T)
+    pub fn append_child<'a, T>(&'a mut self, child: T)
         where
             T: 'static + Renderable,
     {

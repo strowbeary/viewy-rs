@@ -6,16 +6,22 @@ extern crate viewy;
 
 mod catchers;
 mod home;
+mod login;
 
 use rocket::response::content::Html;
 use viewy::*;
 
 #[get("/")]
-fn goodbye() -> Html<String> {
+fn home() -> Html<String> {
     let page = home::home();
+    Html(compile_page(page.compile(), "auto"))
+}
+#[get("/login")]
+fn login() -> Html<String> {
+    let page = login::login();
     Html(compile_page(page.compile(), "auto"))
 }
 
 fn main() {
-    rocket::ignite().mount("/", routes![goodbye]).register(catchers::routes()).launch();
+    rocket::ignite().mount("/", routes![home, login]).register(catchers::routes()).launch();
 }

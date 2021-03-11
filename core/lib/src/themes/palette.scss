@@ -56,7 +56,7 @@
     --surface-red: #{color.adjust($destructive, $alpha: -0.9)};
     --color-border-blue: #{color.adjust($primary, $alpha: -0.25)};
     --background: $background;
-    --background-raised: #{color.adjust($themed-on-background, $lightness: +85%)};
+    --background-raised: #{color.adjust($themed-on-background, $lightness: +88%)};
     --surface: #{$surface};
     --surface-dark: #{color.adjust($surface, $darkness: +10%)};
     --backdrop: #{color.adjust($themed-on-background, $alpha: -0.5)};

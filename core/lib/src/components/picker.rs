@@ -69,7 +69,7 @@ impl Picker {
         self.clone()
     }
 
-    pub fn add_view_child(&mut self, child: PickerOption) {
+    pub fn append_child(&mut self, child: PickerOption) {
         self.options.push(child);
     }
 }
@@ -99,16 +99,16 @@ impl Renderable for Picker {
                     let mut option_list = HStack::new(Alignment::Stretch)
                         .add_class("picker__option-list");
                     for option in picker.options {
-                        option_list.add_view_child({
+                        option_list.append_child({
                             let mut item = HStack::new(Alignment::Center).add_class("item");
                             if let Some(icon) = option.icon {
-                                item.add_view_child({
+                                item.append_child({
                                     Icon::new(icon.as_str())
                                         .size(16)
                                         .margin_right(scale(2))
                                 });
                             }
-                            item.add_view_child(Text::new(option.label.as_str(), TextStyle::Button));
+                            item.append_child(Text::new(option.label.as_str(), TextStyle::Button));
                             if picker.value.eq(option.value.as_str()) {
                                 item.add_class("selected");
                             }
@@ -125,7 +125,7 @@ impl Renderable for Picker {
                         .add_class("picker__option-list")
                         .gap(vec![scale(3)]);
                     for option in picker.options {
-                        option_list.add_view_child({
+                        option_list.append_child({
                             let mut radio_row = HStack::new(Alignment::Center)
                                 .gap(vec![scale(2)]);
                             let radio_id = format!("picker-radio-{}-{}", self.name.as_str(), option.label);
@@ -137,10 +137,10 @@ impl Renderable for Picker {
                             if picker.value.eq(option.value.as_str()) {
                                 radio_button.set_attr("checked", "checked");
                             }
-                            radio_row.add_view_child(
+                            radio_row.append_child(
                                 radio_button
                             );
-                            radio_row.add_view_child(
+                            radio_row.append_child(
                                 Text::new(option.label.as_str(), TextStyle::Body)
                                     .set_attr("for", radio_id.as_str())
                                     .tag("label")

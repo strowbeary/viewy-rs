@@ -14,6 +14,7 @@ body {
   font-size: sp(14);
   background: var(--background);
   color: var(--color-text);
+  height: 100vh;
 
   &.app-theme {
     &--auto {
@@ -33,10 +34,6 @@ body {
       @include palette("dark", #1d5dea, #ef5a70);
     }
   }
-}
-
-.rootView {
-  height: 100vh;
 }
 
 #floating-element-wrapper {

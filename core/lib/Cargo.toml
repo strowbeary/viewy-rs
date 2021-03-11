@@ -1,0 +1,22 @@
+[package]
+name = "viewy"
+version = "0.0.1"
+authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
+description = "A `cargo generate` template for quick-starting a procedural macro crate"
+keywords = ["template", "web"]
+edition = "2018"
+readme = "README.md"
+repository = "https://github.com/strowbeary/viewy-rs"
+license = "MIT"
+documentation = "https://docs.rs/viewy"
+
+[dependencies]
+grass = "0.10.4"
+minifier = "0.0"
+serde = "1.0"
+serde_json = "1.0"
+markdown = "0.3"
+html-escape = "0.2"
+palette = "0.5"
+uuid = { version = "0.8", features = ["v4"] }
+

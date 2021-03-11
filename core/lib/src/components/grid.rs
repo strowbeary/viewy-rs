@@ -2,38 +2,28 @@ use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
 use crate::node::{Node, NodeContainer};
 use crate::components::Alignment;
 use std::borrow::BorrowMut;
-use crate::{sp, DefaultModifiers};
+use crate::{DefaultModifiers, sp};
 
 #[derive(Debug, Clone)]
-pub struct HStack {
+pub struct Grid {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
     pub alignment: Alignment,
 }
 
-impl Default for HStack {
-    fn default() -> Self {
-        HStack {
-            children: vec![],
-            node: Default::default(),
-            alignment: Alignment::Stretch,
-        }
-    }
-}
-
-impl NodeContainer for HStack {
+impl NodeContainer for Grid {
     fn get_node(&mut self) -> &mut Node {
         self.node.borrow_mut()
     }
 }
 
-impl DefaultModifiers<HStack> for HStack {}
+impl DefaultModifiers<Grid> for Grid {}
 
-impl ToHtml for HStack {}
+impl ToHtml for Grid {}
 
-impl HStack {
+impl Grid {
     pub fn new(alignment: Alignment) -> Self {
-        HStack {
+        Grid {
             children: vec![],
             node: Default::default(),
             alignment,
@@ -44,7 +34,27 @@ impl HStack {
         self.node.node_style.push(("grid-gap".to_string(), params.join(" ")));
         self.clone()
     }
-    pub fn add_view_child<'a, T>(&'a mut self, child: T)
+    pub fn columns(&mut self, schema: &str) -> Self {
+        self.node.node_style.push(("grid-template-columns".to_string(), schema.to_string()));
+        self.clone()
+    }
+    pub fn rows(&mut self, schema: &str) -> Self {
+        self.node.node_style.push(("grid-template-rows".to_string(), schema.to_string()));
+        self.clone()
+    }
+    pub fn auto_columns(&mut self, size: &str) -> Self {
+        self.node.node_style.push(("grid-auto-columns".to_string(), size.to_string()));
+        self.clone()
+    }
+    pub fn auto_rows(&mut self, size: &str) -> Self {
+        self.node.node_style.push(("grid-auto-rows".to_string(), size.to_string()));
+        self.clone()
+    }
+    pub fn auto_flow(&mut self, direction: &str) -> Self {
+        self.node.node_style.push(("grid-auto-flow".to_string(), direction.to_string()));
+        self.clone()
+    }
+    pub fn append_child<'a, T>(&'a mut self, child: T)
         where
             T: 'static + Renderable,
     {
@@ -52,18 +62,17 @@ impl HStack {
     }
 }
 
-impl Renderable for HStack {
+impl Renderable for Grid {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(
             "stack",
-            include_str!("../themes/components/stack.scss"),
+            include_str!("../themes/components/grid.scss"),
         );
         let mut view = self
             .clone()
-            .add_class("stack")
-            .add_class("stack--horizontal")
+            .add_class("grid")
             .add_class(
-                format!("stack--align-{:?}", self.alignment)
+                format!("grid--align-{:?}", self.alignment)
                     .to_lowercase()
                     .as_str()
             )

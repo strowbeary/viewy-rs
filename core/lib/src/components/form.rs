@@ -23,20 +23,21 @@ impl DefaultModifiers<Form> for Form {}
 impl ToHtml for Form {}
 
 impl Form {
-    pub fn new(action: &str) -> Self {
+    pub fn new(name: &str, action: &str) -> Self {
         Form {
             children: vec![],
             node: Node::default(),
             action: action.to_string(),
             is_async: false
         }
+            .set_attr("id", name)
     }
     pub fn async_form(&mut self) -> Self {
         self.is_async = true;
         self.clone()
     }
 
-    pub fn add_view_child<'a, T>(&'a mut self, child: T)
+    pub fn append_child<'a, T>(&'a mut self, child: T)
         where
             T: 'static + Renderable,
     {

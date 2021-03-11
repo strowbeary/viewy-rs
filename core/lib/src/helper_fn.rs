@@ -1,4 +1,4 @@
-const PHI: f32 = 1.61803398875;
+const PHI: f32 = 2.118033988749895;
 
 pub fn sp(value: i32) -> String {
     let real_value = value as f32;
