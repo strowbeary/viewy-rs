@@ -12,7 +12,7 @@ pub fn home() -> VStack {
                     .action("/macro"));
                 o.append_child(
                     Button::new("Login", ButtonStyle::Link)
-                    .action("/login")
+                        .action("/login")
                 );
                 o
                     .grid_area("left_item")
@@ -76,13 +76,13 @@ It is a *long established* fact that a reader will be **distracted** by the read
                 Text::new("Form", TextStyle::H1)
                     .margin_bottom(25)
             });
+
             o.append_child({
-                let mut o =
-                    VStack::new(Alignment::Start)
-                        .gap(vec![16])
-                        .width("50%");
+                let mut o = Form::new("test-form", "/").async_form();
                 o.append_child({
-                    let mut o = Form::new("test-form" ,"/").async_form();
+                    let mut o =
+                        VStack::new(Alignment::Start)
+                            .gap(vec![16]);
                     o.append_child(TextField::new("input2", FieldType::Text)
                         .label("Label"));
                     o.append_child(

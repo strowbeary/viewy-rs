@@ -99,6 +99,11 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
         self.get_node().node_style.push(("background-color".to_string(), color.to_string()));
         self.clone()
     }
+
+    fn background_image(&mut self, url: &str) -> Self {
+        self.get_node().node_style.push(("background".to_string(), format!("url({}) center / cover", url)));
+        self.clone()
+    }
     fn tag(&mut self, tag_name: &str) -> Self {
         self.get_node().node_type = NodeType::Normal(tag_name.to_string());
         self.clone()

@@ -2,9 +2,10 @@ use viewy::components::*;
 use viewy::{DefaultModifiers, sp, scale};
 
 pub fn login() -> VStack {
-    let mut o = VStack::new(Alignment::Center)
-        .padding(vec![scale(6)])
+    let mut o = VStack::new(Alignment::Start)
+        .padding(vec![scale(6), scale(12)])
         .background_color("var(--background-raised)")
+        .background_image("https://source.unsplash.com/random/1920x1080?vacation")
         .width("100%")
         .height("100%")
         .justify_content("center");
@@ -13,6 +14,7 @@ pub fn login() -> VStack {
             .padding(vec![scale(6), scale(5)]);
         o.append_child(
             Text::new("Connexion", TextStyle::LargeTitle)
+                .margin_bottom(16)
         );
         o.append_child({
             let mut o = Form::new("login-form", "/home")
