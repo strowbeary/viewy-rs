@@ -3,6 +3,7 @@ use crate::node::{Node, NodeContainer};
 use crate::components::Alignment;
 use std::borrow::BorrowMut;
 use crate::{sp, DefaultModifiers};
+use crate::component::{Appendable, ChildContainer};
 
 #[derive(Debug, Clone)]
 pub struct HStack {
@@ -44,13 +45,13 @@ impl HStack {
         self.node.node_style.push(("grid-gap".to_string(), params.join(" ")));
         self.clone()
     }
-    pub fn append_child<'a, T>(&'a mut self, child: T)
-        where
-            T: 'static + Renderable,
-    {
-        self.children.push(Box::new(child));
+}
+impl ChildContainer for HStack {
+    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
+        return self.children.borrow_mut();
     }
 }
+impl Appendable<HStack> for HStack {}
 
 impl Renderable for HStack {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {

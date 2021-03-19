@@ -2,6 +2,8 @@ use crate::renderer::{Renderable, StyleRegistry, ScriptRegistry, ToHtml};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
+use crate::component::{Appendable, ChildContainer};
+use std::process::Child;
 
 #[derive(Debug, Clone)]
 pub struct View {
@@ -27,14 +29,15 @@ impl View {
         }
     }
 
-    pub fn append_child<'a, T>(&'a mut self, child: T)
-        where
-            T: 'static + Renderable,
-    {
-        self.children.push(Box::new(child));
-    }
-
 }
+
+impl ChildContainer for View {
+    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
+        return self.children.borrow_mut();
+    }
+}
+
+impl Appendable<View> for View {}
 
 impl Renderable for View {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {

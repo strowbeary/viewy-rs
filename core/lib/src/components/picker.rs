@@ -3,6 +3,7 @@ use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, scale};
 use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
 use crate::components::{Text, TextStyle, HStack, Alignment, Icon, VStack, View};
+use crate::component::Appendable;
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
@@ -69,8 +70,9 @@ impl Picker {
         self.clone()
     }
 
-    pub fn append_child(&mut self, child: PickerOption) {
+    pub fn append_child(&mut self, child: PickerOption) -> Self {
         self.options.push(child);
+        self.clone()
     }
 }
 
@@ -113,7 +115,7 @@ impl Renderable for Picker {
                                 item.add_class("selected");
                             }
                             item
-                        })
+                        });
                     }
                     option_list.render(style_registery, script_registery)
                 })
@@ -147,7 +149,7 @@ impl Renderable for Picker {
                             );
 
                             radio_row
-                        })
+                        });
                     }
                     option_list.render(style_registery, script_registery)
                 })

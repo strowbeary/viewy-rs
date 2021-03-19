@@ -5,35 +5,33 @@ pub fn home() -> VStack {
     let mut o = VStack::new(Alignment::Stretch);
     o.append_child({
         TitleBar::new("Viewy showcase")
-            .left_item({
+            .right_item({
                 let mut o = HStack::new(Alignment::Stretch);
-                o.append_child(Button::new("Back", ButtonStyle::Link)
-                    .icon("arrow-left")
-                    .action("/macro"));
                 o.append_child(
                     Button::new("Login", ButtonStyle::Link)
+                        .icon("user")
                         .action("/login")
                 );
                 o
-                    .grid_area("left_item")
+                    .grid_area("right_item")
             })
             .bottom_item({
                 TextField::new("Search", FieldType::Search)
                     .placeholder("Search for everything")
                     .grid_area("bottom_item")
             })
-            .right_item({
+            .left_item({
                 Button::new("Donate", ButtonStyle::Filled)
                     .icon("dollar-sign")
-                    .grid_area("right_item")
+                    .grid_area("left_item")
             })
     });
 
     o.append_child({
         let mut o =
             VStack::new(Alignment::Stretch)
-                .gap(vec![20])
-                .padding(vec![30]);
+                .gap(vec![12])
+                .padding(vec![16]);
 
         o.append_child({
             let mut o = Card::new(CardStyle::Raised)

@@ -3,6 +3,7 @@ use crate::node::{Node, NodeContainer, NodeType};
 use crate::DefaultModifiers;
 use std::borrow::BorrowMut;
 use crate::components::View;
+use crate::component::{Appendable, ChildContainer};
 
 #[derive(Debug, Clone)]
 pub struct Popover {
@@ -42,14 +43,14 @@ impl Popover {
         self.placement = placement.to_string();
         self.clone()
     }
-
-    pub fn append_child<'a, T>(&'a mut self, child: T)
-        where
-            T: 'static + Renderable,
-    {
-        self.children.push(Box::new(child));
+}
+impl ChildContainer for Popover {
+    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
+        return self.children.borrow_mut();
     }
 }
+impl Appendable<Popover> for Popover {}
+
 
 impl Renderable for Popover {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {

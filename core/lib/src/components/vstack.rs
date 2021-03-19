@@ -2,6 +2,7 @@ use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, sp};
+use crate::component::{Appendable, ChildContainer};
 
 #[derive(Debug, Clone)]
 pub enum Alignment {
@@ -46,15 +47,14 @@ impl VStack {
         self.node.node_style.push(("justify-content".to_string(), value.to_string()));
         self.clone()
     }
-    pub fn append_child<'a, T>(&'a mut self, child: T)
-        where
-            T: 'static + Renderable,
-    {
-        self.children.push(Box::new(child));
-    }
 
 }
-
+impl ChildContainer for VStack {
+    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
+        return self.children.borrow_mut();
+    }
+}
+impl Appendable<VStack> for VStack {}
 impl Renderable for VStack {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
         style_registery.register_stylesheet(

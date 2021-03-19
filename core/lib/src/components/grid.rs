@@ -3,6 +3,7 @@ use crate::node::{Node, NodeContainer};
 use crate::components::Alignment;
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, sp};
+use crate::component::{Appendable, ChildContainer};
 
 #[derive(Debug, Clone)]
 pub struct Grid {
@@ -54,13 +55,15 @@ impl Grid {
         self.node.node_style.push(("grid-auto-flow".to_string(), direction.to_string()));
         self.clone()
     }
-    pub fn append_child<'a, T>(&'a mut self, child: T)
-        where
-            T: 'static + Renderable,
-    {
-        self.children.push(Box::new(child));
+}
+
+impl ChildContainer for Grid {
+    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
+        return self.children.borrow_mut();
     }
 }
+
+impl Appendable<Grid> for Grid {}
 
 impl Renderable for Grid {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {

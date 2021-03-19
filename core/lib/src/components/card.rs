@@ -2,6 +2,7 @@ use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
+use crate::component::{Appendable, ChildContainer};
 
 #[derive(Debug, Clone)]
 pub enum CardStyle {
@@ -26,6 +27,8 @@ impl NodeContainer for Card {
 impl DefaultModifiers<Card> for Card {}
 impl ToHtml for Card {}
 
+
+
 impl Card {
     pub fn new(style: CardStyle) -> Self {
         Card {
@@ -34,13 +37,13 @@ impl Card {
             style: style.clone(),
         }
     }
-    pub fn append_child<'a, T>(&'a mut self, child: T)
-        where
-            T: 'static + Renderable,
-    {
-        self.children.push(Box::new(child));
+}
+impl ChildContainer for Card {
+    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
+        return self.children.borrow_mut();
     }
 }
+impl Appendable<Card> for Card {}
 
 impl Renderable for Card {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {

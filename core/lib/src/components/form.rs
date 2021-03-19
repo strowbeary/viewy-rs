@@ -1,8 +1,8 @@
 use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
-use crate::{DefaultModifiers, scale};
-use crate::components::{Icon, Text, TextStyle};
+use crate::{DefaultModifiers};
+use crate::component::{Appendable, ChildContainer};
 
 
 #[derive(Debug, Clone)]
@@ -36,14 +36,14 @@ impl Form {
         self.is_async = true;
         self.clone()
     }
+}
 
-    pub fn append_child<'a, T>(&'a mut self, child: T)
-        where
-            T: 'static + Renderable,
-    {
-        self.children.push(Box::new(child));
+impl ChildContainer for Form {
+    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
+        return self.children.borrow_mut();
     }
 }
+impl Appendable<Form> for Form {}
 
 impl Renderable for Form {
     fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {

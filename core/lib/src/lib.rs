@@ -10,6 +10,7 @@ mod node;
 mod modifiers;
 mod renderer;
 pub mod components;
+mod component;
 
 pub use modifiers::DefaultModifiers;
 pub use renderer::ToHtml;
