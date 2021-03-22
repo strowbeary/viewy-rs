@@ -1,6 +1,6 @@
 [package]
 name = "viewy"
-version = "0.0.1"
+version = "0.1.0"
 authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
 description = "A `cargo generate` template for quick-starting a procedural macro crate"
 keywords = ["template", "web"]
