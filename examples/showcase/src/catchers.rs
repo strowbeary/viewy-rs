@@ -2,19 +2,20 @@ use rocket::response::content::Html;
 use rocket::Catcher;
 use viewy::components::{VStack, Alignment, Text, TextStyle};
 use crate::compile_page;
-use viewy::{DefaultModifiers, ToHtml};
+use viewy::*;
+use viewy::component::Appendable;
 
 #[catch(404)]
 pub fn not_found() -> Html<String> {
     let mut page = VStack::new(Alignment::Center)
         .justify_content("center")
-        .height("100vh");
-    page.append_child({
-        Text::new("404", TextStyle::LargeTitle)
-    });
-    page.append_child({
-        Text::new("Not found", TextStyle::H2)
-    });
+        .height("100vh")
+        .append_child({
+            Text::new("404", TextStyle::LargeTitle)
+        })
+        .append_child({
+            Text::new("Not found", TextStyle::H2)
+        });
     let compiled_page = page.compile();
     Html(compile_page(compiled_page, "auto"))
 }

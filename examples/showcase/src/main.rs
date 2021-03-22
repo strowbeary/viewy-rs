@@ -14,12 +14,12 @@ use viewy::*;
 #[get("/")]
 fn home() -> Html<String> {
     let page = home::home();
-    Html(compile_page(page.compile(), "auto"))
+    Html(compile_page(page.compile(), "dark"))
 }
 #[get("/login")]
 fn login() -> Html<String> {
     let page = login::login();
-    Html(compile_page(page.compile(), "auto"))
+    Html(compile_page(page.compile(), "light"))
 }
 
 fn main() {
