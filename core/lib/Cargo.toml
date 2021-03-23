@@ -2,7 +2,7 @@
 name = "viewy"
 version = "0.1.0"
 authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
-description = "A `cargo generate` template for quick-starting a procedural macro crate"
+description = "A web UI toolkit that combine the advantages of a design system and an ui library."
 keywords = ["template", "web"]
 edition = "2018"
 readme = "../../README.md"

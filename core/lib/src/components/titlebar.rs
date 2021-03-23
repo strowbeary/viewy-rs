@@ -2,7 +2,7 @@ use crate::node::{Node, NodeContainer};
 use crate::renderer::{Renderable, StyleRegistry, ScriptRegistry, ToHtml};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::components::{TextStyle, Text};
+use crate::components::{TextStyle, Text, View};
 
 #[derive(Debug, Clone)]
 pub struct TitleBar {
@@ -85,13 +85,19 @@ impl Renderable for TitleBar {
             .render(style_registery, script_registery);
         view.children.push(text);
         if let Some(left_item) = self.left_item.clone() {
-            view.children.push(left_item.render(style_registery, script_registery));
+            let mut item = left_item.render(style_registery, script_registery);
+            item.node_style.push(("grid-area".to_string(), "left_item".to_string()));
+            view.children.push(item);
         }
         if let Some(right_item) = self.right_item.clone() {
-            view.children.push(right_item.render(style_registery, script_registery));
+            let mut item = right_item.render(style_registery, script_registery);
+            item.node_style.push(("grid-area".to_string(), "right_item".to_string()));
+            view.children.push(item);
         }
         if let Some(bottom_item) = self.bottom_item.clone() {
-            view.children.push(bottom_item.render(style_registery, script_registery));
+            let mut item = bottom_item.render(style_registery, script_registery);
+            item.node_style.push(("grid-area".to_string(), "bottom_item".to_string()));
+            view.children.push(item);
         }
         view
     }

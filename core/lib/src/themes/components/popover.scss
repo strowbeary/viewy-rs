@@ -7,6 +7,9 @@
   padding: sp(14);
   border-radius: sp(8);
   display: none;
+  &[data-show] {
+    display: block;
+  }
   .arrow,
   .arrow::before {
     position: absolute;

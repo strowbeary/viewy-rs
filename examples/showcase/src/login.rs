@@ -23,8 +23,20 @@ pub fn login() -> VStack {
                         .append_child({
                             VStack::new(Alignment::Stretch)
                                 .gap(vec![scale(3)])
-                                .append_child(TextField::new("email", FieldType::Email).label("Courriel"))
-                                .append_child(TextField::new("password", FieldType::Password).label("Mot de passe"))
+                                .append_child({
+                                    TextField::new(
+                                        "email",
+                                        FieldType::Email
+                                    )
+                                        .label("Courriel")
+                                })
+                                .append_child({
+                                    TextField::new(
+                                        "password",
+                                        FieldType::Password
+                                    )
+                                        .label("Mot de passe")
+                                })
                         })
                 })
                 .append_child(

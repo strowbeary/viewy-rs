@@ -7,23 +7,13 @@ pub fn home() -> VStack {
         .append_child({
             TitleBar::new("Viewy showcase")
                 .right_item({
-                    HStack::new(Alignment::Stretch)
-                        .append_child(
-                            Button::new("Login", ButtonStyle::Link)
-                                .icon("user")
-                                .action("/login")
-                        )
-                        .grid_area("right_item")
+                    Button::new("Login", ButtonStyle::Flat)
+                        .icon("user")
+                        .action("/login")
                 })
                 .bottom_item({
                     TextField::new("Search", FieldType::Search)
                         .placeholder("Search for everything")
-                        .grid_area("bottom_item")
-                })
-                .left_item({
-                    Button::new("Donate", ButtonStyle::Filled)
-                        .icon("dollar-sign")
-                        .grid_area("left_item")
                 })
         })
         .append_child({
@@ -44,10 +34,22 @@ pub fn home() -> VStack {
                                 .append_child(Text::new("Large title", TextStyle::LargeTitle))
                                 .append_child(Text::new("Title 1", TextStyle::H1))
                                 .append_child(Text::new("Subtitle 1", TextStyle::Subtitle1))
-                                .append_child(Text::new("Title 2", TextStyle::H2)).append_child(Text::new("Subtitle 2", TextStyle::Subtitle2)).append_child(Text::new("Title 3", TextStyle::H3)).append_child(Text::new("Subtitle 3", TextStyle::Subtitle3)).append_child(Text::new("Headline", TextStyle::Headline)).append_child(Text::new("Body", TextStyle::Body)).append_child(Text::new("Button", TextStyle::Button)).append_child(Text::new("Label", TextStyle::Label)).append_child(Text::new("Overline", TextStyle::Overline)).append_child(Text::new("Caption", TextStyle::Caption)).append_child(ComplexText::new(r#"
+                                .append_child(Text::new("Title 2", TextStyle::H2))
+                                .append_child(Text::new("Subtitle 2", TextStyle::Subtitle2))
+                                .append_child(Text::new("Title 3", TextStyle::H3))
+                                .append_child(Text::new("Subtitle 3", TextStyle::Subtitle3))
+                                .append_child(Text::new("Headline", TextStyle::Headline))
+                                .append_child(Text::new("Body", TextStyle::Body))
+                                .append_child(Text::new("Button", TextStyle::Button))
+                                .append_child(Text::new("Label", TextStyle::Label))
+                                .append_child(Text::new("Overline", TextStyle::Overline))
+                                .append_child(Text::new("Caption", TextStyle::Caption))
+                                .append_child(ComplexText::new(r#"
 The `ComplexText` component allows you to use **markdown** annotations.
 
-It is a *long established* fact that a reader will be **distracted** by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English.
+It is a *long established* fact that a reader will be **distracted** by the readable content of a page when looking at its layout.
+The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,
+as opposed to using 'Content here, content here', making it look like readable English.
 "#, TextStyle::Body))
                         })
                 })
@@ -59,7 +61,8 @@ It is a *long established* fact that a reader will be **distracted** by the read
                                 .margin_bottom(25)
                         })
                         .append_child({
-                            Form::new("test-form", "/").async_form()
+                            Form::new("test-form", "/")
+                                .async_form()
                                 .append_child({
                                     VStack::new(Alignment::Start)
                                         .gap(vec![16])
