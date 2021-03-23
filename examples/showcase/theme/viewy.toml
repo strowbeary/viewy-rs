@@ -14,5 +14,7 @@ smallest-spacing = 4
 time = "150ms"
 
 [typography]
+line-height-factor = 1.2
+
 
 [shadows]

@@ -6,13 +6,18 @@ pub fn login() -> VStack {
     VStack::new(Alignment::Start)
         .padding(vec![scale(6), scale(12)])
         .background_color("var(--background-raised)")
-        .background_image("https://source.unsplash.com/random/1920x1080?social")
+        .background_image("https://source.unsplash.com/random/1920x1080?space")
         .width("100%")
         .height("100%")
         .justify_content("center")
         .append_child({
             Card::new(CardStyle::Raised)
-                .padding(vec![scale(6), scale(5)])
+                .padding(vec![scale(5), scale(5), scale(6), scale(5)])
+                .append_child({
+                    Button::new("Retour", ButtonStyle::Link)
+                        .icon("arrow-left")
+                        .action("/")
+                })
                 .append_child(
                     Text::new("Connexion", TextStyle::LargeTitle)
                         .margin_bottom(16)

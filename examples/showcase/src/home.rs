@@ -27,6 +27,7 @@ pub fn home() -> VStack {
                             Text::new("Texts", TextStyle::H1)
                                 .margin_bottom(25)
                         })
+                        .append_child(Divider::new())
                         .append_child({
                             VStack::new(Alignment::Start)
                                 .gap(vec![16])
