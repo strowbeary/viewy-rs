@@ -13,39 +13,62 @@
   transition: background 150ms, color 150ms, border 150ms;
   font-family: inherit;
   text-decoration: none;
+
   &--link {
-      padding: sp(8) 0;
-      border: none;
-      background: transparent;
+    padding: sp(8) 0;
+    border: none;
+    background: transparent;
+
+    .text, .icon {
+      color: var(--color-primary);
+    }
+
+    &:hover .text, &:hover .icon {
+      color: var(--color-primary-lighter);
+    }
+
+    &:active .text, &:active .icon {
+      color: var(--color-primary-lighter);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 sp(3) var(--color-focus);
+    }
+
+    &:disabled .text, &:disabled .icon {
+      pointer-events: none;
+      background: none;
+      color: var(--color-text-disabled);
+    }
+    &--destructive {
       .text, .icon {
-        color: var(--color-primary);
-      }
-      &:hover .text, &:hover .icon {
-        color: var(--color-primary-lighter);
-      }
-      &:active .text, &:active .icon {
-        color: var(--color-primary-lighter);
-      }
-      &:focus-visible {
-        box-shadow: 0 0 0 sp(3) var(--color-focus);
+        color: var(--color-destructive);
       }
 
-      &:disabled .text, &:disabled .icon {
-        pointer-events: none;
-        background: none;
-        color: var(--color-text-disabled);
+      &:hover .text, &:hover .icon {
+        color: var(--color-destructive-light);
       }
+
+      &:active .text, &:active .icon {
+        color: var(--color-destructive-lighter);
+      }
+
+      &:focus-visible {
+        box-shadow: 0 0 0 sp(3) var(--surface-red);
+      }
+    }
 
   }
+
   &--flat {
     border: none;
     background: transparent;
-    .text {
-      color: var(--color-primary);
-    }
+
+    .text,
     .icon {
       color: var(--color-primary);
     }
+
     &:hover {
       background: var(--color-hover);
     }
@@ -53,6 +76,7 @@
     &:active {
       background: var(--color-active);
     }
+
     &:focus-visible {
       box-shadow: 0 0 0 sp(3) var(--color-focus);
     }
@@ -62,16 +86,35 @@
       background: none;
       color: var(--color-text-disabled);
     }
+    &--destructive {
+      .text,
+      .icon {
+        color: var(--color-destructive);
+      }
+
+      &:hover {
+        background: var(--surface-red);
+      }
+
+      &:active {
+        background: var(--surface-red-darker);
+      }
+
+      &:focus-visible {
+        box-shadow: 0 0 0 sp(3) var(--surface-red-darker);
+      }
+    }
   }
+
   &--outlined {
     background: transparent;
     border: 1px solid var(--color-border);
-    .text {
-      color: var(--color-primary);
-    }
+
+    .text,
     .icon {
       color: var(--color-primary);
     }
+
     &:hover {
       background: var(--color-hover);
       border: 1px solid var(--color-border-hover);
@@ -92,31 +135,84 @@
       color: var(--color-text-disabled);
       border: sp(1) solid var(--color-shadow);
     }
+    &--destructive {
+      .text,
+      .icon {
+        color: var(--color-destructive);
+      }
+
+      &:hover {
+        background: var(--surface-red);
+        border: 1px solid var(--color-border-hover);
+      }
+
+      &:active {
+        background: var(--surface-red-darker);
+        border: sp(1) solid var(--color-border-hover);
+      }
+
+      &:focus-visible {
+        box-shadow: 0 0 0 sp(3) var(--surface-red-darker);
+      }
+    }
   }
-  &--filled{
+
+  &--filled {
     color: white;
     background: var(--color-primary);
     border: none;
+
     .icon {
       color: white;
     }
+
     .text {
       color: white;
     }
+
     &:hover {
       background: var(--color-primary-light);
     }
+
     &:active {
       background: var(--color-primary-lighter);
     }
+
     &:focus-visible {
       box-shadow: 0 0 0 sp(3) var(--color-focus);
     }
+
     &:disabled {
       pointer-events: none;
       background: none;
       color: white;
       background: var(--color-shadow);
+    }
+    &--destructive {
+      color: white;
+      background: var(--color-destructive);
+      border: none;
+      .icon {
+        color: white;
+      }
+      .text {
+        color: white;
+      }
+      &:hover {
+        background: var(--color-destructive-light);
+      }
+      &:active {
+        background: var(--color-destructive-lighter);
+      }
+      &:focus-visible {
+        box-shadow: 0 0 0 sp(3) var(--color-focus);
+      }
+      &:disabled {
+        pointer-events: none;
+        background: none;
+        color: white;
+        background: var(--color-shadow);
+      }
     }
   }
 }

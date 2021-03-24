@@ -8,7 +8,7 @@ destructive = "#EF5A70"
 
 [shapes]
 corner-radius = 8
-smallest-spacing = 4
+spacing-factor = 4
 
 [animations]
 time = "150ms"
