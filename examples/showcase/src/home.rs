@@ -7,10 +7,9 @@ pub fn home() -> VStack {
         .append_child({
             TitleBar::new("Viewy showcase")
                 .right_item({
-                    Button::new("Login", ButtonStyle::Outlined)
+                    Button::new("Login", ButtonStyle::Flat)
                         .icon("user")
                         .action("/login")
-                        .destructive()
                 })
                 .bottom_item({
                     TextField::new("Search", FieldType::Search)

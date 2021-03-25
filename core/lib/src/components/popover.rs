@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, StyleRegistry, ScriptRegistry, ToHtml};
+use crate::renderer::{Renderable, ToHtml};
 use crate::node::{Node, NodeContainer, NodeType};
 use crate::DefaultModifiers;
 use std::borrow::BorrowMut;
@@ -53,16 +53,7 @@ impl Appendable<Popover> for Popover {}
 
 
 impl Renderable for Popover {
-    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
-
-        style_registery.register_stylesheet(
-            "popover",
-            include_str!("../themes/components/popover.scss"),
-        );
-        script_registery.register_script(
-            "popover",
-            include_str!("../js/popover.js"),
-        );
+    fn render(&self) -> Node {
         let mut popover = self.clone()
             .add_class("popover")
             .set_attr("data-attach-to", self.el_to_attach_to.as_str());
@@ -72,9 +63,9 @@ impl Renderable for Popover {
             .set_attr("data-popper-arrow", "true");
         self.children.iter()
             .for_each(|child| {
-                popover.node.children.push(child.render(style_registery, script_registery))
+                popover.node.children.push(child.render())
             });
-        popover.node.children.push(arrow.render(style_registery, script_registery));
+        popover.node.children.push(arrow.render());
 
         popover.node
     }

@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
+use crate::renderer::{ToHtml, Renderable};
 use crate::components::{View, TextStyle, Text};
 
 #[derive(Debug, Clone)]
@@ -84,11 +84,7 @@ impl TextField {
 impl ToHtml for TextField {}
 
 impl Renderable for TextField {
-    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
-        style_registery.register_stylesheet(
-            "textfield",
-            include_str!("../themes/components/textfield.scss"),
-        );
+    fn render(&self) -> Node {
         let mut field = self.clone()
             .add_class("textfield");
 
@@ -107,13 +103,13 @@ impl Renderable for TextField {
             let text = Text::new(label.as_str(), TextStyle::Label)
                 .set_attr("for", self.name.as_str())
                 .tag("label");
-            field.node.children.push(text.render(style_registery, script_registery));
+            field.node.children.push(text.render());
         }
-        field.node.children.push(input.render(style_registery, script_registery));
+        field.node.children.push(input.render());
         if let Some(helper_text) = field.helper_text {
             let text = Text::new(helper_text.as_str(), TextStyle::Caption)
                 .color("var(--color-text-secondary)");
-            field.node.children.push(text.render(style_registery, script_registery));
+            field.node.children.push(text.render());
         }
         field.node
     }

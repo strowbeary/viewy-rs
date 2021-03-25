@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
+use crate::renderer::{Renderable, ToHtml};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, sp};
@@ -56,11 +56,7 @@ impl ChildContainer for VStack {
 }
 impl Appendable<VStack> for VStack {}
 impl Renderable for VStack {
-    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
-        style_registery.register_stylesheet(
-            "stack",
-            include_str!("../themes/components/stack.scss"),
-        );
+    fn render(&self) -> Node {
         let mut stack = self
             .clone()
             .add_class("stack")
@@ -72,7 +68,7 @@ impl Renderable for VStack {
             );
         self.children.iter()
             .for_each(|child|
-                stack.node.children.push(child.render(style_registery, script_registery)));
+                stack.node.children.push(child.render()));
         stack.node
     }
 }

@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
+use crate::renderer::{Renderable, ToHtml};
 use crate::node::{Node, NodeContainer};
 use crate::components::Alignment;
 use std::borrow::BorrowMut;
@@ -54,11 +54,7 @@ impl ChildContainer for HStack {
 impl Appendable<HStack> for HStack {}
 
 impl Renderable for HStack {
-    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
-        style_registery.register_stylesheet(
-            "stack",
-            include_str!("../themes/components/stack.scss"),
-        );
+    fn render(&self) -> Node {
         let mut view = self
             .clone()
             .add_class("stack")
@@ -71,7 +67,7 @@ impl Renderable for HStack {
             .node;
         self.children.iter()
             .for_each(|child|
-                view.children.push(child.render(style_registery, script_registery)));
+                view.children.push(child.render()));
         view
     }
 }

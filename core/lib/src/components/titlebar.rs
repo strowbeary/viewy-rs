@@ -1,5 +1,5 @@
 use crate::node::{Node, NodeContainer};
-use crate::renderer::{Renderable, StyleRegistry, ScriptRegistry, ToHtml};
+use crate::renderer::{Renderable, ToHtml};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
 use crate::components::{TextStyle, Text, View};
@@ -61,11 +61,7 @@ impl TitleBar {
 }
 
 impl Renderable for TitleBar {
-    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
-        style_registery.register_stylesheet(
-            "titlebar",
-            include_str!("../themes/components/titlebar.scss"),
-        );
+    fn render(&self) -> Node {
         let mut areas = String::new();
         if self.left_item.is_some() {
             areas.push_str("'left_item . right_item' 'title title title'");
@@ -82,20 +78,20 @@ impl Renderable for TitleBar {
 
         let text = Text::new(self.title.as_str(), TextStyle::LargeTitle)
             .grid_area("title")
-            .render(style_registery, script_registery);
+            .render();
         view.children.push(text);
         if let Some(left_item) = self.left_item.clone() {
-            let mut item = left_item.render(style_registery, script_registery);
+            let mut item = left_item.render();
             item.node_style.push(("grid-area".to_string(), "left_item".to_string()));
             view.children.push(item);
         }
         if let Some(right_item) = self.right_item.clone() {
-            let mut item = right_item.render(style_registery, script_registery);
+            let mut item = right_item.render();
             item.node_style.push(("grid-area".to_string(), "right_item".to_string()));
             view.children.push(item);
         }
         if let Some(bottom_item) = self.bottom_item.clone() {
-            let mut item = bottom_item.render(style_registery, script_registery);
+            let mut item = bottom_item.render();
             item.node_style.push(("grid-area".to_string(), "bottom_item".to_string()));
             view.children.push(item);
         }

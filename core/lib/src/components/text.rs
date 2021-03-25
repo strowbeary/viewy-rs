@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
+use crate::renderer::{ToHtml, Renderable};
 use html_escape::encode_text;
 
 #[derive(Debug, Clone)]
@@ -50,11 +50,7 @@ impl Text {
 }
 
 impl Renderable for Text {
-    fn render(&self, style_registery: &mut StyleRegistry, _script_registery: &mut ScriptRegistry) -> Node {
-        style_registery.register_stylesheet(
-            "text",
-            include_str!("../themes/components/text.scss"),
-        );
+    fn render(&self) -> Node {
         let text = self.clone()
             .add_class("text")
             .add_class(format!("text--{:?}", self.style).to_lowercase().as_str());

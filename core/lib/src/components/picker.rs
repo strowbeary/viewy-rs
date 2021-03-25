@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, scale};
-use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
+use crate::renderer::{ToHtml, Renderable};
 use crate::components::{Text, TextStyle, HStack, Alignment, Icon, VStack, View};
 use crate::component::Appendable;
 
@@ -77,26 +77,17 @@ impl Picker {
 }
 
 impl Renderable for Picker {
-    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
-        style_registery.register_stylesheet(
-            "picker",
-            include_str!("../themes/components/picker.scss"),
-        );
-
+    fn render(&self) -> Node {
         let mut picker = self.clone()
             .add_class("picker")
             .add_class(format!("picker--{:?}", self.style).to_lowercase().as_str());
 
         if let Some(label) = picker.label {
             let text = Text::new(label.as_str(), TextStyle::Label);
-            picker.node.children.push(text.render(style_registery, script_registery));
+            picker.node.children.push(text.render());
         }
         match self.style {
             PickerStyle::Segmented => {
-                script_registery.register_script(
-                    "picker-segmented",
-                    include_str!("../js/picker-segmented.js"),
-                );
                 picker.node.children.push({
                     let mut option_list = HStack::new(Alignment::Stretch)
                         .add_class("picker__option-list");
@@ -117,7 +108,7 @@ impl Renderable for Picker {
                             item
                         });
                     }
-                    option_list.render(style_registery, script_registery)
+                    option_list.render()
                 })
             }
             PickerStyle::Dropdown => {}
@@ -151,7 +142,7 @@ impl Renderable for Picker {
                             radio_row
                         });
                     }
-                    option_list.render(style_registery, script_registery)
+                    option_list.render()
                 })
             }
         }

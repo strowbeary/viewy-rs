@@ -6,7 +6,7 @@ pub fn login() -> VStack {
     VStack::new(Alignment::Start)
         .padding(vec![scale(6), scale(12)])
         .background_color("var(--background-raised)")
-        .background_image("https://source.unsplash.com/random/1920x1080?space")
+        .background_image("https://source.unsplash.com/random/1920x1080?medical")
         .width("100%")
         .height("100%")
         .justify_content("center")

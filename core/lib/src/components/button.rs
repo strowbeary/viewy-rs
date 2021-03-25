@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
+use crate::renderer::{Renderable, ToHtml};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, scale};
@@ -80,15 +80,7 @@ impl Button {
 }
 
 impl Renderable for Button {
-    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
-        style_registery.register_stylesheet(
-            "button",
-            include_str!("../themes/components/button.scss"),
-        );
-        script_registery.register_script(
-            "button",
-            include_str!("../js/button.js"),
-        );
+    fn render(&self) -> Node {
         let mut button = self.clone()
             .add_class("button")
             .add_class(format!("button--{:?}", self.style).to_lowercase().as_str())
@@ -98,10 +90,10 @@ impl Renderable for Button {
             let icon = Icon::new(icon.as_str())
                 .size(16)
                 .margin_right(scale(2))
-                .render(style_registery, script_registery);
+                .render();
             button.node.children.push(icon);
         }
-        let text = Text::new(self.label.as_str(), TextStyle::Button).render(style_registery, script_registery);
+        let text = Text::new(self.label.as_str(), TextStyle::Button).render();
         button.node.children.push(text);
         button.node
     }

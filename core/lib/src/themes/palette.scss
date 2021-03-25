@@ -1,13 +1,5 @@
 @use "sass:color";
 
-@function toggle($condition, $a, $b) {
-  @if($condition) {
-    @return $a;
-  } @else {
-    @return $b;
-  }
-}
-
 @mixin palette($variant, $primary, $destructive) {
   @if($variant == "dark") {
     $on-primary: #ffffff;

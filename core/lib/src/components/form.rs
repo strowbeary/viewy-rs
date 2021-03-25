@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml, StyleRegistry, ScriptRegistry};
+use crate::renderer::{Renderable, ToHtml};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers};
@@ -46,17 +46,8 @@ impl ChildContainer for Form {
 impl Appendable<Form> for Form {}
 
 impl Renderable for Form {
-    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
-        style_registery.register_stylesheet(
-            "form",
-            include_str!("../themes/components/form.scss"),
-        );
-        if self.is_async {
-            script_registery.register_script(
-                "form",
-                include_str!("../js/async-form.js"),
-            );
-        }
+    fn render(&self) -> Node {
+
         let mut form = self.clone()
             .add_class("form")
             .set_attr("action", &self.action)
@@ -67,7 +58,7 @@ impl Renderable for Form {
 
         self.children.iter()
             .for_each(|child|
-                node.children.push(child.render(style_registery, script_registery)));
+                node.children.push(child.render()));
         node
     }
 }

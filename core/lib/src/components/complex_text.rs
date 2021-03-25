@@ -2,7 +2,7 @@ use crate::node::{Node, NodeContainer};
 use crate::components::TextStyle;
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
+use crate::renderer::{ToHtml, Renderable};
 
 #[derive(Debug, Clone)]
 pub struct ComplexText {
@@ -34,11 +34,7 @@ impl ComplexText {
 }
 
 impl Renderable for ComplexText {
-    fn render(&self, style_registery: &mut StyleRegistry, _script_registery: &mut ScriptRegistry) -> Node {
-        style_registery.register_stylesheet(
-            "text",
-            include_str!("../themes/components/text.scss"),
-        );
+    fn render(&self) -> Node {
         let text = self.clone()
             .add_class("text")
             .add_class(format!("text--{:?}", self.style).to_lowercase().as_str());

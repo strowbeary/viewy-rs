@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer};
 use std::collections::HashMap;
 use crate::{DefaultModifiers, sp};
-use crate::renderer::{ToHtml, Renderable, StyleRegistry, ScriptRegistry};
+use crate::renderer::{ToHtml, Renderable};
 
 #[derive(Debug, Clone)]
 pub struct Icon {
@@ -43,7 +43,7 @@ impl DefaultModifiers<Icon> for Icon {}
 impl ToHtml for Icon {}
 
 impl Renderable for Icon {
-    fn render(&self, _style_registery: &mut StyleRegistry, _script_registery: &mut ScriptRegistry) -> Node {
+    fn render(&self) -> Node {
         let mut icon = self.clone()
             .add_class("icon")
             .set_attr("width", sp(self.size).as_str())

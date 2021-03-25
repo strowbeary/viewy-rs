@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, StyleRegistry, ScriptRegistry, ToHtml};
+use crate::renderer::{Renderable, ToHtml};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
@@ -40,13 +40,13 @@ impl ChildContainer for View {
 impl Appendable<View> for View {}
 
 impl Renderable for View {
-    fn render(&self, style_registery: &mut StyleRegistry, script_registery: &mut ScriptRegistry) -> Node {
+    fn render(&self) -> Node {
 
         let mut node = self.clone().node;
 
         self.children.iter()
             .for_each(|child|
-                node.children.push(child.render(style_registery, script_registery)));
+                node.children.push(child.render()));
         node
     }
 }
