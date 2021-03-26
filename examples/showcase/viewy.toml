@@ -1,4 +1,14 @@
 [colors]
+
+[colors.dark]
+primary = "#1d5dea"
+on-primary = "#ffffff"
+background = "#ffffff"
+on-background = "#000000"
+surface = "#000000"
+destructive = "#EF5A70"
+
+[colors.light]
 primary = "#1d5dea"
 on-primary = "#ffffff"
 background = "#ffffff"

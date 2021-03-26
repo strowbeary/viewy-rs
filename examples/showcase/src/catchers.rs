@@ -17,7 +17,7 @@ pub fn not_found() -> Html<String> {
             Text::new("Not found", TextStyle::H2)
         });
     let compiled_page = page.compile();
-    Html(compile_page(compiled_page, "auto"))
+    Html(compile_page("Viewy showcase – Page not found".to_string(), compiled_page, "auto"))
 }
 
 #[catch(403)]
@@ -32,7 +32,7 @@ pub fn unauthorized() -> Html<String> {
         Text::new("Unauthorized", TextStyle::H1)
     });
     let compiled_page = page.compile();
-    Html(compile_page(compiled_page, "auto"))
+    Html(compile_page("Viewy showcase – Not authorized".to_string(), compiled_page, "auto"))
 }
 
 pub fn routes() -> Vec<Catcher> {

@@ -19,13 +19,14 @@ pub use helper_fn::*;
 #[derive(Clone)]
 pub struct Assets {
     pub script: String,
-    pub stylesheet: String
+    pub stylesheet: String,
 }
+
 impl Assets {
     pub fn new() -> Self {
         Self {
             script: Assets::compile_scripts(),
-            stylesheet: Assets::compile_theme()
+            stylesheet: Assets::compile_theme(),
         }
     }
     fn compile_theme() -> String {
@@ -69,19 +70,18 @@ impl Assets {
         let joined_scripts: String = scripts.join("");
         minifier::js::minify(joined_scripts.as_str())
     }
-
 }
 
 
-pub fn compile_page(content: String, theme_variant: &str) -> String {
+pub fn compile_page(title: String, content: String, theme_variant: &str) -> String {
     format!(r"
         <!doctype html>
         <html>
         <head>
-            <title>Viewy-rs showcase</title>
+            <title>{title}</title>
             <link href='/app.css' rel='stylesheet'>
-            <script src='/app.js' />
             <script src='https://unpkg.com/@popperjs/core@2'></script>
+            <script src='/app.js'></script>
             <meta charset='utf8' />
         </head>
         <body class='app-theme--{theme_variant}'>
@@ -89,6 +89,7 @@ pub fn compile_page(content: String, theme_variant: &str) -> String {
         </body>
         </html>
     ",
+            title = title,
             content = content,
             theme_variant = theme_variant
     )

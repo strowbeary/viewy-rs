@@ -25,13 +25,13 @@ fn get_scripts(assets: State<Assets>) -> JavaScript<String> {
 #[get("/")]
 fn home() -> Html<String> {
     let page = home::home();
-    Html(compile_page(page.compile(), "auto"))
+    Html(compile_page("Viewy showcase – Home".to_string(), page.compile(), "auto"))
 }
 
 #[get("/login")]
 fn login() -> Html<String> {
     let page = login::login();
-    Html(compile_page(page.compile(), "auto"))
+    Html(compile_page("Viewy showcase – Login".to_string(), page.compile(), "auto"))
 }
 
 fn main() {

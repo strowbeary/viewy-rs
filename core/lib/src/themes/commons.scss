@@ -19,19 +19,19 @@ body {
   &.app-theme {
     &--auto {
       @media (prefers-color-scheme: light) {
-        @include palette("light", #482683, #f14a61);
+        @include palette("light", #1d5dea, #f14a61);
       }
       @media (prefers-color-scheme: dark) {
-        @include palette("dark", #482683, #f14a61);
+        @include palette("dark", #1d5dea, #f14a61);
       }
     }
 
     &--light {
-      @include palette("light", #482683, #f14a61);
+      @include palette("light", #1d5dea, #f14a61);
     }
 
     &--dark {
-      @include palette("dark", #482683, #f14a61);
+      @include palette("dark", #1d5dea, #f14a61);
     }
   }
 }
