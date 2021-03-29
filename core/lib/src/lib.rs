@@ -24,10 +24,14 @@ pub struct Assets {
 
 impl Assets {
     pub fn new() -> Self {
-        Self {
+        print!("Compiling theme");
+        let theme = Self {
             script: Assets::compile_scripts(),
             stylesheet: Assets::compile_theme(),
-        }
+        };
+
+        println!(" [Done]");
+        theme
     }
     fn compile_theme() -> String {
         let mut stylesheets = vec![
@@ -84,7 +88,7 @@ pub fn compile_page(title: String, content: String, theme_variant: &str) -> Stri
             <script src='/app.js'></script>
             <meta charset='utf8' />
         </head>
-        <body class='app-theme--{theme_variant}'>
+        <body class='app-themes--{theme_variant}'>
             {content}
         </body>
         </html>

@@ -8,7 +8,7 @@
     $surface: #181818;
     $themed-on-background: color.mix($on-background, $primary, $weight: 90%);
 
-    --color-primary: #{color.adjust($primary, $lightness: +5%)};
+    --color-primary: #{color.adjust($primary, $lightness: +10%)};
     --color-primary-light: #{color.adjust($primary, $lightness: +20%)};
     --color-primary-lighter: #{color.adjust($primary, $lightness: +35%)};
     --surface-blue: #{color.adjust($surface, $alpha: -0.85)};
@@ -22,8 +22,8 @@
     --backdrop: #{color.adjust($themed-on-background, $alpha: -0.5)};
     --color-text: #{$themed-on-background};
     --color-text-secondary: #{color.adjust($themed-on-background, $lightness: -20%, $saturation: -70%)};
-    --color-border: #{color.adjust($themed-on-background, $lightness: -78%, $saturation: -70%)};
-    --color-border-hover: #{color.adjust($themed-on-background, $lightness: -73%, $saturation: -70%)};
+    --color-border: #{color.adjust($themed-on-background, $lightness: -73%, $saturation: -70%)};
+    --color-border-hover: #{color.adjust($themed-on-background, $lightness: -70%, $saturation: -70%)};
     --color-hover: #{color.adjust($themed-on-background, $alpha: -0.94)};
     --color-active: #{color.adjust($themed-on-background, $alpha: -0.90)};
     --color-focus: #1d5dea99;

@@ -16,7 +16,7 @@ body {
   color: var(--color-text);
   height: 100vh;
 
-  &.app-theme {
+  &.app-themes {
     &--auto {
       @media (prefers-color-scheme: light) {
         @include palette("light", #1d5dea, #f14a61);

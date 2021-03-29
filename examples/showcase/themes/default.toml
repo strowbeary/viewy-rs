@@ -1,0 +1,25 @@
+[colors]
+accent = { light = "#1d5dea", dark = "#1d5dea" }
+on-accent = { light = "#ffffff", dark = "#ffffff" }
+
+background = { light = "#ffffff", dark = "#121212" }
+on-background =  { light = "#000000", dark = "#ffffff" }
+
+surface = { light = "#efefef", dark = "#181818" }
+on-surface = { light = "#000000", dark = "#ffffff" }
+
+destructive = { light = "#f14a61", dark = "#f14a61" }
+on-destructive = { light = "#ffffff", dark = "#ffffff" }
+
+[shapes]
+corner-radius = 8
+spacing-factor = 4
+
+[animations]
+time = "150ms"
+
+[typography]
+line-height-factor = 1.2
+
+
+[shadows]

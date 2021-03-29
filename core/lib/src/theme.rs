@@ -1,17 +1,19 @@
-struct Palette {
-    primary: Color,
-    on_primary: Color,
+struct Colors {
+    accent: Color,
+    on_accent: Color,
     background: Color,
     on_background: Color,
     surface: Color,
-    destructive: Color
+    on_surface: Color,
+    destructive: Color,
+    on_destructive: Color
 }
 
-struct ColorTheme {
-    dark: Palette,
-    light: Palette
+struct Color {
+    dark: String,
+    light: String
 }
 
 pub struct Theme {
-   colors: ColorTheme
+   colors: Colors
 }
