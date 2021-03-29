@@ -1,5 +1,12 @@
 @use "sass:color";
 
+--color-accent
+--color-accent-hover
+--color-accent-active
+--color-accent-border
+--color-background
+
+
 @mixin palette($variant, $primary, $destructive) {
   @if($variant == "dark") {
     $on-primary: #ffffff;
