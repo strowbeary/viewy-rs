@@ -13,10 +13,12 @@ documentation = "https://docs.rs/viewy"
 [dependencies]
 grass = "0.10.4"
 minifier = "0.0"
-serde = "1.0"
+serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 markdown = "0.3"
 html-escape = "0.2"
 palette = "0.5"
 uuid = { version = "0.8", features = ["v4"] }
+indoc = "1.0"
+toml = "0.5"
 

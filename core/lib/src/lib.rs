@@ -4,6 +4,8 @@ extern crate serde;
 extern crate serde_json;
 extern crate html_escape;
 extern crate uuid;
+extern crate indoc;
+extern crate toml;
 
 mod helper_fn;
 mod node;
@@ -11,10 +13,14 @@ mod modifiers;
 mod renderer;
 pub mod components;
 pub mod component;
+pub mod theme;
 
 pub use modifiers::DefaultModifiers;
 pub use renderer::ToHtml;
 pub use helper_fn::*;
+use std::fs::File;
+use std::fs;
+use crate::theme::Theme;
 
 #[derive(Clone)]
 pub struct Assets {
@@ -34,8 +40,14 @@ impl Assets {
         theme
     }
     fn compile_theme() -> String {
+        let theme = fs::read("themes/default.toml")
+            .expect("Can't find theme default config file");
+        let theme_conf: Theme = toml::from_slice(theme.as_slice())
+            .expect("Can't parse config file");
+
         let mut stylesheets = vec![
             include_str!("themes/palette.scss").to_string(),
+            theme_conf.to_scss(),
             include_str!("themes/sizing.scss").to_string(),
             include_str!("themes/typography.scss").to_string(),
             include_str!("themes/commons.scss").to_string(),
@@ -53,12 +65,14 @@ impl Assets {
             include_str!("themes/components/textfield.scss").to_string(),
             include_str!("themes/components/titlebar.scss").to_string(),
         ];
+        let stylesheets = stylesheets.join("\n");
         match grass::from_string(
-            stylesheets.join(""),
+            stylesheets.clone(),
             &grass::Options::default(),
         ) {
             Ok(css) => minifier::css::minify(css.as_str()).unwrap(),
             Err(err) => {
+                println!("{}", stylesheets);
                 println!("{:?}", err);
                 String::new()
             }

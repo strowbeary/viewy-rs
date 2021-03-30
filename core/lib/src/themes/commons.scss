@@ -12,28 +12,9 @@ html {
 body {
   margin: 0;
   font-size: sp(14);
-  background: var(--background);
+  background: var(--color-background);
   color: var(--color-text);
   height: 100vh;
-
-  &.app-themes {
-    &--auto {
-      @media (prefers-color-scheme: light) {
-        @include palette("light", #1d5dea, #f14a61);
-      }
-      @media (prefers-color-scheme: dark) {
-        @include palette("dark", #1d5dea, #f14a61);
-      }
-    }
-
-    &--light {
-      @include palette("light", #1d5dea, #f14a61);
-    }
-
-    &--dark {
-      @include palette("dark", #1d5dea, #f14a61);
-    }
-  }
 }
 
 #floating-element-wrapper {
