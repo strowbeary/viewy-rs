@@ -1,8 +1,8 @@
 [colors]
-accent = { light = "#1d5dea", dark = "#2b6dff" }
+accent = { light = "#009A93", dark = "#00AEA6" }
 on-accent = { light = "#ffffff", dark = "#ffffff" }
 
-background = { light = "#ffffff", dark = "#202020" }
+background = { light = "#ffffff", dark = "#121212" }
 on-background =  { light = "#000000", dark = "#ffffff" }
 
 surface = { light = "#efefef", dark = "#181818" }
@@ -10,6 +10,7 @@ on-surface = { light = "#000000", dark = "#ffffff" }
 
 destructive = { light = "#f14a61", dark = "#f14a61" }
 on-destructive = { light = "#ffffff", dark = "#ffffff" }
+
 
 [shapes]
 corner-radius = 8

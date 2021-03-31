@@ -15,6 +15,7 @@ body {
   background: var(--color-background);
   color: var(--color-text);
   height: 100vh;
+  transition: background 150ms, color 150ms;
 }
 
 #floating-element-wrapper {

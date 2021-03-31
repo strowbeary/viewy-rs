@@ -1,5 +1,6 @@
 use indoc::formatdoc;
 use serde::{Serialize, Deserialize};
+use std::fs;
 
 #[derive(Deserialize, Serialize)]
 #[serde(rename_all = "kebab-case")]
@@ -28,6 +29,13 @@ pub struct Theme {
 }
 
 impl Theme {
+    pub fn load_themes() -> Self {
+        let default_theme = fs::read("themes/default.toml")
+            .expect("Can't find theme default config file");
+        toml::from_slice(default_theme.as_slice())
+            .expect("Can't parse config file")
+    }
+
     pub fn to_scss(&self) -> String {
         let palette: String = formatdoc! {"
 body.app-themes {{

@@ -107,22 +107,22 @@
   }
 
   &--outlined {
-    background: transparent;
-    border: 1px solid var(--color-border);
+    background: var(--color-background-button-default);
+    border: 1px solid var(--color-border-button-default);
 
     .text,
     .icon {
-      color: var(--color-primary);
+      color: var(--color-text-button-default);
     }
 
     &:hover {
-      background: var(--color-hover);
-      border: 1px solid var(--color-border-hover);
+      background: var(--color-background-button-default--hover);
+      border: 1px solid var(--color-border-button-default--hover);
     }
 
     &:active {
-      background: var(--color-active);
-      border: sp(1) solid var(--color-border-hover);
+      background: var(--color-background-button-default--active);
+      border: sp(1) solid var(--color-border-button-default--active);
     }
 
     &:focus-visible {
@@ -131,9 +131,9 @@
 
     &:disabled {
       pointer-events: none;
-      background: none;
-      color: var(--color-text-disabled);
-      border: sp(1) solid var(--color-shadow);
+      background: var(--color-background-button-default);
+      color: var(--color-text-button-default--disabled);
+      border: sp(1) solid var(--color-border-button-default);
     }
     &--destructive {
       .text,
@@ -158,24 +158,24 @@
   }
 
   &--filled {
-    color: white;
-    background: var(--color-primary);
+    color: var(--color-text-button-accent);
+    background: var(--color-background-button-accent);
     border: none;
 
     .icon {
-      color: white;
+      color: var(--color-text-button-accent);
     }
 
     .text {
-      color: white;
+      color: var(--color-text-button-accent);
     }
 
     &:hover {
-      background: var(--color-primary-light);
+      background: var(--color-background-button-accent--hover);
     }
 
     &:active {
-      background: var(--color-primary-lighter);
+      background: var(--color-background-button-accent--active);
     }
 
     &:focus-visible {
@@ -185,18 +185,18 @@
     &:disabled {
       pointer-events: none;
       background: none;
-      color: white;
-      background: var(--color-shadow);
+      color: var(--color-text-button-accent);
+      background: var(--color-background-button-accent--disabled);
     }
     &--destructive {
-      color: white;
+      color: var(--color-text-button-accent);
       background: var(--color-destructive);
       border: none;
       .icon {
-        color: white;
+        color: var(--color-text-button-accent);
       }
       .text {
-        color: white;
+        color: var(--color-text-button-accent);
       }
       &:hover {
         background: var(--color-destructive-light);
@@ -210,7 +210,7 @@
       &:disabled {
         pointer-events: none;
         background: none;
-        color: white;
+        color: var(--color-text-button-accent);
         background: var(--color-shadow);
       }
     }

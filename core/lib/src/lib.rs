@@ -40,14 +40,11 @@ impl Assets {
         theme
     }
     fn compile_theme() -> String {
-        let theme = fs::read("themes/default.toml")
-            .expect("Can't find theme default config file");
-        let theme_conf: Theme = toml::from_slice(theme.as_slice())
-            .expect("Can't parse config file");
+
 
         let mut stylesheets = vec![
             include_str!("themes/palette.scss").to_string(),
-            theme_conf.to_scss(),
+            Theme::load_themes().to_scss(),
             include_str!("themes/sizing.scss").to_string(),
             include_str!("themes/typography.scss").to_string(),
             include_str!("themes/commons.scss").to_string(),

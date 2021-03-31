@@ -7,20 +7,44 @@
   $surface, $on-surface,
   $destructive, $on-destructive
 ) {
+  $on-background: color.mix($on-background, $accent, $weight: 85%);
+
   --color-background: #{$background};
   --color-text: #{$on-background};
 
   @if($variant == "light") {
+    --color-text-button-accent: #{$on-accent};
     --color-background-button-accent: #{$accent};
     --color-background-button-accent--hover: #{color.adjust($accent, $lightness: +5%)};
     --color-background-button-accent--active: #{color.adjust($accent, $lightness: +10%)};
     --color-background-button-accent--disabled: #{color.adjust($background, $darkness: +5%)};
+
+
+    --color-text-button-default: #{$accent};
+    --color-background-button-default: #{$background};
+    --color-border-button-default: #{#{color.adjust($background, $lightness: -10%)}};
+    --color-background-button-default--hover: #{color.adjust($background, $lightness: -5%)};
+    --color-border-button-default--hover: #{#{color.adjust($background, $lightness: -15%)}};
+    --color-background-button-default--active: #{color.adjust($background, $lightness: -10%)};
+    --color-border-button-default--active: #{#{color.adjust($background, $lightness: -20%)}};
+    --color-text-button-default--disabled: #{color.adjust($on-background, $lightness: -30%)};
   }
   @else {
+    --color-text-button-accent: #{$on-accent};
     --color-background-button-accent: #{$accent};
-    --color-background-button-accent--hover: #{color.adjust($accent, $lightness: +5%)};
-    --color-background-button-accent--active: #{color.adjust($accent, $lightness: +10%)};
+    --color-background-button-accent--hover: #{color.adjust($accent, $lightness: -5%, $saturation: -5%)};
+    --color-background-button-accent--active: #{color.adjust($accent, $lightness: -10%, $saturation: -10%)};
     --color-background-button-accent--disabled: #{color.adjust($background, $whiteness: +5%)};
+
+
+    --color-text-button-default: #{$accent};
+    --color-background-button-default: #{$background};
+    --color-border-button-default: #{#{color.adjust($background, $lightness: +10%)}};
+    --color-background-button-default--hover: #{color.adjust($background, $lightness: +3%)};
+    --color-border-button-default--hover: #{#{color.adjust($background, $lightness: +13%)}};
+    --color-background-button-default--active: #{color.adjust($background, $lightness: +6%)};
+    --color-border-button-default--active: #{#{color.adjust($background, $lightness: +16%)}};
+    --color-text-button-default--disabled: #{color.adjust($on-background, $lightness: -70%)};
   }
 
 }
