@@ -14,6 +14,7 @@ mod complex_text;
 mod popover;
 mod form;
 mod divider;
+mod menu;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
@@ -31,3 +32,4 @@ pub use hstack::HStack;
 pub use text::{Text, TextStyle};
 pub use form::Form;
 pub use divider::Divider;
+pub use menu::*;

@@ -1,0 +1,56 @@
+.menu {
+  .menu-section {
+    margin-bottom: sp(16);
+    &__title {
+      margin-bottom: sp(8);
+    }
+
+  }
+  .menu-item + .menu-section {
+    margin-top: sp(16);
+  }
+  .menu-item {
+    padding: sp(8) sp(16) sp(8) sp(10);
+    border-radius: sp(4);
+    cursor: pointer;
+    transition: background 150ms, color 150ms;
+    &--normal {
+      &:hover {
+        background: var(--color-hover);
+        .text, .icon {
+          color: var(--color-primary);
+        }
+      }
+      &:active {
+        background: var(--surface-blue);
+      }
+      &--selected, &--selected:hover, &--selected:active {
+        background: var(--color-primary);
+        .text, .icon {
+          color: white;
+        }
+      }
+    }
+    &--destructive {
+      &:hover {
+        background: var(--color-hover);
+        .text, .icon {
+          color: var(--color-destructive);
+        }
+      }
+      &:active {
+        background: var(--surface-red);
+      }
+      &--selected, &--selected:hover, &--selected:active {
+        background: var(--color-destructive);
+        .text, .icon {
+          color: white;
+        }
+      }
+    }
+    .icon {
+      stroke-width: 2 !important;
+    }
+
+  }
+}

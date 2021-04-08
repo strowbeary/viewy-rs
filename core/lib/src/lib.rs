@@ -52,6 +52,7 @@ impl Assets {
             include_str!("themes/components/text.scss").to_string(),
             include_str!("themes/components/textfield.scss").to_string(),
             include_str!("themes/components/titlebar.scss").to_string(),
+            include_str!("themes/components/menu.scss").to_string(),
         ];
         match grass::from_string(
             stylesheets.join(""),
