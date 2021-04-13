@@ -11,6 +11,7 @@ mod login;
 use rocket::response::content::{Html, Css, JavaScript};
 use viewy::*;
 use rocket::State;
+use viewy::components::{Table, Column};
 
 #[get("/app.css")]
 fn get_stylesheet(assets: State<Assets>) -> Css<String> {
@@ -34,6 +35,20 @@ fn login() -> Html<String> {
     Html(compile_page("Viewy showcase – Login".to_string(), page.compile(), "auto"))
 }
 
+#[get("/table")]
+fn table() -> Html<String> {
+    Html(compile_page("Viewy showcase – Login".to_string(), {
+        Table::new(vec![
+            Column::new("First col"),
+            Column::new("Second col"),
+        ])
+            .rows(vec![
+
+            ])
+            .width("100%")
+    }.compile(), "auto"))
+}
+
 fn main() {
     rocket::
     ignite()
@@ -41,7 +56,8 @@ fn main() {
         get_stylesheet,
         get_scripts,
         home,
-        login
+        login,
+            table
     ])
         .register(catchers::routes())
         .manage(Assets::new())

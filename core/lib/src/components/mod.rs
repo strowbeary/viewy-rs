@@ -15,6 +15,7 @@ mod popover;
 mod form;
 mod divider;
 mod menu;
+mod table;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
@@ -33,3 +34,4 @@ pub use text::{Text, TextStyle};
 pub use form::Form;
 pub use divider::Divider;
 pub use menu::*;
+pub use table::*;

@@ -31,14 +31,14 @@ pub fn login() -> VStack {
                                 .append_child({
                                     TextField::new(
                                         "email",
-                                        FieldType::Email
+                                        FieldType::Email,
                                     )
                                         .label("Courriel")
                                 })
                                 .append_child({
                                     TextField::new(
                                         "password",
-                                        FieldType::Password
+                                        FieldType::Password,
                                     )
                                         .label("Mot de passe")
                                 })
