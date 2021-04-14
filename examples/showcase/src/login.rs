@@ -23,7 +23,7 @@ pub fn login() -> VStack {
                         .margin_bottom(16)
                 )
                 .append_child({
-                    Form::new("login-form", "/home")
+                    Form::new("login-form", "/login")
                         .width(&sp(300))
                         .append_child({
                             VStack::new(Alignment::Stretch)

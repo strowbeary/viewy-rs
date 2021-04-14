@@ -51,8 +51,12 @@ impl Renderable for Form {
         let mut form = self.clone()
             .add_class("form")
             .set_attr("action", &self.action)
-            .set_attr("data-async", "data-async")
+            .set_attr("method", "POST")
             .tag("form");
+
+        if self.is_async {
+            form.set_attr("data-async", "data-async");
+        }
 
         let mut node = form.node;
 

@@ -11,7 +11,8 @@ mod login;
 use rocket::response::content::{Html, Css, JavaScript};
 use viewy::*;
 use rocket::State;
-use viewy::components::{Table, Column};
+use viewy::components::{Table, Column, VStack, Alignment, Form, TextStyle, Text, Row, Button, ButtonStyle};
+use viewy::component::Appendable;
 
 #[get("/app.css")]
 fn get_stylesheet(assets: State<Assets>) -> Css<String> {
@@ -35,17 +36,43 @@ fn login() -> Html<String> {
     Html(compile_page("Viewy showcase – Login".to_string(), page.compile(), "auto"))
 }
 
+struct LoginForm {
+    username: String,
+    password: String,
+}
+
 #[get("/table")]
 fn table() -> Html<String> {
     Html(compile_page("Viewy showcase – Login".to_string(), {
-        Table::new(vec![
-            Column::new("First col"),
-            Column::new("Second col"),
-        ])
-            .rows(vec![
-
-            ])
-            .width("100%")
+        VStack::new(Alignment::Stretch)
+            .padding(vec![24])
+            .append_child({
+                Table::new(vec![
+                    Column::new(Some("First col"))
+                        .width("50%"),
+                    Column::new(Some("Second col"))
+                        .width("50%"),
+                ])
+                    .width("100%")
+                    .append_row({
+                        Row::new()
+                            .append_child({
+                                Text::new("hey", TextStyle::Body)
+                            })
+                            .append_child({
+                                Text::new("ho", TextStyle::Body)
+                            })
+                    })
+                    .append_row({
+                        Row::new()
+                            .append_child({
+                                Text::new("hey 2", TextStyle::Body)
+                            })
+                            .append_child({
+                                Text::new("ho 2", TextStyle::Body)
+                            })
+                    })
+            })
     }.compile(), "auto"))
 }
 
