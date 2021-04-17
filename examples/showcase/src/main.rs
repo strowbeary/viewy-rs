@@ -47,15 +47,16 @@ fn table() -> Html<String> {
         VStack::new(Alignment::Stretch)
             .padding(vec![24])
             .append_child({
-                Table::new(vec![
+                Table::new("test_tableau", vec![
                     Column::new(Some("First col"))
                         .width("50%"),
                     Column::new(Some("Second col"))
                         .width("50%"),
                 ])
+                    .selectable(true)
                     .width("100%")
                     .append_row({
-                        Row::new()
+                        Row::new("1")
                             .append_child({
                                 Text::new("hey", TextStyle::Body)
                             })
@@ -64,7 +65,7 @@ fn table() -> Html<String> {
                             })
                     })
                     .append_row({
-                        Row::new()
+                        Row::new("2")
                             .append_child({
                                 Text::new("hey 2", TextStyle::Body)
                             })

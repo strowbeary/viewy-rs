@@ -166,23 +166,30 @@ as opposed to using 'Content here, content here', making it look like readable E
                                     VStack::new(Alignment::Stretch)
                                         .gap(vec![16])
                                         .append_child({
-                                            Picker::new("Hello", "2", PickerStyle::Segmented)
+                                            Picker::new("test1", "2", PickerStyle::Segmented)
                                                 .label("Segmented picker")
                                                 .append_child({
-                                                    PickerOption::new("Test 1", "1")
-                                                        .icon("user")
+                                                    PickerOption::new("Test 1", "1").icon("user")
                                                 })
-                                                .append_child(PickerOption::new("Test 2", "2"))
-                                                .append_child(PickerOption::new("Test 3", "3"))
+                                                .append_child({
+                                                    PickerOption::new("Test 2", "2")
+                                                })
+                                                .append_child({
+                                                    PickerOption::new("Test 3", "3")
+                                                })
                                         }).append_child({
-                                        Picker::new("Hello", "2", PickerStyle::RadioGroup)
+                                        Picker::new("test2", "2", PickerStyle::RadioGroup)
                                             .label("Radio group picker")
                                             .append_child({
                                                 PickerOption::new("Test 1 - ignored icon", "1")
                                                     .icon("user")
                                             })
-                                            .append_child(PickerOption::new("Test 2", "2"))
-                                            .append_child(PickerOption::new("Test 3", "3"))
+                                            .append_child({
+                                                PickerOption::new("Test 2", "2")
+                                            })
+                                            .append_child({
+                                                PickerOption::new("Test 3", "3")
+                                            })
                                     })
                                 })
                         })

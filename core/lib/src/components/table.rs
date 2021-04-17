@@ -46,7 +46,8 @@ impl Renderable for Column {
 #[derive(Debug, Clone)]
 pub struct Row {
     children: Vec<Box<dyn Renderable>>,
-    pub node: Node,
+    node: Node,
+    pub name: String
 }
 
 impl NodeContainer for Row {
@@ -65,13 +66,14 @@ impl ChildContainer for Row {
     }
 }
 
-impl Appendable<Row> for Row {}
+impl Appendable for Row {}
 
 impl Row {
-    pub fn new() -> Self {
+    pub fn new(name: &str) -> Self {
         Self {
             children: vec![],
             node: Default::default(),
+            name: name.to_string()
         }
     }
 }
@@ -80,25 +82,26 @@ impl Renderable for Row {
     fn render(&self) -> Node {
         let mut row = self.clone()
             .tag("tr");
-        let mut view = row.node;
-
+        let mut node = row.node;
         row.children.iter()
             .for_each(|child| {
                 let mut td = View::new()
                     .tag("td");
                 td.get_children().push(child.clone());
-                view.children.push(td.render())
+                node.children.push(td.render())
             });
-        view
+        node
     }
 }
 
 #[derive(Debug, Clone)]
 pub struct Table {
+    name: String,
     children: Vec<Box<dyn Renderable>>,
     columns: Vec<Column>,
     rows: Vec<Row>,
     node: Node,
+    selectable: bool,
 }
 
 impl NodeContainer for Table {
@@ -117,7 +120,7 @@ impl ChildContainer for Table {
     }
 }
 
-impl Appendable<Table> for Table {}
+impl Appendable for Table {}
 
 impl Renderable for Table {
     fn render(&self) -> Node {
@@ -127,6 +130,12 @@ impl Renderable for Table {
         table.append_child({
             let mut colgroup = View::new()
                 .tag("colgroup");
+            if self.selectable {
+                colgroup.append_child({
+                    Column::new(None)
+                        .width(&sp(30))
+                });
+            }
             self.clone().columns.into_iter()
                 .for_each(|col| {
                     colgroup.append_child(col);
@@ -139,6 +148,12 @@ impl Renderable for Table {
             thead.append_child({
                 let mut tr = View::new()
                     .tag("tr");
+                if self.selectable {
+                    tr.prepend_child({
+                        View::new()
+                            .tag("th")
+                    });
+                }
                 self.clone().columns.into_iter()
                     .for_each(|col| {
                         if let Some(title) = col.title {
@@ -161,7 +176,14 @@ impl Renderable for Table {
             let mut tbody = View::new()
                 .tag("tbody");
             self.clone().rows.into_iter()
-                .for_each(|row| {
+                .for_each(|mut row| {
+                    row.prepend_child({
+                        View::new()
+                            .tag("input")
+                            .set_attr("type", "checkbox")
+                            .set_attr("name", &table.name)
+                            .set_attr("value", &row.name)
+                    });
                     tbody.append_child(row);
                 });
             tbody
@@ -176,17 +198,24 @@ impl Renderable for Table {
 }
 
 impl Table {
-    pub fn new(columns: Vec<Column>) -> Self {
+    pub fn new(name: &str, columns: Vec<Column>) -> Self {
         Self {
+            name: name.to_string(),
             children: vec![],
             columns,
             rows: vec![],
             node: Default::default(),
+            selectable: false,
         }
     }
 
     pub fn append_row(&mut self, row: Row) -> Self {
         self.rows.push(row);
+        self.clone()
+    }
+
+    pub fn selectable(&mut self, is_selectable: bool) -> Self {
+        self.selectable = is_selectable;
         self.clone()
     }
 }

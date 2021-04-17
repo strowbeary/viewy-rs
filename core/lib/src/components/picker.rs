@@ -3,7 +3,7 @@ use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, scale};
 use crate::renderer::{ToHtml, Renderable};
 use crate::components::{Text, TextStyle, HStack, Alignment, Icon, VStack, View};
-use crate::component::Appendable;
+use crate::component::{ChildContainer, Appendable};
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
@@ -41,6 +41,7 @@ pub struct Picker {
     name: String,
     value: String,
     options: Vec<PickerOption>,
+    children: Vec<Box<dyn Renderable>>,
 }
 
 impl NodeContainer for Picker {
@@ -53,6 +54,12 @@ impl DefaultModifiers<Picker> for Picker {}
 
 impl ToHtml for Picker {}
 
+impl ChildContainer for Picker {
+    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
+        return self.children.borrow_mut();
+    }
+}
+
 impl Picker {
     pub fn new(name: &str, value: &str, picker_style: PickerStyle) -> Self {
         Picker {
@@ -61,6 +68,7 @@ impl Picker {
             label: None,
             name: name.to_string(),
             value: value.to_string(),
+            children: vec![],
             options: vec![],
         }
     }
@@ -70,11 +78,13 @@ impl Picker {
         self.clone()
     }
 
-    pub fn append_child(&mut self, child: PickerOption) -> Self {
+    pub fn append_child(&mut self, child: PickerOption) -> Self
+    {
         self.options.push(child);
         self.clone()
     }
 }
+
 
 impl Renderable for Picker {
     fn render(&self) -> Node {
@@ -90,10 +100,28 @@ impl Renderable for Picker {
             PickerStyle::Segmented => {
                 picker.node.children.push({
                     let mut option_list = HStack::new(Alignment::Stretch)
-                        .add_class("picker__option-list");
+                        .add_class("picker--segmented__option-list");
                     for option in picker.options {
+                        let radio_id = format!("picker-segmented-{}-{}", self.name.as_str(), option.label);
+                        option_list
+                            .append_child({
+                                let mut radio = View::new()
+                                    .tag("input")
+                                    .set_attr("type", "radio")
+                                    .set_attr("name", self.name.as_str())
+                                    .set_attr("id", radio_id.as_str())
+                                    .add_class("picker--segmented__option-list__radio");
+                                if picker.value.eq(option.value.as_str()) {
+                                    radio.set_attr("checked", "checked");
+                                }
+                                radio
+                            });
                         option_list.append_child({
-                            let mut item = HStack::new(Alignment::Center).add_class("item");
+                            let mut item = HStack::new(Alignment::Center)
+                                .add_class("picker--segmented__option-list__option")
+                                .tag("label")
+                                .set_attr("for", radio_id.as_str());
+
                             if let Some(icon) = option.icon {
                                 item.append_child({
                                     Icon::new(icon.as_str())
@@ -101,7 +129,9 @@ impl Renderable for Picker {
                                         .margin_right(scale(2))
                                 });
                             }
-                            item.append_child(Text::new(option.label.as_str(), TextStyle::Button));
+                            item.append_child({
+                                Text::new(option.label.as_str(), TextStyle::Button)
+                            });
                             if picker.value.eq(option.value.as_str()) {
                                 item.add_class("selected");
                             }

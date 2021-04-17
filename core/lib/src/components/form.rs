@@ -43,7 +43,7 @@ impl ChildContainer for Form {
         return self.children.borrow_mut();
     }
 }
-impl Appendable<Form> for Form {}
+impl Appendable for Form {}
 
 impl Renderable for Form {
     fn render(&self) -> Node {

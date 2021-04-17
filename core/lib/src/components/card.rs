@@ -43,7 +43,7 @@ impl ChildContainer for Card {
         return self.children.borrow_mut();
     }
 }
-impl Appendable<Card> for Card {}
+impl Appendable for Card {}
 
 impl Renderable for Card {
     fn render(&self) -> Node {

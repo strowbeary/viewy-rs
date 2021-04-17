@@ -37,7 +37,7 @@ impl ChildContainer for View {
     }
 }
 
-impl Appendable<View> for View {}
+impl Appendable for View {}
 
 impl Renderable for View {
     fn render(&self) -> Node {

@@ -54,7 +54,7 @@ impl ChildContainer for VStack {
         return self.children.borrow_mut();
     }
 }
-impl Appendable<VStack> for VStack {}
+impl Appendable for VStack {}
 impl Renderable for VStack {
     fn render(&self) -> Node {
         let mut stack = self

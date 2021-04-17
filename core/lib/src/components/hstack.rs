@@ -51,7 +51,7 @@ impl ChildContainer for HStack {
         return self.children.borrow_mut();
     }
 }
-impl Appendable<HStack> for HStack {}
+impl Appendable for HStack {}
 
 impl Renderable for HStack {
     fn render(&self) -> Node {

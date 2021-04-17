@@ -49,7 +49,7 @@ impl ChildContainer for Popover {
         return self.children.borrow_mut();
     }
 }
-impl Appendable<Popover> for Popover {}
+impl Appendable for Popover {}
 
 
 impl Renderable for Popover {

@@ -70,7 +70,6 @@ impl Assets {
         let mut scripts = vec![
             include_str!("js/async-form.js").to_string(),
             include_str!("js/button.js").to_string(),
-            include_str!("js/picker-segmented.js").to_string(),
             include_str!("js/popover.js").to_string(),
         ];
         let joined_scripts: String = scripts.join("");

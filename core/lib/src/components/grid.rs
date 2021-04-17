@@ -63,7 +63,7 @@ impl ChildContainer for Grid {
     }
 }
 
-impl Appendable<Grid> for Grid {}
+impl Appendable for Grid {}
 
 impl Renderable for Grid {
     fn render(&self) -> Node {

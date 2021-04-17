@@ -77,7 +77,7 @@ impl ChildContainer for Menu {
         return self.options.borrow_mut();
     }
 }
-impl Appendable<Menu> for Menu {}
+impl Appendable for Menu {}
 
 impl NodeContainer for Menu {
     fn get_node(&mut self) -> &mut Node {
