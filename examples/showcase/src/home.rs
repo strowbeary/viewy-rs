@@ -1,18 +1,29 @@
 use viewy::components::*;
-use viewy::{DefaultModifiers, sp};
+use viewy::{DefaultModifiers, sp, scale, Overflow};
 use viewy::component::Appendable;
 
 pub fn home() -> HStack {
     HStack::new(Alignment::Stretch)
+        .height("100vh")
         .append_child({
-            Menu::new(MenuStyle::VerticalNavbar)
-                .append_child({
-                    MenuItem::new("Gestion des utilisateurs")
-                        .icon("user")
-                })
+          VStack::new(Alignment::Stretch)
+              .height("100%")
+              .min_width(sp(300).as_str())
+              .gap(vec![scale(5)])
+              .padding(vec![scale(5)])
+              .background_color("var(--surface)")
+              .append_child({
+                  Menu::new(MenuStyle::VerticalNavbar)
+                      .append_child({
+                          MenuItem::new("Gestion des utilisateurs")
+                              .icon("user")
+                      })
+              })
         })
         .append_child({
             VStack::new(Alignment::Stretch)
+                .overflow(Overflow::Auto)
+                .flex_grow(1)
                 .append_child({
                     TitleBar::new("Viewy showcase")
                         .right_item({

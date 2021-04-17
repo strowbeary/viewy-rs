@@ -12,7 +12,7 @@ mod renderer;
 pub mod components;
 pub mod component;
 
-pub use modifiers::DefaultModifiers;
+pub use modifiers::{DefaultModifiers, Overflow};
 pub use renderer::ToHtml;
 pub use helper_fn::*;
 
@@ -88,6 +88,8 @@ pub fn compile_page(title: String, content: String, theme_variant: &str) -> Stri
             <script src='https://unpkg.com/@popperjs/core@2'></script>
             <script src='/app.js'></script>
             <meta charset='utf8' />
+            <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
+            <meta name='apple-mobile-web-app-capable' content='yes'>
         </head>
         <body class='app-themes--{theme_variant}'>
             {content}

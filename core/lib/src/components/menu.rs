@@ -3,6 +3,7 @@ use crate::{ToHtml, DefaultModifiers};
 use crate::renderer::Renderable;
 use std::borrow::BorrowMut;
 use crate::component::{Appendable, ChildContainer};
+use crate::components::{HStack, Alignment, Icon, TextField, Text, TextStyle};
 
 
 #[derive(Debug, Clone)]
@@ -49,8 +50,21 @@ impl DefaultModifiers<MenuItem> for MenuItem {}
 
 impl Renderable for MenuItem {
     fn render(&self) -> Node {
-        let mut menu_item = self.clone();
-
+        let mut menu_item = self
+            .clone()
+            .add_class("menu-item")
+            .add_class("menu-item--normal");
+        if let Some(icon) = menu_item.icon.clone() {
+            menu_item.node.children.append(&mut vec![
+                Icon::new(icon.as_str())
+                    .size(16)
+                    .stroke_width(5)
+                    .render()
+            ]);
+        }
+        menu_item.node.children.append(&mut vec![
+            Text::new(self.label.as_str(), TextStyle::Label).render()
+        ]);
         menu_item.get_node().clone()
     }
 }
@@ -59,14 +73,14 @@ impl Renderable for MenuItem {
 pub struct Menu {
     node: Node,
     style: MenuStyle,
-    options: Vec<Box<dyn Renderable>>,
+    children: Vec<Box<dyn Renderable>>,
 }
 impl Menu {
     pub fn new(style: MenuStyle) -> Self {
         Self {
             node: Default::default(),
             style,
-            options: vec![]
+            children: vec![]
         }
     }
 }
@@ -74,7 +88,7 @@ impl Menu {
 
 impl ChildContainer for Menu {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.options.borrow_mut();
+        return self.children.borrow_mut();
     }
 }
 impl Appendable for Menu {}
@@ -94,7 +108,9 @@ impl Renderable for Menu {
         let mut menu = self
             .clone()
             .add_class("menu");
-
+        self.children.iter()
+            .for_each(|child|
+                menu.node.children.push(child.render()));
         menu.get_node().clone()
     }
 }

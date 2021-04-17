@@ -3,6 +3,12 @@ use crate::sp;
 use crate::components::Popover;
 use uuid::Uuid;
 
+#[derive(Debug)]
+pub enum Overflow {
+    Auto,
+    Hidden,
+}
+
 pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
     fn color(&mut self, color: &str) -> Self {
         self.get_node().node_style.push(("color".to_string(), color.to_string()));
@@ -130,6 +136,11 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
     }
     fn flex_grow(&mut self, value: i32) -> Self {
         self.get_node().node_style.push(("flex-grow".to_string(), value.to_string()));
+        self.clone()
+    }
+    fn overflow(&mut self, overflow: Overflow) -> Self {
+        self.get_node().node_style
+            .push(("overflow".to_string(), format!("{:?}", overflow).to_lowercase()));
         self.clone()
     }
     fn popover(&mut self, popover: Popover) -> Self {

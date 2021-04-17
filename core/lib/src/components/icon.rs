@@ -21,6 +21,11 @@ impl Icon {
         }
     }
 
+    pub fn stroke_width(&mut self, stroke_width: i32) -> Self {
+        self.stroke_width = stroke_width.to_string();
+        self.clone()
+    }
+
     pub fn size(&mut self, size: i32) -> Self {
         self.size = size;
         self.clone()
