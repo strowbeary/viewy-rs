@@ -1,0 +1,28 @@
+table {
+    border-collapse: collapse;
+    text-align: left;
+    thead{
+        tr {
+            th{
+                border-bottom: sp(1) solid var(--color-border);
+                padding: sp(8) 0;
+            }
+        }
+    }
+    tbody {
+        tr {
+            td{
+                padding: sp(4) sp(12) sp(4) 0;
+                border-bottom: sp(1) solid var(--color-border);
+                &:last-of-type {
+                    padding-right: 0;
+                }
+            }
+            &:last-of-type {
+                td {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+}
