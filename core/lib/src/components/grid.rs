@@ -3,7 +3,8 @@ use crate::node::{Node, NodeContainer};
 use crate::components::Alignment;
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, sp};
-use crate::component::{Appendable, ChildContainer};
+use crate::components::{Appendable, ChildContainer};
+
 
 #[derive(Debug, Clone)]
 pub struct Grid {

@@ -2,8 +2,8 @@ use crate::renderer::{Renderable, ToHtml};
 use crate::node::{Node, NodeContainer, NodeType};
 use crate::DefaultModifiers;
 use std::borrow::BorrowMut;
-use crate::components::View;
-use crate::component::{Appendable, ChildContainer};
+use crate::components::*;
+
 
 #[derive(Debug, Clone)]
 pub struct Popover {

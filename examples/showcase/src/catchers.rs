@@ -1,38 +1,43 @@
 use rocket::response::content::Html;
 use rocket::Catcher;
-use viewy::components::{VStack, Alignment, Text, TextStyle};
-use crate::compile_page;
+use viewy::components::*;
 use viewy::*;
-use viewy::component::Appendable;
+use viewy::page::{Page, RenderMode};
 
 #[catch(404)]
 pub fn not_found() -> Html<String> {
-    let mut page = VStack::new(Alignment::Center)
-        .justify_content("center")
-        .height("100vh")
-        .append_child({
-            Text::new("404", TextStyle::LargeTitle)
+    Html({
+        Page::new("Viewy showcase – Page not found", {
+            VStack::new(Alignment::Center)
+                .justify_content("center")
+                .height("100vh")
+                .append_child({
+                    Text::new("404", TextStyle::LargeTitle)
+                })
+                .append_child({
+                    Text::new("Not found", TextStyle::H2)
+                })
         })
-        .append_child({
-            Text::new("Not found", TextStyle::H2)
-        });
-    let compiled_page = page.compile();
-    Html(compile_page("Viewy showcase – Page not found".to_string(), compiled_page, "auto"))
+            .compile(RenderMode::Complete)
+    })
 }
 
 #[catch(403)]
 pub fn unauthorized() -> Html<String> {
-    let mut page = VStack::new(Alignment::Center)
-        .justify_content("center")
-        .height("100vh");
-    page.append_child({
-        Text::new("403", TextStyle::LargeTitle)
-    });
-    page.append_child({
-        Text::new("Unauthorized", TextStyle::H1)
-    });
-    let compiled_page = page.compile();
-    Html(compile_page("Viewy showcase – Not authorized".to_string(), compiled_page, "auto"))
+    Html({
+        Page::new("Viewy showcase – Not authorized", {
+            VStack::new(Alignment::Center)
+                .justify_content("center")
+                .height("100vh")
+                .append_child({
+                    Text::new("403", TextStyle::LargeTitle)
+                })
+                .append_child({
+                    Text::new("Unauthorized", TextStyle::H1)
+                })
+        })
+            .compile(RenderMode::Complete)
+    })
 }
 
 pub fn routes() -> Vec<Catcher> {

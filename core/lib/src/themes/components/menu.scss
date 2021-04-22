@@ -23,6 +23,8 @@
     cursor: pointer;
     transition: background 150ms, color 150ms;
     flex-wrap: nowrap;
+    text-decoration: none;
+    color: var(--color-text);
     .text {
       text-wrap: none;
     }

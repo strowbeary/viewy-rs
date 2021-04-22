@@ -4,15 +4,17 @@
 extern crate rocket;
 extern crate viewy;
 
-mod catchers;
-mod home;
-mod login;
-
-use rocket::response::content::{Html, Css, JavaScript};
-use viewy::*;
+use rocket::response::content::{Css, Html, JavaScript};
 use rocket::State;
-use viewy::components::{Table, Column, VStack, Alignment, Form, TextStyle, Text, Row, Button, ButtonStyle};
-use viewy::component::Appendable;
+
+use viewy::*;
+use viewy::components::*;
+use viewy::page::{Page, RenderMode};
+
+mod catchers;
+mod components;
+mod layouts;
+mod pages;
 
 #[get("/app.css")]
 fn get_stylesheet(assets: State<Assets>) -> Css<String> {
@@ -26,14 +28,26 @@ fn get_scripts(assets: State<Assets>) -> JavaScript<String> {
 
 #[get("/")]
 fn home() -> Html<String> {
-    let page = home::home();
-    Html(compile_page("Viewy showcase – Home".to_string(), page.compile(), "auto"))
+    Html({
+        Page::new("Viewy showcase – Home", {
+            layouts::default({
+                pages::home()
+            })
+        })
+            .compile(RenderMode::Complete)
+    })
 }
 
 #[get("/login")]
 fn login() -> Html<String> {
-    let page = login::login();
-    Html(compile_page("Viewy showcase – Login".to_string(), page.compile(), "auto"))
+    Html({
+        Page::new("Viewy showcase – Login", {
+            layouts::login_layout({
+                pages::login()
+            })
+        })
+            .compile(RenderMode::Complete)
+    })
 }
 
 struct LoginForm {
@@ -41,52 +55,29 @@ struct LoginForm {
     password: String,
 }
 
+
 #[get("/table")]
 fn table() -> Html<String> {
-    Html(compile_page("Viewy showcase – Login".to_string(), {
-        VStack::new(Alignment::Stretch)
-            .padding(vec![24])
-            .append_child({
-                Table::new("test_tableau", vec![
-                    Column::new(Some("First col"))
-                        .width("50%"),
-                    Column::new(Some("Second col"))
-                        .width("50%"),
-                ])
-                    .selectable(true)
-                    .width("100%")
-                    .append_row({
-                        Row::new("1")
-                            .append_child({
-                                Text::new("hey", TextStyle::Body)
-                            })
-                            .append_child({
-                                Text::new("ho", TextStyle::Body)
-                            })
-                    })
-                    .append_row({
-                        Row::new("2")
-                            .append_child({
-                                Text::new("hey 2", TextStyle::Body)
-                            })
-                            .append_child({
-                                Text::new("ho 2", TextStyle::Body)
-                            })
-                    })
+    Html({
+        Page::new("Viewy showcase – Table", {
+            layouts::default({
+                pages::table()
             })
-    }.compile(), "auto"))
+        })
+            .compile(RenderMode::Complete)
+    })
 }
 
 fn main() {
     rocket::
     ignite()
         .mount("/", routes![
-        get_stylesheet,
-        get_scripts,
-        home,
-        login,
+            get_stylesheet,
+            get_scripts,
+            home,
+            login,
             table
-    ])
+        ])
         .register(catchers::routes())
         .manage(Assets::new())
         .launch();

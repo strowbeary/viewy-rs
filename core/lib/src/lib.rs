@@ -9,12 +9,14 @@ mod helper_fn;
 mod node;
 mod modifiers;
 mod renderer;
+pub mod page;
 pub mod components;
-pub mod component;
 
 pub use modifiers::{DefaultModifiers, Overflow};
-pub use renderer::ToHtml;
+pub use renderer::{ToHtml, Renderable};
 pub use helper_fn::*;
+
+
 
 #[derive(Clone)]
 pub struct Assets {
@@ -54,6 +56,7 @@ impl Assets {
             include_str!("themes/components/titlebar.scss").to_string(),
             include_str!("themes/components/menu.scss").to_string(),
             include_str!("themes/components/table.scss").to_string(),
+            include_str!("themes/components/checkbox.scss").to_string(),
         ];
         match grass::from_string(
             stylesheets.join(""),
@@ -71,34 +74,10 @@ impl Assets {
             include_str!("js/async-form.js").to_string(),
             include_str!("js/button.js").to_string(),
             include_str!("js/popover.js").to_string(),
+            include_str!("js/table.js").to_string(),
         ];
         let joined_scripts: String = scripts.join("");
         minifier::js::minify(joined_scripts.as_str())
     }
-}
-
-
-pub fn compile_page(title: String, content: String, theme_variant: &str) -> String {
-    format!(r"
-        <!doctype html>
-        <html>
-        <head>
-            <title>{title}</title>
-            <link href='/app.css' rel='stylesheet'>
-            <script src='https://unpkg.com/@popperjs/core@2'></script>
-            <script src='/app.js'></script>
-            <meta charset='utf8' />
-            <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
-            <meta name='apple-mobile-web-app-capable' content='yes'>
-        </head>
-        <body class='app-themes--{theme_variant}'>
-            {content}
-        </body>
-        </html>
-    ",
-            title = title,
-            content = content,
-            theme_variant = theme_variant
-    )
 }
 

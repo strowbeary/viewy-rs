@@ -2,24 +2,15 @@ use crate::renderer::{Renderable, ToHtml};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::component::{Appendable, ChildContainer};
 use std::process::Child;
+use crate::components::{Appendable, ChildContainer};
 
+/// This is a simple configurable node
 #[derive(Debug, Clone)]
 pub struct View {
     children: Vec<Box<dyn Renderable>>,
     pub node: Node,
 }
-impl NodeContainer for View {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
-}
-
-impl DefaultModifiers<View> for View {}
-
-
-impl ToHtml for View {}
 
 impl View {
     pub fn new() -> Self {
@@ -30,6 +21,17 @@ impl View {
     }
 
 }
+
+impl NodeContainer for View {
+    fn get_node(&mut self) -> &mut Node {
+        self.node.borrow_mut()
+    }
+}
+
+impl DefaultModifiers<View> for View {}
+
+
+impl ToHtml for View {}
 
 impl ChildContainer for View {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {

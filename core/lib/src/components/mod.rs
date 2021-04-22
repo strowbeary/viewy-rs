@@ -16,6 +16,7 @@ mod form;
 mod divider;
 mod menu;
 mod table;
+mod checkbox;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
@@ -35,3 +36,46 @@ pub use form::Form;
 pub use divider::Divider;
 pub use menu::*;
 pub use table::*;
+pub use checkbox::*;
+
+use crate::node::Node;
+use crate::renderer::Renderable;
+
+/// Trait that make the children property accessible for Appendable trait
+pub trait ChildContainer {
+    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>>;
+}
+
+/// Trait that make a component capable of receiving children
+pub trait Appendable: ChildContainer + Clone {
+
+    /// Adds a node to the end of the list of children of a specified parent node.
+    /// ```rust
+    /// View::new()
+    ///     .append_child({
+    ///         View::new()
+    ///     })
+    /// ```
+    fn append_child<C>(&mut self, child: C) -> Self
+        where
+            C: 'static + Renderable,
+    {
+        self.get_children().push(Box::new(child));
+        self.clone()
+    }
+
+    /// Adds a node before the first child of the list of children of a specified parent node.
+    /// ```rust
+    /// View::new()
+    ///     .prepend_child({
+    ///         View::new()
+    ///     })
+    /// ```
+    fn prepend_child<C>(&mut self, child: C) -> Self
+        where
+            C: 'static + Renderable,
+    {
+        self.get_children().insert(0, Box::new(child));
+        self.clone()
+    }
+}

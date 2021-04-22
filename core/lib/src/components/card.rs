@@ -2,7 +2,8 @@ use crate::renderer::{Renderable, ToHtml};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::component::{Appendable, ChildContainer};
+use crate::components::{Appendable, ChildContainer};
+
 
 #[derive(Debug, Clone)]
 pub enum CardStyle {

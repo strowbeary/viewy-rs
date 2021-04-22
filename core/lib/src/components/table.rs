@@ -1,9 +1,9 @@
 use crate::renderer::{Renderable, ToHtml};
 use crate::node::{Node, NodeContainer};
-use crate::components::{Alignment, Text, TextStyle, View};
+use crate::components::*;
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, sp};
-use crate::component::{Appendable, ChildContainer};
+
 
 #[derive(Debug, Clone)]
 pub struct Column {
@@ -178,11 +178,7 @@ impl Renderable for Table {
             self.clone().rows.into_iter()
                 .for_each(|mut row| {
                     row.prepend_child({
-                        View::new()
-                            .tag("input")
-                            .set_attr("type", "checkbox")
-                            .set_attr("name", &table.name)
-                            .set_attr("value", &row.name)
+                        Checkbox::new(&table.name, &row.name)
                     });
                     tbody.append_child(row);
                 });

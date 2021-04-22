@@ -27,7 +27,7 @@ impl Clone for Box<dyn Renderable> {
 }
 
 pub trait ToHtml : Renderable {
-    fn compile(&self) -> String {
+    fn to_html(&self) -> String {
         let root_node: Node = self.render();
         let popovers_html: Vec<String> = root_node.get_popovers().iter()
             .map(|popover| popover.render())

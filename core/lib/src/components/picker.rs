@@ -2,8 +2,8 @@ use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, scale};
 use crate::renderer::{ToHtml, Renderable};
-use crate::components::{Text, TextStyle, HStack, Alignment, Icon, VStack, View};
-use crate::component::{ChildContainer, Appendable};
+use crate::components::*;
+
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
@@ -30,7 +30,7 @@ impl PickerOption {
 pub enum PickerStyle {
     Segmented,
     Dropdown,
-    RadioGroup,
+    RadioGroup
 }
 
 #[derive(Debug, Clone)]

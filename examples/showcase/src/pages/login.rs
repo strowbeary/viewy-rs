@@ -1,6 +1,5 @@
 use viewy::components::*;
 use viewy::{DefaultModifiers, sp, scale};
-use viewy::component::Appendable;
 
 pub fn login() -> VStack {
     VStack::new(Alignment::Start)

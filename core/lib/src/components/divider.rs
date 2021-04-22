@@ -2,7 +2,7 @@ use crate::renderer::{Renderable, ToHtml};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::component::{Appendable, ChildContainer};
+
 
 #[derive(Debug, Clone)]
 pub struct Divider {

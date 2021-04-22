@@ -11,7 +11,7 @@
     --color-primary: #{color.adjust($primary, $lightness: +10%)};
     --color-primary-light: #{color.adjust($primary, $lightness: +20%)};
     --color-primary-lighter: #{color.adjust($primary, $lightness: +35%)};
-    --surface-blue: #{color.adjust($surface, $alpha: -0.85)};
+    --surface-blue: #{color.adjust($primary, $alpha: -0.85)};
     --surface-red: #{color.adjust($destructive, $alpha: -0.9)};
     --surface-red-darker: #{color.adjust($destructive, $alpha: -0.8)};
     --color-border-blue: #{color.adjust($primary, $alpha: -0.25)};
