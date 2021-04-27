@@ -5,6 +5,7 @@ use crate::components::Popover;
 pub enum NodeType {
     Normal(String),
     SelfClosing(String),
+    Comment(String)
 }
 
 #[derive(Debug, Clone)]
@@ -80,6 +81,10 @@ impl Node {
                 class_list = classes.join(" "),
                 attributes = attributes.join(" "),
                 view_style = style.join("")
+            ),
+            NodeType::Comment(comment) => format!(
+                "<!--{comment}-->",
+                comment = comment
             )
         }
     }

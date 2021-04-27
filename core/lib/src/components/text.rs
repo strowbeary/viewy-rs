@@ -1,9 +1,10 @@
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::renderer::{ToHtml, Renderable};
+use crate::renderer::{Renderable};
 use html_escape::encode_text;
 
+/// Used to set the typographic style of a Text view.
 #[derive(Debug, Clone)]
 pub enum TextStyle {
     LargeTitle,
@@ -21,21 +22,13 @@ pub enum TextStyle {
     Caption,
 }
 
+/// A view that displays one or more lines of read-only text.
 #[derive(Debug, Clone)]
 pub struct Text {
     node: Node,
     pub content: String,
     pub style: TextStyle,
 }
-
-impl NodeContainer for Text {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
-}
-
-impl DefaultModifiers<Text> for Text {}
-impl ToHtml for Text {}
 
 impl Text {
     pub fn new(content: &str, style: TextStyle) -> Self {
@@ -48,6 +41,14 @@ impl Text {
         }
     }
 }
+
+impl NodeContainer for Text {
+    fn get_node(&mut self) -> &mut Node {
+        self.node.borrow_mut()
+    }
+}
+
+impl DefaultModifiers<Text> for Text {}
 
 impl Renderable for Text {
     fn render(&self) -> Node {

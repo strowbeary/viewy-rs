@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml};
+use crate::renderer::{Renderable};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers};
@@ -21,7 +21,6 @@ impl NodeContainer for Form {
 }
 
 impl DefaultModifiers<Form> for Form {}
-impl ToHtml for Form {}
 
 impl Form {
     pub fn new(name: &str, action: &str) -> Self {

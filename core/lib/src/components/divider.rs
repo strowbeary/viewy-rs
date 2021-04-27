@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml};
+use crate::renderer::{Renderable};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
@@ -16,7 +16,6 @@ impl NodeContainer for Divider {
 }
 
 impl DefaultModifiers<Divider> for Divider {}
-impl ToHtml for Divider {}
 
 
 

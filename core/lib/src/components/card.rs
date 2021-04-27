@@ -1,10 +1,11 @@
-use crate::renderer::{Renderable, ToHtml};
+use crate::renderer::{Renderable};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
 use crate::components::{Appendable, ChildContainer};
 
 
+/// Used to set card style.
 #[derive(Debug, Clone)]
 pub enum CardStyle {
     Outlined,
@@ -12,21 +13,13 @@ pub enum CardStyle {
     Raised,
 }
 
+/// An outlined view to emphasize a content.
 #[derive(Debug, Clone)]
 pub struct Card {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
     pub style: CardStyle,
-
 }
-impl NodeContainer for Card {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
-}
-
-impl DefaultModifiers<Card> for Card {}
-impl ToHtml for Card {}
 
 
 
@@ -39,6 +32,16 @@ impl Card {
         }
     }
 }
+
+
+impl NodeContainer for Card {
+    fn get_node(&mut self) -> &mut Node {
+        self.node.borrow_mut()
+    }
+}
+
+impl DefaultModifiers<Card> for Card {}
+
 impl ChildContainer for Card {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
         return self.children.borrow_mut();

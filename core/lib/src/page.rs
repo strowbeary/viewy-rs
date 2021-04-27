@@ -1,5 +1,6 @@
-use crate::renderer::{ToHtml, RenderableClone};
+
 use crate::components::*;
+use crate::node::*;
 use std::fmt;
 use crate::Renderable;
 
@@ -47,36 +48,69 @@ pub enum RenderMode {
     LayoutOnly
 }
 
-impl Clone for Box<dyn ToHtml> {
-    fn clone(&self) -> Box<dyn ToHtml> {
-        self.clone()
+#[derive(Clone, Debug)]
+struct ContentComment;
+
+impl Renderable for ContentComment {
+    fn render(&self) -> Node {
+        Node {
+            node_type: NodeType::Comment("VIEWY_CONTENT".to_string()),
+            text: None,
+            children: vec![],
+            class_list: Default::default(),
+            node_style: vec![],
+            attributes: vec![],
+            popover: Box::new(None)
+        }
     }
 }
 
+/// # How to use
+///
+/// Represent a page and embed all the logic required by the service worker.
+///
+/// **Example to get the full page**
+/// ```rust
+/// use viewy::page::RenderMode;
+/// Page::new("Page name", layout::Default, {
+///     View::new()
+/// })
+///     .compile(RenderMode::Complete)
+/// ```
 #[derive(Clone)]
 pub struct Page {
     name: String,
-    content: Box<dyn ToHtml>,
+    content: Box<dyn Renderable>,
+    layout: Box<fn(Box<dyn Renderable>) -> Box<dyn Renderable>>,
     theme: Theme,
 }
 
 impl Page {
-    pub fn new<C: 'static + ToHtml>(name: &str, content: C) -> Self {
+    pub fn new<C: 'static + Renderable>(name: &str, layout: fn(Box<dyn Renderable>) -> Box<dyn Renderable>, content: C) -> Self {
         Self {
             name: name.to_string(),
             content: Box::new(content),
+            layout: Box::new(layout),
             theme: Theme::Auto,
         }
     }
     pub fn compile(&self, render_mode: RenderMode) -> String {
-        let content = self.content.to_html();
-        let theme_variant = self.theme.to_string().to_lowercase();
+        let page = self;
+
+        let theme_variant = page.theme.to_string().to_lowercase();
         match render_mode {
             RenderMode::Complete => {
-                get_full_html_page(self.name.clone(), content, theme_variant)
+                get_full_html_page(page.name.clone(), {
+                    (page.layout)(page.content.clone()).to_html()
+                }, theme_variant)
             }
             RenderMode::ContentOnly => {
-                content
+                page.content.to_html()
+            }
+            RenderMode::LayoutOnly => {
+                get_full_html_page(page.name.clone(), {
+                    (page.layout)(Box::new(ContentComment)).to_html()
+                }, theme_variant)
             }
         }
     }

@@ -10,6 +10,7 @@ use rocket::State;
 use viewy::*;
 use viewy::components::*;
 use viewy::page::{Page, RenderMode};
+use crate::catchers::routes;
 
 mod catchers;
 mod components;
@@ -29,23 +30,23 @@ fn get_scripts(assets: State<Assets>) -> JavaScript<String> {
 #[get("/")]
 fn home() -> Html<String> {
     Html({
-        Page::new("Viewy showcase – Home", {
-            layouts::default({
-                pages::home()
-            })
-        })
-            .compile(RenderMode::Complete)
+        Page::new(
+            "Viewy showcase – Home",
+            layouts::default,
+            pages::home(),
+        )
+            .compile(RenderMode::LayoutOnly)
     })
 }
 
 #[get("/login")]
 fn login() -> Html<String> {
     Html({
-        Page::new("Viewy showcase – Login", {
-            layouts::login_layout({
-                pages::login()
-            })
-        })
+        Page::new(
+            "Viewy showcase – Login",
+            layouts::login_layout,
+            pages::login(),
+        )
             .compile(RenderMode::Complete)
     })
 }
@@ -59,11 +60,11 @@ struct LoginForm {
 #[get("/table")]
 fn table() -> Html<String> {
     Html({
-        Page::new("Viewy showcase – Table", {
-            layouts::default({
-                pages::table()
-            })
-        })
+        Page::new(
+            "Viewy showcase – Table",
+            layouts::default,
+            pages::table(),
+        )
             .compile(RenderMode::Complete)
     })
 }

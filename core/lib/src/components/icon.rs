@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer};
 use std::collections::HashMap;
 use crate::{DefaultModifiers, sp};
-use crate::renderer::{ToHtml, Renderable};
+use crate::renderer::{Renderable};
 
 #[derive(Debug, Clone)]
 pub struct Icon {
@@ -44,8 +44,6 @@ impl NodeContainer for Icon {
 }
 
 impl DefaultModifiers<Icon> for Icon {}
-
-impl ToHtml for Icon {}
 
 impl Renderable for Icon {
     fn render(&self) -> Node {

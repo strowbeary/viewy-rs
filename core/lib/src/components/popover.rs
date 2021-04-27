@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml};
+use crate::renderer::{Renderable};
 use crate::node::{Node, NodeContainer, NodeType};
 use crate::DefaultModifiers;
 use std::borrow::BorrowMut;
@@ -20,9 +20,6 @@ impl NodeContainer for Popover {
 }
 
 impl DefaultModifiers<Popover> for Popover {}
-
-
-impl ToHtml for Popover {}
 
 impl Popover {
     pub fn new() -> Self {

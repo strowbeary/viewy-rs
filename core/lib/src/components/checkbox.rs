@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, scale};
-use crate::renderer::{ToHtml, Renderable};
+use crate::renderer::Renderable;
 use crate::components::*;
 
 use std::ops::Deref;
@@ -24,8 +24,6 @@ impl NodeContainer for Checkbox {
 }
 
 impl DefaultModifiers<Checkbox> for Checkbox {}
-
-impl ToHtml for Checkbox {}
 
 impl ChildContainer for Checkbox {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {

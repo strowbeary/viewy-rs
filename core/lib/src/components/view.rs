@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml};
+use crate::renderer::{Renderable};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
@@ -29,9 +29,6 @@ impl NodeContainer for View {
 }
 
 impl DefaultModifiers<View> for View {}
-
-
-impl ToHtml for View {}
 
 impl ChildContainer for View {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {

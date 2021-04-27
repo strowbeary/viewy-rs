@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml};
+use crate::renderer::{Renderable};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, sp};
@@ -27,9 +27,6 @@ impl NodeContainer for VStack {
 }
 
 impl DefaultModifiers<VStack> for VStack {}
-
-
-impl ToHtml for VStack {}
 
 impl VStack {
     pub fn new(alignment: Alignment) -> Self {

@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml};
+use crate::renderer::{Renderable};
 use crate::node::{Node, NodeContainer};
 use crate::components::Alignment;
 use std::borrow::BorrowMut;
@@ -20,8 +20,6 @@ impl NodeContainer for Grid {
 }
 
 impl DefaultModifiers<Grid> for Grid {}
-
-impl ToHtml for Grid {}
 
 impl Grid {
     pub fn new(alignment: Alignment) -> Self {

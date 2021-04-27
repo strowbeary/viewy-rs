@@ -1,5 +1,5 @@
 use crate::node::{Node, NodeContainer};
-use crate::renderer::{Renderable, ToHtml};
+use crate::renderer::{Renderable};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
 use crate::components::{TextStyle, Text, View};
@@ -20,8 +20,6 @@ impl NodeContainer for TitleBar {
 }
 
 impl DefaultModifiers<TitleBar> for TitleBar {}
-
-impl ToHtml for TitleBar {}
 
 impl TitleBar {
     pub fn new(title: &str) -> Self {

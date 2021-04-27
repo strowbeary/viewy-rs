@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::renderer::{ToHtml, Renderable};
+use crate::renderer::{Renderable};
 use crate::components::{View, TextStyle, Text};
 
 #[derive(Debug, Clone)]
@@ -80,8 +80,6 @@ impl TextField {
         self.clone()
     }
 }
-
-impl ToHtml for TextField {}
 
 impl Renderable for TextField {
     fn render(&self) -> Node {

@@ -1,16 +1,16 @@
 use viewy::*;
 use viewy::components::*;
+use std::ops::Deref;
 
-pub fn default<C>(content: C) -> HStack
-    where C: 'static + Renderable {
-    HStack::new(Alignment::Stretch)
+pub fn default(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
+    Box::new(HStack::new(Alignment::Stretch)
         .height("100vh")
         .append_child({
             VStack::new(Alignment::Stretch)
                 .height("100%")
                 .min_width(sp(200).as_str())
-                .gap(vec![scale(5)])
-                .padding(vec![scale(5)])
+                .gap(vec![24])
+                .padding(vec![24])
                 .background_color("var(--surface)")
                 .append_child({
                     Menu::new(MenuStyle::VerticalNavbar)
@@ -47,10 +47,9 @@ pub fn default<C>(content: C) -> HStack
                         .padding(vec![16])
                         .append_child(content)
                 })
-        })
+        }))
 }
 
-pub fn login_layout<C>(content: C) -> C
-    where C: 'static + Renderable {
+pub fn login_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
     content
 }

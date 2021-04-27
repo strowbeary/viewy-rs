@@ -1,5 +1,5 @@
 use crate::node::{Node, NodeContainer};
-use crate::{ToHtml, DefaultModifiers};
+use crate::{DefaultModifiers};
 use crate::renderer::Renderable;
 use std::borrow::BorrowMut;
 use crate::components::*;
@@ -99,8 +99,6 @@ impl NodeContainer for Menu {
 }
 
 impl DefaultModifiers<Menu> for Menu {}
-
-impl ToHtml for Menu {}
 
 impl Renderable for Menu {
     fn render(&self) -> Node {

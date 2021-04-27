@@ -11,7 +11,7 @@
     border-radius: sp(4);
     transition: background 150ms ease, border 150ms ease;
     &::after {
-      font-family: inherit;
+      @include font-stack;
       content: "✓";
       display: block;
       color: white;

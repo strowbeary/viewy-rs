@@ -1,12 +1,16 @@
 @import url('https://rsms.me/inter/inter.css');
 @import url('https://fonts.googleapis.com/css2?family=Fira+Mono&display=swap');
 
-html {
-  text-rendering: optimizeLegibility;
+@mixin font-stack() {
   font-family: 'Inter', sans-serif;
   @supports (font-variation-settings: normal) {
     font-family: 'Inter var', sans-serif;
   }
+}
+
+html {
+  text-rendering: optimizeLegibility;
+  @include font-stack;
 }
 
 body {

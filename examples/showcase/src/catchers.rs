@@ -1,45 +1,48 @@
 use rocket::response::content::Html;
-use rocket::Catcher;
+use rocket::{Catcher, Request};
 use viewy::components::*;
 use viewy::*;
 use viewy::page::{Page, RenderMode};
+use crate::layouts;
+use rocket::http::Status;
+use rocket::response::Responder;
 
-#[catch(404)]
-pub fn not_found() -> Html<String> {
+fn default_catch_page(status: Status) -> Html<String>{
     Html({
-        Page::new("Viewy showcase – Page not found", {
-            VStack::new(Alignment::Center)
-                .justify_content("center")
-                .height("100vh")
-                .append_child({
-                    Text::new("404", TextStyle::LargeTitle)
-                })
-                .append_child({
-                    Text::new("Not found", TextStyle::H2)
-                })
-        })
+        Page::new(
+            format!("Viewy showcase – {}", status.reason).as_str(),
+            layouts::login_layout,
+            {
+                VStack::new(Alignment::Center)
+                    .justify_content("center")
+                    .height("100vh")
+                    .append_child({
+                        Text::new(format!("{}", status.code).as_str(), TextStyle::LargeTitle)
+                    })
+                    .append_child({
+                        Text::new(format!("{}", status.reason).as_str(), TextStyle::H2)
+                    })
+            },
+        )
             .compile(RenderMode::Complete)
     })
+}
+
+#[catch(404)]
+fn not_found() -> Html<String> {
+    default_catch_page(Status::NotFound)
 }
 
 #[catch(403)]
-pub fn unauthorized() -> Html<String> {
-    Html({
-        Page::new("Viewy showcase – Not authorized", {
-            VStack::new(Alignment::Center)
-                .justify_content("center")
-                .height("100vh")
-                .append_child({
-                    Text::new("403", TextStyle::LargeTitle)
-                })
-                .append_child({
-                    Text::new("Unauthorized", TextStyle::H1)
-                })
-        })
-            .compile(RenderMode::Complete)
-    })
+fn forbidden() -> Html<String> {
+    default_catch_page(Status::Forbidden)
+}
+
+#[catch(500)]
+fn server_error() -> Html<String> {
+    default_catch_page(Status::InternalServerError)
 }
 
 pub fn routes() -> Vec<Catcher> {
-    catchers![not_found, unauthorized]
+    catchers![not_found, forbidden, server_error]
 }

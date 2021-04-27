@@ -19,4 +19,5 @@ markdown = "0.3"
 html-escape = "0.2"
 palette = "0.5"
 uuid = { version = "0.8", features = ["v4"] }
+dyn-clone = "1.0.4"
 

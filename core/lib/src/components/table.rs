@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml};
+use crate::renderer::{Renderable};
 use crate::node::{Node, NodeContainer};
 use crate::components::*;
 use std::borrow::BorrowMut;
@@ -18,8 +18,6 @@ impl NodeContainer for Column {
 }
 
 impl DefaultModifiers<Column> for Column {}
-
-impl ToHtml for Column {}
 
 impl Column {
     pub fn new(title: Option<&str>) -> Self {
@@ -57,8 +55,6 @@ impl NodeContainer for Row {
 }
 
 impl DefaultModifiers<Row> for Row {}
-
-impl ToHtml for Row {}
 
 impl ChildContainer for Row {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
@@ -111,8 +107,6 @@ impl NodeContainer for Table {
 }
 
 impl DefaultModifiers<Table> for Table {}
-
-impl ToHtml for Table {}
 
 impl ChildContainer for Table {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {

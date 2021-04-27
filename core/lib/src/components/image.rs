@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::renderer::{ToHtml, Renderable};
+use crate::renderer::{Renderable};
 
 #[derive(Debug, Clone)]
 pub struct Image {
@@ -25,8 +25,6 @@ impl Image {
         }
     }
 }
-
-impl ToHtml for Image {}
 
 impl Renderable for Image {
     fn render(&self) -> Node {

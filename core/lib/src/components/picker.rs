@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, scale};
-use crate::renderer::{ToHtml, Renderable};
+use crate::renderer::{Renderable};
 use crate::components::*;
 
 
@@ -44,22 +44,6 @@ pub struct Picker {
     children: Vec<Box<dyn Renderable>>,
 }
 
-impl NodeContainer for Picker {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
-}
-
-impl DefaultModifiers<Picker> for Picker {}
-
-impl ToHtml for Picker {}
-
-impl ChildContainer for Picker {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
-    }
-}
-
 impl Picker {
     pub fn new(name: &str, value: &str, picker_style: PickerStyle) -> Self {
         Picker {
@@ -82,6 +66,21 @@ impl Picker {
     {
         self.options.push(child);
         self.clone()
+    }
+}
+
+
+impl NodeContainer for Picker {
+    fn get_node(&mut self) -> &mut Node {
+        self.node.borrow_mut()
+    }
+}
+
+impl DefaultModifiers<Picker> for Picker {}
+
+impl ChildContainer for Picker {
+    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
+        return self.children.borrow_mut();
     }
 }
 

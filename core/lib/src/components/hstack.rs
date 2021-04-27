@@ -1,4 +1,4 @@
-use crate::renderer::{Renderable, ToHtml};
+use crate::renderer::{Renderable};
 use crate::node::{Node, NodeContainer};
 use crate::components::Alignment;
 use std::borrow::BorrowMut;
@@ -30,8 +30,6 @@ impl NodeContainer for HStack {
 }
 
 impl DefaultModifiers<HStack> for HStack {}
-
-impl ToHtml for HStack {}
 
 impl HStack {
     pub fn new(alignment: Alignment) -> Self {
