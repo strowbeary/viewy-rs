@@ -64,10 +64,9 @@ impl Renderable for ContentComment {
         }
     }
 }
-
-/// # How to use
-///
 /// Represent a page and embed all the logic required by the service worker.
+///
+/// # How to use
 ///
 /// **Example to get the full page**
 /// ```rust

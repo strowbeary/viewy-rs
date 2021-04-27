@@ -35,7 +35,7 @@ fn home() -> Html<String> {
             layouts::default,
             pages::home(),
         )
-            .compile(RenderMode::LayoutOnly)
+            .compile(RenderMode::Complete)
     })
 }
 
