@@ -3,7 +3,7 @@ use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
 
-
+/// Draw a horizontal line to separate content.
 #[derive(Debug, Clone)]
 pub struct Divider {
     node: Node,

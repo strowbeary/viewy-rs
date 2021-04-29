@@ -11,7 +11,11 @@ mod helper_fn;
 mod node;
 mod modifiers;
 mod renderer;
-pub mod page;
+
+mod page;
+pub use page::{Page, RenderMode};
+
+/// Module containing all ui components of viewy-rs
 pub mod components;
 
 pub use modifiers::{DefaultModifiers, Overflow};
@@ -40,6 +44,8 @@ fn get_stylesheets() -> Vec<String> {
         include_str!("themes/components/menu.scss").to_string(),
         include_str!("themes/components/table.scss").to_string(),
         include_str!("themes/components/checkbox.scss").to_string(),
+        include_str!("themes/components/avatar.scss").to_string(),
+        include_str!("themes/components/tag.scss").to_string(),
     ]
 }
 
@@ -52,6 +58,28 @@ fn get_scripts() -> Vec<String> {
     ]
 }
 
+/// At startup it compile theme and minify js sources.
+/// You have to use it to serve these assets to the client.
+///
+/// **How to use**
+///
+/// You have to add these routes to your project
+/// ```rust
+/// #[get("/app.css")]
+/// fn get_stylesheet(assets: State<Assets>) -> Css<String> {
+///     Css(assets.inner().clone().stylesheet)
+/// }
+///
+/// #[get("/app.js")]
+/// fn get_scripts(assets: State<Assets>) -> JavaScript<String> {
+///     JavaScript(assets.inner().clone().script)
+/// }
+/// ```
+/// And add an `Assets` instance to rocket state
+/// ```rust
+/// rocket::ignite()
+///     .manage(Assets::new())
+/// ```
 #[derive(Clone)]
 pub struct Assets {
     pub script: String,

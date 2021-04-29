@@ -6,8 +6,16 @@ pub fn showcase_section<C>(title: &str, content: C) -> Card
     Card::new(CardStyle::Raised)
         .padding(vec![30])
         .append_child({
-            Text::new(title, TextStyle::H1)
-                .margin_bottom(25)
+           HStack::new(Alignment::Center)
+               .margin_bottom(25)
+               .justify_content("space-between")
+               .append_child({
+                   Text::new(title, TextStyle::H1)
+               })
+               .append_child({
+                   Button::new("See documentation", ButtonStyle::Link)
+                       .icon("book-open")
+               })
         })
         .append_child(Divider::new())
         .append_child(content)

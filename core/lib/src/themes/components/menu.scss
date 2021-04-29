@@ -25,6 +25,8 @@
     flex-wrap: nowrap;
     text-decoration: none;
     color: var(--color-text);
+    margin-bottom: sp(6);
+    white-space: nowrap;
     .text {
       text-wrap: none;
     }
@@ -38,10 +40,14 @@
       &:active {
         background: var(--surface-blue);
       }
-      &--selected, &--selected:hover, &--selected:active {
-        background: var(--color-primary);
-        .text, .icon {
-          color: white;
+
+      &.menu-item {
+        &--selected, &--selected:hover, &--selected:active {
+          background: var(--color-primary);
+
+          .text, .icon {
+            color: white;
+          }
         }
       }
     }
@@ -55,12 +61,15 @@
       &:active {
         background: var(--surface-red);
       }
-      &--selected, &--selected:hover, &--selected:active {
-        background: var(--color-destructive);
-        .text, .icon {
-          color: white;
+      &.menu-item {
+        &--selected, &--selected:hover, &--selected:active {
+          background: var(--color-destructive);
+          .text, .icon {
+            color: white;
+          }
         }
       }
+
     }
     .icon {
       stroke-width: 2 !important;

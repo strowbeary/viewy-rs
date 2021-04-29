@@ -100,6 +100,31 @@ pub struct Table {
     selectable: bool,
 }
 
+
+
+impl Table {
+    pub fn new(name: &str, columns: Vec<Column>) -> Self {
+        Self {
+            name: name.to_string(),
+            children: vec![],
+            columns,
+            rows: vec![],
+            node: Default::default(),
+            selectable: false,
+        }
+    }
+
+    pub fn append_row(&mut self, row: Row) -> Self {
+        self.rows.push(row);
+        self.clone()
+    }
+
+    pub fn selectable(&mut self, is_selectable: bool) -> Self {
+        self.selectable = is_selectable;
+        self.clone()
+    }
+}
+
 impl NodeContainer for Table {
     fn get_node(&mut self) -> &mut Node {
         self.node.borrow_mut()
@@ -171,9 +196,11 @@ impl Renderable for Table {
                 .tag("tbody");
             self.clone().rows.into_iter()
                 .for_each(|mut row| {
-                    row.prepend_child({
-                        Checkbox::new(&table.name, &row.name)
-                    });
+                    if self.selectable {
+                        row.prepend_child({
+                            Checkbox::new(&table.name, &row.name)
+                        });
+                    }
                     tbody.append_child(row);
                 });
             tbody
@@ -184,28 +211,5 @@ impl Renderable for Table {
             .for_each(|child|
                 view.children.push(child.render()));
         view
-    }
-}
-
-impl Table {
-    pub fn new(name: &str, columns: Vec<Column>) -> Self {
-        Self {
-            name: name.to_string(),
-            children: vec![],
-            columns,
-            rows: vec![],
-            node: Default::default(),
-            selectable: false,
-        }
-    }
-
-    pub fn append_row(&mut self, row: Row) -> Self {
-        self.rows.push(row);
-        self.clone()
-    }
-
-    pub fn selectable(&mut self, is_selectable: bool) -> Self {
-        self.selectable = is_selectable;
-        self.clone()
     }
 }

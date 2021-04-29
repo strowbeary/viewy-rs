@@ -13,7 +13,7 @@ fn get_full_html_page(title: String, content: String, theme_variant: String) -> 
             <link href='/app.css' rel='stylesheet'>
             <script src='https://unpkg.com/@popperjs/core@2'></script>
             <script src='/app.js'></script>
-            <meta charset='utf8' />
+            <meta charset='utf-8' />
             <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
             <meta name='apple-mobile-web-app-capable' content='yes'>
         </head>

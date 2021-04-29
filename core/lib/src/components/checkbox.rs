@@ -1,12 +1,13 @@
-use crate::node::{Node, NodeContainer};
+use crate::node::{Node, NodeContainer, NodeType};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, scale};
 use crate::renderer::Renderable;
 use crate::components::*;
+use uuid::Uuid;
 
 use std::ops::Deref;
 
-
+/// Used to manipulate boolean values or to choose to include a value to a form submission.
 #[derive(Debug, Clone)]
 pub struct Checkbox {
     node: Node,
@@ -15,6 +16,32 @@ pub struct Checkbox {
     value: String,
     checked: bool,
     children: Vec<Box<dyn Renderable>>,
+}
+
+impl Checkbox {
+    /// Create a new checkbox
+    pub fn new(name: &str, value: &str) -> Self {
+        Self {
+            node: Node::default(),
+            label: None,
+            name: name.to_string(),
+            value: value.to_string(),
+            checked: false,
+            children: vec![],
+        }
+    }
+
+    /// Define an optionnal label
+    pub fn label(&mut self, label: &str) -> Self {
+        self.label = Some(label.to_string());
+        self.clone()
+    }
+
+    /// Define the default state
+    pub fn is_checked(&mut self, checked: bool) -> Self {
+        self.checked = checked;
+        self.clone()
+    }
 }
 
 impl NodeContainer for Checkbox {
@@ -33,33 +60,9 @@ impl ChildContainer for Checkbox {
 
 impl Appendable for Checkbox {}
 
-impl Checkbox {
-    pub fn new(name: &str, value: &str) -> Self {
-        Self {
-            node: Default::default(),
-            label: None,
-            name: name.to_string(),
-            value: value.to_string(),
-            checked: false,
-            children: vec![],
-        }
-    }
-
-    pub fn label(&mut self, label: &str) -> Self {
-        self.label = Some(label.to_string());
-        self.clone()
-    }
-
-    pub fn is_checked(&mut self, checked: bool) -> Self {
-        self.checked = checked;
-        self.clone()
-    }
-}
-
-
 impl Renderable for Checkbox {
     fn render(&self) -> Node {
-        let radio_id = format!("checkbox-{}", self.name);
+        let radio_id = Uuid::new_v4().to_hyphenated().to_string();
 
         let mut checkbox = View::new()
             .tag("input")
@@ -80,6 +83,7 @@ impl Renderable for Checkbox {
                 Text::new(label.as_str(), TextStyle::Body)
                     .set_attr("for", radio_id.as_str())
                     .tag("label")
+                    .margin_left(4)
             });
         }
         container.clone().children.iter()

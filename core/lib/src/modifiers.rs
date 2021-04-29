@@ -115,7 +115,28 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
         self.clone()
     }
     fn tag(&mut self, tag_name: &str) -> Self {
-        self.get_node().node_type = NodeType::Normal(tag_name.to_string());
+        let self_closing_tags = vec![
+            "area",
+            "base",
+            "br",
+            "col",
+            "embed",
+            "hr",
+            "input",
+            "img",
+            "link",
+            "meta",
+            "param",
+            "source",
+            "track",
+            "wbr"
+        ];
+        if self_closing_tags.contains(&tag_name) {
+            self.get_node().node_type = NodeType::SelfClosing(tag_name.to_string());
+        }
+        else {
+            self.get_node().node_type = NodeType::Normal(tag_name.to_string());
+        }
         self.clone()
     }
     fn set_attr(&mut self, name: &str, value: &str) -> Self {

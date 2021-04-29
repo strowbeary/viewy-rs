@@ -39,6 +39,11 @@ impl HStack {
             alignment,
         }
     }
+    pub fn justify_content(&mut self, justification: &str) -> Self {
+        self.node.node_style.push(("justify-content".to_string(), justification.to_string()));
+        self.clone()
+    }
+
     pub fn gap(&mut self, gaps: Vec<i32>) -> Self {
         let params: Vec<String> = gaps.iter().map(|size| sp(size.clone())).collect();
         self.node.node_style.push(("grid-gap".to_string(), params.join(" ")));

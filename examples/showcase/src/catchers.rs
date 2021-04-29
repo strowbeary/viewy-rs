@@ -2,7 +2,6 @@ use rocket::response::content::Html;
 use rocket::{Catcher, Request};
 use viewy::components::*;
 use viewy::*;
-use viewy::page::{Page, RenderMode};
 use crate::layouts;
 use rocket::http::Status;
 use rocket::response::Responder;
@@ -11,7 +10,7 @@ fn default_catch_page(status: Status) -> Html<String>{
     Html({
         Page::new(
             format!("Viewy showcase – {}", status.reason).as_str(),
-            layouts::login_layout,
+            layouts::no_layout,
             {
                 VStack::new(Alignment::Center)
                     .justify_content("center")
@@ -21,6 +20,12 @@ fn default_catch_page(status: Status) -> Html<String>{
                     })
                     .append_child({
                         Text::new(format!("{}", status.reason).as_str(), TextStyle::H2)
+                    })
+                    .append_child({
+                        Button::new("Return to home", ButtonStyle::Flat)
+                            .icon("home")
+                            .margin_top(50)
+                            .action("/")
                     })
             },
         )

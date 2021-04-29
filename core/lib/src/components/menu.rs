@@ -7,7 +7,7 @@ use crate::components::*;
 
 #[derive(Debug, Clone)]
 pub enum MenuStyle {
-    VerticalNavbar,
+    NavBar,
     Toolbar,
     RadioGroup,
 }

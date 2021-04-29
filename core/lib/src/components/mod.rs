@@ -17,6 +17,8 @@ mod divider;
 mod menu;
 mod table;
 mod checkbox;
+mod avatar;
+mod tag;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
@@ -37,6 +39,8 @@ pub use divider::Divider;
 pub use menu::*;
 pub use table::*;
 pub use checkbox::*;
+pub use avatar::*;
+pub use tag::*;
 
 use crate::node::Node;
 use crate::renderer::Renderable;

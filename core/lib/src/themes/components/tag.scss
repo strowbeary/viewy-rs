@@ -1,0 +1,10 @@
+.tag {
+  padding: sp(8) sp(10);
+  background: var(--surface-blue);
+  color: var(--color-primary);
+  border-radius: sp(20);
+  height: sp(24);
+  display: flex;
+  align-items: center;
+  width: max-content;
+}

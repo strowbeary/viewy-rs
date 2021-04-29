@@ -9,7 +9,7 @@ use rocket::State;
 
 use viewy::*;
 use viewy::components::*;
-use viewy::page::{Page, RenderMode};
+use viewy::{Page, RenderMode};
 use crate::catchers::routes;
 
 mod catchers;
@@ -32,7 +32,7 @@ fn home() -> Html<String> {
     Html({
         Page::new(
             "Viewy showcase – Home",
-            layouts::default,
+            layouts::default_layout,
             pages::home(),
         )
             .compile(RenderMode::Complete)
@@ -62,8 +62,20 @@ fn table() -> Html<String> {
     Html({
         Page::new(
             "Viewy showcase – Table",
-            layouts::default,
+            layouts::default_layout,
             pages::table(),
+        )
+            .compile(RenderMode::Complete)
+    })
+}
+
+#[get("/calendar")]
+fn calendar() -> Html<String> {
+    Html({
+        Page::new(
+            "Viewy showcase – Calendar",
+            layouts::default_layout,
+            pages::calendar(),
         )
             .compile(RenderMode::Complete)
     })
@@ -77,7 +89,8 @@ fn main() {
             get_scripts,
             home,
             login,
-            table
+            table,
+            calendar
         ])
         .register(catchers::routes())
         .manage(Assets::new())

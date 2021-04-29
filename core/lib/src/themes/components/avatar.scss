@@ -1,0 +1,11 @@
+.avatar {
+  background: var(--color-primary);
+  color: white;
+  border-radius: 50%;
+  &--normal {
+    width: sp(35);
+    height: sp(35);
+    line-height: sp(35);
+    text-align: center;
+  }
+}

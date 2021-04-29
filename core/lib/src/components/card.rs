@@ -21,8 +21,6 @@ pub struct Card {
     pub style: CardStyle,
 }
 
-
-
 impl Card {
     pub fn new(style: CardStyle) -> Self {
         Card {

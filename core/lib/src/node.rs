@@ -65,7 +65,7 @@ impl Node {
             .collect();
         match self.node_type.clone() {
             NodeType::Normal(tag_name) => format!(
-                "<{tag} class=\"{class_list}\" {attributes} style=\"{view_style}\">{children}</{tag}>",
+                "<{tag} class=\"{class_list}\" {attributes} style=\"{view_style}\">\n   {children}\n</{tag}>\n",
                 tag = tag_name,
                 class_list = classes.join(" "),
                 attributes = attributes.join(" "),
@@ -76,14 +76,14 @@ impl Node {
                 }
             ),
             NodeType::SelfClosing(tag_name) => format!(
-                "<{tag} class=\"{class_list}\" {attributes} style=\"{view_style}\" />",
+                "   <{tag} class=\"{class_list}\" {attributes} style=\"{view_style}\" />\n",
                 tag = tag_name,
                 class_list = classes.join(" "),
                 attributes = attributes.join(" "),
                 view_style = style.join("")
             ),
             NodeType::Comment(comment) => format!(
-                "<!--{comment}-->",
+                "<!--{comment}-->\n",
                 comment = comment
             )
         }
