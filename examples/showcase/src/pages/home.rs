@@ -107,6 +107,11 @@ as opposed to using 'Content here, content here', making it look like readable E
                             .label("Label")
                             .helper_text("Message d'aide")
                     })
+                    .append_child({
+                        TextField::new("input4", FieldType::Text)
+                            .label("Label")
+                            .error_message("Message d'erreur")
+                    })
             })
         })
         .append_child({

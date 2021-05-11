@@ -1,6 +1,6 @@
 [package]
 name = "viewy"
-version = "0.2.4"
+version = "0.2.5"
 authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
 description = "A web UI toolkit that combine the advantages of a design system and an ui library."
 keywords = ["template", "web"]

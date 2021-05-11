@@ -114,8 +114,7 @@ impl Renderable for TextField {
         field.node.children.push(input.render());
         if let Some(helper_text) = field.helper_text {
             let text = Text::new(helper_text.as_str(), TextStyle::Caption)
-                .add_class("textfield__helper-text")
-                .color("var(--color-text-secondary)");
+                .add_class("textfield__helper-text");
             field.node.children.push(text.render());
         }
         field.node

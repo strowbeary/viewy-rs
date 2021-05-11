@@ -28,12 +28,18 @@
     }
 
   }
+  &__helper-text {
+    color: var(--color-text-secondary);
+  }
   &--error {
     .textfield{
+      &__label {
+        color: var(--color-destructive);
+      }
       &__input {
-        border-color: var(--color-destructive-light);
+        border-color: var(--color-destructive);
         &:hover {
-          border-color: var(--color-destructive);
+          border-color: var(--color-destructive-light);
         }
       }
       &__helper-text {
