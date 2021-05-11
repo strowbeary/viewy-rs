@@ -65,6 +65,13 @@ impl TextField {
         self.helper_text = Some(helper_text.to_string());
         self.clone()
     }
+
+    pub fn error_message(&mut self, helper_text: &str) -> Self {
+        self.add_class("textfield--error");
+        self.helper_text = Some(helper_text.to_string());
+        self.clone()
+    }
+
     pub fn placeholder(&mut self, placeholder: &str) -> Self {
         self.placeholder = Some(placeholder.to_string());
         self.clone()
@@ -99,6 +106,7 @@ impl Renderable for TextField {
 
         if let Some(label) = field.label {
             let text = Text::new(label.as_str(), TextStyle::Label)
+                .add_class("textfield__label")
                 .set_attr("for", self.name.as_str())
                 .tag("label");
             field.node.children.push(text.render());
@@ -106,6 +114,7 @@ impl Renderable for TextField {
         field.node.children.push(input.render());
         if let Some(helper_text) = field.helper_text {
             let text = Text::new(helper_text.as_str(), TextStyle::Caption)
+                .add_class("textfield__helper-text")
                 .color("var(--color-text-secondary)");
             field.node.children.push(text.render());
         }

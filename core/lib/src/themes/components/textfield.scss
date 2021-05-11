@@ -26,5 +26,19 @@
       padding: sp(8) sp(12);
       border: sp(2) solid var(--color-primary);
     }
+
+  }
+  &--error {
+    .textfield{
+      &__input {
+        border-color: var(--color-destructive-light);
+        &:hover {
+          border-color: var(--color-destructive);
+        }
+      }
+      &__helper-text {
+        color: var(--color-destructive);
+      }
+    }
   }
 }
