@@ -1,37 +1,38 @@
 
 fn get_stylesheets() -> Vec<String> {
     vec![
-        include_str!("themes/palette.scss").to_string(),
-        include_str!("themes/sizing.scss").to_string(),
-        include_str!("themes/typography.scss").to_string(),
-        include_str!("themes/commons.scss").to_string(),
-        include_str!("themes/view.scss").to_string(),
-        include_str!("themes/components/button.scss").to_string(),
-        include_str!("themes/components/card.scss").to_string(),
-        include_str!("themes/components/divider.scss").to_string(),
-        include_str!("themes/components/form.scss").to_string(),
-        include_str!("themes/components/grid.scss").to_string(),
-        include_str!("themes/components/image.scss").to_string(),
-        include_str!("themes/components/picker.scss").to_string(),
-        include_str!("themes/components/popover.scss").to_string(),
-        include_str!("themes/components/stack.scss").to_string(),
-        include_str!("themes/components/text.scss").to_string(),
-        include_str!("themes/components/textfield.scss").to_string(),
-        include_str!("themes/components/titlebar.scss").to_string(),
-        include_str!("themes/components/menu.scss").to_string(),
-        include_str!("themes/components/table.scss").to_string(),
-        include_str!("themes/components/checkbox.scss").to_string(),
-        include_str!("themes/components/avatar.scss").to_string(),
-        include_str!("themes/components/tag.scss").to_string(),
+        "$border-radius: 8;".to_string(),
+        include_str!("../themes/palette.scss").to_string(),
+        include_str!("../themes/sizing.scss").to_string(),
+        include_str!("../themes/typography.scss").to_string(),
+        include_str!("../themes/commons.scss").to_string(),
+        include_str!("../themes/view.scss").to_string(),
+        include_str!("../themes/components/button.scss").to_string(),
+        include_str!("../themes/components/card.scss").to_string(),
+        include_str!("../themes/components/divider.scss").to_string(),
+        include_str!("../themes/components/form.scss").to_string(),
+        include_str!("../themes/components/grid.scss").to_string(),
+        include_str!("../themes/components/image.scss").to_string(),
+        include_str!("../themes/components/picker.scss").to_string(),
+        include_str!("../themes/components/popover.scss").to_string(),
+        include_str!("../themes/components/stack.scss").to_string(),
+        include_str!("../themes/components/text.scss").to_string(),
+        include_str!("../themes/components/textfield.scss").to_string(),
+        include_str!("../themes/components/titlebar.scss").to_string(),
+        include_str!("../themes/components/menu.scss").to_string(),
+        include_str!("../themes/components/table.scss").to_string(),
+        include_str!("../themes/components/checkbox.scss").to_string(),
+        include_str!("../themes/components/avatar.scss").to_string(),
+        include_str!("../themes/components/tag.scss").to_string(),
     ]
 }
 
 fn get_scripts() -> Vec<String> {
     vec![
-        include_str!("js/async-form.js").to_string(),
-        include_str!("js/menu.js").to_string(),
-        include_str!("js/popover.js").to_string(),
-        include_str!("js/table.js").to_string(),
+        include_str!("../js/async-form.js").to_string(),
+        include_str!("../js/menu.js").to_string(),
+        include_str!("../js/popover.js").to_string(),
+        include_str!("../js/table.js").to_string(),
     ]
 }
 
@@ -43,20 +44,21 @@ fn get_scripts() -> Vec<String> {
 ///
 /// You have to add these routes to your project
 /// ```rust
+/// use viewy::engine::Assets;
 /// #[get("/app.css")]
-/// fn get_stylesheet(assets: State<Assets>) -> Css<String> {
+/// fn get_stylesheet(assets: rocket::State<Assets>) -> Css<String> {
 ///     Css(assets.inner().clone().stylesheet)
 /// }
 ///
 /// #[get("/app.js")]
-/// fn get_scripts(assets: State<Assets>) -> JavaScript<String> {
+/// fn get_scripts(assets: rocket::State<Assets>) -> JavaScript<String> {
 ///     JavaScript(assets.inner().clone().script)
 /// }
 /// ```
 /// And add an `Assets` instance to rocket state
 /// ```rust
 /// rocket::ignite()
-///     .manage(Assets::new())
+///     .manage(rocket::Assets::new())
 /// ```
 #[derive(Clone)]
 pub struct Assets {

@@ -8,7 +8,7 @@
     width: sp(16);
     height: sp(16);
     border: sp(2) solid var(--color-border);
-    border-radius: sp(4);
+    border-radius: sp($border-radius / 2);
     transition: background 150ms ease, border 150ms ease;
     &::after {
       @include font-stack;

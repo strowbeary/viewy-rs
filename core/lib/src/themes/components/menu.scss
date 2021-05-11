@@ -19,7 +19,7 @@
     align-items: center;
     gap: sp(12);
     padding: sp(8) sp(16) sp(8) sp(10);
-    border-radius: sp(4);
+    border-radius: sp($border-radius / 2);
     cursor: pointer;
     transition: background 150ms, color 150ms;
     flex-wrap: nowrap;

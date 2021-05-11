@@ -5,7 +5,7 @@
   &__input {
     padding: sp(9) sp(13);
     background: inherit;
-    border-radius: sp(8);
+    border-radius: sp($border-radius);
     font-size: sp(16);
     border: sp(1) solid var(--color-border);
     resize: vertical;

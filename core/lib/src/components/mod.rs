@@ -43,7 +43,7 @@ pub use avatar::*;
 pub use tag::*;
 
 use crate::node::Node;
-use crate::renderer::Renderable;
+use crate::Renderable;
 
 /// Trait that make the children property accessible for Appendable trait
 pub trait ChildContainer {

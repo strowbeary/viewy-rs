@@ -12,7 +12,7 @@ destructive = { light = "#f14a61", dark = "#f14a61" }
 on-destructive = { light = "#ffffff", dark = "#ffffff" }
 
 [shapes]
-corner-radius = 8
+border-radius = 8
 spacing-factor = 4
 
 [animations]

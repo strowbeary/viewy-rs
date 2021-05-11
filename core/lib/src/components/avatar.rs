@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer};
 use std::collections::HashMap;
 use crate::{DefaultModifiers, sp};
-use crate::renderer::{Renderable};
+use crate::{Renderable};
 
 #[derive(Debug, Clone)]
 pub struct Avatar {

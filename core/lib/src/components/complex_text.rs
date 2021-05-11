@@ -2,7 +2,7 @@ use crate::node::{Node, NodeContainer};
 use crate::components::TextStyle;
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::renderer::{Renderable};
+use crate::{Renderable};
 
 #[derive(Debug, Clone)]
 pub struct ComplexText {

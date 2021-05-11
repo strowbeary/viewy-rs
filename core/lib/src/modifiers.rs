@@ -114,6 +114,31 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
         self.get_node().node_style.push(("background".to_string(), format!("url({}) center / cover", url)));
         self.clone()
     }
+
+    fn border(&mut self, value: &str) -> Self {
+        self.get_node().node_style.push(("border".to_string(), value.to_string()));
+        self.clone()
+    }
+    fn border_left(&mut self, value: &str) -> Self {
+        self.get_node().node_style.push(("border-left".to_string(), value.to_string()));
+        self.clone()
+    }
+
+    fn border_right(&mut self, value: &str) -> Self {
+        self.get_node().node_style.push(("border-right".to_string(), value.to_string()));
+        self.clone()
+    }
+
+    fn border_bottom(&mut self, value: &str) -> Self {
+        self.get_node().node_style.push(("border-bottom".to_string(), value.to_string()));
+        self.clone()
+    }
+
+    fn border_top(&mut self, value: &str) -> Self {
+        self.get_node().node_style.push(("border-top".to_string(), value.to_string()));
+        self.clone()
+    }
+
     fn tag(&mut self, tag_name: &str) -> Self {
         let self_closing_tags = vec![
             "area",

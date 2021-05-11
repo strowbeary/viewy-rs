@@ -1,5 +1,5 @@
 use crate::node::{Node, NodeContainer};
-use crate::renderer::{Renderable};
+use crate::{Renderable};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
 use crate::components::{TextStyle, Text, View};

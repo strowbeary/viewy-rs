@@ -72,7 +72,7 @@
       padding: 0 sp(4);
       border: sp(1) solid var(--color-border-hover);
       background: var(--color-hover);
-      border-radius: sp(4);
+      border-radius: sp($border-radius / 2);
     }
   }
 

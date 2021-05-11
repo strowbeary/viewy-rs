@@ -1,7 +1,7 @@
 .button {
   font-size: sp(16);
   border: none;
-  border-radius: sp(6);
+  border-radius: sp($border-radius * (3/4));
   padding: sp(8) sp(16);
   cursor: pointer;
   display: flex;

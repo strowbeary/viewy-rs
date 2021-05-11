@@ -9,8 +9,8 @@ use rocket::State;
 
 use viewy::*;
 use viewy::components::*;
-use viewy::{Page, RenderMode};
 use crate::catchers::routes;
+use viewy::engine::Assets;
 
 mod catchers;
 mod components;

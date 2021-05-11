@@ -5,7 +5,7 @@
   border: sp(1) solid var(--color-border);
   box-shadow: 0 4px 8px 0 var(--color-shadow);
   padding: sp(14);
-  border-radius: sp(8);
+  border-radius: sp($border-radius);
   display: none;
   &[data-show] {
     display: block;
@@ -29,7 +29,7 @@
     &::before {
       border-right: sp(1) solid var(--color-border);
       border-bottom: sp(1) solid var(--color-border);
-      border-radius: 0 0 sp(4) 0;
+      border-radius: 0 0 sp($border-radius / 2) 0;
     }
   }
 

@@ -1,5 +1,5 @@
 .card {
-  border-radius: sp(8);
+  border-radius: sp($border-radius);
   padding: 0;
   &--outlined {
     border: sp(1) solid var(--color-border);

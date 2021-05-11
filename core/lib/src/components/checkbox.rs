@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer, NodeType};
 use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, scale};
-use crate::renderer::Renderable;
+use crate::Renderable;
 use crate::components::*;
 use uuid::Uuid;
 

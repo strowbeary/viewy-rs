@@ -38,12 +38,12 @@
 
         &:last-of-type {
           border-right: sp(1) solid var(--color-border);
-          border-radius: 0 sp(6) sp(6) 0;
+          border-radius: 0 sp($border-radius * (3/4)) sp($border-radius * (3/4)) 0;
         }
 
         &:first-of-type {
           border-left: sp(1) solid var(--color-border);
-          border-radius: sp(6) 0 0 sp(6);
+          border-radius: sp($border-radius * (3/4)) 0 0 sp($border-radius * (3/4));
         }
 
         &:hover {
@@ -84,7 +84,7 @@
       background: none;
       width: sp(20);
       height: sp(20);
-      border-radius: sp(10);
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -106,7 +106,7 @@
           content: "";
           width: sp(6);
           height: sp(6);
-          border-radius: sp(4);
+          border-radius: sp(3);
           background: white;
         }
       }
