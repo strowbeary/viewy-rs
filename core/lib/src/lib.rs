@@ -6,6 +6,7 @@ extern crate serde_json;
 extern crate html_escape;
 extern crate uuid;
 extern crate dyn_clone;
+extern crate toml;
 
 pub use engine::Renderable;
 pub use helper_fn::*;
@@ -21,4 +22,5 @@ mod page;
 pub mod components;
 
 pub mod engine;
+mod theme;
 

@@ -1,6 +1,6 @@
 [package]
 name = "viewy"
-version = "0.2.2"
+version = "0.2.3"
 authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
 description = "A web UI toolkit that combine the advantages of a design system and an ui library."
 keywords = ["template", "web"]
@@ -13,11 +13,11 @@ documentation = "https://docs.rs/viewy"
 [dependencies]
 grass = "0.10.4"
 minifier = "0.0"
-serde = "1.0"
+serde = { version = "1.0", features = ["serde_derive"] }
 serde_json = "1.0"
 markdown = "0.3"
 html-escape = "0.2"
 palette = "0.5"
 uuid = { version = "0.8", features = ["v4"] }
 dyn-clone = "1.0.4"
-
+toml = "0.5"

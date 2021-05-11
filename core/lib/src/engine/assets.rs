@@ -1,7 +1,19 @@
+use crate::theme::ThemeLoader;
 
 fn get_stylesheets() -> Vec<String> {
+    let theme = ThemeLoader::load_from_config_folder();
+
     vec![
-        "$border-radius: 8;".to_string(),
+        format!(
+            "$primary: {primary};\
+            $destructive: {destructive};",
+            primary = theme.colors.accent.light,
+            destructive = theme.colors.destructive.light
+        ),
+        format!(
+            "$border-radius: {border_radius};",
+            border_radius = theme.shapes.border_radius
+        ),
         include_str!("../themes/palette.scss").to_string(),
         include_str!("../themes/sizing.scss").to_string(),
         include_str!("../themes/typography.scss").to_string(),

@@ -1,6 +1,6 @@
 @use "sass:color";
 
-@mixin palette($variant, $primary, $destructive) {
+@mixin palette($variant) {
   @if($variant == "dark") {
     $on-primary: #ffffff;
     $background: #121212;
@@ -26,7 +26,7 @@
     --color-border-hover: #{color.adjust($themed-on-background, $lightness: -70%, $saturation: -70%)};
     --color-hover: #{color.adjust($themed-on-background, $alpha: -0.94)};
     --color-active: #{color.adjust($themed-on-background, $alpha: -0.90)};
-    --color-focus: #1d5dea99;
+    --color-focus: #{color.adjust($primary, $alpha: -0.8)};
     --color-shadow: rgba(0, 0, 0, 0.1);
     --color-success: #3DA144;
     --color-destructive: #{$destructive};
@@ -56,11 +56,11 @@
     --backdrop: #{color.adjust($themed-on-background, $alpha: -0.5)};
     --color-text: #{$themed-on-background};
     --color-text-secondary: #{color.adjust($themed-on-background, $lightness: +20%, $saturation: -50%)};
-    --color-border: #{color.adjust($themed-on-background, $lightness: +78%, $saturation: -50%)};
-    --color-border-hover: #{color.adjust($themed-on-background, $lightness: +73%, $saturation: -50%)};
+    --color-border: #{color.adjust($themed-on-background, $lightness: +78%, $saturation: -80%)};
+    --color-border-hover: #{color.adjust($themed-on-background, $lightness: +73%, $saturation: -60%)};
     --color-hover: #{color.adjust($themed-on-background, $alpha: -0.94)};
     --color-active: #{color.adjust($themed-on-background, $alpha: -0.90)};
-    --color-focus: #1d5dea99;
+    --color-focus: #{color.adjust($primary, $alpha: -0.5)};
     --color-shadow: rgba(0, 0, 0, 0.1);
     --color-success: #3DA144;
     --color-destructive: #{$destructive};

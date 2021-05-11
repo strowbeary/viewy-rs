@@ -38,16 +38,26 @@
     &::before {
       border-left: sp(1) solid var(--color-border);
       border-top: sp(1) solid var(--color-border);
-      border-radius: sp(4) 0 0 0;
+      border-radius: sp($border-radius / 2) 0 0 0;
     }
   }
 
   &[data-popper-placement^='left'] > .arrow {
     right: sp(-$arrow-size / 2);
+    &::before {
+      border-top: sp(1) solid var(--color-border);
+      border-right: sp(1) solid var(--color-border);
+      border-radius: 0 sp($border-radius / 2) 0 0;
+    }
   }
 
   &[data-popper-placement^='right'] > .arrow {
     left: sp(-$arrow-size / 2);
+    &::before {
+      border-bottom: sp(1) solid var(--color-border);
+      border-left: sp(1) solid var(--color-border);
+      border-radius: 0 0 0 sp($border-radius / 2);
+    }
   }
 
 
