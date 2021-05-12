@@ -6,15 +6,15 @@
     $background: #121212;
     $on-background: #ffffff;
     $surface: #181818;
-    $themed-on-background: color.mix($on-background, $primary, $weight: 90%);
+    $themed-on-background: color.mix($on-background, $accent, $weight: 90%);
 
-    --color-primary: #{color.adjust($primary, $lightness: +10%)};
-    --color-primary-light: #{color.adjust($primary, $lightness: +20%)};
-    --color-primary-lighter: #{color.adjust($primary, $lightness: +35%)};
-    --surface-blue: #{color.adjust($primary, $alpha: -0.85)};
+    --color-accent: #{color.adjust($accent, $lightness: +10%)};
+    --color-accent-light: #{color.adjust($accent, $lightness: +20%)};
+    --color-accent-lighter: #{color.adjust($accent, $lightness: +35%)};
+    --surface-blue: #{color.adjust($accent, $alpha: -0.85)};
     --surface-red: #{color.adjust($destructive, $alpha: -0.9)};
     --surface-red-darker: #{color.adjust($destructive, $alpha: -0.8)};
-    --color-border-blue: #{color.adjust($primary, $alpha: -0.25)};
+    --color-border-blue: #{color.adjust($accent, $alpha: -0.25)};
     --background: $background;
     --background-raised: #{color.adjust($themed-on-background, $lightness: +85%)};
     --surface: #{$surface};
@@ -26,7 +26,7 @@
     --color-border-hover: #{color.adjust($themed-on-background, $lightness: -70%, $saturation: -70%)};
     --color-hover: #{color.adjust($themed-on-background, $alpha: -0.94)};
     --color-active: #{color.adjust($themed-on-background, $alpha: -0.90)};
-    --color-focus: #{color.adjust($primary, $alpha: -0.8)};
+    --color-focus: #{color.adjust($accent, $alpha: -0.8)};
     --color-shadow: rgba(0, 0, 0, 0.1);
     --color-success: #3DA144;
     --color-destructive: #{$destructive};
@@ -36,19 +36,19 @@
     --color-text-disabled: #{color.adjust($themed-on-background, $lightness: -50%)};
   }
   @else {
-    $on-primary: #ffffff;
     $background: #ffffff;
     $on-background: #000000;
     $surface: #efefef;
-    $themed-on-background: color.mix($on-background, $primary, $weight: 85%);
+    $themed-on-background: color.mix($on-background, $accent, $weight: 85%);
 
-    --color-primary: #{$primary};
-    --color-primary-light: #{color.adjust($primary, $lightness: -15%)};
-    --color-primary-lighter: #{color.adjust($primary, $lightness: -30%)};
-    --surface-blue: #{color.adjust($primary, $alpha: -0.85)};
+    --color-accent: #{$accent};
+    --color-on-accent: #{$on-accent};
+    --color-accent-light: #{color.adjust($accent, $lightness: -15%)};
+    --color-accent-lighter: #{color.adjust($accent, $lightness: -30%)};
+    --surface-blue: #{color.adjust($accent, $alpha: -0.85)};
     --surface-red: #{color.adjust($destructive, $alpha: -0.9)};
     --surface-red-darker: #{color.adjust($destructive, $alpha: -0.8)};
-    --color-border-blue: #{color.adjust($primary, $alpha: -0.25)};
+    --color-border-blue: #{color.adjust($accent, $alpha: -0.25)};
     --background: $background;
     --background-raised: #{color.adjust($themed-on-background, $lightness: +88%)};
     --surface: #{$surface};
@@ -60,7 +60,7 @@
     --color-border-hover: #{color.adjust($themed-on-background, $lightness: +73%, $saturation: -60%)};
     --color-hover: #{color.adjust($themed-on-background, $alpha: -0.94)};
     --color-active: #{color.adjust($themed-on-background, $alpha: -0.90)};
-    --color-focus: #{color.adjust($primary, $alpha: -0.5)};
+    --color-focus: #{color.adjust($accent, $alpha: -0.5)};
     --color-shadow: rgba(0, 0, 0, 0.1);
     --color-success: #3DA144;
     --color-destructive: #{$destructive};

@@ -28,8 +28,8 @@
       background-color: var(--color-hover);
     }
     &:checked {
-      border-color: var(--color-primary);
-      background-color: var(--color-primary);
+      border-color: var(--color-accent);
+      background-color: var(--color-accent);
       &::after {
         opacity: 1;
       }

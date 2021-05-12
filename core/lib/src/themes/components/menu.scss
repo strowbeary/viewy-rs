@@ -34,7 +34,7 @@
       &:hover {
         background: var(--color-hover);
         .text, .icon {
-          color: var(--color-primary);
+          color: var(--color-accent);
         }
       }
       &:active {
@@ -43,10 +43,10 @@
 
       &.menu-item {
         &--selected, &--selected:hover, &--selected:active {
-          background: var(--color-primary);
+          background: var(--color-accent);
 
           .text, .icon {
-            color: white;
+            color: var(--color-on-accent);
           }
         }
       }

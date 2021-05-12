@@ -20,15 +20,15 @@
     background: transparent;
 
     .text, .icon {
-      color: var(--color-primary);
+      color: var(--color-accent);
     }
 
     &:hover .text, &:hover .icon {
-      color: var(--color-primary-lighter);
+      color: var(--color-accent-lighter);
     }
 
     &:active .text, &:active .icon {
-      color: var(--color-primary-lighter);
+      color: var(--color-accent-lighter);
     }
 
     &:focus-visible {
@@ -66,7 +66,7 @@
 
     .text,
     .icon {
-      color: var(--color-primary);
+      color: var(--color-accent);
     }
 
     &:hover {
@@ -112,7 +112,7 @@
 
     .text,
     .icon {
-      color: var(--color-primary);
+      color: var(--color-accent);
     }
 
     &:hover {
@@ -159,7 +159,7 @@
 
   &--filled {
     color: white;
-    background: var(--color-primary);
+    background: var(--color-accent);
     border: none;
 
     .icon {
@@ -171,11 +171,11 @@
     }
 
     &:hover {
-      background: var(--color-primary-light);
+      background: var(--color-accent-light);
     }
 
     &:active {
-      background: var(--color-primary-lighter);
+      background: var(--color-accent-lighter);
     }
 
     &:focus-visible {

@@ -1,5 +1,5 @@
 [colors]
-accent = { light = "#1d5dea", dark = "#1d5dea" }
+accent = { light = "#AA0032", dark = "#AA0032" }
 on-accent = { light = "#ffffff", dark = "#ffffff" }
 
 background = { light = "#ffffff", dark = "#121212" }
@@ -8,7 +8,7 @@ on-background =  { light = "#000000", dark = "#ffffff" }
 surface = { light = "#efefef", dark = "#181818" }
 on-surface = { light = "#000000", dark = "#ffffff" }
 
-destructive = { light = "#f14a61", dark = "#f14a61" }
+destructive = { light = "#C70039 ", dark = "#C70039" }
 on-destructive = { light = "#ffffff", dark = "#ffffff" }
 
 [shapes]

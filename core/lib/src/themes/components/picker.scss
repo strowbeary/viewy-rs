@@ -33,7 +33,7 @@
 
         .icon, .text {
           transition: color 150ms;
-          color: var(--color-primary);
+          color: var(--color-accent);
         }
 
         &:last-of-type {
@@ -58,8 +58,8 @@
       }
 
       &__radio:checked + &__option {
-        border-color: var(--color-primary);
-        background: var(--color-primary);
+        border-color: var(--color-accent);
+        background: var(--color-accent);
         color: white;
 
         .icon, .text {
@@ -99,7 +99,7 @@
       }
 
       &:checked {
-        background: var(--color-primary);
+        background: var(--color-accent);
 
         &::after {
           display: block;

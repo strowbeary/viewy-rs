@@ -11,7 +11,7 @@
             popovers.forEach(popover => {
                 const el = document.getElementById(popover.getAttribute("data-attach-to"));
                 let popperInstance = Popper.createPopper(el, popover, {
-                    placement: "right",
+                    placement: popover.getAttribute("data-placement"),
                     modifiers: [
                         {
                             name: 'preventOverflow',

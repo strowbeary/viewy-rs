@@ -53,7 +53,8 @@ impl Renderable for Popover {
     fn render(&self) -> Node {
         let mut popover = self.clone()
             .add_class("popover")
-            .set_attr("data-attach-to", self.el_to_attach_to.as_str());
+            .set_attr("data-attach-to", self.el_to_attach_to.as_str())
+            .set_attr("data-placement", self.placement.as_str());
 
         let arrow = View::new()
             .add_class("arrow")

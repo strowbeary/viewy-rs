@@ -5,10 +5,15 @@ fn get_stylesheets() -> Vec<String> {
 
     vec![
         format!(
-            "$primary: {primary};\
+            "$accent: {accent};\
             $destructive: {destructive};",
-            primary = theme.colors.accent.light,
+            accent = theme.colors.accent.light,
             destructive = theme.colors.destructive.light
+        ),
+
+        format!(
+            "$on-accent: {on_primary};",
+            on_primary = theme.colors.on_accent.light,
         ),
         format!(
             "$border-radius: {border_radius};",
