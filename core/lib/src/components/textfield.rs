@@ -24,6 +24,7 @@ pub enum FieldType {
 pub struct TextField {
     node: Node,
     pub label: Option<String>,
+    pub value: Option<String>,
     pub helper_text: Option<String>,
     pub placeholder: Option<String>,
     pub leading_icon: Option<String>,
@@ -46,6 +47,7 @@ impl TextField {
         TextField {
             node: Default::default(),
             label: None,
+            value: None,
             helper_text: None,
             placeholder: None,
             leading_icon: None,
@@ -58,6 +60,11 @@ impl TextField {
 
     pub fn label(&mut self, label: &str) -> Self {
         self.label = Some(label.to_string());
+        self.clone()
+    }
+
+    pub fn value(&mut self, value: &str) -> Self {
+        self.value = Some(value.to_string());
         self.clone()
     }
 
@@ -99,6 +106,10 @@ impl Renderable for TextField {
             .set_attr("type", format!("{:?}", field.field_type).to_lowercase().as_str())
             .set_attr("id", self.name.as_str())
             .set_attr("name", self.name.as_str());
+
+        if let Some(value) = field.value {
+            input.set_attr("value", &value);
+        }
 
         if let Some(placeholder) = field.placeholder {
             input.set_attr("placeholder", placeholder.as_str());
