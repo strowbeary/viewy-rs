@@ -1,4 +1,3 @@
-#![feature(in_band_lifetimes)]
 extern crate minifier;
 extern crate grass;
 extern crate serde;

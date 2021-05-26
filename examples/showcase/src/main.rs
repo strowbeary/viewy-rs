@@ -1,5 +1,3 @@
-#![feature(proc_macro_hygiene, decl_macro)]
-
 #[macro_use]
 extern crate rocket;
 extern crate viewy;
@@ -18,12 +16,12 @@ mod layouts;
 mod pages;
 
 #[get("/app.css")]
-fn get_stylesheet(assets: State<Assets>) -> Css<String> {
+fn get_stylesheet(assets: &State<Assets>) -> Css<String> {
     Css(assets.inner().clone().stylesheet)
 }
 
 #[get("/app.js")]
-fn get_scripts(assets: State<Assets>) -> JavaScript<String> {
+fn get_scripts(assets: &State<Assets>) -> JavaScript<String> {
     JavaScript(assets.inner().clone().script)
 }
 
@@ -81,9 +79,9 @@ fn calendar() -> Html<String> {
     })
 }
 
-fn main() {
-    rocket::
-    ignite()
+#[launch]
+fn rocket() -> _ {
+    rocket::build()
         .mount("/", routes![
             get_stylesheet,
             get_scripts,
@@ -92,7 +90,7 @@ fn main() {
             table,
             calendar
         ])
-        .register(catchers::routes())
+        .register("/" , catchers::routes())
         .manage(Assets::new())
-        .launch();
+
 }

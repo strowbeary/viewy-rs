@@ -9,7 +9,7 @@ use rocket::response::Responder;
 fn default_catch_page(status: Status) -> Html<String>{
     Html({
         Page::new(
-            format!("Viewy showcase – {}", status.reason).as_str(),
+            format!("Viewy showcase – {}", status.reason_lossy()).as_str(),
             layouts::no_layout,
             {
                 VStack::new(Alignment::Center)
@@ -19,7 +19,7 @@ fn default_catch_page(status: Status) -> Html<String>{
                         Text::new(format!("{}", status.code).as_str(), TextStyle::LargeTitle)
                     })
                     .append_child({
-                        Text::new(format!("{}", status.reason).as_str(), TextStyle::H2)
+                        Text::new(format!("{}", status.reason_lossy()).as_str(), TextStyle::H2)
                     })
                     .append_child({
                         Button::new("Return to home", ButtonStyle::Flat)

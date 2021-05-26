@@ -9,4 +9,5 @@ publish = false
 
 [dependencies]
 viewy = { path = "../../core/lib" }
-rocket="0.4"
+proc-macro2 = "1.0.27"
+rocket = { git = "https://github.com/SergioBenitez/Rocket", rev = "5a4e66ec439411d30f16e5c045f8e4986f5883a4" }
