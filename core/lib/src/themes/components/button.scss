@@ -14,12 +14,12 @@
   font-family: inherit;
   text-decoration: none;
   .icon {
-    margin: 0 sp(16) 0 0;
+    margin: 0 sp(5) 0 0;
   }
   &--reversed {
     flex-direction: row-reverse;
     .icon {
-      margin: 0 0 0 sp(16);
+      margin: 0 0 0 sp(5);
     }
   }
 

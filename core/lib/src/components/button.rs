@@ -119,7 +119,6 @@ impl Renderable for Button {
         if let Some(icon) = button.icon {
             let icon = Icon::new(icon.as_str())
                 .size(16)
-                .margin_right(scale(2))
                 .render();
             button.node.children.push(icon);
         }
