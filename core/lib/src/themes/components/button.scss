@@ -14,6 +14,10 @@
   font-family: inherit;
   text-decoration: none;
 
+  &--reversed {
+    flex-direction: row-reverse;
+  }
+
   &--link {
     padding: sp(8) 0;
     border: none;

@@ -54,6 +54,14 @@ impl Button {
         }
     }
 
+    pub fn reversed(&mut self, is_reversed: bool) -> Self {
+        if is_reversed {
+            self.add_class("button--reversed")
+        } else {
+            self.clone()
+        }
+    }
+
     /// Make the button submit specified form
     /// ```rust
     ///View::new()
