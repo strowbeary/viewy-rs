@@ -4,6 +4,15 @@ use crate::DefaultModifiers;
 use crate::{Renderable};
 
 #[derive(Debug, Clone)]
+pub enum ObjectFit {
+    Fill,
+    Contain,
+    Cover,
+    None,
+    ScaleDown,
+}
+
+#[derive(Debug, Clone)]
 pub struct Image {
     node: Node,
     pub src: String,
@@ -23,6 +32,20 @@ impl Image {
             node: Default::default(),
             src: src.to_string(),
         }
+    }
+    pub fn object_fit(&mut self, fit: ObjectFit) -> Self {
+        self.get_node().node_style
+            .push(("object-fit".to_string(), {
+                match fit {
+                    ObjectFit::Fill => "fill",
+                    ObjectFit::Contain => "contain",
+                    ObjectFit::Cover => "cover",
+                    ObjectFit::None => "none",
+                    ObjectFit::ScaleDown => "scale-down"
+                }
+            }.to_string()));
+
+        self.clone()
     }
 }
 

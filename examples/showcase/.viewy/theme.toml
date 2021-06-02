@@ -1,5 +1,5 @@
 [colors]
-accent = { light = "#AA0032", dark = "#AA0032" }
+accent = { light = "#0052cc", dark = "#0052cc" }
 on-accent = { light = "#ffffff", dark = "#ffffff" }
 
 background = { light = "#ffffff", dark = "#121212" }
