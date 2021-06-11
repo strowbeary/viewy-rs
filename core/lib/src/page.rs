@@ -1,16 +1,20 @@
-
 use crate::components::*;
 use crate::node::*;
 use std::fmt;
 use crate::Renderable;
 
-fn get_full_html_page(title: String, content: String, theme_variant: String) -> String {
+fn get_full_html_page(title: String, content: String, theme_variant: String, base_url: &Option<String>) -> String {
+    let base_elem = match base_url {
+        Some(url) => format!("<base href='{}/'>", url),
+        None => "".to_string()
+    };
     format!(r"
         <!doctype html>
         <html>
         <head>
             <title>{title}</title>
             <link href='/app.css' rel='stylesheet'>
+            {base_url}
             <script src='https://unpkg.com/@popperjs/core@2'></script>
             <script src='/app.js'></script>
             <meta charset='utf-8' />
@@ -24,7 +28,8 @@ fn get_full_html_page(title: String, content: String, theme_variant: String) -> 
     ",
             title = title,
             content = content,
-            theme_variant = theme_variant
+            theme_variant = theme_variant,
+            base_url = base_elem
     )
 }
 
@@ -45,7 +50,7 @@ pub enum RenderMode {
     Complete,
     ContentOnly,
     /// Not used for the moment
-    LayoutOnly
+    LayoutOnly,
 }
 
 #[derive(Clone, Debug)]
@@ -60,10 +65,11 @@ impl Renderable for ContentComment {
             class_list: Default::default(),
             node_style: vec![],
             attributes: vec![],
-            popover: Box::new(None)
+            popover: Box::new(None),
         }
     }
 }
+
 /// Represent a page and embed all the logic required by the service worker.
 ///
 /// # How to use
@@ -77,21 +83,28 @@ impl Renderable for ContentComment {
 ///     .compile(RenderMode::Complete)
 /// ```
 #[derive(Clone)]
-pub struct Page {
+pub struct Page<'a> {
     name: String,
     content: Box<dyn Renderable>,
-    layout: Box<fn(Box<dyn Renderable>) -> Box<dyn Renderable>>,
+    layout: &'a Fn(Box<dyn Renderable>) -> Box<dyn Renderable>,
     theme: Theme,
+    base_url: Option<String>,
 }
 
-impl Page {
-    pub fn new<C: 'static + Renderable>(name: &str, layout: fn(Box<dyn Renderable>) -> Box<dyn Renderable>, content: C) -> Self {
+impl<'a> Page<'a> {
+    pub fn new<C: 'static + Renderable>(name: &str, layout: &'a Fn(Box<dyn Renderable>) -> Box<dyn Renderable>, content: C) -> Self
+    {
         Self {
             name: name.to_string(),
             content: Box::new(content),
-            layout: Box::new(layout),
+            layout,
             theme: Theme::Auto,
+            base_url: None,
         }
+    }
+    pub fn base_url(&mut self, base_url: &str) -> Self {
+        self.base_url = Some(base_url.to_string());
+        self.clone()
     }
     pub fn compile(&self, render_mode: RenderMode) -> String {
         let page = self;
@@ -101,7 +114,7 @@ impl Page {
             RenderMode::Complete => {
                 get_full_html_page(page.name.clone(), {
                     (page.layout)(page.content.clone()).to_html()
-                }, theme_variant)
+                }, theme_variant, &self.base_url)
             }
             RenderMode::ContentOnly => {
                 page.content.to_html()
@@ -109,7 +122,7 @@ impl Page {
             RenderMode::LayoutOnly => {
                 get_full_html_page(page.name.clone(), {
                     (page.layout)(Box::new(ContentComment)).to_html()
-                }, theme_variant)
+                }, theme_variant, &self.base_url)
             }
         }
     }

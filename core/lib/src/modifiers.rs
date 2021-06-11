@@ -115,6 +115,11 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
         self.clone()
     }
 
+    fn background(&mut self, value: &str) -> Self {
+        self.get_node().node_style.push(("background".to_string(), value.to_string()));
+        self.clone()
+    }
+
     fn border(&mut self, value: &str) -> Self {
         self.get_node().node_style.push(("border".to_string(), value.to_string()));
         self.clone()
@@ -182,6 +187,18 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
     }
     fn flex_grow(&mut self, value: i32) -> Self {
         self.get_node().node_style.push(("flex-grow".to_string(), value.to_string()));
+        self.clone()
+    }
+    fn line_height(&mut self, value: &str) -> Self {
+        self.get_node().node_style.push(("line-height".to_string(), value.to_string()));
+        self.clone()
+    }
+    fn border_radius(&mut self, value: &str) -> Self {
+        self.get_node().node_style.push(("border-radius".to_string(), value.to_string()));
+        self.clone()
+    }
+    fn text_align(&mut self, value: &str) -> Self {
+        self.get_node().node_style.push(("text-align".to_string(), value.to_string()));
         self.clone()
     }
     fn overflow(&mut self, overflow: Overflow) -> Self {

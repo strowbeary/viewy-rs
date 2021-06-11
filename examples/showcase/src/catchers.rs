@@ -10,7 +10,7 @@ fn default_catch_page(status: Status) -> Html<String>{
     Html({
         Page::new(
             format!("Viewy showcase – {}", status.reason_lossy()).as_str(),
-            layouts::no_layout,
+            &layouts::no_layout,
             {
                 VStack::new(Alignment::Center)
                     .justify_content("center")

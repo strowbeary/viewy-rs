@@ -13,11 +13,14 @@
   transition: background 150ms, color 150ms, border 150ms;
   font-family: inherit;
   text-decoration: none;
+
   .icon {
     margin: 0 sp(5) 0 0;
   }
+
   &--reversed {
     flex-direction: row-reverse;
+
     .icon {
       margin: 0 0 0 sp(5);
     }
@@ -49,6 +52,7 @@
       background: none;
       color: var(--color-text-disabled);
     }
+
     &--destructive {
       .text, .icon {
         color: var(--color-destructive);
@@ -95,6 +99,7 @@
       background: none;
       color: var(--color-text-disabled);
     }
+
     &--destructive {
       .text,
       .icon {
@@ -144,6 +149,7 @@
       color: var(--color-text-disabled);
       border: sp(1) solid var(--color-shadow);
     }
+
     &--destructive {
       .text,
       .icon {
@@ -197,31 +203,46 @@
       color: white;
       background: var(--color-shadow);
     }
+
     &--destructive {
       color: white;
       background: var(--color-destructive);
       border: none;
+
       .icon {
         color: white;
       }
+
       .text {
         color: white;
       }
+
       &:hover {
         background: var(--color-destructive-light);
       }
+
       &:active {
         background: var(--color-destructive-lighter);
       }
+
       &:focus-visible {
         box-shadow: 0 0 0 sp(3) var(--color-focus);
       }
+
       &:disabled {
         pointer-events: none;
         background: none;
         color: white;
         background: var(--color-shadow);
       }
+    }
+
+  }
+  &--icon-only {
+    padding: sp(4);
+    .icon {
+      margin: 0;
+
     }
   }
 }

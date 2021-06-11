@@ -22,7 +22,7 @@ pub enum ButtonStyle {
 pub struct Button {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
-    pub label: String,
+    pub label: Option<String>,
     pub style: ButtonStyle,
     pub icon: Option<String>,
 }
@@ -33,9 +33,22 @@ impl Button {
         Button {
             children: vec![],
             node: Node::default(),
-            label: label.to_string(),
+            label: Some(label.to_string()),
             style,
             icon: None,
+        }
+            .tag("button")
+    }
+
+
+    /// Create new icon only button
+    pub fn icon_only(icon: &str, style: ButtonStyle) -> Self {
+        Button {
+            children: vec![],
+            node: Node::default(),
+            label: None,
+            style,
+            icon: Some(icon.to_string()),
         }
             .tag("button")
     }
@@ -116,14 +129,24 @@ impl Renderable for Button {
             .add_class(format!("button--{:?}", self.style).to_lowercase().as_str())
             .set_attr("role", "button");
 
-        if let Some(icon) = button.icon {
-            let icon = Icon::new(icon.as_str())
-                .size(16)
-                .render();
-            button.node.children.push(icon);
+        if button.label.is_none() && button.icon.is_some() {
+            button = button.add_class("button--icon-only");
         }
-        let text = Text::new(self.label.as_str(), TextStyle::Button).render();
-        button.node.children.push(text);
+
+        if let Some(icon) = button.icon {
+            let mut icon = Icon::new(icon.as_str())
+                .size(16);
+            if button.label.is_none() {
+                icon = icon.size(24).stroke_width(2);
+            }
+            button.node.children.push(icon.render());
+        }
+
+        if let Some(label) = button.label {
+            let text = Text::new(label.as_str(), TextStyle::Button).render();
+            button.node.children.push(text);
+        }
+
         button.node
     }
 }

@@ -30,7 +30,7 @@ fn home() -> Html<String> {
     Html({
         Page::new(
             "Viewy showcase – Home",
-            layouts::default_layout,
+            &layouts::default_layout,
             pages::home(),
         )
             .compile(RenderMode::Complete)
@@ -42,7 +42,7 @@ fn login() -> Html<String> {
     Html({
         Page::new(
             "Viewy showcase – Login",
-            layouts::login_layout,
+            &layouts::login_layout,
             pages::login(),
         )
             .compile(RenderMode::Complete)
@@ -60,7 +60,7 @@ fn table() -> Html<String> {
     Html({
         Page::new(
             "Viewy showcase – Table",
-            layouts::default_layout,
+            &layouts::default_layout,
             pages::table(),
         )
             .compile(RenderMode::Complete)
@@ -72,8 +72,20 @@ fn calendar() -> Html<String> {
     Html({
         Page::new(
             "Viewy showcase – Calendar",
-            layouts::default_layout,
+            &layouts::default_layout,
             pages::calendar(),
+        )
+            .compile(RenderMode::Complete)
+    })
+}
+
+#[get("/menus")]
+fn menus() -> Html<String> {
+    Html({
+        Page::new(
+            "Viewy showcase – Navigation & menus",
+            &layouts::default_layout,
+            pages::navigation_and_menus(),
         )
             .compile(RenderMode::Complete)
     })
@@ -88,9 +100,9 @@ fn rocket() -> _ {
             home,
             login,
             table,
-            calendar
+            calendar,
+            menus
         ])
-        .register("/" , catchers::routes())
+        .register("/", catchers::routes())
         .manage(Assets::new())
-
 }

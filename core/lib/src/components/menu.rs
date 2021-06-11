@@ -3,13 +3,13 @@ use crate::{DefaultModifiers};
 use crate::Renderable;
 use std::borrow::BorrowMut;
 use crate::components::*;
+use std::ops::Deref;
 
 
 #[derive(Debug, Clone)]
 pub enum MenuStyle {
-    NavBar,
-    Toolbar,
-    RadioGroup,
+    Horizontal,
+    Vertical,
 }
 
 #[derive(Debug, Clone)]
@@ -61,9 +61,19 @@ impl Renderable for MenuItem {
                     .render()
             ]);
         }
-        menu_item.node.children.append(&mut vec![
-            Text::new(self.label.as_str(), TextStyle::Label).render()
-        ]);
+        if menu_item.node.popover.is_some() {
+            menu_item.node.children.append(&mut vec![
+                Text::new(self.label.as_str(), TextStyle::Label)
+                    .render(),
+                Icon::new("chevron-down")
+                    .size(16)
+                    .render()
+            ]);
+        } else {
+            menu_item.node.children.append(&mut vec![
+                Text::new(self.label.as_str(), TextStyle::Label).render()
+            ]);
+        }
         menu_item.get_node().clone()
     }
 }
@@ -105,6 +115,14 @@ impl Renderable for Menu {
         let mut menu = self
             .clone()
             .add_class("menu");
+        match self.style {
+            MenuStyle::Vertical => {
+                menu = menu.add_class("menu--vertical")
+            }
+            MenuStyle::Horizontal => {
+                menu = menu.add_class("menu--horizontal")
+            }
+        }
         self.children.iter()
             .for_each(|child|
                 menu.node.children.push(child.render()));

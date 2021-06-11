@@ -12,11 +12,11 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                 .padding(vec![24])
                 .background_color("var(--surface)")
                 .append_child({
-                    Menu::new(MenuStyle::NavBar)
+                    Menu::new(MenuStyle::Horizontal)
                         .append_child({
                             MenuItem::new("Basic components")
                                 .icon("box")
-                                .action("/")
+                                .action("./")
                         })
                         .append_child({
                             MenuItem::new("Table")
@@ -27,6 +27,11 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                             MenuItem::new("Calendar")
                                 .icon("calendar")
                                 .action("/calendar")
+                        })
+                        .append_child({
+                            MenuItem::new("Navigation & menus")
+                                .icon("map")
+                                .action("/menus")
                         })
                 })
         })

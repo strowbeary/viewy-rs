@@ -39,6 +39,14 @@ impl Text {
             style,
         }
     }
+    pub fn bold(&mut self, is_bold: bool) -> Self {
+        if is_bold {
+            self.get_node().node_style.push(("font-weight".to_string(), "bold".to_string()));
+        } else {
+            self.get_node().node_style.push(("font-weight".to_string(), "normal".to_string()));
+        }
+        self.clone()
+    }
 }
 
 impl NodeContainer for Text {

@@ -45,7 +45,8 @@ impl Renderable for Column {
 pub struct Row {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
-    pub name: String
+    pub name: String,
+    pub action: Option<String>,
 }
 
 impl NodeContainer for Row {
@@ -69,8 +70,15 @@ impl Row {
         Self {
             children: vec![],
             node: Default::default(),
-            name: name.to_string()
+            name: name.to_string(),
+            action: None,
         }
+    }
+
+
+    pub fn action(&mut self, url: &str) -> Self {
+        self.action = Some(url.to_string());
+        self.clone()
     }
 }
 
@@ -78,12 +86,26 @@ impl Renderable for Row {
     fn render(&self) -> Node {
         let mut row = self.clone()
             .tag("tr");
+        if self.action.is_some() {
+            row = row.add_class("clickable");
+        }
         let mut node = row.node;
         row.children.iter()
             .for_each(|child| {
                 let mut td = View::new()
                     .tag("td");
-                td.get_children().push(child.clone());
+                if let Some(url) = &self.action {
+                    td.get_children().push({
+                        Box::new({
+                            View::new()
+                                .tag("a")
+                                .set_attr("href", url)
+                                .append_child(child.clone())
+                        })
+                    })
+                } else {
+                    td.get_children().push(child.clone());
+                }
                 node.children.push(td.render())
             });
         node
@@ -99,7 +121,6 @@ pub struct Table {
     node: Node,
     selectable: bool,
 }
-
 
 
 impl Table {

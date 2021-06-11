@@ -1,8 +1,8 @@
 .text {
 
   &--largetitle {
-    font-size: sp(40);
-    line-height: sp(56);
+    font-size: sp(32);
+    line-height: sp(40);
     font-weight: $fw-bold;
     letter-spacing: sp(-0.022);
     &::first-letter {
