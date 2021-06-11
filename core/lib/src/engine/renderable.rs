@@ -14,7 +14,16 @@ pub trait Renderable: DynClone + Debug {
             .map(|popover| popover.render())
             .map(|node| node.get_html())
             .collect();
-        format!("{view} {popover}", view = root_node.get_html(), popover = popovers_html.join(""))
+        let popups_html: Vec<String> = root_node.get_popups().iter()
+            .map(|popup| popup.render())
+            .map(|node| node.get_html())
+            .collect();
+        format!(
+            "{view} {popover} {popup}",
+            view = root_node.get_html(),
+            popover = popovers_html.join(""),
+            popup = popups_html.join("")
+        )
     }
 }
 

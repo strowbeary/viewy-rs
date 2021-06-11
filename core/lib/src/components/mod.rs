@@ -19,6 +19,7 @@ mod table;
 mod checkbox;
 mod avatar;
 mod tag;
+mod popup;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
@@ -41,6 +42,7 @@ pub use table::*;
 pub use checkbox::*;
 pub use avatar::*;
 pub use tag::*;
+pub use popup::*;
 
 use crate::node::Node;
 use crate::Renderable;

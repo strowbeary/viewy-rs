@@ -1,5 +1,5 @@
 use std::collections::HashSet;
-use crate::components::Popover;
+use crate::components::{Popover, Popup};
 
 #[derive(Debug, Clone)]
 pub enum NodeType {
@@ -17,6 +17,7 @@ pub struct Node {
     pub node_style: Vec<(String, String)>,
     pub attributes: Vec<(String, String)>,
     pub popover: Box<Option<Popover>>,
+    pub popup: Box<Option<Popup>>,
 }
 
 impl Default for Node {
@@ -31,6 +32,7 @@ impl Default for Node {
             node_style: vec![],
             attributes: vec![],
             popover: Box::new(None),
+            popup: Box::new(None),
         }
     }
 }
@@ -48,6 +50,20 @@ impl Node {
                     .for_each(|popover| popovers.push(popover.clone()))
             });
         popovers
+    }
+
+    pub fn get_popups(&self) -> Vec<Popup> {
+        let mut popups: Vec<Popup> = vec![];
+
+        if let Some(popup) = self.popup.clone().take() {
+            popups.push(popup)
+        }
+        self.children.iter()
+            .for_each(|child| {
+                child.get_popups().iter()
+                    .for_each(|popup| popups.push(popup.clone()))
+            });
+        popups
     }
 
     pub fn get_html(&self) -> String {

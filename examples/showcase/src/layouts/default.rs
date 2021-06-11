@@ -12,7 +12,7 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                 .padding(vec![24])
                 .background_color("var(--surface)")
                 .append_child({
-                    Menu::new(MenuStyle::Horizontal)
+                    Menu::new(MenuStyle::Vertical)
                         .append_child({
                             MenuItem::new("Basic components")
                                 .icon("box")

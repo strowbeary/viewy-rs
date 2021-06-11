@@ -66,6 +66,7 @@ impl Renderable for ContentComment {
             node_style: vec![],
             attributes: vec![],
             popover: Box::new(None),
+            popup: Box::new(None)
         }
     }
 }
