@@ -19,7 +19,7 @@
     --color-border-blue: #{color.adjust($accent, $alpha: -0.25)};
     --background: $background;
     --background-raised: #{color.adjust($themed-on-background, $lightness: +85%)};
-    --backdrop: #{color.adjust($themed-on-background, $alpha: -0.5)};
+    --backdrop: #{color.adjust($background, $alpha: -0.3)};
     --color-text: #{$themed-on-background};
     --color-text-secondary: #{color.adjust($themed-on-background, $lightness: -20%, $saturation: -70%)};
     --color-border: #{color.adjust($themed-on-background, $lightness: -73%, $saturation: -70%)};

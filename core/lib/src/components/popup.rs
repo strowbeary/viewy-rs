@@ -31,6 +31,15 @@ impl Popup {
         self.el_to_attach_to = el.to_string();
         self.clone()
     }
+    pub fn open(&mut self, is_open: bool) -> Self {
+        {
+            if is_open {
+                self.add_class("visible")
+            } else {
+                self.remove_class("visible")
+            }
+        }.clone()
+    }
 }
 
 impl ChildContainer for Popup {

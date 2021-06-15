@@ -15,12 +15,15 @@
   &__window {
     pointer-events: none;
     margin: auto;
-    background: var(--background);
+    background: var(--surface);
     border-radius: sp($border-radius);
     box-shadow: 0 4px 8px 0 var(--color-shadow);
     max-height: 90vh;
     max-width: 95vw;
     overflow: auto;
+    .titlebar {
+      background: var(--surface);
+    }
   }
 
   &.visible {
