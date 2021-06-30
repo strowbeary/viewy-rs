@@ -27,13 +27,15 @@
                         },
                     ],
                 });
-                el.addEventListener("click", e => {
-                    if (popover.getAttribute("data-show")) {
+                window.addEventListener("click", e => {
+                    console.log("click on", e.target);
+                    if (!(e.target.isSameNode(popover) || popover.contains(e.target))) {
                         popover.removeAttribute("data-show");
-                    } else {
-                        closeAll(popover);
+                    }
+                    if(e.target.isSameNode(el) || el.contains(e.target)) {
                         popover.setAttribute("data-show", "data-show");
                     }
+
                     popperInstance.update();
                 });
 

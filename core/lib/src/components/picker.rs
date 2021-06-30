@@ -30,7 +30,7 @@ impl PickerOption {
 pub enum PickerStyle {
     Segmented,
     Dropdown,
-    RadioGroup
+    RadioGroup,
 }
 
 #[derive(Debug, Clone)]
@@ -140,7 +140,25 @@ impl Renderable for Picker {
                     option_list.render()
                 })
             }
-            PickerStyle::Dropdown => {}
+            PickerStyle::Dropdown => {
+                picker.node.children.push({
+                    let radio_id = format!("picker-dropdown-{}", self.name.as_str());
+                    let mut select = View::new()
+                        .tag("select")
+                        .set_attr("name", self.name.as_str())
+                        .set_attr("id", radio_id.as_str());
+                    for option in picker.options {
+                        select = select.append_child({
+                            let mut option_element = View::new()
+                                .tag("option")
+                                .set_attr("value", &option.value);
+                            option_element.node.text = Some(option.label);
+                            option_element
+                        })
+                    }
+                    select.render()
+                })
+            }
             PickerStyle::RadioGroup => {
                 picker.node.children.push({
                     let mut option_list = VStack::new(Alignment::Stretch)

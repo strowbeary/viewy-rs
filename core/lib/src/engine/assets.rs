@@ -42,6 +42,7 @@ fn get_stylesheets() -> Vec<String> {
         include_str!("../themes/components/avatar.scss").to_string(),
         include_str!("../themes/components/tag.scss").to_string(),
         include_str!("../themes/components/popup.scss").to_string(),
+        include_str!("../themes/components/file-input.scss").to_string(),
     ]
 }
 
@@ -52,6 +53,7 @@ fn get_scripts() -> Vec<String> {
         include_str!("../js/popover.js").to_string(),
         include_str!("../js/table.js").to_string(),
         include_str!("../js/popup.js").to_string(),
+        include_str!("../js/file-input.js").to_string(),
     ]
 }
 

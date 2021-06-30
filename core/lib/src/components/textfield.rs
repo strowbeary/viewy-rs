@@ -2,7 +2,7 @@ use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
 use crate::{Renderable};
-use crate::components::{View, TextStyle, Text};
+use crate::components::{View, TextStyle, Text, Button};
 
 #[derive(Debug, Clone)]
 pub enum FieldType {
@@ -18,6 +18,7 @@ pub enum FieldType {
     Time,
     Url,
     Week,
+    Hidden
 }
 
 #[derive(Debug, Clone)]
@@ -54,7 +55,7 @@ impl TextField {
             trailing_icon: None,
             field_type,
             name: name.to_string(),
-            auto_sizing: false
+            auto_sizing: false,
         }
     }
 
@@ -110,23 +111,27 @@ impl Renderable for TextField {
         if let Some(value) = field.value {
             input.set_attr("value", &value);
         }
+        if !matches!(field.field_type, FieldType::Hidden) {
+            if let Some(placeholder) = field.placeholder {
+                input.set_attr("placeholder", placeholder.as_str());
+            }
 
-        if let Some(placeholder) = field.placeholder {
-            input.set_attr("placeholder", placeholder.as_str());
-        }
-
-        if let Some(label) = field.label {
-            let text = Text::new(label.as_str(), TextStyle::Label)
-                .add_class("textfield__label")
-                .set_attr("for", self.name.as_str())
-                .tag("label");
-            field.node.children.push(text.render());
+            if let Some(label) = field.label {
+                let text = Text::new(label.as_str(), TextStyle::Label)
+                    .add_class("textfield__label")
+                    .set_attr("for", self.name.as_str())
+                    .tag("label");
+                field.node.children.push(text.render());
+            }
         }
         field.node.children.push(input.render());
-        if let Some(helper_text) = field.helper_text {
-            let text = Text::new(helper_text.as_str(), TextStyle::Caption)
-                .add_class("textfield__helper-text");
-            field.node.children.push(text.render());
+
+        if !matches!(field.field_type, FieldType::Hidden) {
+            if let Some(helper_text) = field.helper_text {
+                let text = Text::new(helper_text.as_str(), TextStyle::Caption)
+                    .add_class("textfield__helper-text");
+                field.node.children.push(text.render());
+            }
         }
         field.node
     }

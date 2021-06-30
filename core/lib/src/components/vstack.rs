@@ -60,9 +60,12 @@ impl Renderable for VStack {
             .add_class("stack")
             .add_class("stack--vertical")
             .add_class(
-                format!("stack--align-{:?}", self.alignment)
-                    .to_lowercase()
-                    .as_str()
+                &format!("stack--align-{}", match self.alignment {
+                    Alignment::Center => {"center"}
+                    Alignment::Start => {"flex-start"}
+                    Alignment::End => {"flex-end"}
+                    Alignment::Stretch => {"stretch"}
+                })
             );
         self.children.iter()
             .for_each(|child|

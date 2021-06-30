@@ -47,6 +47,7 @@ pub struct Row {
     node: Node,
     pub name: String,
     pub action: Option<String>,
+    pub download: Option<String>,
 }
 
 impl NodeContainer for Row {
@@ -72,12 +73,19 @@ impl Row {
             node: Default::default(),
             name: name.to_string(),
             action: None,
+            download: None
         }
     }
 
 
     pub fn action(&mut self, url: &str) -> Self {
         self.action = Some(url.to_string());
+        self.clone()
+    }
+
+    pub fn download_action(&mut self, url: &str, file_name: &str) -> Self {
+        self.action = Some(url.to_string());
+        self.download = Some(file_name.to_string());
         self.clone()
     }
 }
@@ -97,10 +105,14 @@ impl Renderable for Row {
                 if let Some(url) = &self.action {
                     td.get_children().push({
                         Box::new({
-                            View::new()
+                            let mut link = View::new()
                                 .tag("a")
                                 .set_attr("href", url)
-                                .append_child(child.clone())
+                                .append_child(child.clone());
+                            if let Some(file_name) = &self.download {
+                                link = link.set_attr("download", file_name);
+                            }
+                            link
                         })
                     })
                 } else {

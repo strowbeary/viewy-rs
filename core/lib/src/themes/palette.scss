@@ -34,6 +34,7 @@
     --color-destructive-lighter: #{color.adjust($destructive, $lightness: 10%)};;
     --color-warning: #D86F48;
     --color-text-disabled: #{color.adjust($themed-on-background, $lightness: -50%)};
+
   }
   @else {
     $background: #ffffff;

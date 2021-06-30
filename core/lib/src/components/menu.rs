@@ -37,6 +37,10 @@ impl MenuItem {
             .set_attr("href", url)
             .tag("a")
     }
+    pub fn attach_to_file_input(&mut self, input_id: &str) -> Self {
+        self
+            .set_attr("data-input-file", &format!("file-input-{}", input_id))
+    }
 }
 
 impl NodeContainer for MenuItem {
@@ -57,7 +61,6 @@ impl Renderable for MenuItem {
             menu_item.node.children.append(&mut vec![
                 Icon::new(icon.as_str())
                     .size(16)
-                    .stroke_width(5)
                     .render()
             ]);
         }
@@ -84,12 +87,13 @@ pub struct Menu {
     style: MenuStyle,
     children: Vec<Box<dyn Renderable>>,
 }
+
 impl Menu {
     pub fn new(style: MenuStyle) -> Self {
         Self {
             node: Default::default(),
             style,
-            children: vec![]
+            children: vec![],
         }
     }
 }
@@ -100,6 +104,7 @@ impl ChildContainer for Menu {
         return self.children.borrow_mut();
     }
 }
+
 impl Appendable for Menu {}
 
 impl NodeContainer for Menu {

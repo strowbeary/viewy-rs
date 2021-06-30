@@ -37,11 +37,11 @@
     }
 
     .menu-item + .menu-section {
-      margin-left: sp(16);
+      margin-right: sp(16);
     }
 
     .menu-item {
-      margin-left: sp(6);
+      margin-right: sp(6);
     }
   }
 
@@ -114,7 +114,7 @@
     }
 
     .icon {
-      stroke-width: 2 !important;
+      stroke-width: sp(2) !important;
     }
 
   }

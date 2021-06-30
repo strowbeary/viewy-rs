@@ -20,6 +20,7 @@ mod checkbox;
 mod avatar;
 mod tag;
 mod popup;
+mod file_input;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
@@ -43,6 +44,7 @@ pub use checkbox::*;
 pub use avatar::*;
 pub use tag::*;
 pub use popup::*;
+pub use file_input::*;
 
 use crate::node::Node;
 use crate::Renderable;

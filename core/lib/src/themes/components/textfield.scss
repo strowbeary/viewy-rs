@@ -16,6 +16,9 @@
     font-weight: $fw-normal;
     outline: none;
     transition: border-color 150ms;
+    &[type="file"] {
+      display: none;
+    }
     &:hover {
       border-color: var(--color-border-hover);
     }
