@@ -11,12 +11,10 @@ pub trait Renderable: DynClone + Debug {
     fn to_html(&self) -> String {
         let root_node: Node = self.render();
         let popovers_html: Vec<String> = root_node.get_popovers().iter()
-            .map(|popover| popover.render())
-            .map(|node| node.get_html())
+            .map(|popover| popover.to_html())
             .collect();
         let popups_html: Vec<String> = root_node.get_popups().iter()
-            .map(|popup| popup.render())
-            .map(|node| node.get_html())
+            .map(|popup| popup.to_html())
             .collect();
         format!(
             "{view} {popover} {popup}",

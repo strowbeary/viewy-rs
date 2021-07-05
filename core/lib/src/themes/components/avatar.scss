@@ -2,10 +2,29 @@
   background: var(--color-accent);
   color: white;
   border-radius: 50%;
+  $font-size: 0.35;
+
   &--normal {
     width: sp(35);
     height: sp(35);
     line-height: sp(35);
+    font-size: sp(35) * $font-size;
+    text-align: center;
+  }
+
+  &--large {
+    width: sp(70);
+    height: sp(70);
+    line-height: sp(70);
+    font-size: sp(70) * $font-size;
+    text-align: center;
+  }
+
+  &--x-large {
+    width: sp(105);
+    height: sp(105);
+    line-height: sp(105);
+    font-size: sp(105) * $font-size;
     text-align: center;
   }
 }
