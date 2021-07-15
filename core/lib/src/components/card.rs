@@ -48,14 +48,26 @@ impl ChildContainer for Card {
 impl Appendable for Card {}
 
 impl Renderable for Card {
-    fn render(&self) -> Node {
-        let mut view = self.clone()
+    fn render(&mut self) -> Node {
+        let style = self.style.clone();
+        self
             .add_class("card")
-            .add_class(format!("card--{:?}", self.style).to_lowercase().as_str())
-            .node;
-        self.children.iter()
-            .for_each(|child|
-                view.children.push(child.render()));
-        view
+            .add_class({
+                match style {
+                    CardStyle::Outlined => {"card--outlined"}
+                    CardStyle::Filled => {"card--filled"}
+                    CardStyle::Raised => {"card--raised"}
+                }
+            });
+
+        let mut rendered_children: Vec<Node> = self.children.iter_mut()
+            .map(|child| {
+                child.render()
+            })
+            .collect();
+        self.get_node().clone().children.append({
+            &mut rendered_children
+        });
+        self.get_node().clone()
     }
 }

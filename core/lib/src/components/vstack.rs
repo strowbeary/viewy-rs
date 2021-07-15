@@ -54,22 +54,22 @@ impl ChildContainer for VStack {
 }
 impl Appendable for VStack {}
 impl Renderable for VStack {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
+        let alignment = self.alignment.clone();
         let mut stack = self
-            .clone()
             .add_class("stack")
             .add_class("stack--vertical")
             .add_class(
-                &format!("stack--align-{}", match self.alignment {
+                &format!("stack--align-{}", match alignment {
                     Alignment::Center => {"center"}
                     Alignment::Start => {"flex-start"}
                     Alignment::End => {"flex-end"}
                     Alignment::Stretch => {"stretch"}
                 })
             );
-        self.children.iter()
+        self.children.iter_mut()
             .for_each(|child|
                 stack.node.children.push(child.render()));
-        stack.node
+        stack.get_node().clone()
     }
 }

@@ -59,7 +59,7 @@ impl TitleBar {
 }
 
 impl Renderable for TitleBar {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut areas = String::new();
         if self.left_item.is_some() {
             areas.push_str("'left_item . right_item' 'title title title'");
@@ -78,17 +78,17 @@ impl Renderable for TitleBar {
             .grid_area("title")
             .render();
         view.children.push(text);
-        if let Some(left_item) = self.left_item.clone() {
+        if let Some(left_item) = &mut self.left_item {
             let mut item = left_item.render();
             item.node_style.push(("grid-area".to_string(), "left_item".to_string()));
             view.children.push(item);
         }
-        if let Some(right_item) = self.right_item.clone() {
+        if let Some(right_item) = &mut self.right_item {
             let mut item = right_item.render();
             item.node_style.push(("grid-area".to_string(), "right_item".to_string()));
             view.children.push(item);
         }
-        if let Some(bottom_item) = self.bottom_item.clone() {
+        if let Some(bottom_item) = &mut self.bottom_item{
             let mut item = bottom_item.render();
             item.node_style.push(("grid-area".to_string(), "bottom_item".to_string()));
             view.children.push(item);

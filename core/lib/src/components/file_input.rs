@@ -28,12 +28,13 @@ impl FileInput {
         }
             .set_attr("id", &format!("file-input-{}", name))
             .set_attr("name", name)
+            .clone()
     }
 }
 
 
 impl Renderable for FileInput {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
 
         let mut file_input = self.clone()
             .add_class("file-input")

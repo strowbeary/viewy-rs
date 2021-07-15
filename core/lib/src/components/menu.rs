@@ -27,17 +27,17 @@ impl MenuItem {
             label: label.to_string(),
         }
     }
-    pub fn icon(&mut self, name: &str) -> Self {
+    pub fn icon(&mut self, name: &str) -> &mut Self {
         self.icon = Some(name.to_string());
-        self.clone()
+        self
     }
 
-    pub fn action(&mut self, url: &str) -> Self {
+    pub fn action(&mut self, url: &str) -> &mut Self {
         self
             .set_attr("href", url)
             .tag("a")
     }
-    pub fn attach_to_file_input(&mut self, input_id: &str) -> Self {
+    pub fn attach_to_file_input(&mut self, input_id: &str) -> &mut Self {
         self
             .set_attr("data-input-file", &format!("file-input-{}", input_id))
     }
@@ -52,7 +52,7 @@ impl NodeContainer for MenuItem {
 impl DefaultModifiers<MenuItem> for MenuItem {}
 
 impl Renderable for MenuItem {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut menu_item = self
             .clone()
             .add_class("menu-item")
@@ -116,7 +116,7 @@ impl NodeContainer for Menu {
 impl DefaultModifiers<Menu> for Menu {}
 
 impl Renderable for Menu {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut menu = self
             .clone()
             .add_class("menu");

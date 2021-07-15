@@ -39,13 +39,15 @@ impl ChildContainer for View {
 impl Appendable for View {}
 
 impl Renderable for View {
-    fn render(&self) -> Node {
-
-        let mut node = self.clone().node;
-
-        self.children.iter()
-            .for_each(|child|
-                node.children.push(child.render()));
-        node
+    fn render(&mut self) -> Node {
+        let mut rendered_children: Vec<Node> = self.children.iter_mut()
+            .map(|child| {
+                child.render()
+            })
+            .collect();
+        self.get_node().clone().children.append({
+            &mut rendered_children
+        });
+        self.get_node().clone()
     }
 }

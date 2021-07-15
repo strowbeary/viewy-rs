@@ -58,7 +58,7 @@ impl ChildContainer for HStack {
 impl Appendable for HStack {}
 
 impl Renderable for HStack {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut view = self
             .clone()
             .add_class("stack")

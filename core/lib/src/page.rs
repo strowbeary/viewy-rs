@@ -57,7 +57,7 @@ pub enum RenderMode {
 struct ContentComment;
 
 impl Renderable for ContentComment {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         Node {
             node_type: NodeType::Comment("VIEWY_CONTENT".to_string()),
             text: None,

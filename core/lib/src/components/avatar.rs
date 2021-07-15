@@ -28,9 +28,9 @@ impl Avatar {
         }
     }
 
-    pub fn size(&mut self, size: Size) -> Self {
+    pub fn size(&mut self, size: Size) -> &mut Self {
         self.size = size;
-        self.clone()
+        self
     }
 }
 
@@ -43,7 +43,7 @@ impl NodeContainer for Avatar {
 impl DefaultModifiers<Avatar> for Avatar {}
 
 impl Renderable for Avatar {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut avatar = self.clone()
             .add_class("avatar")
             .add_class(&format!("avatar--{}", match self.size {

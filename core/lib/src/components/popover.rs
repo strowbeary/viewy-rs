@@ -50,7 +50,7 @@ impl Appendable for Popover {}
 
 
 impl Renderable for Popover {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut popover = self.clone()
             .add_class("popover")
             .set_attr("data-attach-to", self.el_to_attach_to.as_str())

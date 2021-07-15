@@ -28,7 +28,7 @@ impl Divider {
 }
 
 impl Renderable for Divider {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
 
         let mut view = self.clone()
             .add_class("divider")

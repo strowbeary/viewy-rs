@@ -39,13 +39,13 @@ impl Text {
             style,
         }
     }
-    pub fn bold(&mut self, is_bold: bool) -> Self {
+    pub fn bold(&mut self, is_bold: bool) -> &mut Self {
         if is_bold {
             self.get_node().node_style.push(("font-weight".to_string(), "bold".to_string()));
         } else {
             self.get_node().node_style.push(("font-weight".to_string(), "normal".to_string()));
         }
-        self.clone()
+        self
     }
 }
 
@@ -58,10 +58,11 @@ impl NodeContainer for Text {
 impl DefaultModifiers<Text> for Text {}
 
 impl Renderable for Text {
-    fn render(&self) -> Node {
-        let text = self.clone()
+    fn render(&mut self) -> Node {
+        self.clone()
             .add_class("text")
-            .add_class(format!("text--{:?}", self.style).to_lowercase().as_str());
-        text.node
+            .add_class(format!("text--{:?}", self.style).to_lowercase().as_str())
+            .get_node()
+            .clone()
     }
 }

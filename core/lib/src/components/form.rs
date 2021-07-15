@@ -31,6 +31,7 @@ impl Form {
             is_async: false
         }
             .set_attr("id", name)
+            .clone()
     }
     pub fn async_form(&mut self) -> Self {
         self.is_async = true;
@@ -46,7 +47,7 @@ impl ChildContainer for Form {
 impl Appendable for Form {}
 
 impl Renderable for Form {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
 
         let mut form = self.clone()
             .add_class("form")

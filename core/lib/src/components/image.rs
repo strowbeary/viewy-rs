@@ -50,7 +50,7 @@ impl Image {
 }
 
 impl Renderable for Image {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         self.clone()
             .add_class("image")
             .set_attr("src", self.src.as_str())

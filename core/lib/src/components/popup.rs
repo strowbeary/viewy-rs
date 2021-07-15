@@ -52,7 +52,7 @@ impl Appendable for Popup {}
 
 
 impl Renderable for Popup {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut popup = self.clone()
             .add_class("popup")
             .set_attr("data-attach-to", self.el_to_attach_to.as_str());

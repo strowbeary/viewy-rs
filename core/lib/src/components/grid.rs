@@ -64,19 +64,24 @@ impl ChildContainer for Grid {
 impl Appendable for Grid {}
 
 impl Renderable for Grid {
-    fn render(&self) -> Node {
-        let mut view = self
+    fn render(&mut self) -> Node {
+        self
             .clone()
             .add_class("grid")
             .add_class(
                 format!("grid--align-{:?}", self.alignment)
                     .to_lowercase()
                     .as_str()
-            )
-            .node;
-        self.children.iter()
-            .for_each(|child|
-                view.children.push(child.render()));
-        view
+            );
+
+        let mut rendered_children: Vec<Node> = self.children.iter_mut()
+            .map(|child| {
+                child.render()
+            })
+            .collect();
+        self.get_node().clone().children.append({
+            &mut rendered_children
+        });
+        self.get_node().clone()
     }
 }

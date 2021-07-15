@@ -6,7 +6,7 @@ use std::ops::Deref;
 use dyn_clone::{DynClone, clone_trait_object};
 
 pub trait Renderable: DynClone + Debug {
-    fn render(&self) -> Node;
+    fn render(&mut self) -> Node;
 
     fn to_html(&self) -> String {
         let root_node: Node = self.render();
@@ -28,7 +28,7 @@ pub trait Renderable: DynClone + Debug {
 clone_trait_object!(Renderable);
 
 impl Renderable for Box<dyn Renderable> {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         self.deref().render()
     }
 }

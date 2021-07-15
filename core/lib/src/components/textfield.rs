@@ -97,7 +97,7 @@ impl TextField {
 }
 
 impl Renderable for TextField {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut field = self.clone()
             .add_class("textfield");
 

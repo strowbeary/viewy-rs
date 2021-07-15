@@ -34,7 +34,7 @@ impl Column {
 }
 
 impl Renderable for Column {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         self.clone()
             .tag("col")
             .node
@@ -47,7 +47,6 @@ pub struct Row {
     node: Node,
     pub name: String,
     pub action: Option<String>,
-    pub download: Option<String>,
 }
 
 impl NodeContainer for Row {
@@ -73,7 +72,6 @@ impl Row {
             node: Default::default(),
             name: name.to_string(),
             action: None,
-            download: None
         }
     }
 
@@ -82,41 +80,31 @@ impl Row {
         self.action = Some(url.to_string());
         self.clone()
     }
-
-    pub fn download_action(&mut self, url: &str, file_name: &str) -> Self {
-        self.action = Some(url.to_string());
-        self.download = Some(file_name.to_string());
-        self.clone()
-    }
 }
 
 impl Renderable for Row {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut row = self.clone()
             .tag("tr");
         if self.action.is_some() {
             row = row.add_class("clickable");
         }
         let mut node = row.node;
-        row.children.iter()
+        row.children.iter_mut()
             .for_each(|child| {
                 let mut td = View::new()
                     .tag("td");
                 if let Some(url) = &self.action {
-                    td.get_children().push({
-                        Box::new({
-                            let mut link = View::new()
-                                .tag("a")
-                                .set_attr("href", url)
-                                .append_child(child.clone());
-                            if let Some(file_name) = &self.download {
-                                link = link.set_attr("download", file_name);
-                            }
-                            link
-                        })
-                    })
+                    td.append_child({
+                        View::new()
+                            .tag("a")
+                            .set_attr("href", url)
+                            .append_child(child)
+                    });
                 } else {
-                    td.get_children().push(child.clone());
+                    td.append_child({
+                        child
+                    });
                 }
                 node.children.push(td.render())
             });
@@ -175,7 +163,7 @@ impl ChildContainer for Table {
 impl Appendable for Table {}
 
 impl Renderable for Table {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut table = self
             .clone()
             .tag("table");
@@ -188,7 +176,7 @@ impl Renderable for Table {
                         .width(&sp(30))
                 });
             }
-            self.clone().columns.into_iter()
+            self.clone().columns.iter_mut()
                 .for_each(|col| {
                     colgroup.append_child(col);
                 });
@@ -227,11 +215,11 @@ impl Renderable for Table {
         table.append_child({
             let mut tbody = View::new()
                 .tag("tbody");
-            self.clone().rows.into_iter()
+            self.clone().rows.iter_mut()
                 .for_each(|mut row| {
                     if self.selectable {
                         row.prepend_child({
-                            Checkbox::new(&table.name, &row.name)
+                            &mut Checkbox::new(&table.name, &row.name)
                         });
                     }
                     tbody.append_child(row);

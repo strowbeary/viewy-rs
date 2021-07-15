@@ -46,7 +46,7 @@ impl NodeContainer for Icon {
 impl DefaultModifiers<Icon> for Icon {}
 
 impl Renderable for Icon {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut icon = self.clone()
             .add_class("icon")
             .set_attr("width", sp(self.size).as_str())

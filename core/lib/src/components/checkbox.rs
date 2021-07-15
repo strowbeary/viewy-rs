@@ -61,13 +61,14 @@ impl ChildContainer for Checkbox {
 impl Appendable for Checkbox {}
 
 impl Renderable for Checkbox {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let radio_id = Uuid::new_v4().to_hyphenated().to_string();
 
         let mut checkbox = View::new()
             .tag("input")
             .set_attr("type", "checkbox")
             .set_attr("name", self.name.as_str())
+            .set_attr("value", self.value.as_str())
             .set_attr("id", radio_id.as_str());
 
 

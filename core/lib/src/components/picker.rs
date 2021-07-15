@@ -86,12 +86,12 @@ impl ChildContainer for Picker {
 
 
 impl Renderable for Picker {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut picker = self.clone()
             .add_class("picker")
             .add_class(format!("picker--{:?}", self.style).to_lowercase().as_str());
 
-        if let Some(label) = picker.label {
+        if let Some(label) = &picker.label {
             let text = Text::new(label.as_str(), TextStyle::Label);
             picker.node.children.push(text.render());
         }
@@ -129,7 +129,7 @@ impl Renderable for Picker {
                                 });
                             }
                             item.append_child({
-                                Text::new(option.label.as_str(), TextStyle::Button)
+                                &mut Text::new(option.label.as_str(), TextStyle::Button)
                             });
                             if picker.value.eq(option.value.as_str()) {
                                 item.add_class("selected");
@@ -172,8 +172,9 @@ impl Renderable for Picker {
                             let mut radio_button = View::new()
                                 .tag("input")
                                 .set_attr("type", "radio")
-                                .set_attr("name", self.name.as_str())
-                                .set_attr("id", radio_id.as_str());
+                                .set_attr("name", &self.name)
+                                .set_attr("value", &option.value)
+                                .set_attr("id", &radio_id);
                             if picker.value.eq(option.value.as_str()) {
                                 radio_button.set_attr("checked", "checked");
                             }
@@ -184,9 +185,7 @@ impl Renderable for Picker {
                                 Text::new(option.label.as_str(), TextStyle::Body)
                                     .set_attr("for", radio_id.as_str())
                                     .tag("label")
-                            );
-
-                            radio_row
+                            )
                         });
                     }
                     option_list.render()

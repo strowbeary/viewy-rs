@@ -38,6 +38,7 @@ impl Button {
             icon: None,
         }
             .tag("button")
+            .clone()
     }
 
 
@@ -51,27 +52,28 @@ impl Button {
             icon: Some(icon.to_string()),
         }
             .tag("button")
+            .clone()
     }
 
     /// Change button style to destructive (red)
-    pub fn destructive(&mut self) -> Self {
+    pub fn destructive(&mut self) -> &mut Self {
         self.add_class(format!("button--{:?}--destructive", self.style).to_lowercase().as_str())
     }
 
     /// Disable interaction on the button
-    pub fn disabled(&mut self, is_disabled: bool) -> Self {
+    pub fn disabled(&mut self, is_disabled: bool) -> &mut Self {
         if is_disabled {
             self.add_class(format!("button--{:?}--disabled", self.style).to_lowercase().as_str())
         } else {
-            self.clone()
+            self
         }
     }
 
-    pub fn reversed(&mut self, is_reversed: bool) -> Self {
+    pub fn reversed(&mut self, is_reversed: bool) -> &mut Self {
         if is_reversed {
             self.add_class("button--reversed")
         } else {
-            self.clone()
+            self
         }
     }
 
@@ -86,23 +88,23 @@ impl Button {
     ///            .attach_to_form("formName")
     ///        })
     /// ```
-    pub fn attach_to_form(&mut self, form_name: &str) -> Self {
+    pub fn attach_to_form(&mut self, form_name: &str) -> &mut Self {
         self
             .set_attr("form", form_name)
             .set_attr("type", "submit")
     }
 
     /// Set url to navigate to.
-    pub fn action(&mut self, url: &str) -> Self {
+    pub fn action(&mut self, url: &str) -> &mut Self {
         self
             .set_attr("href", url)
             .tag("a")
     }
 
     /// Set button's icon
-    pub fn icon(&mut self, name: &str) -> Self {
+    pub fn icon(&mut self, name: &str) -> &mut Self {
         self.icon = Some(name.to_string());
-        self.clone()
+        self
     }
 
     fn append_child<'a, T>(&'a mut self, child: T)
@@ -123,30 +125,31 @@ impl NodeContainer for Button {
 impl DefaultModifiers<Button> for Button {}
 
 impl Renderable for Button {
-    fn render(&self) -> Node {
-        let mut button = self.clone()
+    fn render(&mut self) -> Node {
+        let style = self.style.clone();
+        let mut button = self
             .add_class("button")
-            .add_class(format!("button--{:?}", self.style).to_lowercase().as_str())
+            .add_class(format!("button--{:?}", style).to_lowercase().as_str())
             .set_attr("role", "button");
 
         if button.label.is_none() && button.icon.is_some() {
-            button = button.add_class("button--icon-only");
+            button.add_class("button--icon-only");
         }
 
-        if let Some(icon) = button.icon {
-            let mut icon = Icon::new(icon.as_str())
+        if let Some(icon) = &button.icon {
+            let mut icon = Icon::new(icon)
                 .size(16);
             if button.label.is_none() {
-                icon = icon.size(24).stroke_width(2);
+               icon.size(24).stroke_width(2);
             }
             button.node.children.push(icon.render());
         }
 
-        if let Some(label) = button.label {
+        if let Some(label) = button.label.clone() {
             let text = Text::new(label.as_str(), TextStyle::Button).render();
             button.node.children.push(text);
         }
 
-        button.node
+        button.get_node().clone()
     }
 }

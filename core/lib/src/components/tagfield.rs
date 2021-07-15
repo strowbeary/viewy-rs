@@ -82,7 +82,7 @@ impl TagField {
 }
 
 impl Renderable for TagField {
-    fn render(&self) -> Node {
+    fn render(&mut self) -> Node {
         let mut field = self.clone()
             .add_class("tagfield");
 
