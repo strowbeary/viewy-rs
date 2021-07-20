@@ -13,8 +13,8 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, bas
         <html>
         <head>
             <title>{title}</title>
-            <link href='/app.css' rel='stylesheet'>
             {base_url}
+            <link href='/app.css' rel='stylesheet'>
             <script src='https://unpkg.com/@popperjs/core@2'></script>
             <script src='/app.js'></script>
             <meta charset='utf-8' />
