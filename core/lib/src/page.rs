@@ -8,12 +8,16 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, bas
         Some(url) => format!("<base href='{}/'>", url),
         None => "".to_string()
     };
+    let base_url = match base_url {
+        Some(url) => url,
+        None => "/".to_string()
+    };
     format!(r"
         <!doctype html>
         <html>
         <head>
             <title>{title}</title>
-            {base_url}
+            {base_elem}
             <link href='{base_url}/app.css' rel='stylesheet'>
             <script src='https://unpkg.com/@popperjs/core@2'></script>
             <script src='{base_url}/app.js'></script>
@@ -29,7 +33,8 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, bas
             title = title,
             content = content,
             theme_variant = theme_variant,
-            base_url = base_elem
+            base_elem = base_elem,
+            base_url = base_url
     )
 }
 
