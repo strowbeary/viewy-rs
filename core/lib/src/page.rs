@@ -10,7 +10,7 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, bas
     };
     let base_url = match base_url {
         Some(url) => url,
-        None => "/".to_string()
+        None => "/"
     };
     format!(r"
         <!doctype html>
