@@ -1,33 +1,37 @@
 use crate::components::*;
 use crate::node::*;
-use std::fmt;
+use std::{fmt, env};
 use crate::Renderable;
 
-fn get_full_html_page(title: String, content: String, theme_variant: String, base_url: &Option<String>) -> String {
-    let base_elem = match base_url {
-        Some(url) => format!("<base href='{}/'>", url),
-        None => "".to_string()
+fn get_full_html_page(title: String, content: String, theme_variant: String, insert_base_element: bool) -> String {
+    let base_url = match env::var("BASE_URL") {
+        Ok(url) => url,
+        Err(_) => "/".to_string()
     };
-    let base_url = match base_url {
-        Some(url) => url,
-        None => "/"
+    let base_elem = {
+        if insert_base_element {
+            format!("<base href='{}/'>", base_url)
+        } else {
+            "".to_string()
+        }
     };
+
     format!(r"
         <!doctype html>
         <html>
-        <head>
-            <title>{title}</title>
-            {base_elem}
-            <link href='{base_url}/app.css' rel='stylesheet'>
-            <script src='https://unpkg.com/@popperjs/core@2'></script>
-            <script src='{base_url}/app.js'></script>
-            <meta charset='utf-8' />
-            <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
-            <meta name='apple-mobile-web-app-capable' content='yes'>
-        </head>
-        <body class='app-themes--{theme_variant}'>
-            {content}
-        </body>
+            <head>
+                <title>{title}</title>
+                {base_elem}
+                <link href='{base_url}/app.css' rel='stylesheet'>
+                <script src='https://unpkg.com/@popperjs/core@2'></script>
+                <script src='{base_url}/app.js'></script>
+                <meta charset='utf-8' />
+                <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
+                <meta name='apple-mobile-web-app-capable' content='yes'>
+            </head>
+            <body class='app-themes--{theme_variant}'>
+                {content}
+            </body>
         </html>
     ",
             title = title,
@@ -94,7 +98,7 @@ pub struct Page<'a> {
     content: Box<dyn Renderable>,
     layout: &'a Fn(Box<dyn Renderable>) -> Box<dyn Renderable>,
     theme: Theme,
-    base_url: Option<String>,
+    base_url: bool,
 }
 
 impl<'a> Page<'a> {
@@ -105,11 +109,11 @@ impl<'a> Page<'a> {
             content: Box::new(content),
             layout,
             theme: Theme::Auto,
-            base_url: None,
+            base_url: false,
         }
     }
-    pub fn base_url(&mut self, base_url: &str) -> Self {
-        self.base_url = Some(base_url.to_string());
+    pub fn insert_base_element(&mut self) -> Self {
+        self.base_url = true;
         self.clone()
     }
     pub fn compile(&self, render_mode: RenderMode) -> String {
@@ -120,7 +124,7 @@ impl<'a> Page<'a> {
             RenderMode::Complete => {
                 get_full_html_page(page.name.clone(), {
                     (page.layout)(page.content.clone()).to_html()
-                }, theme_variant, &self.base_url)
+                }, theme_variant, self.base_url)
             }
             RenderMode::ContentOnly => {
                 page.content.to_html()
@@ -128,7 +132,7 @@ impl<'a> Page<'a> {
             RenderMode::LayoutOnly => {
                 get_full_html_page(page.name.clone(), {
                     (page.layout)(Box::new(ContentComment)).to_html()
-                }, theme_variant, &self.base_url)
+                }, theme_variant, self.base_url)
             }
         }
     }
