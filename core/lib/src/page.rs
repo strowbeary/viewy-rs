@@ -6,7 +6,7 @@ use crate::Renderable;
 fn get_full_html_page(title: String, content: String, theme_variant: String, insert_base_element: bool) -> String {
     let base_url = match env::var("BASE_URL") {
         Ok(url) => url,
-        Err(_) => "/".to_string()
+        Err(_) => "".to_string()
     };
     let base_elem = {
         if insert_base_element {
@@ -86,7 +86,7 @@ impl Renderable for ContentComment {
 ///
 /// **Example to get the full page**
 /// ```rust
-/// use viewy::page::RenderMode;
+/// use viewy::RenderMode;
 /// Page::new("Page name", layout::Default, {
 ///     View::new()
 /// })

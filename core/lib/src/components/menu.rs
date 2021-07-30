@@ -12,6 +12,45 @@ pub enum MenuStyle {
     Vertical,
 }
 
+//MENU SECTION
+
+#[derive(Debug, Clone)]
+pub struct MenuSection {
+    node: Node,
+    pub label: String,
+}
+
+impl MenuSection {
+    pub fn new(label: &str) -> Self {
+        Self {
+            node: Default::default(),
+            label: label.to_string(),
+        }
+    }
+}
+
+
+impl NodeContainer for MenuSection {
+    fn get_node(&mut self) -> &mut Node {
+        self.node.borrow_mut()
+    }
+}
+
+impl DefaultModifiers<MenuSection> for MenuSection {}
+
+impl Renderable for MenuSection {
+    fn render(&self) -> Node {
+        let mut menu_section = self.clone()
+            .add_class("menu-section");
+        menu_section.node.children.append(&mut vec![
+            Text::new(self.label.as_str(), TextStyle::Overline).render()
+        ]);
+        menu_section.node
+    }
+}
+
+// MENU ITEM
+
 #[derive(Debug, Clone)]
 pub struct MenuItem {
     node: Node,

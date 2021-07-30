@@ -10,7 +10,6 @@ fn get_stylesheets() -> Vec<String> {
             accent = theme.colors.accent.light,
             destructive = theme.colors.destructive.light
         ),
-
         format!(
             "$on-accent: {on_primary};",
             on_primary = theme.colors.on_accent.light,
@@ -54,6 +53,7 @@ fn get_scripts() -> Vec<String> {
         include_str!("../js/table.js").to_string(),
         include_str!("../js/popup.js").to_string(),
         include_str!("../js/file-input.js").to_string(),
+        include_str!("../js/searchable-input.js").to_string(),
     ]
 }
 
@@ -99,13 +99,15 @@ impl Assets {
         theme
     }
     fn compile_theme() -> String {
+        let stylesheets = get_stylesheets().join("");
         match grass::from_string(
-            get_stylesheets().join(""),
+            stylesheets,
             &grass::Options::default(),
         ) {
             Ok(css) => minifier::css::minify(css.as_str()).unwrap(),
             Err(err) => {
                 println!("{:?}", err);
+                println!("{}", get_stylesheets().join(""));
                 String::new()
             }
         }

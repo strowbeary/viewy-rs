@@ -33,6 +33,11 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                                 .icon("map")
                                 .action("/menus")
                         })
+                        .append_child({
+                            MenuItem::new("Search demo")
+                                .icon("search")
+                                .action("/search")
+                        })
                 })
         })
         .append_child({

@@ -1,8 +1,11 @@
-use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
+
+use uuid::Uuid;
+
+use crate::Renderable;
+use crate::components::{Button, Text, TextStyle, View};
 use crate::DefaultModifiers;
-use crate::{Renderable};
-use crate::components::{View, TextStyle, Text, Button};
+use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
 pub enum FieldType {
@@ -18,7 +21,7 @@ pub enum FieldType {
     Time,
     Url,
     Week,
-    Hidden
+    Hidden,
 }
 
 #[derive(Debug, Clone)]
@@ -33,6 +36,7 @@ pub struct TextField {
     pub field_type: FieldType,
     pub name: String,
     pub auto_sizing: bool,
+    pub datalist: bool,
 }
 
 impl NodeContainer for TextField {
@@ -56,6 +60,7 @@ impl TextField {
             field_type,
             name: name.to_string(),
             auto_sizing: false,
+            datalist: false,
         }
     }
 
@@ -94,6 +99,11 @@ impl TextField {
         self.leading_icon = Some(name.to_string());
         self.clone()
     }
+
+    pub fn async_datalist(&mut self, url: &str) -> Self {
+        self.datalist = true;
+        self.set_attr("data-async-datalist", url)
+    }
 }
 
 impl Renderable for TextField {
@@ -107,6 +117,10 @@ impl Renderable for TextField {
             .set_attr("type", format!("{:?}", field.field_type).to_lowercase().as_str())
             .set_attr("id", self.name.as_str())
             .set_attr("name", self.name.as_str());
+        if self.datalist {
+            let id = Uuid::new_v4().to_hyphenated().to_string();
+            input.set_attr("list", id.as_str());
+        }
 
         if let Some(value) = field.value {
             input.set_attr("value", &value);

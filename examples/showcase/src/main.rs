@@ -9,6 +9,8 @@ use viewy::*;
 use viewy::components::*;
 use crate::catchers::routes;
 use viewy::engine::Assets;
+use rocket::serde::{Serialize, Deserialize};
+use rocket::serde::json::Json;
 
 mod catchers;
 mod components;
@@ -91,6 +93,43 @@ fn menus() -> Html<String> {
     })
 }
 
+#[derive(Clone, Serialize, Deserialize)]
+#[serde(crate = "rocket::serde")]
+struct SearchResult<T: Serialize> {
+    pub label: String,
+    pub value: T
+}
+
+#[get("/search?<q>")]
+fn search(q: String) -> Json<Vec<SearchResult<String>>> {
+    Json(vec![
+        SearchResult {
+            label: q,
+            value: "test1".to_string()
+        },
+        SearchResult {
+            label: "Test 3".to_string(),
+            value: "test3".to_string()
+        },
+        SearchResult {
+            label: "Test 2".to_string(),
+            value: "test2".to_string()
+        }
+    ])
+}
+
+#[get("/search")]
+fn search_page() -> Html<String> {
+    Html({
+        Page::new(
+            "Viewy showcase – Search demo",
+            &layouts::default_layout,
+            pages::searchable_input_page(),
+        )
+            .compile(RenderMode::Complete)
+    })
+}
+
 #[launch]
 fn rocket() -> _ {
     rocket::build()
@@ -101,7 +140,9 @@ fn rocket() -> _ {
             login,
             table,
             calendar,
-            menus
+            menus,
+            search_page,
+            search
         ])
         .register("/", catchers::routes())
         .manage(Assets::new())
