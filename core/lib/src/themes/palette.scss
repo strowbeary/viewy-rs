@@ -46,14 +46,14 @@
     --color-on-accent: #{$on-accent};
     --color-accent-light: #{color.adjust($accent, $lightness: -15%)};
     --color-accent-lighter: #{color.adjust($accent, $lightness: -30%)};
+    --surface: #{$surface};
+    --surface-dark: #{color.adjust($surface, $lightness: -8%)};
     --surface-blue: #{color.adjust($accent, $alpha: -0.85)};
     --surface-red: #{color.adjust($destructive, $alpha: -0.9)};
     --surface-red-darker: #{color.adjust($destructive, $alpha: -0.8)};
     --color-border-blue: #{color.adjust($accent, $alpha: -0.25)};
     --background: $background;
     --background-raised: #{color.adjust($themed-on-background, $lightness: +88%)};
-    --surface: #{$surface};
-    --surface-dark: #{color.adjust($surface, $darkness: +10%)};
     --backdrop: #{color.adjust($themed-on-background, $alpha: -0.5)};
     --color-text: #{$themed-on-background};
     --color-text-secondary: #{color.adjust($themed-on-background, $lightness: +20%, $saturation: -50%)};

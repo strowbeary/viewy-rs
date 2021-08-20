@@ -2,50 +2,6 @@
   display: flex;
   align-items: stretch;
 
-  &--vertical {
-    flex-direction: column;
-
-    .menu-section {
-      margin-bottom: sp(16);
-
-      &__title {
-        margin-bottom: sp(8);
-      }
-    }
-
-    .menu-item + .menu-section {
-      margin-top: sp(16);
-    }
-
-    .menu-item {
-      margin-bottom: sp(6);
-      .text {
-        flex-grow: 1;
-      }
-    }
-  }
-
-  &--horizontal {
-    flex-direction: row;
-
-    .menu-section {
-      margin-right: sp(16);
-
-      &__title {
-        margin-right: sp(8);
-      }
-    }
-
-    .menu-item + .menu-section {
-      margin-right: sp(16);
-    }
-
-    .menu-item {
-      margin-right: sp(6);
-    }
-  }
-
-
   .menu-item {
     display: flex;
     flex-direction: row;
@@ -117,5 +73,80 @@
       stroke-width: sp(2) !important;
     }
 
+  }
+
+  &--vertical {
+    flex-direction: column;
+
+    .menu-section {
+      margin-bottom: sp(16);
+
+      &__title {
+        margin-bottom: sp(8);
+      }
+    }
+
+    .menu-item + .menu-section {
+      margin-top: sp(16);
+    }
+
+    .menu-item {
+      margin-bottom: sp(6);
+
+      .text {
+        flex-grow: 1;
+      }
+    }
+  }
+
+  &--horizontal-nav {
+    flex-direction: row;
+    gap: sp(4);
+
+    .menu-section {
+      margin-right: 0;
+
+      &__title {
+        margin-right: 0;
+      }
+    }
+
+    .menu-item + .menu-section {
+      margin-right: sp(0);
+    }
+
+    .menu-item {
+      margin-right: 0;
+      padding: sp(4);
+      gap: 0;
+      flex-direction: column;
+      .text {
+        font-size: sp(12);
+      }
+    }
+
+
+
+  &--horizontal-tab {
+    flex-direction: row;
+
+    .menu-section {
+      margin-right: sp(16);
+
+      &__title {
+        margin-right: sp(8);
+      }
+    }
+
+    .menu-item + .menu-section {
+      margin-right: sp(16);
+    }
+
+    .menu-item {
+      margin-right: sp(6);
+    }
+
+
+    }
   }
 }

@@ -37,6 +37,12 @@ impl Grid {
         self.node.node_style.push(("grid-template-columns".to_string(), schema.to_string()));
         self.clone()
     }
+
+    pub fn areas(&mut self, schema: &str) -> Self {
+        self.node.node_style.push(("grid-template-areas".to_string(), schema.to_string()));
+        self.clone()
+    }
+
     pub fn rows(&mut self, schema: &str) -> Self {
         self.node.node_style.push(("grid-template-rows".to_string(), schema.to_string()));
         self.clone()

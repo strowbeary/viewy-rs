@@ -10,9 +10,12 @@
   background: var(--backdrop);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 250ms, z-index 250ms;
+  transition: opacity 250ms, z-index 250ms, backdrop-filter 250ms;
   z-index: -1000;
+  backdrop-filter: blur(0px);
   &__window {
+    transition: transform 500ms ease;
+    transform: translateY(10px);
     pointer-events: none;
     margin: auto;
     background: var(--surface);
@@ -30,7 +33,9 @@
     z-index: 10000;
     opacity: 1;
     pointer-events: all;
+    backdrop-filter: blur(15px);
     .popup__window {
+      transform: translateY(0px);
       pointer-events: all;
     }
   }

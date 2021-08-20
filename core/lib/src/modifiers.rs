@@ -88,9 +88,14 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
         self.get_node().node_style.push(("max-height".to_string(), value.to_string()));
         self.clone()
     }
-    fn sticky(&mut self, top: i32) -> Self {
+    fn sticky_to_top(&mut self, top: i32) -> Self {
         self.get_node().node_style.push(("position".to_string(), "sticky".to_string(), ));
         self.get_node().node_style.push(("top".to_string(), sp(top)));
+        self.clone()
+    }
+    fn sticky_to_bottom(&mut self, bottom: i32) -> Self {
+        self.get_node().node_style.push(("position".to_string(), "sticky".to_string(), ));
+        self.get_node().node_style.push(("bottom".to_string(), sp(bottom)));
         self.clone()
     }
     fn align_self(&mut self, value: &str) -> Self {

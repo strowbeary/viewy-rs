@@ -1,17 +1,22 @@
 window.addEventListener("load", () => {
     document.querySelectorAll(".menu")
-        .forEach(menus => {
-            let entries = [...menus.querySelectorAll("a[href]")].sort((a, b) => {
-                let aLength = new URL(a.getAttribute("href"), document.baseURI).toString().length;
-                let bLength = new URL(b.getAttribute("href"), document.baseURI).toString().length;
-                return bLength - aLength;
-            });
-
-            entries.find((link) => {
-                let linkUrl = new URL(link.getAttribute("href")).toString();
-                window.location.path.includes(linkUrl)
-            })
-                .classList.add("menu-item--selected");
+        .forEach((menus) => {
+            let item = [...menus.querySelectorAll("a[href]")]
+                .sort((a, b) => {
+                    let aLength = a.getAttribute("href").length;
+                    let bLength = b.getAttribute("href").length;
+                    return bLength - aLength;
+                })
+                .find((link) => {
+                    let linkUrl = link.getAttribute("href");
+                    let href = window.location.href;
+                    let match =  href.toString().includes(linkUrl);
+                    console.log(href, linkUrl, match);
+                    return match;
+                });
+            console.log(item);
+            if (item) {
+                item.classList.add("menu-item--selected");
+            }
         });
-
 });

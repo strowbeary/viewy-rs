@@ -43,7 +43,7 @@ pub fn navigation_and_menus() -> VStack {
                     Text::new("Horizontal menu", TextStyle::H1)
                 })
                 .append_child({
-                    Menu::new(MenuStyle::Horizontal)
+                    Menu::new(MenuStyle::HorizontalTab)
                         .append_child({
                             MenuItem::new("Basic components")
                                 .icon("box")

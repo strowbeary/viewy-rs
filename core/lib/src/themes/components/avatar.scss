@@ -13,18 +13,18 @@
   }
 
   &--large {
-    width: sp(70);
-    height: sp(70);
-    line-height: sp(70);
-    font-size: sp(70) * $font-size;
+    width: sp(50);
+    height: sp(50);
+    line-height: sp(50);
+    font-size: sp(50) * $font-size;
     text-align: center;
   }
 
   &--x-large {
-    width: sp(105);
-    height: sp(105);
-    line-height: sp(105);
-    font-size: sp(105) * $font-size;
+    width: sp(80);
+    height: sp(80);
+    line-height: sp(80);
+    font-size: sp(80) * $font-size;
     text-align: center;
   }
 }

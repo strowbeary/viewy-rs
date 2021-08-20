@@ -104,7 +104,9 @@ impl Assets {
             stylesheets,
             &grass::Options::default(),
         ) {
-            Ok(css) => minifier::css::minify(css.as_str()).unwrap(),
+            Ok(css) => {
+                minifier::css::minify(css.as_str()).unwrap()
+            },
             Err(err) => {
                 println!("{:?}", err);
                 println!("{}", get_stylesheets().join(""));
@@ -115,5 +117,6 @@ impl Assets {
     fn compile_scripts() -> String {
         let joined_scripts: String = get_scripts().join("");
         minifier::js::minify(joined_scripts.as_str())
+
     }
 }

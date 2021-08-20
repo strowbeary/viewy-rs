@@ -8,7 +8,8 @@ use std::ops::Deref;
 
 #[derive(Debug, Clone)]
 pub enum MenuStyle {
-    Horizontal,
+    HorizontalTab,
+    HorizontalNav,
     Vertical,
 }
 
@@ -163,8 +164,11 @@ impl Renderable for Menu {
             MenuStyle::Vertical => {
                 menu = menu.add_class("menu--vertical")
             }
-            MenuStyle::Horizontal => {
-                menu = menu.add_class("menu--horizontal")
+            MenuStyle::HorizontalTab => {
+                menu = menu.add_class("menu--horizontal-tab")
+            }
+            MenuStyle::HorizontalNav => {
+                menu = menu.add_class("menu--horizontal-nav")
             }
         }
         self.children.iter()
