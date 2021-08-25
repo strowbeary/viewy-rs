@@ -12,6 +12,7 @@
   pointer-events: none;
   transition: opacity 250ms, z-index 250ms, backdrop-filter 250ms;
   z-index: -1000;
+  -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
   &__window {
     transition: transform 500ms ease;

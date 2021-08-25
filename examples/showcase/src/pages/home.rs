@@ -1,5 +1,6 @@
+use viewy::{DefaultModifiers, Overflow, scale, sp};
 use viewy::components::*;
-use viewy::{DefaultModifiers, sp, scale, Overflow};
+
 use crate::components::showcase_section;
 
 pub fn home() -> VStack {
@@ -130,20 +131,35 @@ as opposed to using 'Content here, content here', making it look like readable E
                             .append_child({
                                 PickerOption::new("Test 3", "3")
                             })
-                    }).append_child({
-                    Picker::new("test2", "2", PickerStyle::RadioGroup)
-                        .label("Radio group picker")
-                        .append_child({
-                            PickerOption::new("Test 1 - ignored icon", "1")
-                                .icon("user")
-                        })
-                        .append_child({
-                            PickerOption::new("Test 2", "2")
-                        })
-                        .append_child({
-                            PickerOption::new("Test 3", "3")
-                        })
-                })
+                    })
+                    .append_child({
+                        Picker::new("test2", "2", PickerStyle::RadioGroup)
+                            .label("Radio group picker")
+                            .append_child({
+                                PickerOption::new("Test 1 - ignored icon", "1")
+                                    .icon("user")
+                            })
+                            .append_child({
+                                PickerOption::new("Test 2", "2")
+                            })
+                            .append_child({
+                                PickerOption::new("Test 3", "3")
+                            })
+                    })
+                    .append_child({
+                        Picker::new("test2", "2", PickerStyle::Dropdown)
+                            .label("Dropdown picker")
+                            .append_child({
+                                PickerOption::new("Test 1 - ignored icon", "1")
+                                    .icon("user")
+                            })
+                            .append_child({
+                                PickerOption::new("Test 2", "2")
+                            })
+                            .append_child({
+                                PickerOption::new("Test 3", "3")
+                            })
+                    })
             })
         })
         .append_child({

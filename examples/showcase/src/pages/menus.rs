@@ -74,6 +74,40 @@ pub fn navigation_and_menus() -> VStack {
             Card::new(CardStyle::Raised)
                 .padding(vec![scale(3)])
                 .append_child({
+                    Text::new("Horizontal nav menu", TextStyle::H1)
+                })
+                .append_child({
+                    Menu::new(MenuStyle::HorizontalNav)
+                        .append_child({
+                            MenuItem::new("Basic components")
+                                .icon("box")
+                                .popover({
+                                    Popover::new()
+                                        .placement("bottom")
+                                        .padding(vec![scale(3)])
+                                        .append_child({
+                                            Text::new("Hello", TextStyle::Body)
+                                        })
+                                })
+                        })
+                        .append_child({
+                            MenuItem::new("Table")
+                                .icon("columns")
+                        })
+                        .append_child({
+                            MenuItem::new("Calendar")
+                                .icon("calendar")
+                        })
+                        .append_child({
+                            MenuItem::new("Navigation & menus")
+                                .icon("map")
+                        })
+                })
+        })
+        .append_child({
+            Card::new(CardStyle::Raised)
+                .padding(vec![scale(3)])
+                .append_child({
                     Text::new("Menu with sections", TextStyle::H1)
                 })
                 .append_child({
