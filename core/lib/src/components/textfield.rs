@@ -2,10 +2,10 @@ use std::borrow::BorrowMut;
 
 use uuid::Uuid;
 
-use crate::Renderable;
 use crate::components::{Button, Text, TextStyle, View};
 use crate::DefaultModifiers;
 use crate::node::{Node, NodeContainer};
+use crate::Renderable;
 
 #[derive(Debug, Clone)]
 pub enum FieldType {
@@ -114,7 +114,12 @@ impl Renderable for TextField {
         let mut input = View::new()
             .tag("input")
             .add_class("textfield__input")
-            .set_attr("type", format!("{:?}", field.field_type).to_lowercase().as_str())
+            .set_attr("type", &match &field.field_type {
+                FieldType::DateTimeLocal => { "datetime-local".to_string() }
+                field_type => {
+                    format!("{:?}", field_type).to_lowercase()
+                }
+            })
             .set_attr("id", self.name.as_str())
             .set_attr("name", self.name.as_str());
         if self.datalist {
