@@ -46,10 +46,10 @@ window.addEventListener("load", () => {
                     const response = await fetch(`${url}${e.target.value}`);
                     const suggestions = await response.json();
                     datalist.innerText = "";
-                    suggestions.Search.forEach(suggestion => {
+                    suggestions.forEach(suggestion => {
                         let option = document.createElement("option");
-                        option.setAttribute("value", suggestion.imdbID);
-                        option.text = suggestion.Title;
+                        option.setAttribute("value", suggestion.value);
+                        option.text = suggestion.label;
                         datalist.appendChild(option);
                     })
                 }
