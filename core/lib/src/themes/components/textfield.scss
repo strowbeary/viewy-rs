@@ -8,7 +8,7 @@
     border-radius: sp($border-radius);
     font-size: sp(16);
     border: sp(1) solid var(--color-border);
-    resize: vertical;
+    resize: none;
     font-family: Inter, sans-serif;
     overflow: hidden;
     overflow-y: auto;
@@ -24,6 +24,7 @@
     }
     &.type-textarea {
       padding: sp(12);
+      resize: vertical;
     }
     &:focus {
       padding: sp(8) sp(12);

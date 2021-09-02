@@ -92,6 +92,12 @@ impl Button {
             .set_attr("type", "submit")
     }
 
+
+    pub fn attach_to_file_input(&mut self, input_id: &str) -> Self {
+        self
+            .set_attr("data-input-file", &format!("file-input-{}", input_id))
+    }
+
     /// Set url to navigate to.
     pub fn action(&mut self, url: &str) -> Self {
         self
