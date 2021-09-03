@@ -67,7 +67,8 @@ impl Renderable for Checkbox {
         let mut checkbox = View::new()
             .tag("input")
             .set_attr("type", "checkbox")
-            .set_attr("name", self.name.as_str())
+            .set_attr("name", &self.name)
+            .set_attr("value", &self.value)
             .set_attr("id", radio_id.as_str());
 
 

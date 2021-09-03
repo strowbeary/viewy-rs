@@ -38,6 +38,7 @@ impl Button {
             icon: None,
         }
             .tag("button")
+            .set_attr("type", "button")
     }
 
 
@@ -51,6 +52,7 @@ impl Button {
             icon: Some(icon.to_string()),
         }
             .tag("button")
+            .set_attr("type", "button")
     }
 
     /// Change button style to destructive (red)

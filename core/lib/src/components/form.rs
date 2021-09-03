@@ -31,6 +31,7 @@ impl Form {
             is_async: false
         }
             .set_attr("id", name)
+            .set_attr("method", "POST")
     }
     pub fn async_form(&mut self) -> Self {
         self.is_async = true;
@@ -51,7 +52,6 @@ impl Renderable for Form {
         let mut form = self.clone()
             .add_class("form")
             .set_attr("action", &self.action)
-            .set_attr("method", "POST")
             .tag("form");
 
         if self.is_async {

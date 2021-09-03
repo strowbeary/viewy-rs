@@ -22,7 +22,9 @@ pub enum FieldType {
     Url,
     Week,
     Hidden,
+    TextArea
 }
+
 
 #[derive(Debug, Clone)]
 pub struct TextField {
@@ -112,23 +114,41 @@ impl Renderable for TextField {
             .add_class("textfield");
 
         let mut input = View::new()
-            .tag("input")
-            .add_class("textfield__input")
-            .set_attr("type", &match &field.field_type {
-                FieldType::DateTimeLocal => { "datetime-local".to_string() }
-                field_type => {
-                    format!("{:?}", field_type).to_lowercase()
-                }
+            .tag(&match &self.field_type {
+                FieldType::TextArea => "textarea",
+                _ => "input",
             })
+            .add_class("textfield__input")
+
             .set_attr("id", self.name.as_str())
             .set_attr("name", self.name.as_str());
-        if self.datalist {
+
+        match &self.field_type {
+            FieldType::TextArea => {}
+            _ => {
+                input.set_attr("type", &match &field.field_type {
+                    FieldType::DateTimeLocal => { "datetime-local".to_string() }
+                    field_type => {
+                        format!("{:?}", field_type).to_lowercase()
+                    }
+                });
+            }
+        }
+        if self.datalist && !matches!(field.field_type, FieldType::TextArea) {
             let id = Uuid::new_v4().to_hyphenated().to_string();
             input.set_attr("list", id.as_str());
         }
 
         if let Some(value) = field.value {
-            input.set_attr("value", &value);
+            match &self.field_type {
+                FieldType::TextArea => {
+                    input.node.text = Some(value);
+                }
+                _ => {
+                    input.set_attr("value", &value);
+                }
+            }
+
         }
         if !matches!(field.field_type, FieldType::Hidden) {
             if let Some(placeholder) = field.placeholder {

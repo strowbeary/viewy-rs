@@ -175,7 +175,7 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
         self.clone()
     }
     fn set_attr(&mut self, name: &str, value: &str) -> Self {
-        self.get_node().attributes.push((name.to_string(), value.to_string()));
+        self.get_node().attributes.insert(name.to_string(), value.to_string());
         self.clone()
     }
     fn grid_area(&mut self, name: &str) -> Self {

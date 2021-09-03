@@ -2,6 +2,7 @@ use crate::components::*;
 use crate::node::*;
 use std::{fmt, env};
 use crate::Renderable;
+use std::collections::HashMap;
 
 fn get_full_html_page(title: String, content: String, theme_variant: String, insert_base_element: bool) -> String {
     let base_url = match env::var("BASE_URL") {
@@ -73,7 +74,7 @@ impl Renderable for ContentComment {
             children: vec![],
             class_list: Default::default(),
             node_style: vec![],
-            attributes: vec![],
+            attributes: HashMap::new(),
             popover: Box::new(None),
             popup: Box::new(None)
         }

@@ -1,4 +1,4 @@
-use std::collections::HashSet;
+use std::collections::{HashSet, HashMap};
 use crate::components::{Popover, Popup};
 
 #[derive(Debug, Clone)]
@@ -15,7 +15,7 @@ pub struct Node {
     pub children: Vec<Node>,
     pub class_list: HashSet<String>,
     pub node_style: Vec<(String, String)>,
-    pub attributes: Vec<(String, String)>,
+    pub attributes: HashMap<String, String>,
     pub popover: Box<Option<Popover>>,
     pub popup: Box<Option<Popup>>,
 }
@@ -30,7 +30,7 @@ impl Default for Node {
             children: vec![],
             class_list,
             node_style: vec![],
-            attributes: vec![],
+            attributes: HashMap::new(),
             popover: Box::new(None),
             popup: Box::new(None),
         }
@@ -81,7 +81,7 @@ impl Node {
             .collect();
         match self.node_type.clone() {
             NodeType::Normal(tag_name) => format!(
-                "<{tag} class=\"{class_list}\" {attributes} style=\"{view_style}\">\n   {children}\n</{tag}>\n",
+                "<{tag} class=\"{class_list}\" {attributes} style=\"{view_style}\">{children}</{tag}>",
                 tag = tag_name,
                 class_list = classes.join(" "),
                 attributes = attributes.join(" "),
@@ -92,14 +92,14 @@ impl Node {
                 }
             ),
             NodeType::SelfClosing(tag_name) => format!(
-                "   <{tag} class=\"{class_list}\" {attributes} style=\"{view_style}\" />\n",
+                "<{tag} class=\"{class_list}\" {attributes} style=\"{view_style}\" />",
                 tag = tag_name,
                 class_list = classes.join(" "),
                 attributes = attributes.join(" "),
                 view_style = style.join("")
             ),
             NodeType::Comment(comment) => format!(
-                "<!--{comment}-->\n",
+                "<!--{comment}-->",
                 comment = comment
             )
         }
