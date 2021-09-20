@@ -69,22 +69,22 @@ impl MenuItem {
             label: label.to_string(),
         }
     }
-    pub fn icon(mut self, name: &str) -> Self {
+    pub fn icon(&mut self, name: &str) -> Self {
         self.icon = Some(name.to_string());
-        self
+        self.clone()
     }
 
-    pub fn icon_color(mut self, color: &str) -> Self {
+    pub fn icon_color(&mut self, color: &str) -> Self {
         self.icon_color = Some(color.to_string());
-        self
+        self.clone()
     }
 
-    pub fn action(mut self, url: &str) -> Self {
+    pub fn action(&mut self, url: &str) -> Self {
         self
             .set_attr("href", url)
             .tag("a")
     }
-    pub fn attach_to_file_input(mut self, input_id: &str) -> Self {
+    pub fn attach_to_file_input(&mut self, input_id: &str) -> Self {
         self
             .set_attr("data-input-file", &format!("file-input-{}", input_id))
     }
