@@ -1,10 +1,10 @@
-use crate::node::{Node, NodeContainer};
-use crate::{DefaultModifiers};
-use crate::Renderable;
 use std::borrow::BorrowMut;
-use crate::components::*;
 use std::ops::Deref;
 
+use crate::DefaultModifiers;
+use crate::components::*;
+use crate::node::{Node, NodeContainer};
+use crate::Renderable;
 
 #[derive(Debug, Clone)]
 pub enum MenuStyle {
@@ -56,6 +56,7 @@ impl Renderable for MenuSection {
 pub struct MenuItem {
     node: Node,
     pub icon: Option<String>,
+    pub icon_color: Option<String>,
     pub label: String,
 }
 
@@ -64,20 +65,26 @@ impl MenuItem {
         Self {
             node: Default::default(),
             icon: None,
+            icon_color: None,
             label: label.to_string(),
         }
     }
-    pub fn icon(&mut self, name: &str) -> Self {
+    pub fn icon(mut self, name: &str) -> Self {
         self.icon = Some(name.to_string());
-        self.clone()
+        self
     }
 
-    pub fn action(&mut self, url: &str) -> Self {
+    pub fn icon_color(mut self, color: &str) -> Self {
+        self.icon_color = Some(color.to_string());
+        self
+    }
+
+    pub fn action(mut self, url: &str) -> Self {
         self
             .set_attr("href", url)
             .tag("a")
     }
-    pub fn attach_to_file_input(&mut self, input_id: &str) -> Self {
+    pub fn attach_to_file_input(mut self, input_id: &str) -> Self {
         self
             .set_attr("data-input-file", &format!("file-input-{}", input_id))
     }
@@ -98,11 +105,14 @@ impl Renderable for MenuItem {
             .add_class("menu-item")
             .add_class("menu-item--normal");
         if let Some(icon) = menu_item.icon.clone() {
-            menu_item.node.children.append(&mut vec![
-                Icon::new(icon.as_str())
-                    .size(16)
-                    .render()
-            ]);
+            menu_item.node.children.append(&mut vec![{
+                let mut icon = Icon::new(icon.as_str())
+                    .size(16);
+                if let Some(icon_color) = &menu_item.icon_color {
+                    icon.color(icon_color);
+                }
+                icon.render()
+            }]);
         }
         if menu_item.node.popover.is_some() {
             menu_item.node.children.append(&mut vec![
@@ -110,7 +120,7 @@ impl Renderable for MenuItem {
                     .render(),
                 Icon::new("chevron-down")
                     .size(16)
-                    .render()
+                    .render(),
             ]);
         } else {
             menu_item.node.children.append(&mut vec![
