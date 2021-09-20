@@ -64,6 +64,7 @@ impl Button {
     pub fn disabled(&mut self, is_disabled: bool) -> Self {
         if is_disabled {
             self.add_class(format!("button--{:?}--disabled", self.style).to_lowercase().as_str())
+                .set_attr("disabled", "disabled")
         } else {
             self.clone()
         }
