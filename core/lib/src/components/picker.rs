@@ -108,6 +108,7 @@ impl Renderable for Picker {
                                     .tag("input")
                                     .set_attr("type", "radio")
                                     .set_attr("name", self.name.as_str())
+                                    .set_attr("value", option.value.as_str())
                                     .set_attr("id", radio_id.as_str())
                                     .add_class("picker--segmented__option-list__radio");
                                 if picker.value.eq(option.value.as_str()) {
