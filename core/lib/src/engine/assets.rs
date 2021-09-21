@@ -42,6 +42,7 @@ fn get_stylesheets() -> Vec<String> {
         include_str!("../themes/components/tag.scss").to_string(),
         include_str!("../themes/components/popup.scss").to_string(),
         include_str!("../themes/components/file-input.scss").to_string(),
+        include_str!("../themes/components/color-picker.scss").to_string(),
     ]
 }
 

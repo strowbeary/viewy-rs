@@ -21,3 +21,4 @@ palette = "0.5"
 uuid = { version = "0.8", features = ["v4"] }
 dyn-clone = "1.0.4"
 toml = "0.5"
+hex = "0.4"

@@ -1,0 +1,39 @@
+.color-picker {
+  display: flex;
+  flex-direction: column;
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  -webkit-touch-action: none;
+  touch-action: none;
+  width: max-content;
+  gap: sp(4);
+
+  &--palette {
+    &--option-list {
+      display: flex;
+      flex-direction: row;
+      gap: sp(8);
+
+      &--radio {
+        display: none;
+
+        &:checked + label {
+          box-shadow: 0px 0px 0px 2px var(--color-accent);
+        }
+      }
+
+      &--swatch {
+        cursor: pointer;
+        width: sp(24);
+        height: sp(24);
+        border-radius: sp($border-radius / 2);
+        background: currentColor;
+        border: 2px solid var(--background);
+        box-shadow: 0px 0px 0px 2px var(--color-border);
+
+      }
+    }
+  }
+}

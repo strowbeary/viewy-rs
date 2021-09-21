@@ -119,8 +119,8 @@ impl<'a> Page<'a> {
     }
     pub fn compile(&self, render_mode: RenderMode) -> String {
         let page = self;
-
         let theme_variant = page.theme.to_string().to_lowercase();
+
         match render_mode {
             RenderMode::Complete => {
                 get_full_html_page(page.name.clone(), {

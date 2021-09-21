@@ -21,6 +21,7 @@ mod avatar;
 mod tag;
 mod popup;
 mod file_input;
+mod color_picker;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
@@ -45,6 +46,7 @@ pub use avatar::*;
 pub use tag::*;
 pub use popup::*;
 pub use file_input::*;
+pub use color_picker::*;
 
 use crate::node::Node;
 use crate::Renderable;

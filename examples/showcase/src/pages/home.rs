@@ -262,4 +262,25 @@ as opposed to using 'Content here, content here', making it look like readable E
                     })
             })
         })
+        .append_child({
+            showcase_section("Color picker", {
+                VStack::new(Alignment::Stretch)
+                    .gap(vec![16])
+                    .append_child({
+                        ColorPicker::new("color-picker", ColorPickerStyle::Palette(vec![
+                            Color::from_hex("#131b23"),
+                            Color::from_hex("#1d5dea"),
+                            Color::from_hex("#ff674d"),
+                            Color::from_hex("#fba7de"),
+                            Color::from_hex("#fcba04"),
+                            Color::from_hex("#d4cdf4"),
+                            Color::from_hex("#06d6a0"),
+                            Color::from_hex("#58a4b0"),
+                            Color::from_hex("#e0cba8"),
+                            Color::from_hex("#a23b72")
+                        ]))
+                            .label("Choisir une couleur")
+                    })
+            })
+        })
 }
