@@ -1,9 +1,9 @@
-use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
-use crate::{DefaultModifiers, scale};
-use crate::{Renderable};
-use crate::components::*;
 
+use crate::{DefaultModifiers, scale};
+use crate::Renderable;
+use crate::components::*;
+use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
@@ -147,7 +147,9 @@ impl Renderable for Picker {
                     let mut select = View::new()
                         .tag("select")
                         .set_attr("name", self.name.as_str())
+                        .set_attr("value", self.value.as_str())
                         .set_attr("id", radio_id.as_str());
+
                     for option in picker.options {
                         select = select.append_child({
                             let mut option_element = View::new()
