@@ -147,7 +147,6 @@ impl Renderable for Picker {
                     let mut select = View::new()
                         .tag("select")
                         .set_attr("name", self.name.as_str())
-                        .set_attr("value", self.value.as_str())
                         .set_attr("id", radio_id.as_str());
 
                     for option in picker.options {
@@ -155,6 +154,9 @@ impl Renderable for Picker {
                             let mut option_element = View::new()
                                 .tag("option")
                                 .set_attr("value", &option.value);
+                            if option.value.eq(&self.value) {
+                                option_element.set_attr("selected", "selected")
+                            }
                             option_element.node.text = Some(option.label);
                             option_element
                         })
