@@ -155,7 +155,7 @@ impl Renderable for Picker {
                                 .tag("option")
                                 .set_attr("value", &option.value);
                             if option.value.eq(&self.value) {
-                                option_element.set_attr("selected", "selected")
+                                option_element.set_attr("selected", "selected");
                             }
                             option_element.node.text = Some(option.label);
                             option_element
