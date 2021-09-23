@@ -5,7 +5,7 @@ use crate::node::Node;
 use std::ops::Deref;
 use dyn_clone::{DynClone, clone_trait_object};
 
-pub trait Renderable: DynClone + Debug {
+pub trait Renderable: DynClone + Send + Sync + Debug {
     fn render(&self) -> Node;
 
     fn to_html(&self) -> String {
