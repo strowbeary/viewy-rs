@@ -62,6 +62,25 @@ impl Picker {
         self.clone()
     }
 
+
+
+    /// Make the button submit specified form
+    /// ```rust
+    ///View::new()
+    ///    .append_child({
+    ///        Form::new("formName", "/")
+    ///    })
+    ///    .append_child({
+    ///        Button::new("Submit", ButtonStyle::Filled)
+    ///            .attach_to_form("formName")
+    ///        })
+    /// ```
+    pub fn attach_to_form(&mut self, form_name: &str) -> Self {
+        self
+            .set_attr("form", form_name)
+    }
+
+
     pub fn append_child(&mut self, child: PickerOption) -> Self
     {
         self.options.push(child);
@@ -178,7 +197,8 @@ impl Renderable for Picker {
                                 .tag("input")
                                 .set_attr("type", "radio")
                                 .set_attr("name", self.name.as_str())
-                                .set_attr("id", radio_id.as_str());
+                                .set_attr("id", radio_id.as_str())
+                                .set_attr("value", option.value.as_str());
                             if picker.value.eq(option.value.as_str()) {
                                 radio_button.set_attr("checked", "checked");
                             }
