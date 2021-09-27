@@ -5,10 +5,12 @@ window.addEventListener("load", () => {
                 e.preventDefault();
                 let fileInput = document.getElementById(fileInputOpener.getAttribute("data-input-file"));
 
-                fileInput.addEventListener("change", () => {
-                    console.log("change");
-                    fileInput.closest("form").submit();
-                });
+                if (fileInput.hasAttribute("data-auto-submit")) {
+                    fileInput.addEventListener("change", () => {
+                        fileInput.closest("form").submit();
+                    });
+                }
+
                 fileInput.click();
             });
         });
