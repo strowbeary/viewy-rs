@@ -47,6 +47,7 @@ pub struct Row {
     node: Node,
     pub name: String,
     pub action: Option<String>,
+    pub action_target: Option<String>,
     pub download: Option<String>,
 }
 
@@ -73,6 +74,7 @@ impl Row {
             node: Default::default(),
             name: name.to_string(),
             action: None,
+            action_target: None,
             download: None
         }
     }
@@ -80,6 +82,11 @@ impl Row {
 
     pub fn action(&mut self, url: &str) -> Self {
         self.action = Some(url.to_string());
+        self.clone()
+    }
+
+    pub fn action_target(&mut self, target: &str) -> Self {
+        self.action_target = Some(target.to_string());
         self.clone()
     }
 
@@ -109,8 +116,11 @@ impl Renderable for Row {
                                 .tag("a")
                                 .set_attr("href", url)
                                 .append_child(child.clone());
+                            if let Some(target) = &self.action_target {
+                                link.set_attr("target", target);
+                            }
                             if let Some(file_name) = &self.download {
-                                link = link.set_attr("download", file_name);
+                                link.set_attr("download", file_name);
                             }
                             link
                         })
