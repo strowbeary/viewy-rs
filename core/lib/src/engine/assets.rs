@@ -48,6 +48,7 @@ fn get_stylesheets() -> Vec<String> {
 
 fn get_scripts() -> Vec<String> {
     vec![
+        include_str!("../js/popper.js").to_string(),
         include_str!("../js/async-form.js").to_string(),
         include_str!("../js/menu.js").to_string(),
         include_str!("../js/popover.js").to_string(),

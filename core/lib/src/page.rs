@@ -24,7 +24,6 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, ins
                 <title>{title}</title>
                 {base_elem}
                 <link href='{base_url}/app.css' rel='stylesheet'>
-                <script src='https://unpkg.com/@popperjs/core@2'></script>
                 <script src='{base_url}/app.js'></script>
                 <meta charset='utf-8' />
                 <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
