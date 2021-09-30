@@ -22,6 +22,7 @@ mod tag;
 mod popup;
 mod file_input;
 mod color_picker;
+mod signature_field;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
@@ -47,6 +48,7 @@ pub use tag::*;
 pub use popup::*;
 pub use file_input::*;
 pub use color_picker::*;
+pub use signature_field::*;
 
 use crate::node::Node;
 use crate::Renderable;

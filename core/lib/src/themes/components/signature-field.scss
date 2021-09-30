@@ -1,0 +1,9 @@
+.signature-field {
+  display: flex;
+  flex-direction: column;
+  gap: sp(4);
+  &__canvas {
+    width: sp(700);
+    height: sp(350);
+  }
+}

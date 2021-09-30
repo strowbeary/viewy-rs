@@ -130,6 +130,18 @@ fn search_page() -> Html<String> {
     })
 }
 
+#[get("/signature")]
+fn signature() -> Html<String> {
+    Html({
+        Page::new(
+            "Viewy showcase – Signature field",
+            &layouts::default_layout,
+            pages::signature_field(),
+        )
+            .compile(RenderMode::Complete)
+    })
+}
+
 #[launch]
 fn rocket() -> _ {
     rocket::build()
@@ -142,7 +154,8 @@ fn rocket() -> _ {
             calendar,
             menus,
             search_page,
-            search
+            search,
+            signature
         ])
         .register("/", catchers::routes())
         .manage(Assets::new())

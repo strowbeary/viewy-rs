@@ -38,6 +38,11 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                                 .icon("search")
                                 .action("/search")
                         })
+                        .append_child({
+                            MenuItem::new("Signature field")
+                                .icon("edit-2")
+                                .action("/signature")
+                        })
                 })
         })
         .append_child({

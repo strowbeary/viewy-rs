@@ -43,6 +43,7 @@ fn get_stylesheets() -> Vec<String> {
         include_str!("../themes/components/popup.scss").to_string(),
         include_str!("../themes/components/file-input.scss").to_string(),
         include_str!("../themes/components/color-picker.scss").to_string(),
+        include_str!("../themes/components/signature-field.scss").to_string(),
     ]
 }
 
@@ -56,6 +57,7 @@ fn get_scripts() -> Vec<String> {
         include_str!("../js/popup.js").to_string(),
         include_str!("../js/file-input.js").to_string(),
         include_str!("../js/searchable-input.js").to_string(),
+        include_str!("../js/signature-field.js").to_string(),
     ]
 }
 
