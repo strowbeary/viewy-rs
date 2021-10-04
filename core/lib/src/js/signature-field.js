@@ -5,8 +5,8 @@ window.addEventListener("load", () => {
             let input = field.querySelector("input");
             let ctx = canvas.getContext("2d");
 
-
             const dpr = window.devicePixelRatio || 1;
+
             const rect = canvas.getBoundingClientRect();
             // Give the canvas pixel dimensions of their CSS
             // size * the device pixel ratio.
@@ -101,7 +101,7 @@ window.addEventListener("load", () => {
             }
 
             function renderCanvas() {
-                if (drawing) {
+                 if (drawing) {
                     ctx.moveTo(lastPos.x, lastPos.y);
                     ctx.lineTo(mousePos.x, mousePos.y);
                     ctx.stroke();

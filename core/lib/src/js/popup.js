@@ -24,6 +24,7 @@ function closeAllPopover() {
                 });
                 const el = document.getElementById(popup.getAttribute("data-attach-to"));
                 el.addEventListener("click", e => {
+                    e.preventDefault();
                     if (popup.classList.contains("visible")) {
                         popup.classList.remove("visible");
                     } else {

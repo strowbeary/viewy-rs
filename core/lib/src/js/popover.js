@@ -33,6 +33,7 @@
                         popover.removeAttribute("data-show");
                     }
                     if(e.target.isSameNode(el) || el.contains(e.target)) {
+                        e.preventDefault();
                         popover.setAttribute("data-show", "data-show");
                     }
 
