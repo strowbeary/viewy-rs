@@ -6,8 +6,9 @@ use crate::components::{TextStyle, Text, View};
 
 #[derive(Debug, Clone)]
 pub struct TitleBar {
-    view: Node,
+    node: Node,
     pub title: String,
+    pub is_sticky: bool,
     pub left_item: Option<Box<dyn Renderable>>,
     pub right_item: Option<Box<dyn Renderable>>,
     pub bottom_item: Option<Box<dyn Renderable>>,
@@ -15,7 +16,7 @@ pub struct TitleBar {
 
 impl NodeContainer for TitleBar {
     fn get_node(&mut self) -> &mut Node {
-        self.view.borrow_mut()
+        self.node.borrow_mut()
     }
 }
 
@@ -24,17 +25,24 @@ impl DefaultModifiers<TitleBar> for TitleBar {}
 impl TitleBar {
     pub fn new(title: &str) -> Self {
         TitleBar {
-            view: Default::default(),
+            node: Default::default(),
             title: title.to_string(),
+            is_sticky: true,
             left_item: None,
             right_item: None,
             bottom_item: None,
         }
     }
     fn grid_areas(&mut self, schema: &str) -> Self {
-        self.view.node_style.push(("grid-template-areas".to_string(), schema.to_string()));
+        self.node.node_style.push(("grid-template-areas".to_string(), schema.to_string()));
         self.clone()
     }
+
+    pub fn sticky(&mut self, is_sticky: bool) -> Self {
+        self.is_sticky = is_sticky;
+        self.clone()
+    }
+
     pub fn left_item<'a, T>(&'a mut self, item: T) -> Self
         where
             T: 'static + Renderable,
@@ -71,28 +79,31 @@ impl Renderable for TitleBar {
         }
         let mut view = self.clone()
             .add_class("titlebar")
-            .grid_areas(areas.as_str())
-            .view;
+            .grid_areas(areas.as_str());
+
+        if self.is_sticky {
+            view.sticky_to_top(0);
+        }
 
         let text = Text::new(self.title.as_str(), TextStyle::LargeTitle)
             .grid_area("title")
             .render();
-        view.children.push(text);
+        view.node.children.push(text);
         if let Some(left_item) = self.left_item.clone() {
             let mut item = left_item.render();
             item.node_style.push(("grid-area".to_string(), "left_item".to_string()));
-            view.children.push(item);
+            view.node.children.push(item);
         }
         if let Some(right_item) = self.right_item.clone() {
             let mut item = right_item.render();
             item.node_style.push(("grid-area".to_string(), "right_item".to_string()));
-            view.children.push(item);
+            view.node.children.push(item);
         }
         if let Some(bottom_item) = self.bottom_item.clone() {
             let mut item = bottom_item.render();
             item.node_style.push(("grid-area".to_string(), "bottom_item".to_string()));
-            view.children.push(item);
+            view.node.children.push(item);
         }
-        view
+        view.node
     }
 }
