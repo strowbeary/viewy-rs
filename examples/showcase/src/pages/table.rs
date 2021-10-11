@@ -20,7 +20,7 @@ pub fn table() -> VStack {
                 .width("100%");
 
             for i in 1..100 {
-                table.append_row({
+                table.append_child({
                     Row::new(i.to_string().as_str())
                         .append_child({
                             Text::new(i.to_string().as_str(), TextStyle::Body)

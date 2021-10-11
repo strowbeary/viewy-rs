@@ -1,9 +1,9 @@
 use std::borrow::BorrowMut;
 
-use crate::Renderable;
 use crate::{DefaultModifiers, sp};
 use crate::components::*;
 use crate::node::{Node, NodeContainer};
+use crate::Renderable;
 
 #[derive(Debug, Clone)]
 pub struct Column {
@@ -102,7 +102,7 @@ impl Renderable for Row {
         let mut row = self.clone()
             .tag("tr");
         if self.action.is_some() {
-            row = row.add_class("clickable");
+            row.add_class("clickable");
         }
         let mut node = row.node;
         row.children.iter()
@@ -157,13 +157,14 @@ impl Table {
         }
     }
 
-    pub fn append_row(&mut self, row: Row) -> Self {
-        self.rows.push(row);
+    pub fn selectable(&mut self, is_selectable: bool) -> Self {
+        self.selectable = is_selectable;
         self.clone()
     }
 
-    pub fn selectable(&mut self, is_selectable: bool) -> Self {
-        self.selectable = is_selectable;
+    pub fn append_child(&mut self, row: Row) -> Self
+    {
+        self.rows.push(row);
         self.clone()
     }
 }
@@ -182,14 +183,11 @@ impl ChildContainer for Table {
     }
 }
 
-impl Appendable for Table {}
-
 impl Renderable for Table {
     fn render(&self) -> Node {
-        let mut table = self
-            .clone()
+        let mut table = self.clone()
             .tag("table");
-        table.append_child({
+        table.get_node().children.push({
             let mut colgroup = View::new()
                 .tag("colgroup");
             if self.selectable {
@@ -203,59 +201,54 @@ impl Renderable for Table {
                     colgroup.append_child(col);
                 });
             colgroup
-        });
+        }.render());
         if self.clone().columns.iter().any(|col| col.title.is_some()) {
-            table.append_child({
-                let mut thead = View::new()
-                    .tag("thead");
-                thead.append_child({
-                    let mut tr = View::new()
-                        .tag("tr");
-                    if self.selectable {
-                        tr.prepend_child({
-                            View::new()
-                                .tag("th")
-                        });
-                    }
-                    self.clone().columns.into_iter()
-                        .for_each(|col| {
-                            if let Some(title) = col.title {
-                                tr.append_child({
-                                    Text::new(title.as_str(), TextStyle::Headline)
-                                        .tag("th")
-                                });
-                            } else {
-                                tr.append_child({
-                                    View::new().tag("th")
-                                });
-                            }
-                        });
-                    tr
-                });
-                thead
-            });
+
+            table.get_node().children.push({
+                View::new()
+                    .tag("thead")
+                    .append_child({
+                        let mut tr = View::new()
+                            .tag("tr");
+                        if self.selectable {
+                            tr.prepend_child({
+                                View::new()
+                                    .tag("th")
+                            });
+                        }
+                        self.clone().columns.into_iter()
+                            .for_each(|col| {
+                                if let Some(title) = col.title {
+                                    tr.append_child({
+                                        Text::new(title.as_str(), TextStyle::Headline)
+                                            .tag("th")
+                                    });
+                                } else {
+                                    tr.append_child({
+                                        View::new().tag("th")
+                                    });
+                                }
+                            });
+                        tr
+                    })
+            }.render());
         }
 
 
-        table.append_child({
+        table.get_node().children.push({
             let mut tbody = View::new()
                 .tag("tbody");
-            self.clone().rows.into_iter()
-                .for_each(|mut row| {
-                    if self.selectable {
-                        row.prepend_child({
-                            Checkbox::new(&table.name, &row.name)
-                        });
-                    }
-                    tbody.append_child(row);
-                });
+            for mut row in self.clone().rows {
+                if self.selectable {
+                    row.prepend_child({
+                        Checkbox::new(&self.name, &row.name)
+                    });
+                }
+                tbody.append_child(row);
+            }
             tbody
-        });
+        }.render());
 
-        let mut view = table.node;
-        table.children.iter()
-            .for_each(|child|
-                view.children.push(child.render()));
-        view
+        table.node
     }
 }

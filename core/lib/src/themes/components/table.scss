@@ -11,6 +11,14 @@ table {
     }
   }
 
+
+  thead + tbody tr:first-of-type td {
+    border-top-color: var(--color-border);
+  }
+  thead + tbody tr:first-of-type.selected td {
+    border-top-color: var(--color-border-blue);
+  }
+
   tbody {
     tr {
       td {
