@@ -1,9 +1,9 @@
-use crate::{Renderable};
-use crate::node::{Node, NodeContainer};
-use crate::components::*;
 use std::borrow::BorrowMut;
-use crate::{DefaultModifiers, sp};
 
+use crate::Renderable;
+use crate::{DefaultModifiers, sp};
+use crate::components::*;
+use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
 pub struct Column {
@@ -75,7 +75,7 @@ impl Row {
             name: name.to_string(),
             action: None,
             action_target: None,
-            download: None
+            download: None,
         }
     }
 
@@ -204,35 +204,38 @@ impl Renderable for Table {
                 });
             colgroup
         });
-        table.append_child({
-            let mut thead = View::new()
-                .tag("thead");
-            thead.append_child({
-                let mut tr = View::new()
-                    .tag("tr");
-                if self.selectable {
-                    tr.prepend_child({
-                        View::new()
-                            .tag("th")
-                    });
-                }
-                self.clone().columns.into_iter()
-                    .for_each(|col| {
-                        if let Some(title) = col.title {
-                            tr.append_child({
-                                Text::new(title.as_str(), TextStyle::Headline)
-                                    .tag("th")
-                            });
-                        } else {
-                            tr.append_child({
-                                View::new().tag("th")
-                            });
-                        }
-                    });
-                tr
+        if self.clone().columns.iter().any(|col| col.title.is_some()) {
+            table.append_child({
+                let mut thead = View::new()
+                    .tag("thead");
+                thead.append_child({
+                    let mut tr = View::new()
+                        .tag("tr");
+                    if self.selectable {
+                        tr.prepend_child({
+                            View::new()
+                                .tag("th")
+                        });
+                    }
+                    self.clone().columns.into_iter()
+                        .for_each(|col| {
+                            if let Some(title) = col.title {
+                                tr.append_child({
+                                    Text::new(title.as_str(), TextStyle::Headline)
+                                        .tag("th")
+                                });
+                            } else {
+                                tr.append_child({
+                                    View::new().tag("th")
+                                });
+                            }
+                        });
+                    tr
+                });
+                thead
             });
-            thead
-        });
+        }
+
 
         table.append_child({
             let mut tbody = View::new()

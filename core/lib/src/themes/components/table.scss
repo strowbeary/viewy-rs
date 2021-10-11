@@ -21,6 +21,8 @@ table {
         &:last-of-type {
           padding-right: 0;
         }
+
+
         a {
           display: block;
           color: inherit;
@@ -34,7 +36,11 @@ table {
           border-bottom: sp(1) solid transparent;
         }
       }
-
+      &:first-of-type {
+        td {
+          border-top: sp(1) solid transparent;
+        }
+      }
       &.selected {
         td {
           border-color: var(--color-border-blue);
@@ -47,7 +53,7 @@ table {
       }
 
       &.selected + tr td {
-        border-color: var(--color-border-blue);
+        border-top-color: var(--color-border-blue);
 
       }
 

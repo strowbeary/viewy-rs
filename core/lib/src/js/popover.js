@@ -28,7 +28,6 @@
                     ],
                 });
                 window.addEventListener("click", e => {
-                    console.log("click on", e.target);
                     if (!(e.target.isSameNode(popover) || popover.contains(e.target))) {
                         popover.removeAttribute("data-show");
                     }
