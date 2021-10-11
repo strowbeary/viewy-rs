@@ -4,6 +4,7 @@
   align-items: center;
 
   input[type="checkbox"] {
+    -webkit-appearance: none;
     appearance: none;
     width: sp(16);
     height: sp(16);
