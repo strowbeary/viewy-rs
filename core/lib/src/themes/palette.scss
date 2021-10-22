@@ -3,9 +3,9 @@
 @mixin palette($variant) {
   @if($variant == "dark") {
     $on-primary: #ffffff;
-    $background: #121212;
+    $background: $background-dark;
     $on-background: #ffffff;
-    $surface: #181818;
+    $surface: $surface-dark;
     $themed-on-background: color.mix($on-background, $accent, $weight: 90%);
 
     --color-accent: #{color.adjust($accent, $lightness: +10%)};
@@ -37,9 +37,9 @@
 
   }
   @else {
-    $background: #ffffff;
+    $background: $background-light;
     $on-background: #000000;
-    $surface: #efefef;
+    $surface: $surface-light;
     $themed-on-background: color.mix($on-background, $accent, $weight: 85%);
 
     --color-accent: #{$accent};

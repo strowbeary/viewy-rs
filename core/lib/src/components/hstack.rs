@@ -49,6 +49,10 @@ impl HStack {
         self.node.node_style.push(("grid-gap".to_string(), params.join(" ")));
         self.clone()
     }
+    pub fn flex_wrap(&mut self) -> Self {
+        self.node.node_style.push(("flex-wrap".to_string(), "wrap".to_string()));
+        self.clone()
+    }
 }
 impl ChildContainer for HStack {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {

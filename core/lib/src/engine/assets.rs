@@ -4,19 +4,24 @@ fn get_stylesheets() -> Vec<String> {
     let theme = ThemeLoader::load_from_config_folder();
 
     vec![
-        format!(
-            "$accent: {accent};\
-            $destructive: {destructive};",
-            accent = theme.colors.accent.light,
-            destructive = theme.colors.destructive.light
-        ),
-        format!(
-            "$on-accent: {on_primary};",
-            on_primary = theme.colors.on_accent.light,
-        ),
-        format!(
-            "$border-radius: {border_radius};",
-            border_radius = theme.shapes.border_radius
+        format!("
+$accent: {accent};
+$destructive: {destructive};
+$on-accent: {on_accent};
+$border-radius: {border_radius};
+$background-light: {background_light};
+$background-dark: {background_dark};
+$surface-light: {surface_light};
+$surface-dark: {surface_dark};
+            ",
+                accent = theme.colors.accent.light,
+                destructive = theme.colors.destructive.light,
+                on_accent = theme.colors.on_accent.light,
+                border_radius = theme.shapes.border_radius,
+                background_light = theme.colors.background.light,
+                background_dark = theme.colors.background.dark,
+                surface_light = theme.colors.surface.light,
+                surface_dark = theme.colors.surface.dark
         ),
         include_str!("../themes/palette.scss").to_string(),
         include_str!("../themes/sizing.scss").to_string(),
@@ -50,7 +55,7 @@ fn get_stylesheets() -> Vec<String> {
 fn get_scripts() -> Vec<String> {
     vec![
         include_str!("../js/popper.js").to_string(),
-        include_str!("../js/async-form.js").to_string(),
+        include_str!("../js/form.js").to_string(),
         include_str!("../js/menu.js").to_string(),
         include_str!("../js/popover.js").to_string(),
         include_str!("../js/table.js").to_string(),
@@ -110,7 +115,7 @@ impl Assets {
         ) {
             Ok(css) => {
                 minifier::css::minify(css.as_str()).unwrap()
-            },
+            }
             Err(err) => {
                 println!("{:?}", err);
                 println!("{}", get_stylesheets().join(""));
@@ -121,6 +126,5 @@ impl Assets {
     fn compile_scripts() -> String {
         let joined_scripts: String = get_scripts().join("");
         minifier::js::minify(joined_scripts.as_str())
-
     }
 }

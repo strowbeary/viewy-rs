@@ -29,6 +29,14 @@ impl Card {
             style: style.clone(),
         }
     }
+
+    pub fn action(&mut self, url: &str) -> Self {
+        self
+            .tag("a")
+            .set_attr("href", url)
+            .add_class("clickable")
+            .clone()
+    }
 }
 
 

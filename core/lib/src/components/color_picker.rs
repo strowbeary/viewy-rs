@@ -15,6 +15,9 @@ impl Color {
         let color_parsed = <[u8; 3]>::from_hex(color_string).expect("color format not valid");
         Color(color_parsed[0], color_parsed[1], color_parsed[2])
     }
+
+    
+
     pub fn to_string(&self) -> String {
         let color_array = [self.0, self.1, self.2];
         hex::encode(color_array)

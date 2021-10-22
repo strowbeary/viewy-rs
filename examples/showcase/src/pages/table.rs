@@ -1,5 +1,5 @@
 use viewy::components::*;
-use viewy::DefaultModifiers;
+use viewy::{DefaultModifiers, scale, sp};
 
 pub fn table() -> VStack {
     VStack::new(Alignment::Stretch)

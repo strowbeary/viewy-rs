@@ -35,7 +35,7 @@ pub use textfield::{TextField, FieldType};
 pub use picker::{Picker, PickerStyle, PickerOption};
 pub use icon::Icon;
 pub use image::{Image, ObjectFit};
-pub use popover::Popover;
+pub use popover::{Popover, Placement};
 pub use hstack::HStack;
 pub use text::{Text, TextStyle};
 pub use form::Form;

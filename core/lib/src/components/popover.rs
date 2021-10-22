@@ -4,13 +4,29 @@ use crate::DefaultModifiers;
 use std::borrow::BorrowMut;
 use crate::components::*;
 
+#[derive(Debug, Clone)]
+pub enum Placement {
+    Auto,
+    TopStart,
+    Top,
+    TopEnd,
+    RightStart,
+    Right,
+    RightEnd,
+    BottomStart,
+    Bottom,
+    BottomEnd,
+    LeftStart,
+    Left,
+    LeftEnd
+}
 
 #[derive(Debug, Clone)]
 pub struct Popover {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
     pub el_to_attach_to: String,
-    pub placement: String
+    pub placement: Placement
 }
 
 impl NodeContainer for Popover {
@@ -27,7 +43,7 @@ impl Popover {
             children: vec![],
             node: Default::default(),
             el_to_attach_to: "".to_string(),
-            placement: "auto".to_string()
+            placement: Placement::Auto
         }
     }
 
@@ -36,8 +52,8 @@ impl Popover {
         self.clone()
     }
 
-    pub fn placement(&mut self, placement: &str) -> Self {
-        self.placement = placement.to_string();
+    pub fn placement(&mut self, placement: Placement) -> Self {
+        self.placement = placement;
         self.clone()
     }
 }
@@ -54,7 +70,21 @@ impl Renderable for Popover {
         let mut popover = self.clone()
             .add_class("popover")
             .set_attr("data-attach-to", self.el_to_attach_to.as_str())
-            .set_attr("data-placement", self.placement.as_str());
+            .set_attr("data-placement", match self.placement {
+                Placement::Auto => "auto",
+                Placement::TopStart => "top-start",
+                Placement::Top => "top",
+                Placement::TopEnd => "top-end",
+                Placement::RightStart => "right-start",
+                Placement::Right => "right",
+                Placement::RightEnd => "right-end",
+                Placement::BottomStart => "bottom-start",
+                Placement::Bottom => "bottom",
+                Placement::BottomEnd => "bottom-end",
+                Placement::LeftStart => "left-start",
+                Placement::Left => "left",
+                Placement::LeftEnd => "left-end",
+            });
 
         let arrow = View::new()
             .add_class("arrow")

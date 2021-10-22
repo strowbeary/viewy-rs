@@ -68,4 +68,8 @@ table {
 
     }
   }
+
+  &.alternate-row-color tbody tr:nth-child(2n+1) td {
+    background-color: var(--surface);
+  }
 }

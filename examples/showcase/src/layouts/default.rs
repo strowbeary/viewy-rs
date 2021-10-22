@@ -34,6 +34,11 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                                 .action("/menus")
                         })
                         .append_child({
+                            MenuItem::new("Forms")
+                                .icon("edit")
+                                .action("/forms")
+                        })
+                        .append_child({
                             MenuItem::new("Search demo")
                                 .icon("search")
                                 .action("/search")
@@ -67,6 +72,8 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                 })
                 .append_child({
                     View::new()
+                        .height("100%")
+                        .width("100%")
                         .padding(vec![16])
                         .append_child(content)
                 })

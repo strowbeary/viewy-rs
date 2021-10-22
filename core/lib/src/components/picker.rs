@@ -62,7 +62,13 @@ impl Picker {
         self.clone()
     }
 
-
+    pub fn submit_on_change(&mut self, submit_on_change: bool) -> Self {
+        if submit_on_change {
+            self.set_attr("data-auto-submit", "data-auto-submit")
+        } else {
+            self.unset_attr("data-auto-submit")
+        }
+    }
 
     /// Make the button submit specified form
     /// ```rust

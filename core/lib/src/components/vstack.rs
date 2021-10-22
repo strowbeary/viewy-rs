@@ -45,6 +45,10 @@ impl VStack {
         self.node.node_style.push(("justify-content".to_string(), value.to_string()));
         self.clone()
     }
+    pub fn flex_wrap(&mut self) -> Self {
+        self.node.node_style.push(("flex-wrap".to_string(), "wrap".to_string()));
+        self.clone()
+    }
 
 }
 impl ChildContainer for VStack {

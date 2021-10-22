@@ -141,6 +141,17 @@ fn signature() -> Html<String> {
             .compile(RenderMode::Complete)
     })
 }
+#[get("/forms")]
+fn forms() -> Html<String> {
+    Html({
+        Page::new(
+            "Viewy showcase – Forms",
+            &layouts::default_layout,
+            pages::forms(),
+        )
+            .compile(RenderMode::Complete)
+    })
+}
 
 #[launch]
 fn rocket() -> _ {
@@ -155,7 +166,8 @@ fn rocket() -> _ {
             menus,
             search_page,
             search,
-            signature
+            signature,
+            forms
         ])
         .register("/", catchers::routes())
         .manage(Assets::new())

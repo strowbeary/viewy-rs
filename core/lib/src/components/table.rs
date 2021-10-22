@@ -162,6 +162,11 @@ impl Table {
         self.clone()
     }
 
+    pub fn alternate_row_color(&mut self, is_alternate: bool) -> Self {
+        self.add_class("alternate-row-color");
+        self.clone()
+    }
+
     pub fn append_child(&mut self, row: Row) -> Self
     {
         self.rows.push(row);
@@ -220,7 +225,7 @@ impl Renderable for Table {
                             .for_each(|col| {
                                 if let Some(title) = col.title {
                                     tr.append_child({
-                                        Text::new(title.as_str(), TextStyle::Headline)
+                                        Text::new(title.as_str(), TextStyle::Label)
                                             .tag("th")
                                     });
                                 } else {
