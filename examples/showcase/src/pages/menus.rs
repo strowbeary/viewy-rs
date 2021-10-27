@@ -49,7 +49,7 @@ pub fn navigation_and_menus() -> VStack {
                                 .icon("box")
                                 .popover({
                                     Popover::new()
-                                        .placement("bottom")
+                                        .placement(Placement::Bottom)
                                         .padding(vec![scale(3)])
                                         .append_child({
                                             Text::new("Hello", TextStyle::Body)
@@ -83,7 +83,7 @@ pub fn navigation_and_menus() -> VStack {
                                 .icon("box")
                                 .popover({
                                     Popover::new()
-                                        .placement("bottom")
+                                        .placement(Placement::Bottom)
                                         .padding(vec![scale(3)])
                                         .append_child({
                                             Text::new("Hello", TextStyle::Body)
@@ -120,7 +120,7 @@ pub fn navigation_and_menus() -> VStack {
                                 .icon("box")
                                 .popover({
                                     Popover::new()
-                                        .placement("bottom")
+                                        .placement(Placement::Bottom)
                                         .padding(vec![scale(3)])
                                         .append_child({
                                             Text::new("Hello", TextStyle::Body)

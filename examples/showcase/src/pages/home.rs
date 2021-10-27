@@ -205,7 +205,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                         Button::new("Open popover 2", ButtonStyle::Filled)
                             .popover({
                                 Popover::new()
-                                    .placement("bottom-end")
+                                    .placement(Placement::BottomEnd)
                                     .append_child(Text::new("Popover content 2", TextStyle::H1))
                             })
                     })

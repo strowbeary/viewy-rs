@@ -1,12 +1,18 @@
 .text {
-
+  letter-spacing: -0.0222998em;
   &--largetitle {
-    font-size: sp(32);
+    font-size: sp(30);
     line-height: sp(40);
     font-weight: $fw-bold;
-    letter-spacing: sp(-0.022);
+    letter-spacing: sp(-0.021);
     &::first-letter {
       text-transform: uppercase;
+    }
+    @media screen and (max-width: 840px){
+      font-size: sp(20);
+      line-height: sp(28);
+      font-weight: $fw-bold;
+      letter-spacing: sp(-0.017);
     }
   }
 
@@ -14,7 +20,7 @@
     font-size: sp(24);
     line-height: sp(32);
     font-weight: $fw-bold;
-    letter-spacing: sp(-0.021);
+    letter-spacing: sp(-0.019);
   }
 
   &--subtitle1 {
@@ -28,7 +34,7 @@
     font-size: sp(20);
     line-height: sp(28);
     font-weight: $fw-semi-bold;
-    letter-spacing: sp(-0.019);
+    letter-spacing: sp(-0.017);
   }
 
 
@@ -36,7 +42,7 @@
     font-size: sp(16);
     line-height: sp(20);
     font-weight: $fw-medium;
-    letter-spacing: sp(-0.006);
+    letter-spacing: sp(-0.0011);
   }
 
   &--h3 {
@@ -57,13 +63,13 @@
     font-size: sp(16);
     line-height: sp(24);
     font-weight: $fw-bold;
-    letter-spacing: sp(-0.013);
+    letter-spacing: sp(-0.011);
   }
 
   &--body {
     font-size: sp(17);
     line-height: sp(22);
-    letter-spacing: sp(-0.011);
+    letter-spacing: sp(-0.013);
     font-weight: $fw-normal;
     code {
       font-family: 'Fira Mono', monospace;
@@ -74,6 +80,13 @@
       background: var(--color-hover);
       border-radius: sp($border-radius / 2);
     }
+  }
+
+  article &--body {
+    font-family: "Merriweather", serif;
+    font-size: sp(18);
+    line-height: sp(28);
+    letter-spacing: sp(-0.014);
   }
 
   &--button {
@@ -100,7 +113,7 @@
   &--caption {
     font-size: sp(13);
     line-height: sp(17);
-    letter-spacing: sp(0);
+    letter-spacing: sp(-0.003);
     font-weight: $fw-normal;
   }
 }

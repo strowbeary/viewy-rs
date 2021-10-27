@@ -23,6 +23,7 @@ mod popup;
 mod file_input;
 mod color_picker;
 mod signature_field;
+mod snackbar;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};

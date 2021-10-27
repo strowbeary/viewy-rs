@@ -96,13 +96,13 @@ impl Renderable for ContentComment {
 pub struct Page<'a> {
     name: String,
     content: Box<dyn Renderable>,
-    layout: &'a Fn(Box<dyn Renderable>) -> Box<dyn Renderable>,
+    layout: &'a dyn Fn(Box<dyn Renderable>) -> Box<dyn Renderable>,
     theme: Theme,
     base_url: bool,
 }
 
 impl<'a> Page<'a> {
-    pub fn new<C: 'static + Renderable>(name: &str, layout: &'a Fn(Box<dyn Renderable>) -> Box<dyn Renderable>, content: C) -> Self
+    pub fn new<C: 'static + Renderable>(name: &str, layout: &'a dyn Fn(Box<dyn Renderable>) -> Box<dyn Renderable>, content: C) -> Self
     {
         Self {
             name: name.to_string(),
