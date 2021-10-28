@@ -1,4 +1,5 @@
 use std::borrow::BorrowMut;
+use uuid::Uuid;
 
 use crate::{DefaultModifiers, scale};
 use crate::Renderable;
@@ -120,13 +121,14 @@ impl Renderable for Picker {
             let text = Text::new(label.as_str(), TextStyle::Label);
             picker.node.children.push(text.render());
         }
+        let picker_id = Uuid::new_v4().to_hyphenated().to_string();
         match self.style {
             PickerStyle::Segmented => {
                 picker.node.children.push({
                     let mut option_list = HStack::new(Alignment::Stretch)
                         .add_class("picker--segmented__option-list");
                     for option in picker.options {
-                        let radio_id = format!("picker-segmented-{}-{}", self.name.as_str(), option.label);
+                        let radio_id = format!("picker-segmented-{}-{}", picker_id, option.label);
                         option_list
                             .append_child({
                                 let mut radio = View::new()

@@ -1,4 +1,5 @@
 use hex::FromHex;
+use uuid::Uuid;
 
 use crate::{DefaultModifiers, Renderable};
 use crate::components::{Alignment, Appendable, HStack, Text, TextStyle, View};
@@ -65,6 +66,8 @@ impl ColorPicker {
         self.label = Some(label.to_string());
         self.clone()
     }
+
+
 }
 
 impl NodeContainer for ColorPicker {
@@ -86,13 +89,14 @@ impl Renderable for ColorPicker {
                 Text::new(label.as_str(), TextStyle::Label)
             }.render());
         }
+        let picker_id = Uuid::new_v4().to_hyphenated().to_string();
         match &self.style {
             ColorPickerStyle::Palette(color_palette) => {
                 picker.node.children.push({
                     let mut option_list = HStack::new(Alignment::Center)
                         .add_class(&format!("{}--option-list", &base_class));
                     for color in color_palette {
-                        let radio_id = format!("color-picker-{}-{}", self.name.as_str(), color.to_string());
+                        let radio_id = format!("color-picker-{}-{}", picker_id, color.to_string());
                         option_list
                             .append_child({
                                 View::new()
