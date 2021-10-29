@@ -15,6 +15,7 @@ pub struct Checkbox {
     name: String,
     value: String,
     checked: bool,
+    auto_submit: bool,
     children: Vec<Box<dyn Renderable>>,
 }
 
@@ -27,6 +28,7 @@ impl Checkbox {
             name: name.to_string(),
             value: value.to_string(),
             checked: false,
+            auto_submit: false,
             children: vec![],
         }
     }
@@ -40,6 +42,13 @@ impl Checkbox {
     /// Define the default state
     pub fn is_checked(&mut self, checked: bool) -> Self {
         self.checked = checked;
+        self.clone()
+    }
+
+    pub fn auto_submit(&mut self, is_auto_submit: bool) -> Self {
+        if is_auto_submit {
+            self.auto_submit = is_auto_submit;
+        }
         self.clone()
     }
 }
@@ -74,6 +83,9 @@ impl Renderable for Checkbox {
 
         if self.checked {
             checkbox.set_attr("checked", "checked");
+        }
+        if self.auto_submit {
+            checkbox.set_attr("data-auto-submit", &self.auto_submit.to_string());
         }
 
         let mut container = self.clone()

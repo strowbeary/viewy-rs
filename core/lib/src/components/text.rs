@@ -15,6 +15,7 @@ pub enum TextStyle {
     Subtitle2,
     Subtitle3,
     Body,
+    Article,
     Button,
     Label,
     Overline,
@@ -27,6 +28,7 @@ pub struct Text {
     node: Node,
     pub content: String,
     pub style: TextStyle,
+    pub no_wrap: bool,
 }
 
 impl Text {
@@ -37,6 +39,7 @@ impl Text {
             node,
             content: content.to_string(),
             style,
+            no_wrap: false
         }
     }
     pub fn bold(&mut self, is_bold: bool) -> Self {
@@ -45,6 +48,10 @@ impl Text {
         } else {
             self.get_node().node_style.push(("font-weight".to_string(), "normal".to_string()));
         }
+        self.clone()
+    }
+    pub fn no_wrap(&mut self, is_no_wrap: bool) -> Self {
+        self.no_wrap = is_no_wrap;
         self.clone()
     }
 }
@@ -59,9 +66,12 @@ impl DefaultModifiers<Text> for Text {}
 
 impl Renderable for Text {
     fn render(&self) -> Node {
-        let text = self.clone()
+        let mut text = self.clone()
             .add_class("text")
             .add_class(format!("text--{:?}", self.style).to_lowercase().as_str());
+        if self.no_wrap {
+            text.add_class("text--nowrap");
+        }
         text.node
     }
 }

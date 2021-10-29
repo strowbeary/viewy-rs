@@ -37,7 +37,6 @@
     letter-spacing: sp(-0.017);
   }
 
-
   &--subtitle2 {
     font-size: sp(16);
     line-height: sp(20);
@@ -82,7 +81,8 @@
     }
   }
 
-  article &--body {
+  &--article {
+    font-weight: $fw-normal;
     font-family: "Merriweather", serif;
     font-size: sp(18);
     line-height: sp(28);
@@ -115,5 +115,11 @@
     line-height: sp(17);
     letter-spacing: sp(-0.003);
     font-weight: $fw-normal;
+  }
+
+  &--nowrap {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
   }
 }

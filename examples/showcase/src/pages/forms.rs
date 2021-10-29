@@ -19,5 +19,10 @@ pub fn forms() -> VStack {
                            PickerOption::new("Three", "3")
                        })
                })
+               .append_child({
+                   Checkbox::new("auto-submit-checkbox", "hello")
+                       .label("Checkbox à soumission automatique")
+                       .auto_submit(true)
+               })
        })
 }
