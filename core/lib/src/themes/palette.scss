@@ -2,13 +2,14 @@
 
 @mixin palette($variant) {
   @if($variant == "dark") {
+    $accent: $accent-dark;
     $on-primary: #ffffff;
     $background: $background-dark;
     $on-background: #ffffff;
     $surface: $surface-dark;
     $themed-on-background: color.mix($on-background, $accent, $weight: 90%);
 
-    --color-accent: #{color.adjust($accent, $lightness: +10%)};
+    --color-accent: #{$accent};
     --color-accent-light: #{color.adjust($accent, $lightness: +20%)};
     --color-accent-lighter: #{color.adjust($accent, $lightness: +35%)};
     --surface: #{$surface};
@@ -37,6 +38,7 @@
 
   }
   @else {
+    $accent: $accent-light;
     $background: $background-light;
     $on-background: #000000;
     $surface: $surface-light;

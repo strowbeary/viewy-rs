@@ -5,7 +5,8 @@ fn get_stylesheets() -> Vec<String> {
 
     vec![
         format!("
-$accent: {accent};
+$accent-light: {accent_light};
+$accent-dark: {accent_dark};
 $destructive: {destructive};
 $on-accent: {on_accent};
 $border-radius: {border_radius};
@@ -14,7 +15,8 @@ $background-dark: {background_dark};
 $surface-light: {surface_light};
 $surface-dark: {surface_dark};
             ",
-                accent = theme.colors.accent.light,
+                accent_light = theme.colors.accent.light,
+                accent_dark = theme.colors.accent.dark,
                 destructive = theme.colors.destructive.light,
                 on_accent = theme.colors.on_accent.light,
                 border_radius = theme.shapes.border_radius,

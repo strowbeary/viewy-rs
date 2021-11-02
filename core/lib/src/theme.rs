@@ -1,6 +1,6 @@
 use std::path::Path;
 use std::fs::File;
-use std::fs;
+use std::{env, fs};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
@@ -88,9 +88,8 @@ pub struct ThemeLoader;
 
 impl ThemeLoader {
     pub fn load_from_config_folder() -> Theme {
-        let theme_path =
-            Path::new("./.viewy/theme.toml");
-        if theme_path.exists() {
+        let theme_path = Path::new("./.viewy/theme.toml");
+        let mut theme = if theme_path.exists() {
             fs::read_to_string(theme_path)
                 .map(|theme_config| -> Theme {
                     toml::from_str(&theme_config).expect("Can't parse theme config file")
@@ -98,6 +97,13 @@ impl ThemeLoader {
                 .expect("Can't open config file")
         } else {
             Theme::default()
-        }
+        };
+
+        theme.colors.accent.light = env::var("VIEWY_COLOR_ACCENT_LIGHT")
+            .unwrap_or(theme.colors.accent.light);
+        theme.colors.accent.dark = env::var("VIEWY_COLOR_ACCENT_DARK")
+            .unwrap_or(theme.colors.accent.dark);
+
+        theme
     }
 }
