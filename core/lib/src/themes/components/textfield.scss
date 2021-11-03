@@ -2,6 +2,7 @@
   display: grid;
   grid-template-areas: "label required" "input input" "helper_text helper_text";
   grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr auto;
   gap: sp(4);
   align-items: center;
 
@@ -33,11 +34,6 @@
       border-color: var(--color-border-hover);
     }
 
-    &.type-textarea {
-      padding: sp(12);
-      resize: vertical;
-    }
-
     &:focus {
       padding: sp(8) sp(12);
       border: sp(2) solid var(--color-accent);
@@ -50,6 +46,10 @@
     &:-moz-ui-invalid {
       box-shadow: none;
     }
+  }
+
+  textarea {
+    height: 100%;
   }
 
   &__helper-text {
