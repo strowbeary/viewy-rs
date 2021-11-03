@@ -1,16 +1,15 @@
-use crate::{Renderable};
-use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
-use crate::{DefaultModifiers};
+
+use crate::Renderable;
+use crate::DefaultModifiers;
 use crate::components::{Appendable, ChildContainer};
-
-
+use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
 pub struct FileInput {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
-    auto_submit: bool
+    auto_submit: bool,
 }
 
 impl NodeContainer for FileInput {
@@ -26,10 +25,18 @@ impl FileInput {
         FileInput {
             children: vec![],
             node: Node::default(),
-            auto_submit: false
+            auto_submit: false,
         }
             .set_attr("id", &format!("file-input-{}", name))
             .set_attr("name", name)
+    }
+
+    pub fn accept(&mut self, mime_types: &str) -> Self {
+        self.set_attr("accept", mime_types)
+    }
+
+    pub fn multiple(&mut self) -> Self {
+        self.set_attr("multiple", "multiple")
     }
 
     pub fn auto_submit(&mut self, is_auto_submit: bool) -> Self {
@@ -43,11 +50,11 @@ impl FileInput {
 
 impl Renderable for FileInput {
     fn render(&self) -> Node {
-
         let mut file_input = self.clone()
             .add_class("file-input")
             .set_attr("type", "file")
             .tag("input");
+
         if self.auto_submit {
             file_input.set_attr("data-auto-submit", &self.auto_submit.to_string());
         }
@@ -55,8 +62,9 @@ impl Renderable for FileInput {
         let mut node = file_input.node;
 
         self.children.iter()
-            .for_each(|child|
-                node.children.push(child.render()));
+            .for_each(|child| {
+                node.children.push(child.render());
+            });
         node
     }
 }

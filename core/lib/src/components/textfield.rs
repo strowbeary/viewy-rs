@@ -22,7 +22,7 @@ pub enum FieldType {
     Url,
     Week,
     Hidden,
-    TextArea
+    TextArea,
 }
 
 
@@ -165,12 +165,13 @@ impl Renderable for TextField {
                     input.set_attr("value", &value);
                 }
             }
-
         }
 
-        field.node.children.push(input.render());
+        if matches!(field.field_type, FieldType::Hidden) {
+            input.render()
+        } else {
+            field.node.children.push(input.render());
 
-        if !matches!(field.field_type, FieldType::Hidden) {
             if let Some(placeholder) = field.placeholder {
                 input.set_attr("placeholder", placeholder.as_str());
             }
@@ -182,15 +183,14 @@ impl Renderable for TextField {
                     .tag("label");
                 field.node.children.push(text.render());
             }
-        }
 
-        if !matches!(field.field_type, FieldType::Hidden) {
             if let Some(helper_text) = field.helper_text {
                 let text = Text::new(helper_text.as_str(), TextStyle::Caption)
                     .add_class("textfield__helper-text");
                 field.node.children.push(text.render());
             }
+
+            field.node
         }
-        field.node
     }
 }
