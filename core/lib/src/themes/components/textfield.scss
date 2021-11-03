@@ -1,8 +1,16 @@
 .textfield {
-  display: flex;
-  flex-direction: column;
+  display: grid;
+  grid-template-areas: "label required" "input input" "helper_text helper_text";
+  grid-template-columns: 1fr auto;
   gap: sp(4);
+  align-items: center;
+
+  &__label {
+    grid-area: label;
+  }
+
   &__input {
+    grid-area: input;
     padding: sp(9) sp(13);
     background: inherit;
     border-radius: sp($border-radius);
@@ -16,36 +24,53 @@
     font-weight: $fw-normal;
     outline: none;
     transition: border-color 150ms;
+
     &[type="file"] {
       display: none;
     }
+
     &:hover {
       border-color: var(--color-border-hover);
     }
+
     &.type-textarea {
       padding: sp(12);
       resize: vertical;
     }
+
     &:focus {
       padding: sp(8) sp(12);
       border: sp(2) solid var(--color-accent);
     }
 
+    &:invalid {
+      box-shadow: none;
+    }
+
+    &:-moz-ui-invalid {
+      box-shadow: none;
+    }
   }
+
   &__helper-text {
+    grid-area: helper_text;
     color: var(--color-text-secondary);
   }
+
   &--error {
-    .textfield{
+    .textfield {
       &__label {
         color: var(--color-destructive);
       }
+
       &__input {
         border-color: var(--color-destructive);
+
         &:hover {
           border-color: var(--color-destructive-light);
         }
       }
+
       &__helper-text {
         color: var(--color-destructive);
       }

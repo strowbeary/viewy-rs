@@ -39,6 +39,7 @@ pub struct TextField {
     pub name: String,
     pub auto_sizing: bool,
     pub datalist: bool,
+    pub required: bool,
 }
 
 impl NodeContainer for TextField {
@@ -63,6 +64,7 @@ impl TextField {
             name: name.to_string(),
             auto_sizing: false,
             datalist: false,
+            required: false,
         }
     }
 
@@ -106,6 +108,11 @@ impl TextField {
         self.datalist = true;
         self.set_attr("data-async-datalist", url)
     }
+
+    pub fn required(&mut self, is_required: bool) -> Self {
+        self.required = is_required;
+        self.clone()
+    }
 }
 
 impl Renderable for TextField {
@@ -122,6 +129,16 @@ impl Renderable for TextField {
 
             .set_attr("id", self.name.as_str())
             .set_attr("name", self.name.as_str());
+
+        if self.required {
+            input.set_attr("required", "required");
+            field.node.children.push({
+                Text::new("Requis", TextStyle::Caption)
+                    .color("var(--color-text-secondary)")
+                    .grid_area("required")
+                    .render()
+            });
+        }
 
         match &self.field_type {
             FieldType::TextArea => {}
@@ -150,6 +167,9 @@ impl Renderable for TextField {
             }
 
         }
+
+        field.node.children.push(input.render());
+
         if !matches!(field.field_type, FieldType::Hidden) {
             if let Some(placeholder) = field.placeholder {
                 input.set_attr("placeholder", placeholder.as_str());
@@ -163,7 +183,6 @@ impl Renderable for TextField {
                 field.node.children.push(text.render());
             }
         }
-        field.node.children.push(input.render());
 
         if !matches!(field.field_type, FieldType::Hidden) {
             if let Some(helper_text) = field.helper_text {

@@ -113,6 +113,19 @@ as opposed to using 'Content here, content here', making it look like readable E
                             .label("Label")
                             .error_message("Message d'erreur")
                     })
+                    .append_child({
+                        Form::new("required_test", "")
+                            .append_child({
+                                TextField::new("input5", FieldType::Text)
+                                    .label("Champ de text")
+                                    .helper_text("Indication sur le type de donnée à mettre dans le champ")
+                                    .required(true)
+                            })
+                            .append_child({
+                                Button::new("Valider", ButtonStyle::Filled)
+                                    .attach_to_form("required_test")
+                            })
+                    })
             })
         })
         .append_child({
