@@ -77,7 +77,7 @@ impl Renderable for FileInput {
                 field.node
             }
             FileInputType::Simple => {
-                Card::new(CardStyle::Raised)
+                Card::new(CardStyle::Outlined)
                     .add_class("file-input")
                     .add_class("file-input--simple")
                     .append_child({
@@ -109,7 +109,7 @@ impl Renderable for FileInput {
                     .render()
             }
             FileInputType::Image => {
-                Card::new(CardStyle::Raised)
+                Card::new(CardStyle::Outlined)
                     .overflow(Overflow::Hidden)
                     .add_class("file-input")
                     .add_class("file-input--image")
@@ -142,7 +142,6 @@ impl Renderable for FileInput {
                                         })
                                     ))
                                     .add_class("file-input__image-preview")
-                                    .height(&sp(200))
                             })
                             .append_child({
                                 HStack::new(Alignment::Center)

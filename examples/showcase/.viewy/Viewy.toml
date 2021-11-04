@@ -1,5 +1,0 @@
-[head]
-base_title = "Viewy showcase — {}"
-metas = [
-    { name = "author", content = "Rémi Caillot<remicaillot5@gmail.com>" }
-]

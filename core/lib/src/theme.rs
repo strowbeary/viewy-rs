@@ -4,6 +4,12 @@ use std::{env, fs};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+pub struct Features {
+    #[serde(rename = "rich-text-editor")]
+    pub rich_text_editor: bool,
+}
+
+#[derive(Deserialize, Serialize)]
 pub struct Colors {
     pub accent: Color,
     #[serde(rename = "on-accent")]
@@ -34,14 +40,18 @@ pub struct Shapes {
 }
 
 #[derive(Deserialize, Serialize)]
-pub struct Theme {
+pub struct Config {
+    pub features: Features,
     pub colors: Colors,
     pub shapes: Shapes,
 }
 
-impl Default for Theme {
+impl Default for Config {
     fn default() -> Self {
-        Theme {
+        Config {
+            features: Features {
+                rich_text_editor: false
+            },
             colors: Colors {
                 accent: Color {
                     dark: "#1d5dea".to_string(),
@@ -84,19 +94,19 @@ impl Default for Theme {
     }
 }
 
-pub struct ThemeLoader;
+pub struct ConfigLoader;
 
-impl ThemeLoader {
-    pub fn load_from_config_folder() -> Theme {
-        let theme_path = Path::new("./.viewy/theme.toml");
+impl ConfigLoader {
+    pub fn load_from_config_folder() -> Config {
+        let theme_path = Path::new("./viewy.toml");
         let mut theme = if theme_path.exists() {
             fs::read_to_string(theme_path)
-                .map(|theme_config| -> Theme {
+                .map(|theme_config| -> Config {
                     toml::from_str(&theme_config).expect("Can't parse theme config file")
                 })
                 .expect("Can't open config file")
         } else {
-            Theme::default()
+            Config::default()
         };
 
         theme.colors.accent.light = env::var("VIEWY_COLOR_ACCENT_LIGHT")

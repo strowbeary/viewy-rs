@@ -2,8 +2,8 @@ use std::borrow::BorrowMut;
 
 use uuid::Uuid;
 
-use crate::components::{Button, Text, TextStyle, View};
-use crate::DefaultModifiers;
+use crate::{DefaultModifiers, scale, sp};
+use crate::components::*;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
 
@@ -23,6 +23,7 @@ pub enum FieldType {
     Week,
     Hidden,
     TextArea,
+    RichTextArea,
 }
 
 
@@ -119,78 +120,181 @@ impl Renderable for TextField {
     fn render(&self) -> Node {
         let mut field = self.clone()
             .add_class("textfield");
-
-        let mut input = View::new()
-            .tag(&match &self.field_type {
-                FieldType::TextArea => "textarea",
-                _ => "input",
-            })
-            .add_class("textfield__input")
-
-            .set_attr("id", self.name.as_str())
-            .set_attr("name", self.name.as_str());
-
-        if self.required {
-            input.set_attr("required", "required");
-            field.node.children.push({
-                Text::new("Requis", TextStyle::Caption)
-                    .color("var(--color-text-secondary)")
-                    .grid_area("required")
-                    .render()
-            });
-        }
-
         match &self.field_type {
-            FieldType::TextArea => {}
-            _ => {
-                input.set_attr("type", &match &field.field_type {
-                    FieldType::DateTimeLocal => { "datetime-local".to_string() }
-                    field_type => {
-                        format!("{:?}", field_type).to_lowercase()
-                    }
+            FieldType::RichTextArea => {
+                let id = Uuid::new_v4().to_hyphenated().to_string();
+                let editor_id = &format!("editor-{}", id);
+                let toolbar_id = &format!("toolbar-{}", id);
+                field.node.children.push({
+                    Card::new(CardStyle::Outlined)
+                        .grid_area("input")
+                        .padding(vec![scale(3)])
+                        .append_child({
+                            HStack::new(Alignment::Center)
+                                .set_attr("id", &toolbar_id)
+                                .gap(vec![scale(4)])
+                                .append_child({
+                                    HStack::new(Alignment::Center)
+                                        .gap(vec![scale(2)])
+                                        .append_child({
+                                            Button::new("h1", ButtonStyle::Flat)
+                                                .padding(vec![8])
+                                                .width(&sp(32))
+                                                .height(&sp(32))
+                                                .add_class("ql-header")
+                                                .set_attr("value", "1")
+                                        })
+                                        .append_child({
+                                            Button::new("h2", ButtonStyle::Flat)
+                                                .padding(vec![8])
+                                                .width(&sp(32))
+                                                .height(&sp(32))
+                                                .add_class("ql-header")
+                                                .set_attr("value", "2")
+                                        })
+                                        .append_child({
+                                            Button::new("h3", ButtonStyle::Flat)
+                                                .padding(vec![8])
+                                                .width(&sp(32))
+                                                .height(&sp(32))
+                                                .add_class("ql-header")
+                                                .set_attr("value", "3")
+                                        })
+                                })
+                                .append_child({
+                                    HStack::new(Alignment::Center)
+                                        .gap(vec![scale(2)])
+                                        .append_child({
+                                            Button::icon_only("bold", ButtonStyle::Flat)
+                                                .add_class("ql-bold")
+                                        })
+                                        .append_child({
+                                            Button::icon_only("italic", ButtonStyle::Flat)
+                                                .add_class("ql-italic")
+                                        })
+                                        .append_child({
+                                            Button::icon_only("underline", ButtonStyle::Flat)
+                                                .add_class("ql-underline")
+                                        })
+                                })
+                                .append_child({
+                                    HStack::new(Alignment::Center)
+                                        .gap(vec![scale(2)])
+                                        .append_child({
+                                            Button::icon_only("list", ButtonStyle::Flat)
+                                                .add_class("ql-list")
+                                                .set_attr("value", "bullet")
+                                        })
+                                        .append_child({
+                                            Button::icon_only("link-2", ButtonStyle::Flat)
+                                                .add_class("ql-link")
+                                        })
+                                })
+                        })
+                        .append_child({
+                            View::new()
+                                .set_attr("id", editor_id)
+                        })
+                }.render());
+
+                if let Some(label) = field.label {
+                    let text = Text::new(label.as_str(), TextStyle::Label)
+                        .add_class("textfield__label")
+                        .set_attr("for", self.name.as_str())
+                        .tag("label");
+                    field.node.children.push(text.render());
+                }
+
+                if let Some(helper_text) = field.helper_text {
+                    let text = Text::new(helper_text.as_str(), TextStyle::Caption)
+                        .add_class("textfield__helper-text");
+                    field.node.children.push(text.render());
+                }
+
+                field.node.children.push({
+                    let mut script = View::new()
+                        .tag("script")
+                        .render();
+                    script.text = Some(format!("new Quill('#{}', {{ modules: {{ toolbar: '#{}' }} }})", editor_id, toolbar_id));
+                    script
                 });
-            }
-        }
-        if self.datalist && !matches!(field.field_type, FieldType::TextArea) {
-            let id = Uuid::new_v4().to_hyphenated().to_string();
-            input.set_attr("list", id.as_str());
-        }
 
-        if let Some(value) = field.value {
-            match &self.field_type {
-                FieldType::TextArea => {
-                    input.node.text = Some(value);
+                field.node
+            }
+            _ => {
+                let mut input = View::new()
+                    .tag(&match &self.field_type {
+                        FieldType::TextArea => "textarea",
+                        _ => "input",
+                    })
+                    .add_class("textfield__input")
+
+                    .set_attr("id", self.name.as_str())
+                    .set_attr("name", self.name.as_str());
+
+                if self.required {
+                    input.set_attr("required", "required");
+                    field.node.children.push({
+                        Text::new("Requis", TextStyle::Caption)
+                            .color("var(--color-text-secondary)")
+                            .grid_area("required")
+                            .render()
+                    });
                 }
-                _ => {
-                    input.set_attr("value", &value);
+
+                match &self.field_type {
+                    FieldType::TextArea => {}
+                    _ => {
+                        input.set_attr("type", &match &field.field_type {
+                            FieldType::DateTimeLocal => { "datetime-local".to_string() }
+                            field_type => {
+                                format!("{:?}", field_type).to_lowercase()
+                            }
+                        });
+                    }
+                }
+                if self.datalist && !matches!(field.field_type, FieldType::TextArea) {
+                    let id = Uuid::new_v4().to_hyphenated().to_string();
+                    input.set_attr("list", id.as_str());
+                }
+
+                if let Some(value) = field.value {
+                    match &self.field_type {
+                        FieldType::TextArea => {
+                            input.node.text = Some(value);
+                        }
+                        _ => {
+                            input.set_attr("value", &value);
+                        }
+                    }
+                }
+
+                if matches!(field.field_type, FieldType::Hidden) {
+                    input.render()
+                } else {
+                    field.node.children.push(input.render());
+
+                    if let Some(placeholder) = field.placeholder {
+                        input.set_attr("placeholder", placeholder.as_str());
+                    }
+
+                    if let Some(label) = field.label {
+                        let text = Text::new(label.as_str(), TextStyle::Label)
+                            .add_class("textfield__label")
+                            .set_attr("for", self.name.as_str())
+                            .tag("label");
+                        field.node.children.push(text.render());
+                    }
+
+                    if let Some(helper_text) = field.helper_text {
+                        let text = Text::new(helper_text.as_str(), TextStyle::Caption)
+                            .add_class("textfield__helper-text");
+                        field.node.children.push(text.render());
+                    }
+
+                    field.node
                 }
             }
-        }
-
-        if matches!(field.field_type, FieldType::Hidden) {
-            input.render()
-        } else {
-            field.node.children.push(input.render());
-
-            if let Some(placeholder) = field.placeholder {
-                input.set_attr("placeholder", placeholder.as_str());
-            }
-
-            if let Some(label) = field.label {
-                let text = Text::new(label.as_str(), TextStyle::Label)
-                    .add_class("textfield__label")
-                    .set_attr("for", self.name.as_str())
-                    .tag("label");
-                field.node.children.push(text.render());
-            }
-
-            if let Some(helper_text) = field.helper_text {
-                let text = Text::new(helper_text.as_str(), TextStyle::Caption)
-                    .add_class("textfield__helper-text");
-                field.node.children.push(text.render());
-            }
-
-            field.node
         }
     }
 }

@@ -71,5 +71,18 @@ pub fn forms() -> VStack {
                        })
                })
        })
+       .append_child({
+           VStack::new(Alignment::Stretch)
+               .gap(vec![scale(2)])
+               .append_child({
+                   Text::new("Rich text field", TextStyle::H1)
+               })
+               .append_child({
+                   Form::new("async-auto-submit-form", "")
+                       .append_child({
+                          TextField::new("richtext", FieldType::RichTextArea)
+                       })
+               })
+       })
 
 }

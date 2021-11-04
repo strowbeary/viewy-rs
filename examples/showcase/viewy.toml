@@ -1,3 +1,6 @@
+[features]
+rich-text-editor = true
+
 [colors]
 accent = { light = "#0052cc", dark = "#0052cc" }
 on-accent = { light = "#ffffff", dark = "#ffffff" }

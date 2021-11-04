@@ -1,9 +1,7 @@
-use crate::theme::ThemeLoader;
+use crate::theme::{Config, ConfigLoader};
 
-fn get_stylesheets() -> Vec<String> {
-    let theme = ThemeLoader::load_from_config_folder();
-
-    vec![
+fn get_stylesheets(config: &Config) -> Vec<String> {
+    let mut styles = vec![
         format!("
 $accent-light: {accent_light};
 $accent-dark: {accent_dark};
@@ -15,15 +13,15 @@ $background-dark: {background_dark};
 $surface-light: {surface_light};
 $surface-dark: {surface_dark};
             ",
-                accent_light = theme.colors.accent.light,
-                accent_dark = theme.colors.accent.dark,
-                destructive = theme.colors.destructive.light,
-                on_accent = theme.colors.on_accent.light,
-                border_radius = theme.shapes.border_radius,
-                background_light = theme.colors.background.light,
-                background_dark = theme.colors.background.dark,
-                surface_light = theme.colors.surface.light,
-                surface_dark = theme.colors.surface.dark
+                accent_light = config.colors.accent.light,
+                accent_dark = config.colors.accent.dark,
+                destructive = config.colors.destructive.light,
+                on_accent = config.colors.on_accent.light,
+                border_radius = config.shapes.border_radius,
+                background_light = config.colors.background.light,
+                background_dark = config.colors.background.dark,
+                surface_light = config.colors.surface.light,
+                surface_dark = config.colors.surface.dark
         ),
         include_str!("../themes/palette.scss").to_string(),
         include_str!("../themes/sizing.scss").to_string(),
@@ -51,11 +49,16 @@ $surface-dark: {surface_dark};
         include_str!("../themes/components/file-input.scss").to_string(),
         include_str!("../themes/components/color-picker.scss").to_string(),
         include_str!("../themes/components/signature-field.scss").to_string(),
-    ]
+    ];
+    if config.features.rich_text_editor {
+        styles.push(include_str!("../themes/quill.scss").to_string());
+    }
+
+    styles
 }
 
-fn get_scripts() -> Vec<String> {
-    vec![
+fn get_scripts(config: &Config) -> Vec<String> {
+    let mut scripts = vec![
         include_str!("../js/popper.js").to_string(),
         include_str!("../js/form.js").to_string(),
         include_str!("../js/menu.js").to_string(),
@@ -65,7 +68,11 @@ fn get_scripts() -> Vec<String> {
         include_str!("../js/file-input.js").to_string(),
         include_str!("../js/searchable-input.js").to_string(),
         include_str!("../js/signature-field.js").to_string(),
-    ]
+    ];
+    if config.features.rich_text_editor {
+        scripts.push(include_str!("../js/quill-editor.js").to_string());
+    }
+    scripts
 }
 
 
@@ -100,17 +107,18 @@ pub struct Assets {
 
 impl Assets {
     pub fn new() -> Self {
-        print!("Compiling theme");
+        print!("Load config");
+        let config = ConfigLoader::load_from_config_folder();
         let theme = Self {
-            script: Assets::compile_scripts(),
-            stylesheet: Assets::compile_theme(),
+            script: Assets::compile_scripts(&config),
+            stylesheet: Assets::compile_theme(&config),
         };
 
         println!(" [Done]");
         theme
     }
-    fn compile_theme() -> String {
-        let stylesheets = get_stylesheets().join("");
+    fn compile_theme(config: &Config) -> String {
+        let stylesheets = get_stylesheets(&config).join("");
         match grass::from_string(
             stylesheets,
             &grass::Options::default(),
@@ -120,13 +128,14 @@ impl Assets {
             }
             Err(err) => {
                 println!("{:?}", err);
-                println!("{}", get_stylesheets().join(""));
+                println!("{}", get_stylesheets(config).join(""));
                 String::new()
             }
         }
     }
-    fn compile_scripts() -> String {
-        let joined_scripts: String = get_scripts().join("");
-        minifier::js::minify(joined_scripts.as_str())
+    fn compile_scripts(config: &Config) -> String {
+        let joined_scripts: String = get_scripts(config).join("");
+        minifier::js::minify(joined_scripts.as_str());
+        joined_scripts
     }
 }
