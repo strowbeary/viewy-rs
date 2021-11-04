@@ -2,7 +2,7 @@ use std::borrow::BorrowMut;
 
 use uuid::Uuid;
 
-use crate::{DefaultModifiers, scale, sp};
+use crate::{DefaultModifiers, Overflow, scale, sp};
 use crate::components::*;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
@@ -128,11 +128,14 @@ impl Renderable for TextField {
                 field.node.children.push({
                     Card::new(CardStyle::Outlined)
                         .grid_area("input")
-                        .padding(vec![scale(3)])
+                        .overflow(Overflow::Hidden)
                         .append_child({
                             HStack::new(Alignment::Center)
+                                .padding(vec![scale(3)])
                                 .set_attr("id", &toolbar_id)
                                 .gap(vec![scale(4)])
+                                //.border_bottom(&format!("{} solid var(--color-border)", sp(1)))
+                                .background("var(--surface)")
                                 .append_child({
                                     HStack::new(Alignment::Center)
                                         .gap(vec![scale(2)])
@@ -193,6 +196,7 @@ impl Renderable for TextField {
                         })
                         .append_child({
                             View::new()
+                                .padding(vec![scale(3)])
                                 .set_attr("id", editor_id)
                         })
                 }.render());
