@@ -14,4 +14,29 @@ window.addEventListener("load", () => {
                 fileInput.click();
             });
         });
+    document.querySelectorAll(".file-input")
+        .forEach(fileInputComponent => {
+            fileInputComponent.querySelector(".file-input__button")
+                .addEventListener("click", e => {
+                    e.preventDefault();
+                    fileInputComponent.querySelector("input[type='file']")
+                        .click();
+                });
+        });
+    document.querySelectorAll(".file-input--simple")
+        .forEach(fileInputComponent => {
+            let fileInput = fileInputComponent.querySelector("input[type='file']");
+            fileInput.addEventListener("change", e => {
+                fileInputComponent.querySelector(".file-input__file-name").textContent = [...e.target.files].map(file => file.name).join(", ");
+            });
+        });
+
+    document.querySelectorAll(".file-input--image")
+        .forEach(fileInputComponent => {
+            let fileInput = fileInputComponent.querySelector("input[type='file']");
+            fileInput.addEventListener("change", e => {
+                fileInputComponent.querySelector(".file-input__file-name").textContent = [...e.target.files].map(file => file.name).join(", ");
+                fileInputComponent.querySelector(".file-input__image-preview").src = URL.createObjectURL(e.target.files[0]);
+            });
+        });
 });

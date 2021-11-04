@@ -6,6 +6,7 @@ extern crate html_escape;
 extern crate uuid;
 extern crate dyn_clone;
 extern crate toml;
+extern crate base64;
 
 pub use engine::Renderable;
 pub use helper_fn::*;

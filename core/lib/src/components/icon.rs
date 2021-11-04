@@ -49,6 +49,7 @@ impl Renderable for Icon {
     fn render(&self) -> Node {
         let mut icon = self.clone()
             .add_class("icon")
+            .set_attr("xmlns", "http://www.w3.org/2000/svg")
             .set_attr("width", sp(self.size).as_str())
             .set_attr("height", sp(self.size).as_str())
             .set_attr("viewBox", "0 0 24 24")
