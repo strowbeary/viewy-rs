@@ -122,6 +122,26 @@ impl Renderable for TextField {
             .add_class("textfield");
         match &self.field_type {
             FieldType::RichTextArea => {
+                field.add_class("textfield__rich-text-area");
+                let mut input = View::new()
+                    .tag("input")
+                    .add_class("textfield__input")
+                    .set_attr("type", "text")
+                    .display("none")
+                    .set_attr("id", self.name.as_str())
+                    .set_attr("name", self.name.as_str())
+                    .set_attr("value", &field.value.unwrap_or_default());
+
+                if self.required {
+                    input.set_attr("required", "required");
+                    field.node.children.push({
+                        Text::new("Requis", TextStyle::Caption)
+                            .color("var(--color-text-secondary)")
+                            .grid_area("required")
+                            .render()
+                    });
+                }
+
                 let id = Uuid::new_v4().to_hyphenated().to_string();
                 let editor_id = &format!("editor-{}", id);
                 let toolbar_id = &format!("toolbar-{}", id);
@@ -134,8 +154,8 @@ impl Renderable for TextField {
                                 .padding(vec![scale(3)])
                                 .set_attr("id", &toolbar_id)
                                 .gap(vec![scale(4)])
-                                //.border_bottom(&format!("{} solid var(--color-border)", sp(1)))
                                 .background("var(--surface)")
+                                .add_class("textfield__toolbar")
                                 .append_child({
                                     HStack::new(Alignment::Center)
                                         .gap(vec![scale(2)])
@@ -194,10 +214,14 @@ impl Renderable for TextField {
                                         })
                                 })
                         })
+                        .append_child(input)
                         .append_child({
-                            View::new()
+                            let mut editor = View::new()
+                                .add_class("textfield__editor")
                                 .padding(vec![scale(3)])
-                                .set_attr("id", editor_id)
+                                .set_attr("id", editor_id);
+                            editor.node.text = self.value.clone();
+                            editor
                         })
                 }.render());
 
@@ -222,6 +246,7 @@ impl Renderable for TextField {
                     script.text = Some(format!("new Quill('#{}', {{ modules: {{ toolbar: '#{}' }} }})", editor_id, toolbar_id));
                     script
                 });
+
 
                 field.node
             }

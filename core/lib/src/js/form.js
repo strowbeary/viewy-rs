@@ -1,5 +1,4 @@
 function asyncSubmit(form) {
-    console.log("Async form submit", form);
     const formData = new FormData(form);
     fetch(form.getAttribute("action"), {
         method: "POST",
@@ -11,7 +10,6 @@ function asyncSubmit(form) {
 window.addEventListener("load", () => {
     document.querySelectorAll("form[data-async]")
         .forEach(form => {
-            console.log("Async form", form);
             form.addEventListener("submit", e => {
                 e.preventDefault();
                 asyncSubmit(form)
@@ -54,5 +52,22 @@ window.addEventListener("load", () => {
                         }
                     })
                 });
+            form.querySelectorAll(".textfield__rich-text-area")
+                .forEach(field => {
+                    let input = field.querySelector(".textfield__input");
+                    let editor = field.querySelector(".textfield__editor");
+                    let toolbar = field.querySelector(".textfield__toolbar");
+
+                    let quill = new Quill(`#${editor.id}`, {
+                        modules: {
+                            toolbar: `#${toolbar.id}`
+                        }
+                    });
+
+                    quill.on('text-change', () => {
+                        console.log("text-change", editor.querySelector(".ql-editor").innerHTML);
+                        input.value = editor.querySelector(".ql-editor").innerHTML;
+                    });
+                })
         });
 });

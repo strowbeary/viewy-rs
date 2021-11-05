@@ -78,9 +78,16 @@ pub fn forms() -> VStack {
                    Text::new("Rich text field", TextStyle::H1)
                })
                .append_child({
-                   Form::new("async-auto-submit-form", "")
+                   Form::new("richtext-form", "")
                        .append_child({
                           TextField::new("richtext", FieldType::RichTextArea)
+                              .label("Éditeur de texte riche")
+                              .required(true)
+                              .value("Hello")
+                       })
+                       .append_child({
+                           Button::new("Enregistrer", ButtonStyle::Filled)
+                               .attach_to_form("richtext-form")
                        })
                })
        })
