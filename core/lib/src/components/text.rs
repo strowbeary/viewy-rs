@@ -56,8 +56,8 @@ impl Text {
         self.no_wrap = is_no_wrap;
         self.clone()
     }
-    pub fn disable_purification(&mut self, is_disabled: bool) -> Self {
-        self.encode_text = is_disabled;
+    pub fn disable_purification(&mut self) -> Self {
+        self.encode_text = false;
         self.clone()
     }
 }
