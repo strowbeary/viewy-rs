@@ -1,7 +1,9 @@
-use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
-use crate::{DefaultModifiers, Renderable};
+
 use html_escape::encode_text;
+
+use crate::{DefaultModifiers, Renderable};
+use crate::node::{Node, NodeContainer};
 
 /// Used to set the typographic style of a Text view.
 #[derive(Debug, Clone)]
@@ -29,17 +31,17 @@ pub struct Text {
     pub content: String,
     pub style: TextStyle,
     pub no_wrap: bool,
+    pub encode_text: bool,
 }
 
 impl Text {
     pub fn new(content: &str, style: TextStyle) -> Self {
-        let mut node = Node::default();
-        node.text = Some(encode_text(content).to_string());
         Text {
-            node,
+            node: Node::default(),
             content: content.to_string(),
             style,
-            no_wrap: false
+            no_wrap: false,
+            encode_text: true,
         }
     }
     pub fn bold(&mut self, is_bold: bool) -> Self {
@@ -52,6 +54,10 @@ impl Text {
     }
     pub fn no_wrap(&mut self, is_no_wrap: bool) -> Self {
         self.no_wrap = is_no_wrap;
+        self.clone()
+    }
+    pub fn disable_purification(&mut self, is_disabled: bool) -> Self {
+        self.encode_text = is_disabled;
         self.clone()
     }
 }
@@ -69,6 +75,11 @@ impl Renderable for Text {
         let mut text = self.clone()
             .add_class("text")
             .add_class(format!("text--{:?}", self.style).to_lowercase().as_str());
+        if self.encode_text {
+            text.node.text = Some(encode_text(&self.content).to_string());
+        } else {
+            text.node.text = Some(self.content.to_string());
+        }
         if self.no_wrap {
             text.add_class("text--nowrap");
         }
