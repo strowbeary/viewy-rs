@@ -10,6 +10,12 @@
     grid-area: label;
   }
 
+  &__editor {
+    p {
+      margin-bottom: sp(16);
+    }
+  }
+
   &__input {
     grid-area: input;
     padding: sp(9) sp(13);
