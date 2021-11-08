@@ -1,4 +1,5 @@
 use std::borrow::BorrowMut;
+use html_escape::encode_text;
 
 use uuid::Uuid;
 
@@ -130,7 +131,7 @@ impl Renderable for TextField {
                     .display("none")
                     .set_attr("id", self.name.as_str())
                     .set_attr("name", self.name.as_str())
-                    .set_attr("value", &field.value.unwrap_or_default());
+                    .set_attr("value", &encode_text(&field.value.unwrap_or_default()));
 
                 if self.required {
                     input.set_attr("required", "required");
