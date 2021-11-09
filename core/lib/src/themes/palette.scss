@@ -34,7 +34,7 @@
     --color-destructive-light: #{color.adjust($destructive, $lightness: 5%)};;
     --color-destructive-lighter: #{color.adjust($destructive, $lightness: 10%)};;
     --color-warning: #D86F48;
-    --color-text-disabled: #{color.adjust($themed-on-background, $lightness: -50%)};
+    --color-text-disabled: #{color.mix($background, $accent, $weight: 60%)};
 
   }
   @else {
@@ -59,7 +59,7 @@
     --backdrop: #{color.adjust($themed-on-background, $alpha: -0.5)};
     --color-text: #{$themed-on-background};
     --color-text-secondary: #{color.adjust($themed-on-background, $lightness: +20%, $saturation: -50%)};
-    --color-text-disabled: #{color.adjust($themed-on-background, $lightness: +50%, $saturation: -90%)};
+    --color-text-disabled: #{color.mix($background, $accent, $weight: 50%)};
     --color-border: #{color.adjust($themed-on-background, $lightness: +78%, $saturation: -80%)};
     --color-border-hover: #{color.adjust($themed-on-background, $lightness: +73%, $saturation: -60%)};
     --color-hover: #{color.adjust($themed-on-background, $alpha: -0.94)};
