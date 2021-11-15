@@ -22,6 +22,12 @@ function closeAllPopover() {
                         popup.classList.remove("visible");
                     }
                 });
+                popup.querySelectorAll(".popup__window-controls")
+                    .forEach(el => {
+                    el.addEventListener("click", () => {
+                        popup.classList.remove("visible");
+                    })
+                });
                 const el = document.getElementById(popup.getAttribute("data-attach-to"));
                 el.addEventListener("click", e => {
                     e.preventDefault();

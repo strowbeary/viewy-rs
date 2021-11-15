@@ -1,13 +1,15 @@
-use crate::{Renderable, DefaultModifiers};
-use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
-use crate::components::{ChildContainer, Appendable, View};
+
+use crate::{DefaultModifiers, Renderable};
+use crate::components::{Alignment, Appendable, Button, ButtonStyle, ChildContainer, HStack, View};
+use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
 pub struct Popup {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
     pub el_to_attach_to: String,
+    pub window_controls: bool,
 }
 
 impl NodeContainer for Popup {
@@ -24,6 +26,7 @@ impl Popup {
             children: vec![],
             node: Default::default(),
             el_to_attach_to: "".to_string(),
+            window_controls: true,
         }
     }
 
@@ -39,6 +42,11 @@ impl Popup {
                 self.remove_class("visible")
             }
         }.clone()
+    }
+
+    pub fn hide_window_controls(&mut self) -> Self {
+        self.window_controls = false;
+        self.clone()
     }
 }
 
@@ -58,9 +66,21 @@ impl Renderable for Popup {
             .set_attr("data-attach-to", self.el_to_attach_to.as_str());
         let mut window = View::new()
             .add_class("popup__window");
+
+        if self.window_controls {
+            window.node.children.push({
+                HStack::new(Alignment::Center)
+                    .background_color("var(--surface-dark)")
+                    .append_child({
+                        Button::icon_only("x", ButtonStyle::Link)
+                            .add_class("popup__window-controls")
+                    })
+            }.render());
+        }
+
         self.children.iter()
             .for_each(|child| {
-                window.node.children.push(child.render())
+                window.node.children.push(child.render());
             });
 
 

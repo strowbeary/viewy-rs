@@ -100,6 +100,10 @@ impl Button {
             .set_attr("data-input-file", &format!("file-input-{}", input_id))
     }
 
+    pub fn close_popup(&mut self) -> Self {
+        self.add_class("popup__window-controls")
+    }
+
     /// Set url to navigate to.
     pub fn action(&mut self, url: &str) -> Self {
         self
