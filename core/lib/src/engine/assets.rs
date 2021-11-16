@@ -49,6 +49,7 @@ $surface-dark: {surface_dark};
         include_str!("../themes/components/file-input.scss").to_string(),
         include_str!("../themes/components/color-picker.scss").to_string(),
         include_str!("../themes/components/signature-field.scss").to_string(),
+        include_str!("../themes/print.scss").to_string(),
     ];
     if config.features.rich_text_editor {
         styles.push(include_str!("../themes/quill.scss").to_string());

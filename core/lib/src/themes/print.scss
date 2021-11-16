@@ -1,0 +1,13 @@
+@media print {
+  .button,
+  .menu,
+  .textfield,
+  .picker,
+  .form,
+  .file-input,
+  .color-picker,
+  .checkbox,
+  .app-menu {
+    display: none;
+  }
+}
