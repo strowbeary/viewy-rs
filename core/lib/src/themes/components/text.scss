@@ -79,6 +79,16 @@
       background: var(--color-hover);
       border-radius: sp($border-radius / 2);
     }
+    a {
+      color: var(--color-accent);
+      text-decoration: underline;
+    }
+    p {
+      margin: 0;
+      & + p {
+        margin-top: sp(16);
+      }
+    }
   }
 
   &--article {
