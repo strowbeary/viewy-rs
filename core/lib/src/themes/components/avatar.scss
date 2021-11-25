@@ -27,4 +27,7 @@
     font-size: sp(80) * $font-size;
     text-align: center;
   }
+  &.clickable:hover {
+    background: var(--color-accent-lighter);
+  }
 }

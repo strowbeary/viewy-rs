@@ -59,6 +59,10 @@ impl Grid {
         self.node.node_style.push(("grid-auto-flow".to_string(), direction.to_string()));
         self.clone()
     }
+    pub fn align_items(&mut self, value: &str) -> Self {
+        self.node.node_style.push(("align-items".to_string(), value.to_string()));
+        self.clone()
+    }
 }
 
 impl ChildContainer for Grid {

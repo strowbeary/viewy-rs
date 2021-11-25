@@ -19,11 +19,11 @@ pub struct Avatar {
 }
 
 impl Avatar {
-    pub fn new(name: &str, profil_img: Option<&str>) -> Self {
+    pub fn new(name: &str, profil_img: &Option<String>) -> Self {
         Self {
             node: Default::default(),
             name: name.to_string(),
-            profil_img: profil_img.map(|url| url.to_string()),
+            profil_img: profil_img.clone(),
             size: Size::Normal
         }
     }
