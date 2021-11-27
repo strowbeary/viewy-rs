@@ -1,33 +1,33 @@
 window.addEventListener("load", () => {
     document.querySelectorAll(".signature-field")
         .forEach((field) => {
-            let canvas = field.querySelector("canvas");
-            let input = field.querySelector("input");
+            const id = field.getAttribute("data-signature-field-id");
+            let canvas = document.getElementById(`signature-field-${id}__canvas`);
+            if (canvas.parentElement) {
+                canvas.parentElement.style.width = "100vw";
+                canvas.parentElement.style.maxWidth = "100vw";
+                canvas.parentElement.style.height = "100vh";
+                canvas.parentElement.style.maxHeight = "100vh";
+                canvas.parentElement.style.overflow = "none";
+                canvas.parentElement.style.borderRadius = "0";
+            }
+            let input = document.getElementById(`signature-field-${id}__input`);
             let ctx = canvas.getContext("2d");
 
             const dpr = window.devicePixelRatio || 1;
 
-            const rect = canvas.getBoundingClientRect();
+            //const rect = canvas.getBoundingClientRect();
             // Give the canvas pixel dimensions of their CSS
             // size * the device pixel ratio.
-            canvas.width = rect.width * dpr;
-            canvas.height = rect.height * dpr;
 
-            ctx.lineWidth = 4 * dpr;
-            ctx.lineCap = "round";
-            ctx.lineJoin = "round";
-            ctx.imageSmoothingEnabled = true;
+            canvas.width = window.innerWidth * dpr;
+            canvas.height = window.innerHeight * dpr;
 
-            ctx.strokeStyle = getComputedStyle(document.body)
-                .getPropertyValue('--color-text');
+            window.addEventListener("resize", () => {
+                canvas.width = window.innerWidth * dpr;
+                canvas.height = window.innerHeight * dpr;
 
-            console.log(ctx.strokeStyle);
-
-            window.matchMedia("(prefers-color-scheme: dark)")
-                .addEventListener("change", e => {
-                    ctx.strokeStyle = getComputedStyle(document.body)
-                        .getPropertyValue('--color-text');
-                });
+            });
 
             let drawing = false;
             let mousePos = {
@@ -101,7 +101,13 @@ window.addEventListener("load", () => {
             }
 
             function renderCanvas() {
-                 if (drawing) {
+                ctx.strokeStyle = getComputedStyle(document.body)
+                    .getPropertyValue('--color-text');
+                if (drawing) {
+                    ctx.lineWidth = 4 * dpr;
+                    ctx.lineCap = "round";
+                    ctx.lineJoin = "round";
+                    ctx.imageSmoothingEnabled = true;
                     ctx.moveTo(lastPos.x, lastPos.y);
                     ctx.lineTo(mousePos.x, mousePos.y);
                     ctx.stroke();

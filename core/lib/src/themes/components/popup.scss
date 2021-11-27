@@ -15,6 +15,7 @@
   -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
   &__window {
+    position: relative;
     transition: transform 500ms ease;
     transform: translateY(10px);
     pointer-events: none;

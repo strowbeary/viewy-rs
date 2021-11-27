@@ -1,8 +1,9 @@
 use crate::{Renderable};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
+use uuid::Uuid;
 use crate::{DefaultModifiers};
-use crate::components::{Appendable, ChildContainer, View, Text, TextStyle, Card, CardStyle};
+use crate::components::{Appendable, ChildContainer, View, Text, TextStyle, Card, CardStyle, Button, ButtonStyle, Popup};
 
 
 
@@ -11,6 +12,7 @@ pub struct SignatureField {
     node: Node,
     pub label: Option<String>,
     pub name: String,
+    pub id: String,
 }
 
 impl NodeContainer for SignatureField {
@@ -26,7 +28,8 @@ impl SignatureField {
         SignatureField {
             node: Node::default(),
             label: None,
-            name: name.to_string()
+            name: name.to_string(),
+            id: Uuid::new_v4().to_hyphenated().to_string()
         }
     }
 
@@ -41,7 +44,8 @@ impl Renderable for SignatureField {
     fn render(&self) -> Node {
 
         let mut field = self.clone()
-            .add_class("signature-field");
+            .add_class("signature-field")
+            .set_attr("data-signature-field-id", &self.id);
 
         if let Some(label) = field.label {
             let text = Text::new(label.as_str(), TextStyle::Label)
@@ -51,9 +55,16 @@ impl Renderable for SignatureField {
             field.node.children.push(text.render());
         }
         field.node.children.push({
-            Card::new(CardStyle::Raised)
-                .tag("canvas")
-                .add_class("signature-field__canvas")
+           Button::new("Signer", ButtonStyle::Filled)
+               .popup({
+                   Popup::new()
+                       .append_child({
+                           View::new()
+                               .add_class("signature-field__canvas")
+                               .tag("canvas")
+                               .set_attr("id", &format!("signature-field-{}__canvas", self.id))
+                       })
+               })
         }.render());
 
         field.node.children.push({
@@ -62,7 +73,7 @@ impl Renderable for SignatureField {
                 .add_class("signature-field__input")
                 .set_attr("type", "hidden")
                 .set_attr("name", self.name.as_str())
-                .set_attr("id", &format!("signature-field-{}", self.name.as_str()))
+                .set_attr("id", &format!("signature-field-{}__input", self.id))
         }.render());
         field.node
     }

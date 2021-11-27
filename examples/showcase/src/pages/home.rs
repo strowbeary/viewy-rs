@@ -230,23 +230,23 @@ as opposed to using 'Content here, content here', making it look like readable E
                 VStack::new(Alignment::Stretch)
                     .gap(vec![16])
                     .append_child({
-                        Avatar::new("Rémi Caillot", None)
+                        Avatar::new("Rémi Caillot", &None)
                     })
                     .append_child({
-                        Avatar::new("Rémi Caillot", Some("https://lh3.googleusercontent.com/U8h85c4x-LmiRSLFoT_zmfbdboYMc3sDycMWW-7_8P2yyyC8ZqW_K9okYg1HlG62PodD0ftCw4_6qk_nGxuOrh5u444crsEIQYJpbCH_wubucJn6DZQoo4Wl1sfOqwFBqkCL61FLaCYgcmniQ8QfuwmO-oByPNahjUxTfiIR-xnbgfhVKV4m-XImAQyJAMEdAC9pM6AamFqUSu5I0MxUFiQhOOSZffRNIN0q54QY5mYqXzUCZ5IJDkvRzp-6daoR6BgCZ07zWPiLS4VAYzTLCiTLFUyZAiYQ-hWt-FudOIgqTI8MT9wEGu4MtmJYpX6ST1_fr-lM_dxMty-UTRC6AorCmKDQOygF5X5bgcagFCGXZcjVPQVbQTE8vAMYtY1z3quXMIcgISOT8qaUG81mFJ1jX3Quc_yUPre-CHqvR_h3xuwyRYvYKjcR2METom2YYZvcJlWJcIkpm2NsTgfwTthqRk_Ve8TGW6FPvCVHEHkbjO61xVhWFVyWq-kiERuyKhJfkmNwjoQuRQy5zPjlS0OrrztUyEC91aEc1kcB4OxIyuHCHpU1oovnj20Xg004uNlm26BWbwm5OurIveffVOt4McpY30G4uPU-oXd5Y7uzC0L5WTbSEIo21wSf62MQOkASAViXvnpiTf2p_7vhUDY7B2AlxH4dBsn6gvCJ3_HVhog_ckPqQ2AA2-NFCU_B_eK0su_C31qSHi370OfmXOkTzj9F-bOTQPnNFrMblQUWgAUxJ1xmKlpUoejrhKoGE_8Q_WN7G8V5-PvV=w506-h912-no?authuser=0"))
+                        Avatar::new("Rémi Caillot", &Some("https://lh3.googleusercontent.com/U8h85c4x-LmiRSLFoT_zmfbdboYMc3sDycMWW-7_8P2yyyC8ZqW_K9okYg1HlG62PodD0ftCw4_6qk_nGxuOrh5u444crsEIQYJpbCH_wubucJn6DZQoo4Wl1sfOqwFBqkCL61FLaCYgcmniQ8QfuwmO-oByPNahjUxTfiIR-xnbgfhVKV4m-XImAQyJAMEdAC9pM6AamFqUSu5I0MxUFiQhOOSZffRNIN0q54QY5mYqXzUCZ5IJDkvRzp-6daoR6BgCZ07zWPiLS4VAYzTLCiTLFUyZAiYQ-hWt-FudOIgqTI8MT9wEGu4MtmJYpX6ST1_fr-lM_dxMty-UTRC6AorCmKDQOygF5X5bgcagFCGXZcjVPQVbQTE8vAMYtY1z3quXMIcgISOT8qaUG81mFJ1jX3Quc_yUPre-CHqvR_h3xuwyRYvYKjcR2METom2YYZvcJlWJcIkpm2NsTgfwTthqRk_Ve8TGW6FPvCVHEHkbjO61xVhWFVyWq-kiERuyKhJfkmNwjoQuRQy5zPjlS0OrrztUyEC91aEc1kcB4OxIyuHCHpU1oovnj20Xg004uNlm26BWbwm5OurIveffVOt4McpY30G4uPU-oXd5Y7uzC0L5WTbSEIo21wSf62MQOkASAViXvnpiTf2p_7vhUDY7B2AlxH4dBsn6gvCJ3_HVhog_ckPqQ2AA2-NFCU_B_eK0su_C31qSHi370OfmXOkTzj9F-bOTQPnNFrMblQUWgAUxJ1xmKlpUoejrhKoGE_8Q_WN7G8V5-PvV=w506-h912-no?authuser=0".to_string()))
                     })
                     .append_child({
                         HStack::new(Alignment::Center)
                             .append_child({
-                                Avatar::new("Rémi Caillot", None)
+                                Avatar::new("Rémi Caillot", &None)
                                     .size(Size::XLarge)
                             })
                             .append_child({
-                                Avatar::new("Rémi Caillot", None)
+                                Avatar::new("Rémi Caillot", &None)
                                     .size(Size::Large)
                             })
                             .append_child({
-                                Avatar::new("Rémi Caillot", None)
+                                Avatar::new("Rémi Caillot", &None)
                                     .size(Size::Normal)
                             })
                     })

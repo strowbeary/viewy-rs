@@ -3,7 +3,13 @@
   flex-direction: column;
   gap: sp(4);
   &__canvas {
+    display: block;
+    position: absolute;
+    top: sp(32);
+    left: 0;
+    right: 0;
+    bottom: 0;
     width: 100%;
-    height: sp(350);
+    height: calc(100% - #{sp(32)});
   }
 }
