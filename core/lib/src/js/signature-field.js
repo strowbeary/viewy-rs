@@ -61,12 +61,12 @@ window.addEventListener("load", () => {
             const id = field.getAttribute("data-signature-field-id");
             let canvas = document.getElementById(`signature-field-${id}__canvas`);
             if (canvas.parentElement) {
-                canvas.parentElement.style.width = "100vw";
-                canvas.parentElement.style.maxWidth = "100vw";
-                canvas.parentElement.style.height = "100vh";
-                canvas.parentElement.style.maxHeight = "100vh";
-                canvas.parentElement.style.overflow = "none";
-                canvas.parentElement.style.borderRadius = "0";
+                canvas.parentElement.parentElement.parentElement.style.width = "100vw";
+                canvas.parentElement.parentElement.parentElement.style.maxWidth = "100vw";
+                canvas.parentElement.parentElement.parentElement.style.height = "100vh";
+                canvas.parentElement.parentElement.parentElement.style.maxHeight = "100vh";
+                canvas.parentElement.parentElement.parentElement.style.overflow = "none";
+                canvas.parentElement.parentElement.parentElement.style.borderRadius = "0";
             }
             let input = document.getElementById(`signature-field-${id}__input`);
             let ctx = canvas.getContext("2d");

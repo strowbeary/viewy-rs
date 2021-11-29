@@ -1,11 +1,11 @@
-use crate::{Renderable};
-use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
+
 use uuid::Uuid;
-use crate::{DefaultModifiers};
-use crate::components::{Appendable, ChildContainer, View, Text, TextStyle, Card, CardStyle, Button, ButtonStyle, Popup};
 
-
+use crate::{Renderable, scale};
+use crate::DefaultModifiers;
+use crate::components::{Alignment, Appendable, Button, ButtonStyle, Card, CardStyle, ChildContainer, HStack, Popup, Text, TextStyle, View, VStack};
+use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
 pub struct SignatureField {
@@ -13,6 +13,7 @@ pub struct SignatureField {
     pub label: Option<String>,
     pub name: String,
     pub id: String,
+    pub form_name: Option<String>,
 }
 
 impl NodeContainer for SignatureField {
@@ -29,7 +30,8 @@ impl SignatureField {
             node: Node::default(),
             label: None,
             name: name.to_string(),
-            id: Uuid::new_v4().to_hyphenated().to_string()
+            id: Uuid::new_v4().to_hyphenated().to_string(),
+            form_name: None,
         }
     }
 
@@ -37,12 +39,15 @@ impl SignatureField {
         self.label = Some(label.to_string());
         self.clone()
     }
+    pub fn attach_to_form(&mut self, form_name: &str) -> Self {
+        self.form_name = Some(form_name.to_string());
+        self.clone()
+    }
 }
 
 
 impl Renderable for SignatureField {
     fn render(&self) -> Node {
-
         let mut field = self.clone()
             .add_class("signature-field")
             .set_attr("data-signature-field-id", &self.id);
@@ -55,16 +60,41 @@ impl Renderable for SignatureField {
             field.node.children.push(text.render());
         }
         field.node.children.push({
-           Button::new("Signer", ButtonStyle::Filled)
-               .popup({
-                   Popup::new()
-                       .append_child({
-                           View::new()
-                               .add_class("signature-field__canvas")
-                               .tag("canvas")
-                               .set_attr("id", &format!("signature-field-{}__canvas", self.id))
-                       })
-               })
+            Button::new("Signer", ButtonStyle::Filled)
+                .popup({
+                    Popup::new()
+                        .hide_window_controls()
+                        .append_child({
+                            VStack::new(Alignment::Stretch)
+                                .width("100%")
+                                .height("100%")
+                                .gap(vec![scale(2)])
+                                .padding(vec![scale(4)])
+                                .append_child({
+                                    View::new()
+                                        .add_class("signature-field__canvas-container")
+                                        .width("100%")
+                                        .height("100%")
+                                        .append_child({
+                                            Card::new(CardStyle::Raised)
+                                                .add_class("signature-field__canvas-container__canvas")
+                                                .tag("canvas")
+                                                .set_attr("id", &format!("signature-field-{}__canvas", self.id))
+                                        })
+                                })
+                                .append_child({
+                                    let mut sign_button = Button::new("Signer", ButtonStyle::Filled)
+                                        .align_self("flex-end")
+                                        .close_popup();
+                                    if let Some(form_name) = &self.form_name {
+                                        sign_button = sign_button
+                                            .set_attr("form", form_name)
+                                            .set_attr("type", "submit");
+                                    }
+                                    sign_button
+                                })
+                        })
+                })
         }.render());
 
         field.node.children.push({
