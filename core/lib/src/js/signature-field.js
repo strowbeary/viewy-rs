@@ -1,5 +1,6 @@
 // MIT http://rem.mit-license.org
 
+
 function trim(c) {
     let ctx = c.getContext('2d'),
         copy = document.createElement('canvas').getContext('2d'),
@@ -56,6 +57,25 @@ function trim(c) {
 }
 
 window.addEventListener("load", () => {
+
+    const $body = document.querySelector('body');
+
+    const scrollLocker = {
+        enable() {
+            $body.style.overflow = 'hidden';
+            $body.style.position = 'fixed';
+            $body.style.top = `0px`;
+            $body.style.bottom = `0px`;
+            $body.style.width = '100%';
+        },
+        disable() {
+            $body.style.removeProperty('overflow');
+            $body.style.removeProperty('position');
+            $body.style.removeProperty('top');
+            $body.style.removeProperty('bottom');
+            $body.style.removeProperty('width');
+        }
+    };
     document.querySelectorAll(".signature-field")
         .forEach((field) => {
             const id = field.getAttribute("data-signature-field-id");
@@ -109,7 +129,7 @@ window.addEventListener("load", () => {
 
             // Add touch event support for mobile
             canvas.addEventListener("touchstart", function (e) {
-
+                scrollLocker.enable();
             }, false);
 
             canvas.addEventListener("touchmove", function (e) {
@@ -132,6 +152,7 @@ window.addEventListener("load", () => {
             }, false);
 
             canvas.addEventListener("touchend", function (e) {
+                scrollLocker.disable();
                 let me = new MouseEvent("mouseup", {});
                 canvas.dispatchEvent(me);
             }, false);

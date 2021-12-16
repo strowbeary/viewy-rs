@@ -1,13 +1,14 @@
-use crate::node::{Node, NodeContainer};
 use std::collections::HashMap;
+
 use crate::{DefaultModifiers, sp};
-use crate::{Renderable};
+use crate::Renderable;
+use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
 pub enum Size {
     Normal,
     Large,
-    XLarge
+    XLarge,
 }
 
 #[derive(Debug, Clone)]
@@ -15,7 +16,7 @@ pub struct Avatar {
     node: Node,
     name: String,
     profil_img: Option<String>,
-    size: Size
+    size: Size,
 }
 
 impl Avatar {
@@ -24,7 +25,7 @@ impl Avatar {
             node: Default::default(),
             name: name.to_string(),
             profil_img: profil_img.clone(),
-            size: Size::Normal
+            size: Size::Normal,
         }
     }
 
@@ -51,17 +52,39 @@ impl Renderable for Avatar {
                 Size::Large => "large",
                 Size::XLarge => "x-large",
             }));
-        if let Some(profile_img) = self.profil_img.clone()  {
+        if let Some(profile_img) = self.profil_img.clone() {
             avatar = avatar.background_image(&profile_img);
         } else {
             let initials: Vec<char> = self.name
                 .clone()
                 .split(" ")
-                .map(|part|  part.chars().nth(0).unwrap())
+                .filter(|word| {
+                    !vec!["le", "de", "des", "la", "les"].contains(&word.to_lowercase().as_str())
+                })
+                .map(|part| part.chars().nth(0).unwrap_or_default())
                 .collect();
             let text_content: String = initials[0..2].iter().collect();
             avatar.get_node().text = Some(text_content.to_uppercase());
         }
         avatar.get_node().clone()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use crate::components::Avatar;
+    use crate::Renderable;
+
+    #[test]
+    fn test_different_names() {
+        let names = vec![
+            "Rémi Caillot",
+            "Estelle Le Marre",
+            "Jean-François Cano",
+        ];
+        for name in names {
+            let avatar = Avatar::new(name, &None);
+            println!("{} => {}", name, avatar.to_html())
+        }
     }
 }

@@ -20,6 +20,7 @@ mod modifiers;
 mod page;
 /// Module containing all ui components of viewy-rs
 pub mod components;
+pub mod layouts;
 
 pub mod engine;
 mod theme;
