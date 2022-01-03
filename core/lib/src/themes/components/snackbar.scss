@@ -1,0 +1,43 @@
+@keyframes slideinout {
+  0% {
+    transform: translate(0, -50vh) scale(0);
+    transform-origin: center center;
+    opacity: 0;
+  }
+  10% {
+    transform: translate(0, -50vh) scale(0);
+    opacity: 0;
+  }
+  20% {
+    transform: translate(0, -50vh) scale(1);
+    opacity: 1;
+  }
+
+  80% {
+    transform: translate(0, -50vh) scale(1);
+    transform-origin: center center;
+  }
+  100% {
+    transform-origin: right bottom;
+    transform: translate(0, -#{sp(16)}) scale(1);
+  }
+}
+
+.snackbar {
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  margin: auto;
+
+  width: max-content;
+  height: max-content;
+  padding: sp(12) sp(16);
+  border-radius: sp($border-radius);
+  background: var(--color-destructive);
+  color: white;
+  z-index: 200000000;
+  box-shadow: 0 sp(8) sp(16) sp(4) var(--color-shadow);
+  transform: translate(0, -#{sp(16)});
+  animation: 3s cubic-bezier(.19,1,.22,1) 1 forwards slideinout;
+}

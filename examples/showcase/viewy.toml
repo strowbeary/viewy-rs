@@ -2,7 +2,7 @@
 rich-text-editor = true
 
 [colors]
-accent = { light = "#0052cc", dark = "#0052cc" }
+accent = { light = "#0052cc", dark = "#3385ff" }
 on-accent = { light = "#ffffff", dark = "#ffffff" }
 
 background = { light = "#ffffff", dark = "#121212" }

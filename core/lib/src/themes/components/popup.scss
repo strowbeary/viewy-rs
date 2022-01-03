@@ -10,7 +10,8 @@
   background: var(--backdrop);
   opacity: 0;
   pointer-events: none;
-  transition: opacity 250ms, z-index 250ms, backdrop-filter 250ms;
+  visibility: hidden;
+  transition: visibility 0ms 250ms, opacity 250ms 0ms, z-index 250ms 0ms, backdrop-filter 250ms 0ms;
   z-index: -1000;
   -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
@@ -34,9 +35,11 @@
   &.visible {
     z-index: 10000;
     opacity: 1;
+    visibility: visible;
     pointer-events: all;
     -webkit-backdrop-filter: blur(15px);
     backdrop-filter: blur(15px);
+    transition: visibility 250ms 0ms, opacity 250ms 0ms, z-index 250ms 0ms, backdrop-filter 250ms 0ms;
     .popup__window {
       transform: translateY(0px);
       pointer-events: all;

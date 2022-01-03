@@ -7,6 +7,9 @@ pub fn home() -> VStack {
     VStack::new(Alignment::Stretch)
         .gap(vec![12])
         .append_child({
+            Snackbar::new("Une erreur est survenue")
+        })
+        .append_child({
             showcase_section("Text", {
                 VStack::new(Alignment::Start)
                     .gap(vec![16])

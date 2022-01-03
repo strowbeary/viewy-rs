@@ -50,6 +50,7 @@ pub use popup::*;
 pub use file_input::*;
 pub use color_picker::*;
 pub use signature_field::*;
+pub use snackbar::{Snackbar};
 
 use crate::node::Node;
 use crate::Renderable;
