@@ -1,4 +1,5 @@
 .popup {
+  z-index: 10000;
   position: fixed;
   top: 0;
   bottom: 0;
@@ -12,7 +13,6 @@
   pointer-events: none;
   visibility: hidden;
   transition: visibility 0ms 250ms, opacity 250ms 0ms, z-index 250ms 0ms, backdrop-filter 250ms 0ms;
-  z-index: -1000;
   -webkit-backdrop-filter: blur(0px);
   backdrop-filter: blur(0px);
   &__window {
@@ -24,16 +24,27 @@
     background: var(--surface);
     border-radius: sp($border-radius);
     box-shadow: 0 4px 8px 0 var(--color-shadow);
-    max-height: 90vh;
+    max-height: 95vh;
     max-width: 95vw;
-    overflow: auto;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+
     .titlebar {
       background: var(--surface);
     }
   }
+  &__window-bar {
+    background: var(--surface-dark);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+  }
+  &__window-content {
+    overflow: auto;
+  }
 
   &.visible {
-    z-index: 10000;
     opacity: 1;
     visibility: visible;
     pointer-events: all;

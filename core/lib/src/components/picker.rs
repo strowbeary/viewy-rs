@@ -181,7 +181,7 @@ impl Renderable for Picker {
                             let mut option_element = View::new()
                                 .tag("option")
                                 .set_attr("value", &option.value);
-                            if option.value.eq(&self.value) {
+                            if option.value.eq(&picker.value) {
                                 option_element.set_attr("selected", "selected");
                             }
                             option_element.node.text = Some(option.label);

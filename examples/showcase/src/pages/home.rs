@@ -276,6 +276,20 @@ as opposed to using 'Content here, content here', making it look like readable E
                                         Text::new("Hello", TextStyle::H1)
                                     })
                             })
+                    }).append_child({
+                        Button::new("Nested popup", ButtonStyle::Filled)
+                            .popup({
+                                Popup::new()
+                                    .append_child({
+                                        Button::new("open sub popup", ButtonStyle::Filled)
+                                            .popup({
+                                                Popup::new()
+                                                    .append_child({
+                                                        Text::new("Hello", TextStyle::H1)
+                                                    })
+                                            })
+                                    })
+                            })
                     })
             })
         })

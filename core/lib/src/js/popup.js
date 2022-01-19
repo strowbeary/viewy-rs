@@ -5,43 +5,70 @@ function closeAllPopover() {
 }
 
 (() => {
+
     window.addEventListener("load", () => {
         const popups = document.querySelectorAll(".popup");
 
-        function closeAll(except) {
+        function closeAll(excludedPopupIds) {
+            closeAllPopover();
             popups.forEach(popup => {
-                if (popup.getAttribute("data-attach-to") !== except.getAttribute("data-attach-to"))
+                let popupId = popup.getAttribute("data-attach-to");
+
+                if (!excludedPopupIds.includes(popupId)) {
                     popup.classList.remove("visible");
+                }
             });
+        }
+
+        function open(popupId) {
+            let popup = document.querySelector(`.popup[data-attach-to="${popupId}"]`);
+            let opennedPopups = [...document.querySelectorAll(`.popup.visible`)]
+                .map(popup => popup.getAttribute("data-attach-to"));
+            closeAll([popupId, ...opennedPopups]);
+            popup.classList.add("visible");
+        }
+
+        function close(popupId) {
+            let popup = document.querySelector(`.popup[data-attach-to="${popupId}"]`);
+            popup.classList.remove("visible");
         }
 
         function init() {
             popups.forEach(popup => {
+                const popupId = popup.getAttribute("data-attach-to");
                 popup.addEventListener("click", (e) => {
                     if (e.target === popup) {
-                        popup.classList.remove("visible");
+                        close(popupId)
                     }
                 });
                 popup.querySelectorAll(".popup__window-controls")
                     .forEach(el => {
-                    el.addEventListener("click", () => {
-                        popup.classList.remove("visible");
-                    })
-                });
-                const el = document.getElementById(popup.getAttribute("data-attach-to"));
+                        el.addEventListener("click", () => {
+                            close(popupId);
+                        })
+                    });
+
+                const el = document.getElementById(popupId);
+                el.classList.add("popup-oppener");
                 el.addEventListener("click", e => {
                     e.preventDefault();
-                    if (popup.classList.contains("visible")) {
-                        popup.classList.remove("visible");
-                    } else {
-                        closeAll(popup);
-                        closeAllPopover();
-                        popup.classList.add("visible");
-                    }
+                    open(popupId)
                 });
+                el.querySelectorAll("a, .button, .clickable")
+                    .forEach(clickable => {
+                        if (!clickable.classList.contains("popup-oppener")) {
+                            clickable.addEventListener("click", e => {
+                                e.stopPropagation();
+                            });
+                        }
+                    });
             });
         }
 
         init();
+
+
     });
+
+
 })();

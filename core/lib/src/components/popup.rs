@@ -69,8 +69,8 @@ impl Renderable for Popup {
 
         if self.window_controls {
             window.node.children.push({
-                HStack::new(Alignment::Center)
-                    .background_color("var(--surface-dark)")
+                View::new()
+                    .add_class("popup__window-bar")
                     .append_child({
                         Button::icon_only("x", ButtonStyle::Link)
                             .add_class("popup__window-controls")
@@ -78,10 +78,15 @@ impl Renderable for Popup {
             }.render());
         }
 
-        self.children.iter()
-            .for_each(|child| {
-                window.node.children.push(child.render());
-            });
+        window.node.children.push({
+            let mut content = View::new()
+                .add_class("popup__window-content");
+            self.children.iter()
+                .for_each(|child| {
+                    content.append_child(child.clone());
+                });
+            content.render()
+        });
 
 
         popup.node.children.push({
