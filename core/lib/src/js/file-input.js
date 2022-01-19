@@ -4,6 +4,7 @@ window.addEventListener("load", () => {
             if (fileInputOpener) {
                 fileInputOpener.addEventListener("click", (e) => {
                     e.preventDefault();
+
                     let fileInput = document.getElementById(fileInputOpener.getAttribute("data-input-file"));
 
                     if (fileInput.hasAttribute("data-auto-submit")) {

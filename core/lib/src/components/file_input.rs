@@ -69,8 +69,10 @@ impl Renderable for FileInput {
                     .add_class("file-input--hidden")
                     .set_attr("type", "file")
                     .tag("input")
-                    .set_attr("id", &format!("file-input-{}", self.name))
                     .set_attr("name", &self.name);
+                if !field.node.attributes.contains_key("id") {
+                    field.set_attr("id", &format!("file-input-{}", self.name));
+                }
                 if self.auto_submit {
                     field.set_attr("data-auto-submit", &self.auto_submit.to_string());
                 }
