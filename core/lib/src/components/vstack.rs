@@ -66,8 +66,8 @@ impl Renderable for VStack {
             .add_class(
                 &format!("stack--align-{}", match self.alignment {
                     Alignment::Center => {"center"}
-                    Alignment::Start => {"flex-start"}
-                    Alignment::End => {"flex-end"}
+                    Alignment::Start => {"start"}
+                    Alignment::End => {"end"}
                     Alignment::Stretch => {"stretch"}
                 })
             );
