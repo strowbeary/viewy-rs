@@ -61,8 +61,10 @@ impl Renderable for SignatureField {
         }
         field.node.children.push({
             Button::new("Signer", ButtonStyle::Filled)
-                .popup({
+                .add_class("signature-field__opener")
+            .popup({
                     Popup::new()
+                        .add_class("signature-field__popup")
                         .hide_window_controls()
                         .append_child({
                             VStack::new(Alignment::Stretch)
@@ -84,6 +86,7 @@ impl Renderable for SignatureField {
                                 })
                                 .append_child({
                                     let mut sign_button = Button::new("Signer", ButtonStyle::Filled)
+                                        .add_class("signature-field__submit")
                                         .align_self("flex-end")
                                         .close_popup();
                                     if let Some(form_name) = &self.form_name {

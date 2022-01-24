@@ -16,7 +16,7 @@ function trim(c) {
         x, y;
 
     for (i = 0; i < l; i += 4) {
-        if (pixels.data[i+3] !== 0) {
+        if (pixels.data[i + 3] !== 0) {
             x = (i / 4) % c.width;
             y = ~~((i / 4) / c.width);
 
@@ -76,6 +76,22 @@ window.addEventListener("load", () => {
             $body.style.removeProperty('width');
         }
     };
+
+    document.querySelectorAll(`.signature-field__popup[data-attach-to]`)
+        .forEach(signature_popup => {
+            const popupId = signature_popup.getAttribute("data-attach-to");
+            document.getElementById(popupId).addEventListener("click", e => {
+                signature_popup.querySelector(".popup__window-content").requestFullscreen();
+            });
+        });
+    document.querySelectorAll(".signature-field__submit")
+        .forEach(signature_popup => {
+            signature_popup.addEventListener("click", e => {
+                document.exitFullscreen()
+                    .then(() => console.log("Document Exited from Full screen mode"));
+            });
+        });
+
     document.querySelectorAll(".signature-field")
         .forEach((field) => {
             const id = field.getAttribute("data-signature-field-id");
