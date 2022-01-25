@@ -8,6 +8,9 @@
   &--filled {
     border: none;
     background: var(--surface);
+    &.clickable:hover {
+      background: var(--surface-lighter);
+    }
   }
   &--raised {
     border: sp(1) solid var(--color-border);

@@ -14,7 +14,8 @@
     --color-accent-lighter: #{color.adjust($accent, $lightness: +35%)};
     --surface: #{$surface};
     --surface-lighter: #{color.adjust($surface, $lightness: +2%)};
-    --surface-dark: #{color.adjust($surface, $lightness: -5%)};
+    --surface-dark: #{color.adjust($surface, $lightness: -2%)};
+    --surface-darker: #{color.adjust($surface, $lightness: -5%)};
     --surface-blue: #{color.adjust($accent, $alpha: -0.85)};
     --surface-red: #{color.adjust($destructive, $alpha: -0.9)};
     --surface-red-darker: #{color.adjust($destructive, $alpha: -0.8)};
