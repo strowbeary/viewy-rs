@@ -1,9 +1,9 @@
-use crate::{Renderable};
-use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
-use crate::DefaultModifiers;
-use crate::components::{Appendable, ChildContainer};
 
+use crate::components::{Appendable, ChildContainer};
+use crate::DefaultModifiers;
+use crate::node::{Node, NodeContainer};
+use crate::Renderable;
 
 /// Used to set card style.
 #[derive(Debug, Clone)]
@@ -31,11 +31,10 @@ impl Card {
     }
 
     pub fn action(&mut self, url: &str) -> Self {
-        self
-            .tag("a")
-            .set_attr("href", url)
-            .add_class("clickable")
-            .clone()
+        self.tag("a");
+        self.set_attr("href", url);
+        self.add_class("clickable");
+        self.clone()
     }
 }
 
@@ -53,6 +52,7 @@ impl ChildContainer for Card {
         return self.children.borrow_mut();
     }
 }
+
 impl Appendable for Card {}
 
 impl Renderable for Card {

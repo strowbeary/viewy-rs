@@ -2,21 +2,28 @@
   --card-radius: sp($border-radius);
   border-radius: var(--card-radius);
   padding: 0;
+
   &--outlined {
     border: sp(1) solid var(--color-border);
+    background: var(--background);
   }
+
   &--filled {
     border: none;
     background: var(--surface);
+
     &.clickable:hover {
       background: var(--surface-lighter);
     }
   }
+
   &--raised {
     border: sp(1) solid var(--color-border);
     background: var(--background);
     box-shadow: 0 sp(4) sp(8) 0 var(--color-shadow);
+
   }
+
   & .card {
     border-radius: calc(var(--card-radius) / 1.5);
   }
