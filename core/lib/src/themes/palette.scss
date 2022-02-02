@@ -53,6 +53,7 @@
     --surface: #{$surface};
     --surface-lighter: #{color.adjust($surface, $lightness: +3%)};
     --surface-dark: #{color.adjust($surface, $lightness: -8%)};
+    --surface-darker: #{color.adjust($surface, $lightness: -10%)};
     --surface-blue: #{color.adjust($accent, $alpha: -0.85)};
     --surface-red: #{color.adjust($destructive, $alpha: -0.9)};
     --surface-red-darker: #{color.adjust($destructive, $alpha: -0.8)};

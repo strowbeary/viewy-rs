@@ -1,8 +1,8 @@
 use std::collections::HashMap;
 
 use crate::{DefaultModifiers, sp};
-use crate::Renderable;
 use crate::node::{Node, NodeContainer};
+use crate::Renderable;
 
 #[derive(Debug, Clone)]
 pub enum Size {
@@ -63,7 +63,11 @@ impl Renderable for Avatar {
                 })
                 .map(|part| part.chars().nth(0).unwrap_or_default())
                 .collect();
-            let text_content: String = initials[0..2].iter().collect();
+            let text_content = initials.get(0..2)
+                .map(|initials| -> String {
+                    initials.iter().collect()
+                })
+                .unwrap_or(self.name.get(0..2).unwrap_or_default().to_string());
             avatar.get_node().text = Some(text_content.to_uppercase());
         }
         avatar.get_node().clone()
