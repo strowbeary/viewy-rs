@@ -1,8 +1,8 @@
 use std::borrow::BorrowMut;
 use std::ops::Deref;
 
-use crate::DefaultModifiers;
 use crate::components::*;
+use crate::DefaultModifiers;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
 
@@ -58,6 +58,7 @@ pub struct MenuItem {
     pub icon: Option<String>,
     pub icon_color: Option<String>,
     pub label: String,
+    is_destructive: bool,
 }
 
 impl MenuItem {
@@ -67,6 +68,7 @@ impl MenuItem {
             icon: None,
             icon_color: None,
             label: label.to_string(),
+            is_destructive: false
         }
     }
     pub fn icon(&mut self, name: &str) -> Self {
@@ -76,6 +78,11 @@ impl MenuItem {
 
     pub fn icon_color(&mut self, color: &str) -> Self {
         self.icon_color = Some(color.to_string());
+        self.clone()
+    }
+
+    pub fn destructive(&mut self) -> Self {
+        self.is_destructive = true;
         self.clone()
     }
 
@@ -103,7 +110,10 @@ impl Renderable for MenuItem {
         let mut menu_item = self
             .clone()
             .add_class("menu-item")
-            .add_class("menu-item--normal");
+            .add_class(match self.is_destructive {
+                true => { "menu-item--destructive" }
+                false => { "menu-item--normal" }
+            });
         if let Some(icon) = menu_item.icon.clone() {
             menu_item.node.children.append(&mut vec![{
                 let mut icon = Icon::new(icon.as_str())

@@ -85,6 +85,7 @@ mod tests {
             "Rémi Caillot",
             "Estelle Le Marre",
             "Jean-François Cano",
+            "remicaillot5@gmail.com"
         ];
         for name in names {
             let avatar = Avatar::new(name, &None);
