@@ -48,7 +48,9 @@
       -webkit-appearance: none;
       appearance: none;
       width: sp(40);
+      min-width: sp(40);
       height: sp(24);
+      min-height: sp(24);
       border: none;
       background: var(--color-border);
       border-radius: sp(12);
