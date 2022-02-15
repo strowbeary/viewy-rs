@@ -3,37 +3,80 @@
   flex-direction: row;
   align-items: center;
 
-  input[type="checkbox"] {
-    -webkit-appearance: none;
-    appearance: none;
-    width: sp(16);
-    height: sp(16);
-    border: sp(2) solid var(--color-border);
-    border-radius: sp($border-radius / 2);
-    transition: background 150ms ease, border 150ms ease;
-    &::after {
-      @include font-stack;
-      content: "✓";
-      display: block;
-      color: white;
-      width: 100%;
-      height: 100%;
-      line-height: 100%;
-      text-align: center;
-      font-weight: bold;
-      opacity: 0;
-      transition: opacity 150ms ease;
-    }
-    &:hover {
-      border-color: var(--color-border-hover);
-      background-color: var(--color-hover);
-    }
-    &:checked {
-      border-color: var(--color-accent);
-      background-color: var(--color-accent);
+  &--checkbox {
+    input[type="checkbox"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: sp(16);
+      height: sp(16);
+      border: sp(2) solid var(--color-border);
+      border-radius: sp($border-radius / 2);
+      transition: background 150ms ease, border 150ms ease;
+
       &::after {
-        opacity: 1;
+        @include font-stack;
+        content: "✓";
+        display: block;
+        color: white;
+        width: 100%;
+        height: 100%;
+        line-height: 100%;
+        text-align: center;
+        font-weight: bold;
+        opacity: 0;
+        transition: opacity 150ms ease;
+      }
+
+      &:hover {
+        border-color: var(--color-border-hover);
+        background-color: var(--color-hover);
+      }
+
+      &:checked {
+        border-color: var(--color-accent);
+        background-color: var(--color-accent);
+
+        &::after {
+          opacity: 1;
+        }
       }
     }
   }
+
+  &--switch {
+    input[type="checkbox"] {
+      -webkit-appearance: none;
+      appearance: none;
+      width: sp(40);
+      height: sp(24);
+      border: none;
+      background: var(--color-border);
+      border-radius: sp(12);
+      box-sizing: border-box;
+      position: relative;
+      transition: background-color 150ms ease;
+
+
+      &::after {
+        content: "";
+        display: block;
+        width: sp(24);
+        height: sp(24);
+        border: sp(2) solid var(--color-border);
+        background: var(--background);
+        border-radius: sp(12);
+        box-sizing: border-box;
+        transition: border 150ms ease, margin-left 150ms ease;
+      }
+      &:checked {
+        background: var(--color-accent);
+
+        &::after {
+          margin-left: sp(16);
+          border-color: var(--color-accent);
+        }
+      }
+    }
+  }
+
 }

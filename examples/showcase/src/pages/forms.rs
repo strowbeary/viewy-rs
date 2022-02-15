@@ -38,7 +38,7 @@ pub fn forms() -> VStack {
                    Form::new("async-auto-submit-form", "")
                        .async_form()
                        .append_child({
-                           Checkbox::new("auto-submit-checkbox", "hello")
+                           Checkbox::new("auto-submit-checkbox", "hello", CheckboxStyle::Checkbox)
                                .label("Checkbox à soumission automatique")
                                .auto_submit(true)
                        })

@@ -246,7 +246,7 @@ impl Renderable for Table {
             for mut row in self.clone().rows {
                 if self.selectable {
                     row.prepend_child({
-                        Checkbox::new(&self.name, &row.name)
+                        Checkbox::new(&self.name, &row.name, CheckboxStyle::Checkbox)
                     });
                 }
                 tbody.append_child(row);

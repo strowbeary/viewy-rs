@@ -184,16 +184,20 @@ as opposed to using 'Content here, content here', making it look like readable E
                 VStack::new(Alignment::Stretch)
                     .gap(vec![16])
                     .append_child({
-                        Checkbox::new("test1", "2")
+                        Checkbox::new("test1", "2", CheckboxStyle::Checkbox)
                             .label("Checkbox with label checked by default")
                             .is_checked(true)
                     })
                     .append_child({
-                        Checkbox::new("test1", "2")
+                        Checkbox::new("test1", "2", CheckboxStyle::Checkbox)
                             .label("Checkbox with label")
                     })
                     .append_child({
-                        Checkbox::new("test1", "2")
+                        Checkbox::new("test1", "2", CheckboxStyle::Checkbox)
+                    })
+                    .append_child({
+                        Checkbox::new("switch", "2", CheckboxStyle::Switch)
+                            .label("Switch button")
                     })
             })
         })

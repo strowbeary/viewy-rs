@@ -75,6 +75,10 @@
 
         &:active {
           background: var(--surface-red);
+
+          .text, .icon {
+            color: var(--color-destructive);
+          }
         }
 
         &.menu-item {
@@ -153,6 +157,4 @@
       }
     }
   }
-
-
 }

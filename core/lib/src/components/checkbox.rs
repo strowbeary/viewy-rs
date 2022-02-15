@@ -1,16 +1,24 @@
-use crate::node::{Node, NodeContainer, NodeType};
 use std::borrow::BorrowMut;
-use crate::{DefaultModifiers, scale};
-use crate::Renderable;
-use crate::components::*;
+use std::ops::Deref;
+
 use uuid::Uuid;
 
-use std::ops::Deref;
+use crate::{DefaultModifiers, scale};
+use crate::components::*;
+use crate::node::{Node, NodeContainer, NodeType};
+use crate::Renderable;
+
+#[derive(Debug, Clone)]
+pub enum CheckboxStyle {
+    Checkbox,
+    Switch,
+}
 
 /// Used to manipulate boolean values or to choose to include a value to a form submission.
 #[derive(Debug, Clone)]
 pub struct Checkbox {
     node: Node,
+    style: CheckboxStyle,
     label: Option<String>,
     name: String,
     value: String,
@@ -21,9 +29,10 @@ pub struct Checkbox {
 
 impl Checkbox {
     /// Create a new checkbox
-    pub fn new(name: &str, value: &str) -> Self {
+    pub fn new(name: &str, value: &str, style: CheckboxStyle) -> Self {
         Self {
             node: Node::default(),
+            style,
             label: None,
             name: name.to_string(),
             value: value.to_string(),
@@ -90,6 +99,10 @@ impl Renderable for Checkbox {
 
         let mut container = self.clone()
             .add_class("checkbox")
+            .add_class(match self.style {
+                CheckboxStyle::Checkbox => "checkbox--checkbox",
+                CheckboxStyle::Switch => "checkbox--switch"
+            })
             .append_child(checkbox);
         if let Some(label) = self.clone().label {
             container.append_child({
