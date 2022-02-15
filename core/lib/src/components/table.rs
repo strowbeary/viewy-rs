@@ -191,7 +191,8 @@ impl ChildContainer for Table {
 impl Renderable for Table {
     fn render(&self) -> Node {
         let mut table = self.clone()
-            .tag("table");
+            .tag("table")
+            .add_class("table");
         table.get_node().children.push({
             let mut colgroup = View::new()
                 .tag("colgroup");

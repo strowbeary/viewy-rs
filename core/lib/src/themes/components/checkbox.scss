@@ -57,7 +57,7 @@
       box-sizing: border-box;
       position: relative;
       transition: background-color 150ms ease;
-
+      cursor: pointer;
 
       &::after {
         content: "";
