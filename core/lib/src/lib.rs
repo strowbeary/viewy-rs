@@ -10,7 +10,7 @@ extern crate base64;
 
 pub use engine::Renderable;
 pub use helper_fn::*;
-pub use modifiers::{DefaultModifiers, Overflow};
+pub use modifiers::{DefaultModifiers, Overflow, Position};
 pub use page::{Page, RenderMode};
 
 mod helper_fn;
