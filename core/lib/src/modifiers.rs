@@ -9,6 +9,14 @@ pub enum Overflow {
     Hidden,
 }
 
+#[derive(Debug)]
+pub enum Position {
+    Static,
+    Relative,
+    Absolute,
+    Fixed,
+}
+
 pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
     fn color(&mut self, color: &str) -> Self {
         self.get_node().node_style.push(("color".to_string(), color.to_string()));
@@ -20,6 +28,16 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
     }
     fn remove_class(&mut self, class_name: &str) -> Self {
         self.get_node().class_list.remove(class_name);
+        self.clone()
+    }
+    fn position(&mut self, position: Position) -> Self {
+
+        self.get_node().node_style.push(("position".to_string(), match position {
+            Position::Static => "static",
+            Position::Relative => "relative",
+            Position::Absolute => "absolute",
+            Position::Fixed => "fixed"
+        }.to_string()));
         self.clone()
     }
     fn padding(&mut self, padding: Vec<i32>) -> Self {
