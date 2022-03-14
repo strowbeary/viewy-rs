@@ -50,6 +50,7 @@ $surface-dark: {surface_dark};
         include_str!("../themes/components/color-picker.scss").to_string(),
         include_str!("../themes/components/signature-field.scss").to_string(),
         include_str!("../themes/components/snackbar.scss").to_string(),
+        include_str!("../themes/components/tabs.scss").to_string(),
         include_str!("../themes/print.scss").to_string(),
     ];
     if config.features.rich_text_editor {
@@ -60,6 +61,7 @@ $surface-dark: {surface_dark};
 }
 
 fn get_scripts(config: &Config) -> Vec<String> {
+
     let mut scripts = vec![
         include_str!("../js/popper.js").to_string(),
         include_str!("../js/form.js").to_string(),
@@ -70,6 +72,7 @@ fn get_scripts(config: &Config) -> Vec<String> {
         include_str!("../js/file-input.js").to_string(),
         include_str!("../js/searchable-input.js").to_string(),
         include_str!("../js/signature-field.js").to_string(),
+        include_str!("../js/tabs.js").to_string(),
     ];
     if config.features.rich_text_editor {
         scripts.push(include_str!("../js/quill-editor.js").to_string());

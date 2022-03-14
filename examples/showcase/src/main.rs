@@ -93,6 +93,18 @@ fn menus() -> Html<String> {
     })
 }
 
+#[get("/tabs")]
+fn tabs() -> Html<String> {
+    Html({
+        Page::new(
+            "Viewy showcase – Tab view",
+            &layouts::default_layout,
+            pages::tabs(),
+        )
+            .compile(RenderMode::Complete)
+    })
+}
+
 #[derive(Clone, Serialize, Deserialize)]
 #[serde(crate = "rocket::serde")]
 struct SearchResult<T: Serialize> {
@@ -167,7 +179,8 @@ fn rocket() -> _ {
             search_page,
             search,
             signature,
-            forms
+            forms,
+            tabs
         ])
         .register("/", catchers::routes())
         .manage(Assets::new())

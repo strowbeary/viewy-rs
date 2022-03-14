@@ -7,3 +7,7 @@
   align-items: center;
   width: max-content;
 }
+.tag.clickable:hover {
+  background: var(--surface-accent-darker);
+  color: var(--color-accent);
+}

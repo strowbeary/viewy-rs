@@ -24,6 +24,7 @@ mod file_input;
 mod color_picker;
 mod signature_field;
 mod snackbar;
+mod tabs;
 
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
@@ -51,6 +52,10 @@ pub use file_input::*;
 pub use color_picker::*;
 pub use signature_field::*;
 pub use snackbar::{Snackbar};
+pub use tabs::{
+    TabView,
+    TabViewItem
+};
 
 use crate::node::Node;
 use crate::Renderable;

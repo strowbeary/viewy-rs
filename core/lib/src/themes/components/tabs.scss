@@ -1,0 +1,22 @@
+.tab-view {
+  &__tab-container {
+    border-bottom: sp(1) solid var(--color-border);
+    &__tab {
+      padding: sp(10) sp(16) sp(8);
+      border-bottom: sp(2) solid transparent;
+      cursor: pointer;
+      transition: background 150ms, border 150ms;
+      &:hover {
+        background-color: var(--color-hover);
+      }
+      &--active {
+        border-bottom-color: var(--color-accent);
+      }
+    }
+  }
+  &__content-container{
+    &__content {
+      display: none;
+    }
+  }
+}
