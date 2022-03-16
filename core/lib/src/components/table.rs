@@ -113,6 +113,7 @@ impl Renderable for Row {
                     td.get_children().push({
                         Box::new({
                             let mut link = View::new()
+                                .add_class("link-row")
                                 .tag("a")
                                 .set_attr("href", url)
                                 .append_child(child.clone());

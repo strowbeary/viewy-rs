@@ -13,6 +13,7 @@
   transition: background 150ms, color 150ms, border 150ms;
   font-family: inherit;
   text-decoration: none;
+  flex-wrap: nowrap;
 
   .icon {
     margin: 0 sp(5) 0 0;
