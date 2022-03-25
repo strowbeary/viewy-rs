@@ -23,6 +23,11 @@ pub fn navigation_and_menus() -> VStack {
                                 .icon("box")
                         })
                         .append_child({
+                            MenuItem::new("With a notification badge")
+                                .icon("bell")
+                                .badge(&12)
+                        })
+                        .append_child({
                             MenuItem::new("Table")
                                 .icon("columns")
                         })
@@ -61,6 +66,11 @@ pub fn navigation_and_menus() -> VStack {
                                 .icon("columns")
                         })
                         .append_child({
+                            MenuItem::new("With a notification badge")
+                                .icon("bell")
+                                .badge(&12)
+                        })
+                        .append_child({
                             MenuItem::new("Calendar")
                                 .icon("calendar")
                         })
@@ -93,6 +103,11 @@ pub fn navigation_and_menus() -> VStack {
                         .append_child({
                             MenuItem::new("Table")
                                 .icon("columns")
+                        })
+                        .append_child({
+                            MenuItem::new("Notifications")
+                                .icon("bell")
+                                .badge(&12)
                         })
                         .append_child({
                             MenuItem::new("Calendar")
@@ -130,6 +145,11 @@ pub fn navigation_and_menus() -> VStack {
                         .append_child({
                             MenuItem::new("Table")
                                 .icon("columns")
+                        })
+                        .append_child({
+                            MenuItem::new("Notifications")
+                                .icon("bell")
+                                .badge(&12)
                         })
                         .append_child({
                             MenuSection::new("Second Section")

@@ -2,6 +2,7 @@ use std::borrow::BorrowMut;
 use std::ops::Deref;
 
 use crate::components::*;
+use crate::components::badge::{Badge, BadgeSupport};
 use crate::DefaultModifiers;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
@@ -58,6 +59,7 @@ pub struct MenuItem {
     pub icon: Option<String>,
     pub icon_color: Option<String>,
     pub label: String,
+    badge: Option<Badge>,
     is_destructive: bool,
 }
 
@@ -68,6 +70,7 @@ impl MenuItem {
             icon: None,
             icon_color: None,
             label: label.to_string(),
+            badge: None,
             is_destructive: false
         }
     }
@@ -105,6 +108,15 @@ impl NodeContainer for MenuItem {
 
 impl DefaultModifiers<MenuItem> for MenuItem {}
 
+
+impl BadgeSupport for MenuItem {
+    fn add_badge(&mut self, badge: Badge) {
+        self.badge = Some(badge);
+    }
+}
+
+impl BadgeModifiers for MenuItem {}
+
 impl Renderable for MenuItem {
     fn render(&self) -> Node {
         let mut menu_item = self
@@ -137,7 +149,11 @@ impl Renderable for MenuItem {
                 Text::new(self.label.as_str(), TextStyle::Label).render()
             ]);
         }
-        menu_item.get_node().clone()
+
+        if let Some(badge) = &menu_item.badge {
+            menu_item.node.children.push(badge.render());
+        }
+        menu_item.node
     }
 }
 
@@ -175,6 +191,7 @@ impl NodeContainer for Menu {
 
 impl DefaultModifiers<Menu> for Menu {}
 
+
 impl Renderable for Menu {
     fn render(&self) -> Node {
         let mut menu = self
@@ -194,6 +211,8 @@ impl Renderable for Menu {
         self.children.iter()
             .for_each(|child|
                 menu.node.children.push(child.render()));
+
+
         menu.get_node().clone()
     }
 }

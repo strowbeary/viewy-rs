@@ -25,7 +25,9 @@ mod color_picker;
 mod signature_field;
 mod snackbar;
 mod tabs;
+mod badge;
 
+pub use badge::BadgeModifiers;
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
 pub use vstack::{VStack, Alignment};

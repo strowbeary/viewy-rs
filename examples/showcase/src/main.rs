@@ -33,7 +33,10 @@ fn home() -> Html<String> {
         Page::new(
             "Viewy showcase – Home",
             &layouts::default_layout,
-            pages::home(),
+            pages::home()
+                .append_child({
+                    Snackbar::new("Une erreur est survenue")
+                }),
         )
             .compile(RenderMode::Complete)
     })

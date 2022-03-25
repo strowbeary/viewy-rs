@@ -1,0 +1,12 @@
+.badge {
+  display: inline-block;
+  font-size: sp(14);
+  min-width: sp(8);
+  box-sizing: content-box;
+  line-height: sp(14);
+  padding: sp(3) sp(6);
+  border-radius: sp(30);
+  background: var(--color-destructive);
+  color: var(--color-on-destructive);
+  text-align: center;
+}

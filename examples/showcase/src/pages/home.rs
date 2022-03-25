@@ -7,7 +7,31 @@ pub fn home() -> VStack {
     VStack::new(Alignment::Stretch)
         .gap(vec![12])
         .append_child({
-            Snackbar::new("Une erreur est survenue")
+            showcase_section("Badge", {
+                VStack::new(Alignment::Start)
+                    .gap(vec![16])
+                    .width("50%")
+                    .append_child({
+                        Button::new("Label", ButtonStyle::Outlined)
+                            .badge(&125)
+                    })
+                    .append_child({
+                        Button::new("Label", ButtonStyle::Outlined)
+                            .badge(&12)
+                    })
+                    .append_child({
+                        Button::new("Label", ButtonStyle::Outlined)
+                            .badge(&1)
+                    })
+                    .append_child({
+                        Button::icon_only("bell", ButtonStyle::Flat)
+                            .badge(&1)
+                    })
+                    .append_child({
+                        Button::icon_only("bell", ButtonStyle::Flat)
+                            .badge(&900)
+                    })
+            })
         })
         .append_child({
             showcase_section("Text", {

@@ -12,6 +12,7 @@
     --color-accent: #{$accent};
     --color-accent-light: #{color.adjust($accent, $lightness: +20%)};
     --color-accent-lighter: #{color.adjust($accent, $lightness: +35%)};
+    --color-on-accent: #{$on-accent};
     --surface: #{$surface};
     --surface-lighter: #{color.adjust($surface, $lightness: +3%)};
     --surface-dark: #{color.adjust($surface, $lightness: -2%)};
@@ -33,8 +34,9 @@
     --color-shadow: rgba(0, 0, 0, 0.1);
     --color-success: #3DA144;
     --color-destructive: #{$destructive};
-    --color-destructive-light: #{color.adjust($destructive, $lightness: 5%)};;
-    --color-destructive-lighter: #{color.adjust($destructive, $lightness: 10%)};;
+    --color-destructive-light: #{color.adjust($destructive, $lightness: 5%)};
+    --color-destructive-lighter: #{color.adjust($destructive, $lightness: 10%)};
+    --color-on-destructive: #{$on-destructive};
     --color-warning: #D86F48;
     --color-text-disabled: #{color.mix($background, $accent, $weight: 60%)};
 
@@ -73,8 +75,9 @@
     --color-shadow: rgba(0, 0, 0, 0.1);
     --color-success: #3DA144;
     --color-destructive: #{$destructive};
-    --color-destructive-light: #{color.adjust($destructive, $lightness: 5%)};;
-    --color-destructive-lighter: #{color.adjust($destructive, $lightness: 10%)};;
+    --color-destructive-light: #{color.adjust($destructive, $lightness: 5%)};
+    --color-destructive-lighter: #{color.adjust($destructive, $lightness: 10%)};
+    --color-on-destructive: #{$on-destructive};
     --color-warning: #D86F48;
   }
 }

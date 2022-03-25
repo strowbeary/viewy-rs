@@ -5,8 +5,9 @@ fn get_stylesheets(config: &Config) -> Vec<String> {
         format!("
 $accent-light: {accent_light};
 $accent-dark: {accent_dark};
-$destructive: {destructive};
 $on-accent: {on_accent};
+$destructive: {destructive};
+$on-destructive: {on_destructive};
 $border-radius: {border_radius};
 $background-light: {background_light};
 $background-dark: {background_dark};
@@ -16,6 +17,7 @@ $surface-dark: {surface_dark};
                 accent_light = config.colors.accent.light,
                 accent_dark = config.colors.accent.dark,
                 destructive = config.colors.destructive.light,
+                on_destructive = config.colors.on_destructive.light,
                 on_accent = config.colors.on_accent.light,
                 border_radius = config.shapes.border_radius,
                 background_light = config.colors.background.light,
@@ -51,6 +53,7 @@ $surface-dark: {surface_dark};
         include_str!("../themes/components/signature-field.scss").to_string(),
         include_str!("../themes/components/snackbar.scss").to_string(),
         include_str!("../themes/components/tabs.scss").to_string(),
+        include_str!("../themes/components/badge.scss").to_string(),
         include_str!("../themes/print.scss").to_string(),
     ];
     if config.features.rich_text_editor {

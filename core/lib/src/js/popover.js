@@ -25,6 +25,12 @@
                                 offset: [0, 8],
                             },
                         },
+                        {
+                            name: 'arrow',
+                            options: {
+                                padding: 5, // 5px from the edges of the popper
+                            },
+                        },
                     ],
                 });
                 window.addEventListener("click", e => {

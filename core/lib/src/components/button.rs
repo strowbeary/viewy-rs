@@ -1,8 +1,10 @@
-use crate::{Renderable};
-use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
+
+use crate::Renderable;
 use crate::{DefaultModifiers, scale};
-use crate::components::{Icon, Text, TextStyle};
+use crate::components::{BadgeModifiers, Icon, Text, TextStyle};
+use crate::components::badge::{Badge, BadgeSupport};
+use crate::node::{Node, NodeContainer};
 
 /// Used to set a button's importance level.
 #[derive(Debug, Clone)]
@@ -22,6 +24,7 @@ pub enum ButtonStyle {
 pub struct Button {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
+    badge: Option<Badge>,
     pub label: Option<String>,
     pub style: ButtonStyle,
     pub icon: Option<String>,
@@ -33,6 +36,7 @@ impl Button {
         Button {
             children: vec![],
             node: Node::default(),
+            badge: None,
             label: Some(label.to_string()),
             style,
             icon: None,
@@ -47,6 +51,7 @@ impl Button {
         Button {
             children: vec![],
             node: Node::default(),
+            badge: None,
             label: None,
             style,
             icon: Some(icon.to_string()),
@@ -125,7 +130,6 @@ impl Button {
     }
 }
 
-
 impl NodeContainer for Button {
     fn get_node(&mut self) -> &mut Node {
         self.node.borrow_mut()
@@ -133,6 +137,14 @@ impl NodeContainer for Button {
 }
 
 impl DefaultModifiers<Button> for Button {}
+
+impl BadgeSupport for Button {
+    fn add_badge(&mut self, badge: Badge) {
+        self.badge = Some(badge);
+    }
+}
+
+impl BadgeModifiers for Button {}
 
 impl Renderable for Button {
     fn render(&self) -> Node {
@@ -157,6 +169,10 @@ impl Renderable for Button {
         if let Some(label) = button.label {
             let text = Text::new(label.as_str(), TextStyle::Button).render();
             button.node.children.push(text);
+        }
+
+        if let Some(badge) = button.badge {
+            button.node.children.push(badge.render());
         }
 
         button.node
