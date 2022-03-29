@@ -1,7 +1,8 @@
 use std::borrow::{Borrow, BorrowMut};
+use uuid::Uuid;
 
-use crate::{DefaultModifiers, Renderable};
-use crate::components::{Alignment, Appendable, Button, HStack, Text, TextStyle, ButtonStyle};
+use crate::{DefaultModifiers, Renderable, scale};
+use crate::components::{Alignment, Appendable, Button, ButtonStyle, HStack, Text, TextStyle};
 use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
@@ -16,9 +17,20 @@ impl Snackbar {
         Snackbar {
             node: Default::default(),
             content: title.as_ref().to_string(),
-            action: None
+            action: None,
         }
     }
+
+    pub fn closable(&mut self) -> Self {
+        let id = Uuid::new_v4();
+        self.set_attr("data-snackbar-id", &id.to_string());
+        self.action = Some({
+            Button::icon_only("x", ButtonStyle::Flat)
+                .set_attr("data-snackbar-closing-button", &id.to_string())
+        });
+        self.clone()
+    }
+
     pub fn set_action_button(&mut self, button: Button) -> Self {
         if matches!(button.style, ButtonStyle::Link) {
             self.action = Some(button);
@@ -43,6 +55,7 @@ impl Renderable for Snackbar {
             .add_class("snackbar");
         snackbar.node.children.push({
             let mut content = HStack::new(Alignment::Center)
+                .gap(vec![scale(3)])
                 .append_child({
                     Text::new(&self.content, TextStyle::Body)
                 });

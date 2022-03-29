@@ -36,6 +36,7 @@ fn home() -> Html<String> {
             pages::home()
                 .append_child({
                     Snackbar::new("Une erreur est survenue")
+                        .closable()
                 }),
         )
             .compile(RenderMode::Complete)
