@@ -345,7 +345,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                             .label("Choisir une couleur parmi la liste")
                     })
                     .append_child({
-                        ColorPicker::new("color-picker", ColorPickerStyle::Free)
+                        ColorPicker::new("color-picker", ColorPickerStyle::Free(Some(Color::from_hex("#06d6a0"))))
                             .label("Choisir une couleur libre")
                     })
             })

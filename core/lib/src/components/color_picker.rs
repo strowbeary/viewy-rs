@@ -5,7 +5,7 @@ use crate::{DefaultModifiers, Renderable};
 use crate::components::{Alignment, Appendable, HStack, Text, TextStyle, View};
 use crate::node::{Node, NodeContainer};
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Copy)]
 pub struct Color(u8, u8, u8);
 
 impl Color {
@@ -31,14 +31,14 @@ impl Color {
 #[derive(Debug, Clone)]
 pub enum ColorPickerStyle {
     Palette(Vec<Color>),
-    Free,
+    Free(Option<Color>),
 }
 
 impl ColorPickerStyle {
     pub fn get_style_name(&self) -> String {
         match self {
             ColorPickerStyle::Palette(_) => { "palette" }
-            ColorPickerStyle::Free => { "free" }
+            ColorPickerStyle::Free(_) => { "free" }
         }.to_string()
     }
 }
@@ -103,7 +103,7 @@ impl Renderable for ColorPicker {
                                     .tag("input")
                                     .set_attr("type", "radio")
                                     .set_attr("name", self.name.as_str())
-                                    .set_attr("value", &color.to_string())
+                                    .set_attr("value", &format!("#{}", color.to_string()))
                                     .set_attr("id", radio_id.as_str())
                                     .add_class(&format!("{}--option-list--radio", &base_class))
                             });
@@ -118,12 +118,14 @@ impl Renderable for ColorPicker {
                     option_list.render()
                 })
             }
-            ColorPickerStyle::Free => {
+            ColorPickerStyle::Free(color) => {
                 picker.node.children.push({
                     let mut option_list = View::new()
                         .tag("input")
                         .set_attr("name", self.name.as_str())
-                        .set_attr("value", &color.to_string())
+                        .set_attr("value", {
+                            &format!("#{}", color.unwrap_or(Color::from_hex("#ffffff")).to_string())
+                        })
                         .set_attr("type", "color")
                         .add_class(&format!("{}--input", &base_class));
 
