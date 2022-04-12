@@ -82,9 +82,9 @@ dependencies = [
 
 [[package]]
 name = "approx"
-version = "0.3.2"
+version = "0.5.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "f0e60b75072ecd4168020818c0107f2857bb6c4e64252d8d3983f6263b40a5c3"
+checksum = "cab112f0a86d568ea0e627cc1d6be74a1e9cd55214684db5561995f6dad897c6"
 dependencies = [
  "num-traits",
 ]
@@ -399,6 +399,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "find-crate"
+version = "0.6.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "59a98bbaacea1c0eb6a0876280051b892eb73594fd90cf3b20e9c817029c57d2"
+dependencies = [
+ "toml",
+]
+
+[[package]]
 name = "fnv"
 version = "1.0.7"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -575,7 +584,7 @@ dependencies = [
  "num-traits",
  "once_cell",
  "peekmore",
- "phf",
+ "phf 0.8.0",
  "rand 0.7.3",
 ]
 
@@ -956,23 +965,23 @@ checksum = "624a8340c38c1b80fd549087862da4ba43e08858af025b236e509b6649fc13d5"
 
 [[package]]
 name = "palette"
-version = "0.5.0"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "a05c0334468e62a4dfbda34b29110aa7d70d58c7fdb2c9857b5874dd9827cc59"
+checksum = "f9735f7e1e51a3f740bacd5dc2724b61a7806f23597a8736e679f38ee3435d18"
 dependencies = [
  "approx",
  "num-traits",
  "palette_derive",
- "phf",
- "phf_codegen",
+ "phf 0.9.0",
 ]
 
 [[package]]
 name = "palette_derive"
-version = "0.5.0"
+version = "0.6.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "0b4b5f600e60dd3a147fb57b4547033d382d1979eb087af310e91cb45a63b1f4"
+checksum = "7799c3053ea8a6d8a1193c7ba42f534e7863cf52e378a7f90406f4a645d33bad"
 dependencies = [
+ "find-crate",
  "proc-macro2",
  "quote",
  "syn",
@@ -1047,19 +1056,20 @@ version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "3dfb61232e34fcb633f43d12c58f83c1df82962dcdfa565a4e866ffc17dafe12"
 dependencies = [
- "phf_macros",
- "phf_shared",
+ "phf_macros 0.8.0",
+ "phf_shared 0.8.0",
  "proc-macro-hack",
 ]
 
 [[package]]
-name = "phf_codegen"
-version = "0.8.0"
+name = "phf"
+version = "0.9.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "cbffee61585b0411840d3ece935cce9cb6321f01c45477d30066498cd5e1a815"
+checksum = "b2ac8b67553a7ca9457ce0e526948cad581819238f4a9d1ea74545851fa24f37"
 dependencies = [
- "phf_generator",
- "phf_shared",
+ "phf_macros 0.9.0",
+ "phf_shared 0.9.0",
+ "proc-macro-hack",
 ]
 
 [[package]]
@@ -1068,8 +1078,18 @@ version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "17367f0cc86f2d25802b2c26ee58a7b23faeccf78a396094c13dced0d0182526"
 dependencies = [
- "phf_shared",
+ "phf_shared 0.8.0",
  "rand 0.7.3",
+]
+
+[[package]]
+name = "phf_generator"
+version = "0.9.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d43f3220d96e0080cc9ea234978ccd80d904eafb17be31bb0f76daaea6493082"
+dependencies = [
+ "phf_shared 0.9.0",
+ "rand 0.8.3",
 ]
 
 [[package]]
@@ -1078,8 +1098,22 @@ version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "7f6fde18ff429ffc8fe78e2bf7f8b7a5a5a6e2a8b58bc5a9ac69198bbda9189c"
 dependencies = [
- "phf_generator",
- "phf_shared",
+ "phf_generator 0.8.0",
+ "phf_shared 0.8.0",
+ "proc-macro-hack",
+ "proc-macro2",
+ "quote",
+ "syn",
+]
+
+[[package]]
+name = "phf_macros"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b706f5936eb50ed880ae3009395b43ed19db5bff2ebd459c95e7bf013a89ab86"
+dependencies = [
+ "phf_generator 0.9.1",
+ "phf_shared 0.9.0",
  "proc-macro-hack",
  "proc-macro2",
  "quote",
@@ -1091,6 +1125,15 @@ name = "phf_shared"
 version = "0.8.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "c00cf8b9eafe68dde5e9eaa2cef8ee84a9336a47d566ec55ca16589633b65af7"
+dependencies = [
+ "siphasher",
+]
+
+[[package]]
+name = "phf_shared"
+version = "0.9.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a68318426de33640f02be62b4ae8eb1261be2efbc337b60c54d845bf4484e0d9"
 dependencies = [
  "siphasher",
 ]
@@ -1909,7 +1952,7 @@ checksum = "b5a972e5669d67ba988ce3dc826706fb0a8b01471c088cb0b6110b805cc36aed"
 
 [[package]]
 name = "viewy"
-version = "1.4.11"
+version = "1.4.12"
 dependencies = [
  "base64",
  "dyn-clone",
