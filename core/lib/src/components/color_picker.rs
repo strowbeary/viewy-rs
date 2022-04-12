@@ -122,6 +122,8 @@ impl Renderable for ColorPicker {
                 picker.node.children.push({
                     let mut option_list = View::new()
                         .tag("input")
+                        .set_attr("name", self.name.as_str())
+                        .set_attr("value", &color.to_string())
                         .set_attr("type", "color")
                         .add_class(&format!("{}--input", &base_class));
 
