@@ -342,7 +342,11 @@ as opposed to using 'Content here, content here', making it look like readable E
                             Color::from_hex("#e0cba8"),
                             Color::from_hex("#a23b72")
                         ]))
-                            .label("Choisir une couleur")
+                            .label("Choisir une couleur parmi la liste")
+                    })
+                    .append_child({
+                        ColorPicker::new("color-picker", ColorPickerStyle::Free)
+                            .label("Choisir une couleur libre")
                     })
             })
         })

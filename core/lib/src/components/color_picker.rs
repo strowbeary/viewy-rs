@@ -119,7 +119,14 @@ impl Renderable for ColorPicker {
                 })
             }
             ColorPickerStyle::Free => {
-                unimplemented!("Free selection mode is not implemented yet.")
+                picker.node.children.push({
+                    let mut option_list = View::new()
+                        .tag("input")
+                        .set_attr("type", "color")
+                        .add_class(&format!("{}--input", &base_class));
+
+                    option_list.render()
+                })
             }
         }
         picker.node
