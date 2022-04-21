@@ -39,7 +39,7 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                                 .action("/forms")
                         })
                         .append_child({
-                            MenuItem::new("Search demo")
+                            MenuItem::new("Dynamic content")
                                 .icon("search")
                                 .action("/search")
                         })

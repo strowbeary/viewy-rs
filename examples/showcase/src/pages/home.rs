@@ -58,7 +58,6 @@ It is a *long established* fact that a reader will be **distracted** by the read
 The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters,
 as opposed to using 'Content here, content here', making it look like readable English.
 "#, TextStyle::Body))
-
             })
         })
         .append_child({
@@ -308,7 +307,8 @@ as opposed to using 'Content here, content here', making it look like readable E
                                         Text::new("Hello", TextStyle::H1)
                                     })
                             })
-                    }).append_child({
+                    })
+                    .append_child({
                         Button::new("Nested popup", ButtonStyle::Filled)
                             .popup({
                                 Popup::new()
@@ -340,7 +340,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                             Color::from_hex("#06d6a0"),
                             Color::from_hex("#58a4b0"),
                             Color::from_hex("#e0cba8"),
-                            Color::from_hex("#a23b72")
+                            Color::from_hex("#a23b72"),
                         ]))
                             .label("Choisir une couleur parmi la liste")
                     })

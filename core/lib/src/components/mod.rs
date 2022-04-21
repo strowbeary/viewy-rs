@@ -26,6 +26,7 @@ mod signature_field;
 mod snackbar;
 mod tabs;
 mod badge;
+mod dynamic_content;
 
 pub use badge::BadgeModifiers;
 pub use button::{Button, ButtonStyle};
@@ -54,6 +55,7 @@ pub use file_input::*;
 pub use color_picker::*;
 pub use signature_field::*;
 pub use snackbar::{Snackbar};
+pub use dynamic_content::{DynamicContent};
 pub use tabs::{
     TabView,
     TabViewItem

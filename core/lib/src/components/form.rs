@@ -37,6 +37,10 @@ impl Form {
         self.is_async = true;
         self.clone()
     }
+
+    pub fn inject_into_dynamic_content(&mut self, dynamic_content_name: &str) -> Self {
+        self.set_attr("data-dynamic-content-name", dynamic_content_name)
+    }
 }
 
 impl ChildContainer for Form {

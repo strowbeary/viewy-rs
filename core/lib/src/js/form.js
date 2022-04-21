@@ -1,10 +1,24 @@
+/**
+ *
+ * @param {HTMLFormElement} form
+ */
 function asyncSubmit(form) {
     const formData = new FormData(form);
+    let dynamicContent = document.querySelector(`.dynamic-content[data-dynamic-content-name = ${form.dataset.dynamicContentName}]`)
+    dynamicContent.innerHTML = "";
+    dynamicContent.dispatchEvent(new CustomEvent("dynamicContentErased"));
     fetch(form.getAttribute("action"), {
         method: "POST",
         body: formData
     })
-        .then();
+        .then(res => res.text())
+        .then(content => {
+            if (form.dataset.dynamicContentName) {
+                let dynamicContent = document.querySelector(`.dynamic-content[data-dynamic-content-name = ${form.dataset.dynamicContentName}]`)
+                dynamicContent.innerHTML = content;
+                dynamicContent.dispatchEvent(new CustomEvent("dynamicContentLoaded"));
+            }
+        });
 }
 
 window.addEventListener("load", () => {
@@ -67,7 +81,7 @@ window.addEventListener("load", () => {
                     });
 
                     quill.on('text-change', () => {
-                        console.log("text-change", editor.querySelector(".ql-editor").innerHTML);
+                        console.log("text-input", input);
                         input.value = editor.querySelector(".ql-editor").innerHTML;
                     });
                 })
