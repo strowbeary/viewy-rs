@@ -66,6 +66,7 @@ $surface-dark: {surface_dark};
 fn get_scripts(config: &Config) -> Vec<String> {
 
     let mut scripts = vec![
+        include_str!("../js/index.js").to_string(),
         include_str!("../js/popper.js").to_string(),
         include_str!("../js/form.js").to_string(),
         include_str!("../js/menu.js").to_string(),

@@ -2,8 +2,8 @@
  * Selectable row mechanism
  */
 
-window.addEventListener("load", () => {
-    document.querySelectorAll("table input[type='checkbox']")
+window.addEventListener("startViewy", ({detail}) => {
+    detail.root.querySelectorAll("table input[type='checkbox']")
         .forEach(checkbox => {
             let parent = checkbox;
             while (parent.tagName !== "TR") {

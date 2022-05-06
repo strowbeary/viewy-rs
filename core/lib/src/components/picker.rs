@@ -37,12 +37,13 @@ pub enum PickerStyle {
 #[derive(Debug, Clone)]
 pub struct Picker {
     node: Node,
+    children: Vec<Box<dyn Renderable>>,
     style: PickerStyle,
     label: Option<String>,
     name: String,
     value: String,
     options: Vec<PickerOption>,
-    children: Vec<Box<dyn Renderable>>,
+    is_disabled: bool,
 }
 
 impl Picker {
@@ -55,6 +56,7 @@ impl Picker {
             value: value.to_string(),
             children: vec![],
             options: vec![],
+            is_disabled: false,
         }
     }
 
@@ -87,6 +89,10 @@ impl Picker {
             .set_attr("form", form_name)
     }
 
+    pub fn disabled(&mut self, is_disabled: bool) -> Self {
+        self.is_disabled = is_disabled;
+        self.clone()
+    }
 
     pub fn append_child(&mut self, child: PickerOption) -> Self
     {
@@ -117,6 +123,7 @@ impl Renderable for Picker {
             .add_class("picker")
             .add_class(format!("picker--{:?}", self.style).to_lowercase().as_str());
 
+
         if let Some(label) = picker.label {
             let text = Text::new(label.as_str(), TextStyle::Label);
             picker.node.children.push(text.render());
@@ -124,6 +131,9 @@ impl Renderable for Picker {
         let picker_id = Uuid::new_v4().to_hyphenated().to_string();
         match self.style {
             PickerStyle::Segmented => {
+                if picker.is_disabled {
+                    picker.add_class(format!("picker--{:?}--disabled", self.style).to_lowercase().as_str());
+                }
                 picker.node.children.push({
                     let mut option_list = HStack::new(Alignment::Stretch)
                         .add_class("picker--segmented__option-list");
@@ -175,7 +185,9 @@ impl Renderable for Picker {
                         .tag("select")
                         .set_attr("name", self.name.as_str())
                         .set_attr("id", radio_id.as_str());
-
+                    if picker.is_disabled {
+                        select.set_attr("disabled", "disabled");
+                    }
                     for option in picker.options {
                         select = select.append_child({
                             let mut option_element = View::new()
@@ -207,6 +219,9 @@ impl Renderable for Picker {
                                 .set_attr("name", self.name.as_str())
                                 .set_attr("id", radio_id.as_str())
                                 .set_attr("value", option.value.as_str());
+                            if picker.is_disabled {
+                                radio_button.set_attr("disabled", "disabled");
+                            }
                             if picker.value.eq(option.value.as_str()) {
                                 radio_button.set_attr("checked", "checked");
                             }

@@ -1,5 +1,5 @@
-window.addEventListener("load", () => {
-    document.querySelectorAll("[data-input-file]")
+window.addEventListener("startViewy", ({detail}) => {
+    detail.root.querySelectorAll("[data-input-file]")
         .forEach(fileInputOpener => {
             if (fileInputOpener) {
                 fileInputOpener.addEventListener("click", (e) => {
@@ -17,7 +17,7 @@ window.addEventListener("load", () => {
                 });
             }
         });
-    document.querySelectorAll(".file-input")
+    detail.root.querySelectorAll(".file-input")
         .forEach(fileInputComponent => {
             let triggerButton = fileInputComponent.querySelector(".file-input__button");
             if (triggerButton) {
@@ -28,7 +28,7 @@ window.addEventListener("load", () => {
                 });
             }
         });
-    document.querySelectorAll(".file-input--simple")
+    detail.root.querySelectorAll(".file-input--simple")
         .forEach(fileInputComponent => {
             let fileInput = fileInputComponent.querySelector("input[type='file']");
             fileInput.addEventListener("change", e => {
@@ -36,7 +36,7 @@ window.addEventListener("load", () => {
             });
         });
 
-    document.querySelectorAll(".file-input--image")
+    detail.root.querySelectorAll(".file-input--image")
         .forEach(fileInputComponent => {
             let fileInput = fileInputComponent.querySelector("input[type='file']");
             fileInput.addEventListener("change", e => {

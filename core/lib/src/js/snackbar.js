@@ -1,5 +1,5 @@
-window.addEventListener("load", e => {
-    document.querySelectorAll(".snackbar")
+window.addEventListener("startViewy", ({detail}) => {
+    detail.root.querySelectorAll(".snackbar")
         .forEach(snackbar => {
             snackbar.querySelector(".button[data-snackbar-closing-button]")
                 .addEventListener("click", e => {

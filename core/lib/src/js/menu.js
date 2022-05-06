@@ -1,5 +1,5 @@
-window.addEventListener("load", () => {
-    document.querySelectorAll(".menu")
+window.addEventListener("startViewy", ({detail}) => {
+    detail.root.querySelectorAll(".menu")
         .forEach((menus) => {
             let item = [...menus.querySelectorAll("a[href]")]
                 .sort((a, b) => {

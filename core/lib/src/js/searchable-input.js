@@ -30,8 +30,8 @@ function throttle(func, wait, leading, trailing, context) {
     };
 };
 
-window.addEventListener("load", () => {
-    document.querySelectorAll("[data-async-datalist]")
+window.addEventListener("startViewy", ({detail}) => {
+    detail.root.querySelectorAll("[data-async-datalist]")
         .forEach(inputContainer => {
             let url = inputContainer.getAttribute("data-async-datalist");
             let datalist = document.createElement("datalist");

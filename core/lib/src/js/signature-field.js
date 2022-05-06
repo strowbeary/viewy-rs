@@ -56,7 +56,7 @@ function trim(c) {
     return copy.canvas;
 }
 
-window.addEventListener("load", () => {
+window.addEventListener("startViewy", ({detail}) => {
 
     const $body = document.querySelector('body');
 
@@ -77,14 +77,14 @@ window.addEventListener("load", () => {
         }
     };
 
-    document.querySelectorAll(`.signature-field__popup[data-attach-to]`)
+    detail.root.querySelectorAll(`.signature-field__popup[data-attach-to]`)
         .forEach(signature_popup => {
             const popupId = signature_popup.getAttribute("data-attach-to");
             document.getElementById(popupId).addEventListener("click", e => {
                 signature_popup.querySelector(".popup__window-content").requestFullscreen();
             });
         });
-    document.querySelectorAll(".signature-field__submit")
+    detail.root.querySelectorAll(".signature-field__submit")
         .forEach(signature_popup => {
             signature_popup.addEventListener("click", e => {
                 document.exitFullscreen()
@@ -92,7 +92,7 @@ window.addEventListener("load", () => {
             });
         });
 
-    document.querySelectorAll(".signature-field")
+    detail.root.querySelectorAll(".signature-field")
         .forEach((field) => {
             const id = field.getAttribute("data-signature-field-id");
             let canvas = document.getElementById(`signature-field-${id}__canvas`);

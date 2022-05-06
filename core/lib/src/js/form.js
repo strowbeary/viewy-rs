@@ -1,8 +1,9 @@
 /**
  *
  * @param {HTMLFormElement} form
+ * @param {HTMLElement} root
  */
-function asyncSubmit(form) {
+function asyncSubmit(root, form) {
     const formData = new FormData(form);
     let dynamicContent = document.querySelector(`.dynamic-content[data-dynamic-content-name = ${form.dataset.dynamicContentName}]`)
     dynamicContent.innerHTML = "";
@@ -16,20 +17,24 @@ function asyncSubmit(form) {
             if (form.dataset.dynamicContentName) {
                 let dynamicContent = document.querySelector(`.dynamic-content[data-dynamic-content-name = ${form.dataset.dynamicContentName}]`)
                 dynamicContent.innerHTML = content;
-                dynamicContent.dispatchEvent(new CustomEvent("dynamicContentLoaded"));
+                window.dispatchEvent(new CustomEvent("startViewy", {
+                    detail: {
+                        root: dynamicContent
+                    }
+                }));
             }
         });
 }
 
-window.addEventListener("load", () => {
-    document.querySelectorAll("form[data-async]")
+window.addEventListener("startViewy", ({detail}) => {
+    detail.root.querySelectorAll("form[data-async]")
         .forEach(form => {
             form.addEventListener("submit", e => {
                 e.preventDefault();
-                asyncSubmit(form)
+                asyncSubmit(detail.root, form)
             });
         });
-    document.querySelectorAll("form")
+    detail.root.querySelectorAll("form")
         .forEach(form => {
             form.querySelectorAll(".textfield")
                 .forEach(textfield => {
@@ -62,7 +67,7 @@ window.addEventListener("load", () => {
                     console.log("Auto submit input", input);
                     input.addEventListener("change", () => {
                         if (form.hasAttribute("data-async")) {
-                            asyncSubmit(form)
+                            asyncSubmit(detail.root, form)
                         } else {
                             form.submit();
                         }

@@ -1,5 +1,5 @@
-window.addEventListener("load", () => {
-    document.querySelectorAll(".tab-view")
+window.addEventListener("startViewy", ({detail}) => {
+    detail.root.querySelectorAll(".tab-view")
         .forEach(tabView => {
             const tabs = tabView.querySelectorAll(".tab-view__tab-container__tab");
 
@@ -7,7 +7,7 @@ window.addEventListener("load", () => {
                 return tabs.forEach(tab => {
                     if (tab !== except) {
                         let tabId = tab.getAttribute("data-tabId");
-                        document.querySelector(`.tab-view__content-container__content[data-tabId="${tabId}"]`)
+                        detail.root.querySelector(`.tab-view__content-container__content[data-tabId="${tabId}"]`)
                             .style.display = "none";
 
                         tab.classList.remove("tab-view__tab-container__tab--active");
@@ -21,7 +21,7 @@ window.addEventListener("load", () => {
                     desactivateAllTabs(tab).then(() => {
                         let tabId = tab.getAttribute("data-tabId");
                         tab.classList.add("tab-view__tab-container__tab--active");
-                        document.querySelector(`.tab-view__content-container__content[data-tabId="${tabId}"]`)
+                        detail.root.querySelector(`.tab-view__content-container__content[data-tabId="${tabId}"]`)
                             .style.display = "block";
                     })
                 });

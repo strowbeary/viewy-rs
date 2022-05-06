@@ -4,13 +4,11 @@ function closeAllPopover() {
     });
 }
 
-(() => {
-
-    window.addEventListener("load", () => {
-        const popups = document.querySelectorAll(".popup");
+    window.addEventListener("startViewy", ({detail}) => {
+        const popups = detail.root.querySelectorAll(".popup");
 
         function closeAll(excludedPopupIds) {
-            closeAllPopover();
+            //closeAllPopover();
             popups.forEach(popup => {
                 let popupId = popup.getAttribute("data-attach-to");
 
@@ -22,7 +20,7 @@ function closeAllPopover() {
 
         function open(popupId) {
             let popup = document.querySelector(`.popup[data-attach-to="${popupId}"]`);
-            let opennedPopups = [...document.querySelectorAll(`.popup.visible`)]
+            let opennedPopups = [...detail.root.querySelectorAll(`.popup.visible`)]
                 .map(popup => popup.getAttribute("data-attach-to"));
             closeAll([popupId, ...opennedPopups]);
             popup.classList.add("visible");
@@ -69,6 +67,3 @@ function closeAllPopover() {
 
 
     });
-
-
-})();
