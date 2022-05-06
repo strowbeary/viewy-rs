@@ -124,7 +124,7 @@ impl Renderable for Picker {
             .add_class(format!("picker--{:?}", self.style).to_lowercase().as_str());
 
 
-        if let Some(label) = picker.label {
+        if let Some(label) = &picker.label {
             let text = Text::new(label.as_str(), TextStyle::Label);
             picker.node.children.push(text.render());
         }
@@ -132,7 +132,7 @@ impl Renderable for Picker {
         match self.style {
             PickerStyle::Segmented => {
                 if picker.is_disabled {
-                    picker.add_class(format!("picker--{:?}--disabled", self.style).to_lowercase().as_str());
+                    picker.add_class("picker--segmented--disabled");
                 }
                 picker.node.children.push({
                     let mut option_list = HStack::new(Alignment::Stretch)
