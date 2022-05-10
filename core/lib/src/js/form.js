@@ -5,9 +5,11 @@
  */
 function asyncSubmit(root, form) {
     const formData = new FormData(form);
-    let dynamicContent = document.querySelector(`.dynamic-content[data-dynamic-content-name = ${form.dataset.dynamicContentName}]`)
-    dynamicContent.innerHTML = "";
-    dynamicContent.dispatchEvent(new CustomEvent("dynamicContentErased"));
+    if (form.dataset.dynamicContentName) {
+        let dynamicContent = document.querySelector(`.dynamic-content[data-dynamic-content-name = ${form.dataset.dynamicContentName}]`)
+        dynamicContent.innerHTML = "";
+        dynamicContent.dispatchEvent(new CustomEvent("dynamicContentErased"));
+    }
     fetch(form.getAttribute("action"), {
         method: "POST",
         body: formData
