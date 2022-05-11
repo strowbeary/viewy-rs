@@ -7,6 +7,13 @@
   align-items: center;
   width: max-content;
   gap: sp(4);
+  position: relative;
+
+  & > .badge {
+    position: absolute;
+    left: calc(100% + #{sp(-12)});
+    top: sp(-10);
+  }
 }
 .tag.clickable:hover {
   background: var(--surface-accent-darker);
