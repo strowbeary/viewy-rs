@@ -26,8 +26,12 @@ window.addEventListener("startViewy", ({detail}) => {
                     })
                 });
             });
-
-            tabView.querySelector(".tab-view__tab-container__tab").click();
+            let explicitely_open = tabView.querySelector(".tab-view__tab-container__tab[data-is-open]");
+            if (explicitely_open) {
+                explicitely_open.click()
+            } else {
+                tabView.querySelector(".tab-view__tab-container__tab").click();
+            }
 
         });
 });

@@ -45,12 +45,17 @@ impl Renderable for TabView {
             self.children.iter()
                 .for_each(|child| {
                     tab_bar.append_child({
-                        View::new()
+                        let mut tab = View::new()
                             .set_attr("data-tabId", &child.id.to_string())
                             .add_class("tab-view__tab-container__tab")
                             .append_child({
                                 Text::new(&child.title, TextStyle::Label)
-                            })
+                            });
+                        if child.open {
+                            tab.set_attr("data-is-open", "data-is-open");
+                            tab.add_class("tab-view__tab-container__tab--active");
+                        }
+                        tab
                     });
                 });
             tab_bar
@@ -86,6 +91,7 @@ pub struct TabViewItem {
     pub id: Uuid,
     pub title: String,
     pub icon: Option<String>,
+    pub open: bool,
     children: Vec<Box<dyn Renderable>>,
 }
 
@@ -96,8 +102,14 @@ impl TabViewItem {
             id: Uuid::new_v4(),
             title: title.to_string(),
             icon: None,
+            open: false,
             children: vec![],
         }
+    }
+
+    pub fn open(&mut self, is_open: bool) -> Self {
+        self.open = true;
+        self.clone()
     }
 }
 

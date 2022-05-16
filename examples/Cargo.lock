@@ -1952,7 +1952,7 @@ checksum = "b5a972e5669d67ba988ce3dc826706fb0a8b01471c088cb0b6110b805cc36aed"
 
 [[package]]
 name = "viewy"
-version = "1.4.16-alpha.0"
+version = "1.4.17-alpha.0"
 dependencies = [
  "base64",
  "dyn-clone",

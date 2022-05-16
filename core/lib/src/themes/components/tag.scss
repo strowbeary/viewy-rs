@@ -11,8 +11,8 @@
 
   & > .badge {
     position: absolute;
-    left: calc(100% + #{sp(-12)});
-    top: sp(-10);
+    right: sp(-12);
+    top: sp(-12);
   }
 }
 .tag.clickable:hover {
