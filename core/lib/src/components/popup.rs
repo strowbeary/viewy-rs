@@ -1,7 +1,7 @@
 use std::borrow::BorrowMut;
 
 use crate::{DefaultModifiers, Renderable};
-use crate::components::{Alignment, Appendable, Button, ButtonStyle, ChildContainer, HStack, View};
+use crate::components::{Appendable, Button, ButtonStyle, ChildContainer, View};
 use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
@@ -10,6 +10,7 @@ pub struct Popup {
     node: Node,
     pub el_to_attach_to: String,
     pub window_controls: bool,
+    pub open: bool,
 }
 
 impl NodeContainer for Popup {
@@ -27,6 +28,7 @@ impl Popup {
             node: Default::default(),
             el_to_attach_to: "".to_string(),
             window_controls: true,
+            open: false,
         }
     }
 
@@ -35,13 +37,8 @@ impl Popup {
         self.clone()
     }
     pub fn open(&mut self, is_open: bool) -> Self {
-        {
-            if is_open {
-                self.add_class("visible")
-            } else {
-                self.remove_class("visible")
-            }
-        }.clone()
+        self.open = is_open;
+        self.clone()
     }
 
     pub fn hide_window_controls(&mut self) -> Self {
@@ -61,10 +58,16 @@ impl Appendable for Popup {}
 
 impl Renderable for Popup {
     fn render(&self) -> Node {
-        let mut popup = self.clone()
+        let mut popup = View::new()
             .add_class("popup")
             .set_attr("data-attach-to", self.el_to_attach_to.as_str());
-        let mut window = View::new()
+
+        if self.open {
+            popup.add_class("visible");
+        } else {
+            popup.remove_class("visible");
+        }
+        let mut window = self.clone()
             .add_class("popup__window");
 
         if self.window_controls {
@@ -90,7 +93,7 @@ impl Renderable for Popup {
 
 
         popup.node.children.push({
-            window.render()
+            window.node
         });
 
         popup.node
