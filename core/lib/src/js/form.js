@@ -11,7 +11,7 @@ function asyncSubmit(root, form) {
         dynamicContent.dispatchEvent(new CustomEvent("dynamicContentErased"));
     }
     fetch(form.getAttribute("action"), {
-        method: "POST",
+        method: form.method,
         body: formData
     })
         .then(res => res.text())
