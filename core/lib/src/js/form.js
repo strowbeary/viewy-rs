@@ -10,10 +10,16 @@ function asyncSubmit(root, form) {
         dynamicContent.innerHTML = "";
         dynamicContent.dispatchEvent(new CustomEvent("dynamicContentErased"));
     }
-    fetch(form.getAttribute("action"), {
+    let req_options = {
         method: form.method,
-        body: formData
-    })
+    };
+    if (form.method === "POST") {
+        req_options = {
+            method: form.method,
+            body: formData
+        };
+    }
+    fetch(form.getAttribute("action"), req_options)
         .then(res => res.text())
         .then(content => {
             if (form.dataset.dynamicContentName) {
