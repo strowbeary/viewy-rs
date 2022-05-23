@@ -336,7 +336,17 @@ as opposed to using 'Content here, content here', making it look like readable E
                         Button::new("Submit form on popup opening", ButtonStyle::Filled)
                             .popup({
                                 Popup::new()
-                                    .submit_form_on_open("submit_on_popup_opening")
+                                    .on_open_submit_form("submit_on_popup_opening")
+                                    .append_child({
+                                        Text::new("Hello", TextStyle::H2)
+                                    })
+                            })
+                    })
+                    .append_child({
+                        Button::new("Submit form on popup closing", ButtonStyle::Filled)
+                            .popup({
+                                Popup::new()
+                                    .on_close_submit_form("submit_on_popup_opening")
                                     .append_child({
                                         Text::new("Hello", TextStyle::H2)
                                     })

@@ -9,7 +9,8 @@ pub struct Popup {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
     pub el_to_attach_to: String,
-    form_to_submit: Option<String>,
+    form_to_submit_on_open: Option<String>,
+    form_to_submit_on_close: Option<String>,
     pub window_controls: bool,
     pub open: bool,
 }
@@ -28,7 +29,8 @@ impl Popup {
             children: vec![],
             node: Default::default(),
             el_to_attach_to: "".to_string(),
-            form_to_submit: None,
+            form_to_submit_on_open: None,
+            form_to_submit_on_close: None,
             window_controls: true,
             open: false,
         }
@@ -48,8 +50,13 @@ impl Popup {
         self.clone()
     }
 
-    pub fn submit_form_on_open(&mut self, form_name: &str) -> Self {
-        self.form_to_submit = Some(form_name.to_string());
+    pub fn on_open_submit_form(&mut self, form_name: &str) -> Self {
+        self.form_to_submit_on_open = Some(form_name.to_string());
+        self.clone()
+    }
+
+    pub fn on_close_submit_form(&mut self, form_name: &str) -> Self {
+        self.form_to_submit_on_close = Some(form_name.to_string());
         self.clone()
     }
 }
@@ -68,8 +75,12 @@ impl Renderable for Popup {
         let mut popup = View::new()
             .add_class("popup")
             .set_attr("data-attach-to", self.el_to_attach_to.as_str());
-        if let Some(form_name) = &self.form_to_submit {
-            popup.set_attr("data-attached-form", form_name);
+        if let Some(form_name) = &self.form_to_submit_on_open {
+            popup.set_attr("data-form-to-submit-on-open", form_name);
+        }
+
+        if let Some(form_name) = &self.form_to_submit_on_close {
+            popup.set_attr("data-form-to-submit-on-close", form_name);
         }
         if self.open {
             popup.add_class("visible");

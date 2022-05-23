@@ -24,11 +24,15 @@ function closeAllPopover() {
                 .map(popup => popup.getAttribute("data-attach-to"));
             closeAll([popupId, ...opennedPopups]);
             popup.classList.add("visible");
-            let attached_form = popup.getAttribute("data-attached-form");
+            let attached_form = popup.getAttribute("data-form-to-submit-on-open");
             if (attached_form) {
                 console.log(attached_form);
                 let form = document.getElementById(attached_form);
-                asyncSubmit(detail.root, form);
+                if (form.hasAttribute("data-async")) {
+                    asyncSubmit(detail.root, form)
+                } else {
+                    form.submit();
+                }
             }
         }
 
@@ -40,15 +44,28 @@ function closeAllPopover() {
         function init() {
             popups.forEach(popup => {
                 const popupId = popup.getAttribute("data-attach-to");
+                function close_with_form_check(popupId) {
+                    close(popupId);
+                    let attached_form = popup.getAttribute("data-form-to-submit-on-close");
+                    if (attached_form) {
+                        console.log(attached_form);
+                        let form = document.getElementById(attached_form);
+                        if (form.hasAttribute("data-async")) {
+                            asyncSubmit(detail.root, form)
+                        } else {
+                            form.submit();
+                        }
+                    }
+                }
                 popup.addEventListener("click", (e) => {
                     if (e.target === popup) {
-                        close(popupId)
+                        close_with_form_check(popupId)
                     }
                 });
                 popup.querySelectorAll(".popup__window-controls")
                     .forEach(el => {
                         el.addEventListener("click", () => {
-                            close(popupId);
+                            close_with_form_check(popupId)
                         })
                     });
 
