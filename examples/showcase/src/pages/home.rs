@@ -330,6 +330,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                     })
                     .append_child({
                         Form::new("submit_on_popup_opening", "")
+                            .set_attr("method", "GET")
                     })
                     .append_child({
                         Button::new("Submit form on popup opening", ButtonStyle::Filled)
