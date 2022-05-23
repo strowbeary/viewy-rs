@@ -24,6 +24,12 @@ function closeAllPopover() {
                 .map(popup => popup.getAttribute("data-attach-to"));
             closeAll([popupId, ...opennedPopups]);
             popup.classList.add("visible");
+            let attached_form = popup.getAttribute("data-attached-form");
+            if (attached_form) {
+                console.log(attached_form);
+                let form = document.getElementById(attached_form);
+                asyncSubmit(detail.root, form);
+            }
         }
 
         function close(popupId) {
