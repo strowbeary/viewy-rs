@@ -1,10 +1,10 @@
 use std::borrow::BorrowMut;
 
-use crate::Renderable;
 use crate::{DefaultModifiers, scale};
 use crate::components::{BadgeModifiers, Icon, Text, TextStyle};
 use crate::components::badge::{Badge, BadgeSupport};
 use crate::node::{Node, NodeContainer};
+use crate::Renderable;
 
 /// Used to set a button's importance level.
 #[derive(Debug, Clone)]
@@ -68,8 +68,8 @@ impl Button {
     /// Disable interaction on the button
     pub fn disabled(&mut self, is_disabled: bool) -> Self {
         if is_disabled {
-            self.add_class(format!("button--{:?}--disabled", self.style).to_lowercase().as_str())
-                .set_attr("disabled", "disabled")
+            self.add_class(format!("button--{:?}--disabled", self.style).to_lowercase().as_str());
+            self.set_attr("disabled", "disabled")
         } else {
             self.clone()
         }
@@ -95,9 +95,8 @@ impl Button {
     ///        })
     /// ```
     pub fn attach_to_form(&mut self, form_name: &str) -> Self {
-        self
-            .set_attr("form", form_name)
-            .set_attr("type", "submit")
+        self.set_attr("form", form_name);
+        self.set_attr("type", "submit")
     }
 
     pub fn attach_to_file_input(&mut self, input_id: &str) -> Self {
@@ -111,9 +110,8 @@ impl Button {
 
     /// Set url to navigate to.
     pub fn action(&mut self, url: &str) -> Self {
-        self
-            .set_attr("href", url)
-            .tag("a")
+        self.set_attr("href", url);
+        self.tag("a")
     }
 
     /// Set button's icon

@@ -4,7 +4,7 @@ use viewy::{DefaultModifiers, scale};
 pub fn dynamic_content() -> VStack {
 	VStack::new(Alignment::Stretch)
 		.append_child({
-			Form::new("search", "")
+			Form::new("search", "/search")
 				.async_form()
 				.inject_into_dynamic_content("search_result")
 				.append_child({

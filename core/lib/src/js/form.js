@@ -13,7 +13,8 @@ function asyncSubmit(root, form) {
     let req_options = {
         method: form.method,
     };
-    if (form.method === "POST") {
+    console.log(form);
+    if (form.method === "post") {
         req_options = {
             method: form.method,
             body: formData
