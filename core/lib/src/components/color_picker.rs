@@ -6,7 +6,7 @@ use crate::components::{Alignment, Appendable, HStack, Text, TextStyle, View};
 use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone, Copy)]
-pub struct Color(u8, u8, u8);
+pub struct Color(pub u8, pub u8, pub u8);
 
 impl Color {
     pub fn from_hex(hex: &str) -> Self {
