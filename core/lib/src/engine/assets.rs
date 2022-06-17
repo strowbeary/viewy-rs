@@ -1,3 +1,4 @@
+use crate::CONFIG;
 use crate::theme::{Config, ConfigLoader};
 
 fn get_stylesheets(config: &Config) -> Vec<String> {
@@ -119,10 +120,10 @@ pub struct Assets {
 impl Assets {
     pub fn new() -> Self {
         print!("Load config");
-        let config = ConfigLoader::load_from_config_folder();
+        let config = &*CONFIG;
         let theme = Self {
-            script: Assets::compile_scripts(&config),
-            stylesheet: Assets::compile_theme(&config),
+            script: Assets::compile_scripts(config),
+            stylesheet: Assets::compile_theme(config),
         };
 
         println!(" [Done]");

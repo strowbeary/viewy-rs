@@ -1,3 +1,9 @@
+[app]
+name = "Viewy showcase"
+favicons = [
+    { rel = "shortcut icon", href="/assets/logo.svg"}
+]
+
 [features]
 rich-text-editor = true
 

@@ -574,6 +574,7 @@ dependencies = [
  "grass",
  "hex",
  "html-escape",
+ "lazy_static",
  "markdown",
  "minifier",
  "palette",

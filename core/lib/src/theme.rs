@@ -4,6 +4,18 @@ use std::{env, fs};
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
+pub struct AppSettings {
+    pub name: String,
+    pub favicons: Vec<Favicon>,
+}
+
+#[derive(Deserialize, Serialize)]
+pub struct Favicon {
+    pub rel: String,
+    pub href: String
+}
+
+#[derive(Deserialize, Serialize)]
 pub struct Features {
     #[serde(rename = "rich-text-editor")]
     pub rich_text_editor: bool,
@@ -41,6 +53,7 @@ pub struct Shapes {
 
 #[derive(Deserialize, Serialize)]
 pub struct Config {
+    pub app: AppSettings,
     pub features: Features,
     pub colors: Colors,
     pub shapes: Shapes,
@@ -49,6 +62,10 @@ pub struct Config {
 impl Default for Config {
     fn default() -> Self {
         Config {
+            app: AppSettings {
+                name: "".to_string(),
+                favicons: vec![]
+            },
             features: Features {
                 rich_text_editor: false
             },

@@ -3,7 +3,8 @@ use crate::node::*;
 use std::{fmt, env};
 use crate::Renderable;
 use std::collections::HashMap;
-
+use std::fmt::format;
+use crate::CONFIG;
 fn get_full_html_page(title: String, content: String, theme_variant: String, insert_base_element: bool) -> String {
     let base_url = match env::var("BASE_URL") {
         Ok(url) => url,
@@ -16,13 +17,22 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, ins
             "".to_string()
         }
     };
-
+    let config = &*CONFIG;
+    let favicons = config.app.favicons.iter()
+        .map(|favicon| format!("<link rel=\"{rel}\" href=\"{base_url}{href}\">",
+                               rel = favicon.rel,
+                               base_url = base_url,
+                               href = favicon.href
+        ))
+        .collect::<Vec<String>>()
+        .join("");
     format!(r"
         <!doctype html>
         <html>
             <head>
                 <title>{title}</title>
                 {base_elem}
+                {favicons}
                 <link href='{base_url}/app.css' rel='stylesheet'>
                 <script src='{base_url}/app.js'></script>
                 <meta charset='utf-8' />
@@ -38,6 +48,7 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, ins
             content = content,
             theme_variant = theme_variant,
             base_elem = base_elem,
+            favicons = favicons,
             base_url = base_url
     )
 }
