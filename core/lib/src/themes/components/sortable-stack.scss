@@ -1,0 +1,17 @@
+.sortable-stack {
+  counter-reset: sortable-stack-counter;
+  &__item {
+    counter-increment: sortable-stack-counter;
+    &__handle {
+      cursor: move;
+    }
+    &__handle + * {
+      flex-grow: 1;
+    }
+  }
+}
+
+.sortable-stack-counter-display::before {
+  display: inline;
+  content: counter(sortable-stack-counter);
+}

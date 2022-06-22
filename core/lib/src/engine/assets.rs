@@ -60,6 +60,9 @@ $surface-dark: {surface_dark};
     if config.features.rich_text_editor {
         styles.push(include_str!("../themes/quill.scss").to_string());
     }
+    if config.features.sortable_stack {
+        styles.push(include_str!("../themes/components/sortable-stack.scss").to_string());
+    }
 
     styles
 }
@@ -83,6 +86,10 @@ fn get_scripts(config: &Config) -> Vec<String> {
     ];
     if config.features.rich_text_editor {
         scripts.push(include_str!("../js/quill-editor.js").to_string());
+    }
+    if config.features.sortable_stack {
+        scripts.push(include_str!("../js/Sortable.min.js").to_string());
+        scripts.push(include_str!("../js/sortable-stack.js").to_string());
     }
     scripts
 }

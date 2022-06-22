@@ -73,6 +73,10 @@ impl Picker {
         }
     }
 
+    pub fn multiple(&mut self) -> Self {
+        self.clone()
+    }
+
     /// Make the button submit specified form
     /// ```rust
     ///View::new()
