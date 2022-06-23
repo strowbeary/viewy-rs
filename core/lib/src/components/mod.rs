@@ -27,6 +27,7 @@ mod snackbar;
 mod tabs;
 mod badge;
 mod dynamic_content;
+mod sortable_stack;
 
 pub use badge::BadgeModifiers;
 pub use button::{Button, ButtonStyle};
@@ -60,7 +61,7 @@ pub use tabs::{
     TabView,
     TabViewItem
 };
-
+pub use sortable_stack::SortableStack;
 use crate::node::Node;
 use crate::Renderable;
 

@@ -19,6 +19,8 @@ pub struct Favicon {
 pub struct Features {
     #[serde(rename = "rich-text-editor")]
     pub rich_text_editor: bool,
+    #[serde(rename = "sortable-stack")]
+    pub sortable_stack: bool,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -67,7 +69,8 @@ impl Default for Config {
                 favicons: vec![]
             },
             features: Features {
-                rich_text_editor: false
+                rich_text_editor: false,
+                sortable_stack: false
             },
             colors: Colors {
                 accent: Color {

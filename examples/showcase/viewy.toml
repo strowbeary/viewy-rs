@@ -6,6 +6,7 @@ favicons = [
 
 [features]
 rich-text-editor = true
+sortable-stack = true
 
 [colors]
 accent = { light = "#0052cc", dark = "#3385ff" }
