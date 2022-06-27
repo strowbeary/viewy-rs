@@ -1,6 +1,6 @@
 [package]
 name = "viewy_codegen"
-version = "0.1.2"
+version = "0.1.3"
 authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
 edition = "2018"
 
