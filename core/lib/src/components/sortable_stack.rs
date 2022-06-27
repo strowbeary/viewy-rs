@@ -1,14 +1,16 @@
-use crate::{Renderable, scale};
-use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
+
+use crate::{Renderable, scale};
 use crate::{DefaultModifiers, sp};
 use crate::components::{Alignment, Appendable, ChildContainer, HStack, Icon, View};
+use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
 pub struct SortableStack {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
     wrapper_tag: String,
+    is_disabled: bool,
 }
 
 impl NodeContainer for SortableStack {
@@ -24,8 +26,14 @@ impl SortableStack {
         SortableStack {
             children: vec![],
             node: Default::default(),
-            wrapper_tag: "div".to_string()
+            wrapper_tag: "div".to_string(),
+            is_disabled: false,
         }
+    }
+
+    pub fn disabled(&mut self, is_disabled: bool) -> Self {
+        self.is_disabled = is_disabled;
+        self.clone()
     }
 
     pub fn wrapper_tag(&mut self, tag_name: &str) -> Self {
@@ -42,37 +50,55 @@ impl SortableStack {
         self.node.node_style.push(("grid-gap".to_string(), params.join(" ")));
         self.clone()
     }
-
 }
+
 impl ChildContainer for SortableStack {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
         return self.children.borrow_mut();
     }
 }
+
 impl Appendable for SortableStack {}
+
 impl Renderable for SortableStack {
     fn render(&self) -> Node {
         let mut stack = self
             .clone()
             .add_class("stack")
-            .add_class("sortable-stack")
             .add_class("stack--vertical")
-            .add_class("stack--align-stretch");
+            .add_class("stack--align-stretch")
+            .add_class("sortable-stack");
+        if !self.is_disabled {
+            stack.add_class("sortable-stack--disabled");
+        }
         stack.children.into_iter()
-            .for_each(|child|
-                stack.node.children.push({
-                    HStack::new(Alignment::Center)
-                        .tag(&self.wrapper_tag)
-                        .add_class("sortable-stack__item")
-                        .gap(vec![scale(3)])
-                        .append_child({
-                            Icon::new("align-justify")
-                                .stroke_width(2)
-                                .add_class("sortable-stack__item__handle")
-                        })
-                        .append_child(child)
-                        .render()
-                }));
+            .for_each(|child| {
+                if !self.is_disabled {
+                    stack.node.children.push({
+                        HStack::new(Alignment::Center)
+                            .tag(&self.wrapper_tag)
+                            .add_class("sortable-stack__item")
+                            .gap(vec![scale(3)])
+                            .append_child({
+                                Icon::new("align-justify")
+                                    .stroke_width(2)
+                                    .add_class("sortable-stack__item__handle")
+                            })
+                            .append_child(child)
+                            .render()
+                    })
+                } else {
+                    stack.node.children.push({
+                        HStack::new(Alignment::Center)
+                            .tag(&self.wrapper_tag)
+                            .add_class("sortable-stack__item")
+                            .add_class("sortable-stack__item--disabled")
+                            .append_child(child)
+                            .render()
+                    })
+                }
+            });
+
         stack.node
     }
 }

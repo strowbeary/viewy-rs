@@ -4,8 +4,9 @@
     counter-increment: sortable-stack-counter;
     &__handle {
       cursor: move;
+      flex-grow: 0;
     }
-    &__handle + * {
+    &--disabled > * {
       flex-grow: 1;
     }
   }
