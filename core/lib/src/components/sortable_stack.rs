@@ -68,7 +68,7 @@ impl Renderable for SortableStack {
             .add_class("stack--vertical")
             .add_class("stack--align-stretch")
             .add_class("sortable-stack");
-        if !self.is_disabled {
+        if self.is_disabled {
             stack.add_class("sortable-stack--disabled");
         }
         stack.children.into_iter()

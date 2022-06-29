@@ -60,6 +60,10 @@ impl Text {
         self.encode_text = false;
         self.clone()
     }
+
+    pub fn text_overflow(&mut self) -> Self {
+        todo!()
+    }
 }
 
 impl NodeContainer for Text {

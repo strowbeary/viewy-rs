@@ -33,6 +33,8 @@ pub struct TextField {
     node: Node,
     pub label: Option<String>,
     pub value: Option<String>,
+    pub min: Option<String>,
+    pub max: Option<String>,
     pub helper_text: Option<String>,
     pub placeholder: Option<String>,
     pub leading_icon: Option<String>,
@@ -58,6 +60,8 @@ impl TextField {
             node: Default::default(),
             label: None,
             value: None,
+            min: None,
+            max: None,
             helper_text: None,
             placeholder: None,
             leading_icon: None,
@@ -77,6 +81,16 @@ impl TextField {
 
     pub fn value(&mut self, value: &str) -> Self {
         self.value = Some(value.to_string());
+        self.clone()
+    }
+
+    pub fn min(&mut self, value: &str) -> Self {
+        self.min = Some(value.to_string());
+        self.clone()
+    }
+
+    pub fn max(&mut self, value: &str) -> Self {
+        self.max = Some(value.to_string());
         self.clone()
     }
 
@@ -297,6 +311,12 @@ impl Renderable for TextField {
                             input.set_attr("value", &value);
                         }
                     }
+                }
+                if let Some(value) = field.min {
+                    input.set_attr("min", &value);
+                }
+                if let Some(value) = field.max {
+                    input.set_attr("max", &value);
                 }
 
                 if matches!(field.field_type, FieldType::Hidden) {

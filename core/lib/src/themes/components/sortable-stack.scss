@@ -6,6 +6,7 @@
       cursor: move;
       flex-grow: 0;
     }
+    &__handle + *,
     &--disabled > * {
       flex-grow: 1;
     }
