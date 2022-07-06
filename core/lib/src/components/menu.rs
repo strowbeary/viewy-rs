@@ -44,9 +44,9 @@ impl Renderable for MenuSection {
     fn render(&self) -> Node {
         let mut menu_section = self.clone()
             .add_class("menu-section");
-        menu_section.node.children.append(&mut vec![
+        menu_section.node.children.push({
             Text::new(self.label.as_str(), TextStyle::Overline).render()
-        ]);
+        });
         menu_section.node
     }
 }

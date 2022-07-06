@@ -157,7 +157,7 @@ impl Renderable for TextField {
                     });
                 }
 
-                let id = Uuid::new_v4().to_hyphenated().to_string();
+                let id = Uuid::new_v4().to_string();
                 let editor_id = &format!("editor-{}", id);
                 let toolbar_id = &format!("toolbar-{}", id);
                 field.node.children.push({
@@ -298,7 +298,7 @@ impl Renderable for TextField {
                     }
                 }
                 if self.datalist && !matches!(field.field_type, FieldType::TextArea) {
-                    let id = Uuid::new_v4().to_hyphenated().to_string();
+                    let id = Uuid::new_v4().to_string();
                     input.set_attr("list", id.as_str());
                 }
 

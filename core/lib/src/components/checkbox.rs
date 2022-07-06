@@ -80,7 +80,7 @@ impl Appendable for Checkbox {}
 
 impl Renderable for Checkbox {
     fn render(&self) -> Node {
-        let radio_id = Uuid::new_v4().to_hyphenated().to_string();
+        let radio_id = Uuid::new_v4().to_string();
 
         let mut checkbox = View::new()
             .tag("input")

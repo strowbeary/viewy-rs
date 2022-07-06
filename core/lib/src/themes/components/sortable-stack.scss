@@ -1,10 +1,13 @@
 .sortable-stack {
   counter-reset: sortable-stack-counter;
   &__item {
-    counter-increment: sortable-stack-counter;
+    .sortable-stack-counter-display {
+      counter-increment: sortable-stack-counter;
+    }
     &__handle {
       cursor: move;
       flex-grow: 0;
+      color: var(--color-accent);
     }
     &__handle + *,
     &--disabled > * {

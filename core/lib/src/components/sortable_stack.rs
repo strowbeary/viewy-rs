@@ -75,7 +75,8 @@ impl Renderable for SortableStack {
             .for_each(|child| {
                 if !self.is_disabled {
                     stack.node.children.push({
-                        HStack::new(Alignment::Center)
+                        let mut child_node = child.render();
+                        let mut container_node = HStack::new(Alignment::Center)
                             .tag(&self.wrapper_tag)
                             .add_class("sortable-stack__item")
                             .gap(vec![scale(3)])
@@ -84,21 +85,44 @@ impl Renderable for SortableStack {
                                     .stroke_width(2)
                                     .add_class("sortable-stack__item__handle")
                             })
-                            .append_child(child)
-                            .render()
-                    })
-                } else {
-                    stack.node.children.push({
-                        HStack::new(Alignment::Center)
-                            .tag(&self.wrapper_tag)
-                            .add_class("sortable-stack__item")
-                            .add_class("sortable-stack__item--disabled")
-                            .append_child(child)
-                            .render()
-                    })
-                }
-            });
+                            .render();
 
-        stack.node
-    }
+
+                        child_node.node_style.iter()
+                            .for_each(|(property, value)| {
+                                if property.eq("margin")
+                                    || property.eq("margin-top")
+                                    || property.eq("margin-right")
+                                    || property.eq("margin-left")
+                                    || property.eq("margin-bottom") {
+                                    container_node.node_style.push((property.clone(), value.clone()))
+                                }
+                            });
+
+                    child_node.node_style = child_node.node_style.into_iter()
+                        .filter(|(property, value)| {
+                            !(property.eq("margin")
+                                || property.eq("margin-top")
+                                || property.eq("margin-right")
+                                || property.eq("margin-left")
+                                || property.eq("margin-bottom"))
+                        })
+                        .collect();
+                    container_node.children.push(child_node);
+                    container_node
+                })
+            } else {
+                          stack.node.children.push({
+                              HStack::new(Alignment::Center)
+                                  .tag(&self.wrapper_tag)
+                                  .add_class("sortable-stack__item")
+                                  .add_class("sortable-stack__item--disabled")
+                                  .append_child(child)
+                                  .render()
+                          })
+                      }
+    });
+
+    stack.node
+}
 }

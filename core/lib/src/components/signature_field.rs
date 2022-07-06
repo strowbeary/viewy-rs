@@ -30,7 +30,7 @@ impl SignatureField {
             node: Node::default(),
             label: None,
             name: name.to_string(),
-            id: Uuid::new_v4().to_hyphenated().to_string(),
+            id: Uuid::new_v4().to_string(),
             form_name: None,
         }
     }

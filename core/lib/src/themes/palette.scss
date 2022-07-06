@@ -1,13 +1,12 @@
-@use "sass:color";
-
 @mixin palette($variant) {
   @if($variant == "dark") {
     $accent: $accent-dark;
-    $on-primary: #ffffff;
+    $on-accent: contrast-color($accent);
     $background: $background-dark;
     $on-background: #ffffff;
     $surface: $surface-dark;
     $themed-on-background: color.mix($on-background, $accent, $weight: 90%);
+    $themed-on-accent: color.mix($on-accent, $accent, $weight: 90%);
 
     --color-accent: #{$accent};
     --color-accent-light: #{color.adjust($accent, $lightness: +20%)};
@@ -27,6 +26,7 @@
     --backdrop: #{color.adjust($background, $alpha: -0.3)};
     --color-text: #{$themed-on-background};
     --color-text-secondary: #{color.adjust($themed-on-background, $lightness: -20%, $saturation: -70%)};
+    --color-text-on-accent: $themed-on-accent;
     --color-border: #{color.adjust($themed-on-background, $lightness: -73%, $saturation: -70%)};
     --color-border-hover: #{color.adjust($themed-on-background, $lightness: -70%, $saturation: -70%)};
     --color-hover: #{color.adjust($themed-on-background, $alpha: -0.94)};
@@ -44,10 +44,12 @@
   }
   @else {
     $accent: $accent-light;
+    $on-accent: contrast-color($accent);
     $background: $background-light;
     $on-background: #000000;
     $surface: $surface-light;
     $themed-on-background: color.mix($on-background, $accent, $weight: 85%);
+    $themed-on-accent: color.mix($on-accent, $accent, $weight: 90%);
 
     --color-accent: #{$accent};
     --color-on-accent: #{$on-accent};
@@ -68,6 +70,7 @@
     --backdrop: #{color.adjust($themed-on-background, $alpha: -0.5)};
     --color-text: #{$themed-on-background};
     --color-text-secondary: #{color.adjust($themed-on-background, $lightness: +20%, $saturation: -50%)};
+    --color-text-on-accent: $themed-on-accent;
     --color-text-disabled: #{color.mix($background, $accent, $weight: 50%)};
     --color-border: #{color.adjust($themed-on-background, $lightness: +78%, $saturation: -80%)};
     --color-border-hover: #{color.adjust($themed-on-background, $lightness: +73%, $saturation: -60%)};

@@ -52,6 +52,16 @@ impl Text {
         }
         self.clone()
     }
+    pub fn uppercase(&mut self, is_uppercase: bool) -> Self {
+        if is_uppercase {
+            self.get_node().node_style.push(("text-transform".to_string(), "uppercase".to_string()));
+        } else {
+            self.get_node().node_style.push(("text-transform".to_string(), "none".to_string()));
+        }
+        self.clone()
+    }
+
+
     pub fn no_wrap(&mut self, is_no_wrap: bool) -> Self {
         self.no_wrap = is_no_wrap;
         self.clone()

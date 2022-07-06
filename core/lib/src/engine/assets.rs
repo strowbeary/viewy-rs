@@ -4,6 +4,8 @@ use crate::theme::{Config, ConfigLoader};
 fn get_stylesheets(config: &Config) -> Vec<String> {
     let mut styles = vec![
         format!("
+@use \"sass:color\";
+@use \"sass:math\";
 $accent-light: {accent_light};
 $accent-dark: {accent_dark};
 $on-accent: {on_accent};
@@ -26,6 +28,7 @@ $surface-dark: {surface_dark};
                 surface_light = config.colors.surface.light,
                 surface_dark = config.colors.surface.dark
         ),
+        include_str!("../themes/luminance.scss").to_string(),
         include_str!("../themes/palette.scss").to_string(),
         include_str!("../themes/sizing.scss").to_string(),
         include_str!("../themes/typography.scss").to_string(),
@@ -137,24 +140,26 @@ impl Assets {
         theme
     }
     fn compile_theme(config: &Config) -> String {
+        println!("Compile theme ");
         let stylesheets = get_stylesheets(&config).join("");
         match grass::from_string(
             stylesheets,
             &grass::Options::default(),
         ) {
             Ok(css) => {
-                minifier::css::minify(css.as_str()).unwrap()
+                println!(" [Done]");
+                minifier::css::minify(css.as_str()).unwrap().to_string()
             }
             Err(err) => {
+                println!(" [Error]");
                 println!("{:?}", err);
-                println!("{}", get_stylesheets(config).join(""));
-                String::new()
+                get_stylesheets(config).join("")
             }
         }
     }
     fn compile_scripts(config: &Config) -> String {
         let joined_scripts: String = get_scripts(config).join("");
-        minifier::js::minify(joined_scripts.as_str());
+        minifier::js::minify(joined_scripts.as_str()).to_string();
         joined_scripts
     }
 }

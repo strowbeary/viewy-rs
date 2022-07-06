@@ -132,7 +132,7 @@ impl Renderable for Picker {
             let text = Text::new(label.as_str(), TextStyle::Label);
             picker.node.children.push(text.render());
         }
-        let picker_id = Uuid::new_v4().to_hyphenated().to_string();
+        let picker_id = Uuid::new_v4().to_string();
         match self.style {
             PickerStyle::Segmented => {
                 if picker.is_disabled {
@@ -184,11 +184,23 @@ impl Renderable for Picker {
             }
             PickerStyle::Dropdown => {
                 picker.node.children.push({
-                    let radio_id = format!("picker-dropdown-{}", self.name.as_str());
+
+                    let dropdown_id = format!("picker-dropdown-{}", self.name.as_str());
+                    let mut select_textfield = TextField::new(&picker.name, FieldType::Search)
+                        .set_attr("id", &dropdown_id);
+
+                    if picker.is_disabled {
+                        select_textfield.set_attr("disabled", "disabled");
+                    }
+
+
+
+                    select_textfield.render()
+                    /*
                     let mut select = View::new()
                         .tag("select")
                         .set_attr("name", self.name.as_str())
-                        .set_attr("id", radio_id.as_str());
+                        .set_attr("id", dropdown_id.as_str());
                     if picker.is_disabled {
                         select.set_attr("disabled", "disabled");
                     }
@@ -205,6 +217,8 @@ impl Renderable for Picker {
                         })
                     }
                     select.render()
+
+                     */
                 })
             }
             PickerStyle::RadioGroup => {

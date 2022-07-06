@@ -20,6 +20,7 @@ pub struct FileInput {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
     auto_submit: bool,
+    required: bool,
     input_type: FileInputType,
     name: String,
 }
@@ -38,6 +39,7 @@ impl FileInput {
             children: vec![],
             node: Node::default(),
             auto_submit: false,
+            required: false,
             input_type: file_input_type,
             name: name.to_string(),
         }
@@ -45,6 +47,10 @@ impl FileInput {
 
     pub fn accept(&mut self, mime_types: &str) -> Self {
         self.set_attr("accept", mime_types)
+    }
+    pub fn required(&mut self, is_required: bool) -> Self {
+        self.required = is_required;
+        self.clone()
     }
 
     pub fn multiple(&mut self) -> Self {
@@ -73,6 +79,9 @@ impl Renderable for FileInput {
                 if !field.node.attributes.contains_key("id") {
                     field.set_attr("id", &format!("file-input-{}", self.name));
                 }
+                if self.required {
+                    field.set_attr("required", "required");
+                }
                 if self.auto_submit {
                     field.set_attr("data-auto-submit", &self.auto_submit.to_string());
                 }
@@ -88,6 +97,9 @@ impl Renderable for FileInput {
                             .set_attr("name", &self.name)
                             .set_attr("type", "file")
                             .tag("input");
+                        if self.required {
+                            input.set_attr("required", "required");
+                        }
                         if self.auto_submit {
                             input.set_attr("data-auto-submit", &self.auto_submit.to_string());
                         }
@@ -121,6 +133,9 @@ impl Renderable for FileInput {
                             .set_attr("name", &self.name)
                             .set_attr("type", "file")
                             .tag("input");
+                        if self.required {
+                            input.set_attr("required", "required");
+                        }
                         if self.auto_submit {
                             input.set_attr("data-auto-submit", &self.auto_submit.to_string());
                         }

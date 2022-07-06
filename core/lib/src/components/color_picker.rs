@@ -89,7 +89,7 @@ impl Renderable for ColorPicker {
                 Text::new(label.as_str(), TextStyle::Label)
             }.render());
         }
-        let picker_id = Uuid::new_v4().to_hyphenated().to_string();
+        let picker_id = Uuid::new_v4().to_string();
         match &self.style {
             ColorPickerStyle::Palette(color_palette) => {
                 picker.node.children.push({
