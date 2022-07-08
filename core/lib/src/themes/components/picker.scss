@@ -114,34 +114,89 @@
   }
 
   &--dropdown {
-    select {
-      -webkit-appearance: none;
-      appearance: none;
-      padding: sp(9) sp(24) sp(9) sp(13);
-      background-color: transparent;
-      background-repeat: no-repeat;
-      background-position-x: calc(100% - 0.5rem);
-      background-position-y: 50%;
-      border-radius: sp($border-radius);
-      font-size: sp(16);
-      border: sp(1) solid var(--color-border);
-      resize: none;
-      font-family: Inter, sans-serif;
-      overflow: hidden;
-      overflow-y: auto;
+    &__input {
+      display: inline-block;
+      position: relative;
       color: var(--color-text);
-      font-weight: $fw-normal;
-      outline: none;
-      transition: border-color 150ms;
-      &:hover {
-        border-color: var(--color-border-hover);
+      width: 100%;
+
+      &__summary {
+        position: relative;
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        border: sp(1) solid var(--color-border);
+        border-radius: sp($border-radius);
+        padding: sp(8) sp(12);
+        grid-gap: scale(3);
+        min-width: sp(200);
+
+        &:hover {
+          border-color: var(--color-border-hover);
+        }
+
+        &__search-input {
+          border: none;
+          background: inherit;
+          font-size: sp(16);
+          font-family: Inter, sans-serif;
+          color: var(--color-text);
+          font-weight: $fw-normal;
+          outline: none;
+        }
+
+        &::after {
+          content: "";
+          display: inline-block;
+          width: sp(16);
+          height: sp(16);
+          background-repeat: no-repeat;
+          background-position: center;
+          @media (prefers-color-scheme: light) {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' stroke-linecap='round' fill='none' stroke-linejoin='round' stroke='black' stroke-width='3' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+          }
+          @media (prefers-color-scheme: dark) {
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' stroke-linecap='round' fill='none' stroke-linejoin='round' stroke='white' stroke-width='3' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+          }
+        }
+
       }
 
-      @media (prefers-color-scheme: light) {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' stroke-linecap='round' fill='none' stroke-linejoin='round' stroke='black' stroke-width='3' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+      & summary::-webkit-details-marker {
+        display: none;
       }
-      @media (prefers-color-scheme: dark) {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' stroke-linecap='round' fill='none' stroke-linejoin='round' stroke='white' stroke-width='3' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+
+      &[open] summary {
+        border-radius: sp($border-radius) sp($border-radius) 0 0;
+      }
+
+      &__option-list {
+        position: absolute;
+        display: flex;
+        flex-direction: column;
+        border: sp(1) solid var(--color-border);
+        border-top: none;
+        width: 100%;
+        border-radius: 0 0 sp($border-radius) sp($border-radius);
+        background: var(--background);
+        padding: sp(8);
+
+
+        &__option {
+          cursor: pointer;
+          padding: sp(8) sp(12);
+          border-radius: sp($border-radius - 2);
+
+          input[type="radio"] {
+            display: none;
+          }
+
+          &:hover {
+            background: var(--color-accent);
+            color: var(--color-text-on-accent);
+          }
+        }
       }
     }
   }

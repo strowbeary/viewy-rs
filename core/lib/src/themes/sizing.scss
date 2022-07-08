@@ -1,3 +1,8 @@
 @function sp($sp) {
   @return ($sp / 16) * 1rem;
 }
+$PHI: 1.61803398 * 1.3;
+
+@function scale($scale) {
+  @return sp(math.ceil(math.pow($scale, $PHI)));
+}

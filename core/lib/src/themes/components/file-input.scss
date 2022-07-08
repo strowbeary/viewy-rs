@@ -1,9 +1,44 @@
 input[type="file"] {
   display: none;
 }
+
 .file-input {
+  display: grid;
+  grid-template-areas: "label required" "input input" "helper_text helper_text";
+  grid-template-columns: 1fr auto;
+  grid-template-rows: auto 1fr auto;
+  gap: scale(2);
+  align-items: center;
+
+  &__label {
+    grid-area: label;
+  }
+
+  &__helper-text {
+    grid-area: helper_text;
+    color: var(--color-text-secondary);
+  }
+
+  &__required {
+    grid-area: required;
+    color: var(--color-text-secondary);
+  }
+  &__input {
+    grid-area: input;
+  }
+
   &__image-preview {
-     border-bottom: sp(1) solid var(--color-border);
+    border-bottom: sp(1) solid var(--color-border);
     height: sp(200);
+  }
+
+  &--error {
+    .card {
+      border-color: $destructive;
+    }
+
+    & .text {
+      color: $destructive;
+    }
   }
 }

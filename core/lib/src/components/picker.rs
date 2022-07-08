@@ -1,10 +1,11 @@
 use std::borrow::BorrowMut;
+
 use uuid::Uuid;
 
 use crate::{DefaultModifiers, scale};
-use crate::Renderable;
 use crate::components::*;
 use crate::node::{Node, NodeContainer};
+use crate::Renderable;
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
@@ -127,11 +128,12 @@ impl Renderable for Picker {
             .add_class("picker")
             .add_class(format!("picker--{:?}", self.style).to_lowercase().as_str());
 
-
         if let Some(label) = &picker.label {
             let text = Text::new(label.as_str(), TextStyle::Label);
             picker.node.children.push(text.render());
         }
+
+
         let picker_id = Uuid::new_v4().to_string();
         match self.style {
             PickerStyle::Segmented => {
@@ -183,43 +185,57 @@ impl Renderable for Picker {
                 })
             }
             PickerStyle::Dropdown => {
+                let dropdown_id = format!("picker-dropdown-{}", self.name.as_str());
+
                 picker.node.children.push({
-
-                    let dropdown_id = format!("picker-dropdown-{}", self.name.as_str());
-                    let mut select_textfield = TextField::new(&picker.name, FieldType::Search)
-                        .set_attr("id", &dropdown_id);
-
-                    if picker.is_disabled {
-                        select_textfield.set_attr("disabled", "disabled");
-                    }
-
-
-
-                    select_textfield.render()
-                    /*
-                    let mut select = View::new()
-                        .tag("select")
-                        .set_attr("name", self.name.as_str())
-                        .set_attr("id", dropdown_id.as_str());
-                    if picker.is_disabled {
-                        select.set_attr("disabled", "disabled");
-                    }
-                    for option in picker.options {
-                        select = select.append_child({
-                            let mut option_element = View::new()
-                                .tag("option")
-                                .set_attr("value", &option.value);
-                            if option.value.eq(&picker.value) {
-                                option_element.set_attr("selected", "selected");
-                            }
-                            option_element.node.text = Some(option.label);
-                            option_element
+                    View::new()
+                        .tag("details")
+                        .add_class("picker--dropdown__input")
+                        .append_child({
+                            View::new()
+                                .tag("summary")
+                                .add_class("picker--dropdown__input__summary")
+                                .append_child({
+                                   Text::new("Value", TextStyle::Body)
+                                       .flex_grow(1)
+                                })
                         })
-                    }
-                    select.render()
+                        .append_child({
+                            let mut menu = VStack::new(Alignment::Stretch)
+                                .add_class("picker--dropdown__input__option-list")
+                                .append_child({
+                                    TextField::new("", FieldType::Search)
+                                        .placeholder("Chercher parmis les options...")
+                                });
+                            for option in picker.options {
+                                let radio_id = format!("{}-{}", dropdown_id, option.label);
 
-                     */
-                })
+                                menu.append_child({
+                                    View::new()
+                                        .add_class("text--label")
+                                        .add_class("picker--dropdown__input__option-list__option")
+                                        .tag("label")
+                                        .set_attr("for", radio_id.as_str())
+                                        .append_child({
+                                            View::new()
+                                                .tag("input")
+                                                .set_attr("type", "radio")
+                                                .set_attr("name", self.name.as_str())
+                                                .set_attr("value", option.value.as_str())
+                                                .set_attr("id", radio_id.as_str())
+                                        })
+                                        .append_child({
+                                            let mut label = View::new();
+                                            label.node.text = Some(option.label);
+                                            label
+                                        })
+
+                                });
+                            }
+                            menu
+                        })
+                        .render()
+                });
             }
             PickerStyle::RadioGroup => {
                 picker.node.children.push({

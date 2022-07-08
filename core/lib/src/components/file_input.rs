@@ -23,6 +23,8 @@ pub struct FileInput {
     required: bool,
     input_type: FileInputType,
     name: String,
+    label: Option<String>,
+    error_text: Option<String>
 }
 
 impl NodeContainer for FileInput {
@@ -42,6 +44,8 @@ impl FileInput {
             required: false,
             input_type: file_input_type,
             name: name.to_string(),
+            label: None,
+            error_text: None
         }
     }
 
@@ -50,6 +54,16 @@ impl FileInput {
     }
     pub fn required(&mut self, is_required: bool) -> Self {
         self.required = is_required;
+        self.clone()
+    }
+
+    pub fn label(&mut self, label: &str) -> Self {
+        self.label = Some(label.to_string());
+        self.clone()
+    }
+
+    pub fn error_message(&mut self, helper_text: &str) -> Self {
+        self.error_text = Some(helper_text.to_string());
         self.clone()
     }
 
@@ -88,9 +102,27 @@ impl Renderable for FileInput {
                 field.node
             }
             FileInputType::Simple => {
-                Card::new(CardStyle::Outlined)
+
+                let mut simple_file_input = View::new()
                     .add_class("file-input")
-                    .add_class("file-input--simple")
+                    .add_class("file-input--simple");
+                if let Some(label) = &self.label {
+                    simple_file_input.append_child({
+                        Text::new(label.as_str(), TextStyle::Label)
+                            .add_class("file-input__label")
+                            .set_attr("for", &format!("file-input-{}", self.name))
+                            .tag("label")
+                    });
+                }
+                if self.required {
+                    simple_file_input.append_child({
+                        Text::new("Requis", TextStyle::Caption)
+                            .add_class("file-input__required")
+                    });
+                }
+                simple_file_input.append_child({
+                        Card::new(CardStyle::Outlined)
+                            .add_class("file-input__input")
                     .append_child({
                         let mut input = View::new()
                             .set_attr("id", &format!("file-input-{}", self.name))
@@ -99,6 +131,7 @@ impl Renderable for FileInput {
                             .tag("input");
                         if self.required {
                             input.set_attr("required", "required");
+
                         }
                         if self.auto_submit {
                             input.set_attr("data-auto-submit", &self.auto_submit.to_string());
@@ -120,63 +153,98 @@ impl Renderable for FileInput {
                                     .add_class("file-input__button")
                             })
                     })
-                    .render()
+
+                    });
+                if let Some(error_message) = &self.error_text {
+                    simple_file_input.add_class("file-input--error");
+                    simple_file_input.append_child({
+                        Text::new(error_message, TextStyle::Caption)
+                            .add_class("file-input__helper-text")
+                    });
+                }
+                    simple_file_input.render()
             }
             FileInputType::Image => {
-                Card::new(CardStyle::Outlined)
-                    .overflow(Overflow::Hidden)
+                let mut image_file_input = View::new()
                     .add_class("file-input")
-                    .add_class("file-input--image")
-                    .append_child({
-                        let mut input = View::new()
-                            .set_attr("id", &format!("file-input-{}", self.name))
-                            .set_attr("name", &self.name)
-                            .set_attr("type", "file")
-                            .tag("input");
-                        if self.required {
-                            input.set_attr("required", "required");
-                        }
-                        if self.auto_submit {
-                            input.set_attr("data-auto-submit", &self.auto_submit.to_string());
-                        }
-                        input
-                    })
-                    .append_child({
-                        VStack::new(Alignment::Stretch)
-                            .append_child({
-                                Image::new("")
-                                    .set_attr("alt", " ")
-                                    .background(&format!(
-                                        "var(--surface) no-repeat center/2rem url({}) ",
-                                        &format!("data:image/svg+xml;base64,{}", {
-                                            base64::encode({
-                                                Icon::new("file")
-                                                    .set_attr("width", "200")
-                                                    .set_attr("height", "200")
-                                                    .set_attr("viewBox", "0 0 24 24")
-                                                    .render().get_html().as_bytes()
+                    .add_class("file-input--image");
+                if let Some(label) = &self.label {
+                    image_file_input.append_child({
+                        Text::new(label.as_str(), TextStyle::Label)
+                            .add_class("file-input__label")
+                            .set_attr("for", &format!("file-input-{}", self.name))
+                            .tag("label")
+                    });
+                }
+                if self.required {
+                    image_file_input.append_child({
+                        Text::new("Requis", TextStyle::Caption)
+                            .add_class("file-input__required")
+                    });
+                }
+                image_file_input.append_child({
+                    Card::new(CardStyle::Outlined)
+                        .add_class("file-input__input")
+                        .overflow(Overflow::Hidden)
+                        .append_child({
+                            let mut input = View::new()
+                                .set_attr("id", &format!("file-input-{}", self.name))
+                                .set_attr("name", &self.name)
+                                .set_attr("type", "file")
+                                .tag("input");
+                            if self.required {
+                                input.set_attr("required", "required");
+                            }
+                            if self.auto_submit {
+                                input.set_attr("data-auto-submit", &self.auto_submit.to_string());
+                            }
+                            input
+                        })
+                        .append_child({
+                            VStack::new(Alignment::Stretch)
+                                .append_child({
+                                    Image::new("")
+                                        .set_attr("alt", " ")
+                                        .background(&format!(
+                                            "var(--surface) no-repeat center/2rem url({}) ",
+                                            &format!("data:image/svg+xml;base64,{}", {
+                                                base64::encode({
+                                                    Icon::new("file")
+                                                        .set_attr("width", "200")
+                                                        .set_attr("height", "200")
+                                                        .set_attr("viewBox", "0 0 24 24")
+                                                        .render().get_html().as_bytes()
+                                                })
                                             })
+                                        ))
+                                        .add_class("file-input__image-preview")
+                                })
+                                .append_child({
+                                    HStack::new(Alignment::Center)
+                                        .flex_grow(1)
+                                        .padding(vec![scale(3)])
+                                        .gap(vec![scale(3)])
+                                        .append_child({
+                                            Text::new("Sélectionner un fichier", TextStyle::Body)
+                                                .add_class("file-input__file-name")
+                                                .flex_grow(1)
                                         })
-                                    ))
-                                    .add_class("file-input__image-preview")
-                            })
-                            .append_child({
-                                HStack::new(Alignment::Center)
-                                    .flex_grow(1)
-                                    .padding(vec![scale(3)])
-                                    .gap(vec![scale(3)])
-                                    .append_child({
-                                        Text::new("Sélectionner un fichier", TextStyle::Body)
-                                            .add_class("file-input__file-name")
-                                            .flex_grow(1)
-                                    })
-                                    .append_child({
-                                        Button::icon_only("upload", ButtonStyle::Outlined)
-                                            .add_class("file-input__button")
-                                    })
-                            })
-                    })
-                    .render()
+                                        .append_child({
+                                            Button::icon_only("upload", ButtonStyle::Outlined)
+                                                .add_class("file-input__button")
+                                        })
+                                })
+                        })
+                });
+
+                if let Some(error_message) = &self.error_text {
+                    image_file_input.add_class("file-input--error");
+                    image_file_input.append_child({
+                        Text::new(error_message, TextStyle::Caption)
+                            .add_class("file-input__helper-text")
+                    });
+                }
+                image_file_input.render()
             }
         }
     }

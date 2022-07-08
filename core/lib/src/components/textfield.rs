@@ -44,6 +44,7 @@ pub struct TextField {
     pub auto_sizing: bool,
     pub datalist: bool,
     pub required: bool,
+    pub read_only: bool,
 }
 
 impl NodeContainer for TextField {
@@ -71,6 +72,7 @@ impl TextField {
             auto_sizing: false,
             datalist: false,
             required: false,
+            read_only: false
         }
     }
 
@@ -91,6 +93,11 @@ impl TextField {
 
     pub fn max(&mut self, value: &str) -> Self {
         self.max = Some(value.to_string());
+        self.clone()
+    }
+
+    pub fn read_only(&mut self, is_read_only: bool) -> Self {
+        self.read_only = is_read_only;
         self.clone()
     }
 
@@ -156,6 +163,11 @@ impl Renderable for TextField {
                             .render()
                     });
                 }
+                if self.read_only {
+                    input.set_attr("readonly", "readonly");
+                }
+
+
 
                 let id = Uuid::new_v4().to_string();
                 let editor_id = &format!("editor-{}", id);
@@ -284,6 +296,12 @@ impl Renderable for TextField {
                             .grid_area("required")
                             .render()
                     });
+                }
+                if self.read_only {
+                    input.set_attr("readonly", "readonly");
+                }
+                if let Some(placeholder) = &self.placeholder {
+                    input.set_attr("placeholder", placeholder);
                 }
 
                 match &self.field_type {

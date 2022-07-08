@@ -54,6 +54,8 @@ pub fn forms() -> VStack {
                    Form::new("async-auto-submit-form", "")
                        .append_child({
                            FileInput::new("test", FileInputType::Simple)
+                               .label("Label")
+                               .error_message("Error message")
                        })
                })
        })
@@ -68,6 +70,7 @@ pub fn forms() -> VStack {
                        .append_child({
                            FileInput::new("test2", FileInputType::Image)
                                .accept("image/*")
+                               .error_message("Error message")
                        })
                })
        })
