@@ -2,8 +2,8 @@ const viewySelect = (component) => {
     const details = component.querySelector(".picker--dropdown__input");
     const summary = component.querySelector(".picker--dropdown__input__summary");
     const valueDisplay = component.querySelector(".picker--dropdown__input__summary .text");
-    const options = component.querySelectorAll(".picker--dropdown__input__option-list__option");
-    let value = component.querySelector('.picker--dropdown__input__option-list__option input[type="radio"]:checked');
+    const options = component.querySelectorAll(".picker--dropdown__input__dropdown__option-list__option");
+    let value = component.querySelector('.picker--dropdown__input__dropdown__option-list__option input:checked');
     let mouseDown = false;
     setValue(value);
 
@@ -41,12 +41,13 @@ const viewySelect = (component) => {
     details.addEventListener('toggle', () => {
         if (details.open) return;
         updateValue();
-    })
+    });
 
-    details.addEventListener('focusout', e => {
-        if (mouseDown) return;
-        details.removeAttribute('open');
-    })
+    window.addEventListener("click", e => {
+        if (!(e.target.isSameNode(details) || details.contains(e.target))) {
+            details.removeAttribute("open");
+        }
+    });
 
     options.forEach(opt => {
         opt.addEventListener('mousedown', () => {
@@ -90,7 +91,7 @@ const viewySelect = (component) => {
     });
 
     details.setAttribute('aria-haspopup', 'listbox');
-    details.querySelector('.picker--dropdown__input__option-list').setAttribute('role', 'listbox');
+    details.querySelector('.picker--dropdown__input__dropdown__option-list').setAttribute('role', 'listbox');
 
     summary.setAttribute('aria-label', `unselected listbox`);
     summary.setAttribute('aria-live', `polite`);

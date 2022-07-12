@@ -187,7 +187,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                             })
                     })
                     .append_child({
-                        Picker::new("test2", "2", PickerStyle::Dropdown)
+                        Picker::new("test3", "2", PickerStyle::Dropdown)
                             .label("Dropdown picker")
                             .append_child({
                                 PickerOption::new("Test 1 - ignored icon", "1")

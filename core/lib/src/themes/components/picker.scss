@@ -132,19 +132,6 @@
         grid-gap: scale(3);
         min-width: sp(200);
 
-        &:hover {
-          border-color: var(--color-border-hover);
-        }
-
-        &__search-input {
-          border: none;
-          background: inherit;
-          font-size: sp(16);
-          font-family: Inter, sans-serif;
-          color: var(--color-text);
-          font-weight: $fw-normal;
-          outline: none;
-        }
 
         &::after {
           content: "";
@@ -171,33 +158,43 @@
         border-radius: sp($border-radius) sp($border-radius) 0 0;
       }
 
-      &__option-list {
+      &__dropdown {
         position: absolute;
-        display: flex;
-        flex-direction: column;
         border: sp(1) solid var(--color-border);
         border-top: none;
         width: 100%;
         border-radius: 0 0 sp($border-radius) sp($border-radius);
         background: var(--background);
-        padding: sp(8);
+        padding: scale(3);
+        gap: scale(3);
 
+        .textfield {
+          gap: 0;
+        }
 
-        &__option {
-          cursor: pointer;
-          padding: sp(8) sp(12);
-          border-radius: sp($border-radius - 2);
+        &__option-list {
+          &__option {
+            cursor: pointer;
+            padding: sp(8) sp(12);
+            border-radius: sp($border-radius - 2);
 
-          input[type="radio"] {
-            display: none;
-          }
-
-          &:hover {
-            background: var(--color-accent);
-            color: var(--color-text-on-accent);
+            input[type="radio"] {
+              display: none;
+            }
+            .icon {
+              visibility: hidden;
+            }
+            &.active .icon {
+              visibility: visible;
+            }
+            &:hover {
+              background: var(--color-accent);
+              color: var(--color-text-on-accent);
+            }
           }
         }
       }
+
     }
   }
 }
