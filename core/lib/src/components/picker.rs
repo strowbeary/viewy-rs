@@ -189,62 +189,68 @@ impl Renderable for Picker {
 
                 picker.node.children.push({
                     View::new()
-                        .tag("details")
                         .add_class("picker--dropdown__input")
                         .append_child({
-                            View::new()
-                                .tag("summary")
-                                .add_class("picker--dropdown__input__summary")
-                                .append_child({
-                                    Text::new("Value", TextStyle::Body)
-                                        .flex_grow(1)
-                                })
+                            TextField::new(self.name.as_str(), FieldType::Hidden)
+                                .value(&picker.value)
+                                .add_class("picker--dropdown__input__field")
                         })
                         .append_child({
-                            VStack::new(Alignment::Stretch)
-                                .add_class("picker--dropdown__input__dropdown")
-                                /*.append_child({
-                                    TextField::new("", FieldType::Search)
-                                        .add_class("picker--dropdown__input__dropdown__search-bar")
-                                        .placeholder("Chercher parmis les options...")
-                                })*/
+                            Text::new("", TextStyle::Body)
+                                .add_class("picker--dropdown__input__value-display")
+                                .flex_grow(1)
+                        })
+                        .popover({
+                            Popover::new()
+                                .placement(Placement::BottomStart)
+                                .add_class("picker--dropdown__dropdown")
+                                .hide_arrow()
                                 .append_child({
-                                    let mut option_list = VStack::new(Alignment::Stretch)
-                                        .add_class("picker--dropdown__input__dropdown__option-list");
-                                    for option in picker.options {
-                                        let radio_id = format!("{}-{}", dropdown_id, option.label);
+                                    VStack::new(Alignment::Stretch)
+                                        .gap(vec![scale(3)])
+                                        .append_child({
+                                            TextField::new("", FieldType::Search)
+                                                .add_class("picker--dropdown__dropdown__search-bar")
+                                                .placeholder("Chercher parmis les options...")
+                                        })
+                                        .append_child({
+                                            let mut option_list = VStack::new(Alignment::Stretch)
+                                                .add_class("picker--dropdown__dropdown__option-list");
+                                            for option in picker.options {
+                                                let radio_id = format!("{}-{}", dropdown_id, option.label);
 
-                                        option_list.append_child({
-                                            HStack::new(Alignment::Center)
-                                                .gap(vec![scale(3)])
-                                                .add_class("text--label")
-                                                .add_class("picker--dropdown__input__dropdown__option-list__option")
-                                                .tag("label")
-                                                .set_attr("for", radio_id.as_str())
-                                                .append_child({
-                                                    let mut radio = View::new()
-                                                        .tag("input")
-                                                        .set_attr("type", "radio")
-                                                        .set_attr("name", self.name.as_str())
-                                                        .set_attr("value", option.value.as_str())
-                                                        .set_attr("id", radio_id.as_str());
-                                                    if picker.value.eq(&option.value) {
-                                                        radio.set_attr("checked", "checked");
-                                                    }
-                                                    radio
-                                                })
-                                                .append_child({
-                                                    Text::new(&option.label, TextStyle::Label)
-                                                        .flex_grow(1)
-                                                        .no_wrap(true)
-                                                })
-                                                .append_child({
-                                                    Icon::new("check")
-                                                        .size(scale(4))
-                                                })
-                                        });
-                                    }
-                                    option_list
+                                                option_list.append_child({
+                                                    HStack::new(Alignment::Center)
+                                                        .gap(vec![scale(3)])
+                                                        .add_class("text--label")
+                                                        .add_class("picker--dropdown__dropdown__option-list__option")
+                                                        .tag("label")
+                                                        .set_attr("for", radio_id.as_str())
+                                                        .append_child({
+                                                            let mut radio = View::new()
+                                                                .tag("input")
+                                                                .set_attr("type", "radio")
+                                                                .set_attr("name", self.name.as_str())
+                                                                .set_attr("value", option.value.as_str())
+                                                                .set_attr("id", radio_id.as_str());
+                                                            if picker.value.eq(&option.value) {
+                                                                radio.set_attr("checked", "checked");
+                                                            }
+                                                            radio
+                                                        })
+                                                        .append_child({
+                                                            Text::new(&option.label, TextStyle::Label)
+                                                                .flex_grow(1)
+                                                                .no_wrap(true)
+                                                        })
+                                                        .append_child({
+                                                            Icon::new("check")
+                                                                .size(scale(4))
+                                                        })
+                                                });
+                                            }
+                                            option_list
+                                        })
                                 })
                         })
                         .render()

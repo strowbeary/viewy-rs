@@ -25,6 +25,7 @@ pub enum Placement {
 pub struct Popover {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
+    hide_arrow: bool,
     pub el_to_attach_to: String,
     pub placement: Placement
 }
@@ -42,9 +43,15 @@ impl Popover {
         Popover {
             children: vec![],
             node: Default::default(),
+            hide_arrow: false,
             el_to_attach_to: "".to_string(),
             placement: Placement::Auto
         }
+    }
+
+    pub fn hide_arrow(&mut self) -> Self {
+        self.hide_arrow = true;
+        self.clone()
     }
 
     pub fn attach_to(&mut self, el: &str) -> Self {
@@ -57,6 +64,7 @@ impl Popover {
         self.clone()
     }
 }
+
 impl ChildContainer for Popover {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
         return self.children.borrow_mut();
@@ -86,14 +94,18 @@ impl Renderable for Popover {
                 Placement::LeftEnd => "left-end",
             });
 
-        let arrow = View::new()
-            .add_class("arrow")
-            .set_attr("data-popper-arrow", "true");
         self.children.iter()
             .for_each(|child| {
                 popover.node.children.push(child.render())
             });
-        popover.node.children.push(arrow.render());
+        if !self.hide_arrow {
+            popover.node.children.push({
+                View::new()
+                    .add_class("arrow")
+                    .set_attr("data-popper-arrow", "true")
+                    .render()
+            });
+        }
 
         popover.node
     }
