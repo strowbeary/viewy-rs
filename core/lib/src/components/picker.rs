@@ -193,8 +193,8 @@ impl Renderable for Picker {
                         .set_attr("tabindex", "0")
                         .append_child({
                             TextField::new(self.name.as_str(), FieldType::Hidden)
-                                .value(&picker.value)
                                 .add_class("picker--dropdown__input__field")
+                                .value(&picker.value)
                         })
                         .append_child({
                             Text::new("", TextStyle::Body)

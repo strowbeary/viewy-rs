@@ -1,6 +1,7 @@
 function viewySelect(picker) {
     const dropdownId = picker.querySelector(".picker--dropdown__input").id;
     const input = picker.querySelector(".picker--dropdown__input");
+    const field = input.querySelector("input");
     const valueDisplay = picker.querySelector(".picker--dropdown__input__value-display");
 
     const dropdown = document.querySelector(`.picker--dropdown__dropdown[data-attach-to="${dropdownId}"]`);
@@ -9,6 +10,8 @@ function viewySelect(picker) {
     let options = originalOptions;
     let currentValue = null;
     let mouseDown = false;
+
+    console.log(field);
 
     searchbar.addEventListener("input", e => {
         const keyword = e.target.value;
@@ -47,14 +50,13 @@ function viewySelect(picker) {
         valueDisplay.textContent = newValue.parentNode.textContent;
         input.setAttribute('aria-label', `${newValue.parentNode.textContent}, listbox ${pos} of ${options.length}`);
         currentValue = newValue;
-
+        field.value = newValue.parentNode.querySelector("input[type='radio']").value;
         originalOptions.forEach(opt => {
             opt.classList.remove('active');
             opt.setAttribute('aria-selected', 'false');
         })
         newValue.parentNode.classList.add('active');
         newValue.parentNode.setAttribute('aria-selected', 'true');
-        picker.dispatchEvent(new Event('change'));
     }
 
     function keyboardController(e) {
@@ -69,21 +71,25 @@ function viewySelect(picker) {
                 e.preventDefault();
                 dropdown.setAttribute("data-show", "data-show");
                 setChecked(options[options.length - 1].querySelector('input[type="radio"]'))
+                picker.dispatchEvent(new Event('change'));
                 break;
             case 36: // HOME
                 e.preventDefault();
                 dropdown.setAttribute("data-show", "data-show");
                 setChecked(options[0].querySelector('input[type="radio"]'))
+                picker.dispatchEvent(new Event('change'));
                 break;
             case 38: // UP
                 e.preventDefault();
                 dropdown.setAttribute("data-show", "data-show");
                 setChecked(options[current > 0 ? current - 1 : 0].querySelector('input[type="radio"]'));
+                picker.dispatchEvent(new Event('change'));
                 break;
             case 40: // DOWN
                 e.preventDefault();
                 dropdown.setAttribute("data-show", "data-show");
                 setChecked(options[current < options.length - 1 ? current + 1 : options.length - 1].querySelector('[type="radio"]'));
+                picker.dispatchEvent(new Event('change'));
                 break;
             case 13: // ENTER
                 e.preventDefault();
@@ -110,6 +116,7 @@ function viewySelect(picker) {
         opt.setAttribute('role', 'option');
         opt.addEventListener("change", e => {
             setValue(e.target);
+            picker.dispatchEvent(new Event('change'));
         });
         opt.addEventListener('mousedown', () => {
             mouseDown = true;
