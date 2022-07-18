@@ -54,6 +54,7 @@ function viewySelect(picker) {
         })
         newValue.parentNode.classList.add('active');
         newValue.parentNode.setAttribute('aria-selected', 'true');
+        picker.dispatchEvent(new Event('change'));
     }
 
     function keyboardController(e) {
