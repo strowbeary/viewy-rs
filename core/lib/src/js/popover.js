@@ -34,7 +34,7 @@ window.addEventListener("startViewy", ({detail}) => {
                     },
                 ],
             });
-            el.popperInstance=popperInstance;
+            popover.popperInstance=popperInstance;
             window.addEventListener("click", e => {
                 if (!(e.target.isSameNode(popover) || popover.contains(e.target))) {
                     popover.removeAttribute("data-show");

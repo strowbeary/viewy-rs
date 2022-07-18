@@ -1,6 +1,6 @@
 .popover {
   $arrow-size: 12;
-  z-index: 10000;
+  z-index: 1000000;
   background: var(--background);
   border: sp(1) solid var(--color-border);
   box-shadow: 0 sp(8) sp(24) var(--color-shadow);

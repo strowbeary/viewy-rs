@@ -154,13 +154,13 @@
       }
 
       &__option-list {
+        max-height: sp(400);
+        max-width: sp(400);
+        overflow: auto;
         &__option {
           cursor: pointer;
           padding: sp(8) sp(12);
           border-radius: sp($border-radius - 2);
-          max-height: sp(400);
-          max-width: sp(400);
-          overflow: auto;
 
           input[type="radio"] {
             display: none;
