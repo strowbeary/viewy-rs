@@ -190,6 +190,7 @@ impl Renderable for Picker {
                 picker.node.children.push({
                     View::new()
                         .add_class("picker--dropdown__input")
+                        .set_attr("tabindex", "0")
                         .append_child({
                             TextField::new(self.name.as_str(), FieldType::Hidden)
                                 .value(&picker.value)
@@ -217,7 +218,7 @@ impl Renderable for Picker {
                                             let mut option_list = VStack::new(Alignment::Stretch)
                                                 .add_class("picker--dropdown__dropdown__option-list");
                                             for option in picker.options {
-                                                let radio_id = format!("{}-{}", dropdown_id, option.label);
+                                                let radio_id = format!("{}-{}", dropdown_id, option.value);
 
                                                 option_list.append_child({
                                                     HStack::new(Alignment::Center)
