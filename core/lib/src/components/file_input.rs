@@ -79,7 +79,7 @@ impl FileInput {
         }
         self.clone()
     }
-    pub fn image_preview(&mut self, src: String) -> Self {
+    pub fn image_preview(&mut self, src: &str) -> Self {
         self.image_preview = Some(src);
         self.clone()
     }
