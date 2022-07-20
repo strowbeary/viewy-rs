@@ -80,7 +80,7 @@ impl FileInput {
         self.clone()
     }
     pub fn image_preview(&mut self, src: &str) -> Self {
-        self.image_preview = Some(src);
+        self.image_preview = Some(src.to_string());
         self.clone()
     }
 }
@@ -211,18 +211,6 @@ impl Renderable for FileInput {
                                 .append_child({
                                     Image::new(&self.clone().image_preview.unwrap_or_default())
                                         .set_attr("alt", " ")
-                                        .background(&format!(
-                                            "var(--surface) no-repeat center/2rem url({}) ",
-                                            &format!("data:image/svg+xml;base64,{}", {
-                                                base64::encode({
-                                                    Icon::new("file")
-                                                        .set_attr("width", "200")
-                                                        .set_attr("height", "200")
-                                                        .set_attr("viewBox", "0 0 24 24")
-                                                        .render().get_html().as_bytes()
-                                                })
-                                            })
-                                        ))
                                         .add_class("file-input__image-preview")
                                 })
                                 .append_child({

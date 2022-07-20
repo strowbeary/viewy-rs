@@ -23,6 +23,7 @@ input[type="file"] {
     grid-area: required;
     color: var(--color-text-secondary);
   }
+
   &__input {
     grid-area: input;
   }
@@ -30,6 +31,12 @@ input[type="file"] {
   &__image-preview {
     border-bottom: sp(1) solid var(--color-border);
     height: sp(200);
+    object-fit: scale-down;
+    background: var(--surface);
+
+    &[src=""] {
+      background: var(--surface) no-repeat center/2rem url(data:image/svg+xml;base64,PHN2ZyBjbGFzcz0iaWNvbiB2aWV3IiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHN0cm9rZS1saW5lam9pbj0icm91bmQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgc3Ryb2tlPSJjdXJyZW50Q29sb3IiIHN0cm9rZS13aWR0aD0iMyIgd2lkdGg9IjEuNXJlbSIgc3Ryb2tlLWxpbmVjYXA9InJvdW5kIiBmaWxsPSJub25lIiBoZWlnaHQ9IjEuNXJlbSIgc3R5bGU9IiI+PHBhdGggZD0iTTEzIDJINmEyIDIgMCAwIDAtMiAydjE2YTIgMiAwIDAgMCAyIDJoMTJhMiAyIDAgMCAwIDItMlY5eiI+PC9wYXRoPjxwb2x5bGluZSBwb2ludHM9IjEzIDIgMTMgOSAyMCA5Ij48L3BvbHlsaW5lPjwvc3ZnPg==);
+    }
   }
 
   &--error {
