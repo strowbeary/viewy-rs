@@ -24,7 +24,8 @@ pub struct FileInput {
     input_type: FileInputType,
     name: String,
     label: Option<String>,
-    error_text: Option<String>
+    error_text: Option<String>,
+    image_preview: Option<String>,
 }
 
 impl NodeContainer for FileInput {
@@ -45,7 +46,8 @@ impl FileInput {
             input_type: file_input_type,
             name: name.to_string(),
             label: None,
-            error_text: None
+            error_text: None,
+            image_preview: None
         }
     }
 
@@ -75,6 +77,10 @@ impl FileInput {
         if is_auto_submit {
             self.auto_submit = is_auto_submit;
         }
+        self.clone()
+    }
+    pub fn image_preview(&mut self, src: String) -> Self {
+        self.image_preview = Some(src);
         self.clone()
     }
 }
@@ -203,7 +209,7 @@ impl Renderable for FileInput {
                         .append_child({
                             VStack::new(Alignment::Stretch)
                                 .append_child({
-                                    Image::new("")
+                                    Image::new(&self.image_preview.unwrap_or_default())
                                         .set_attr("alt", " ")
                                         .background(&format!(
                                             "var(--surface) no-repeat center/2rem url({}) ",

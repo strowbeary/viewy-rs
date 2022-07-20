@@ -212,7 +212,7 @@ impl Renderable for Picker {
                                         .append_child({
                                             TextField::new("", FieldType::Search)
                                                 .add_class("picker--dropdown__dropdown__search-bar")
-                                                .placeholder("Chercher parmis les options...")
+                                                .placeholder("Recherche")
                                         })
                                         .append_child({
                                             let mut option_list = VStack::new(Alignment::Stretch)
