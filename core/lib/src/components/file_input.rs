@@ -209,7 +209,7 @@ impl Renderable for FileInput {
                         .append_child({
                             VStack::new(Alignment::Stretch)
                                 .append_child({
-                                    Image::new(&self.image_preview.unwrap_or_default())
+                                    Image::new(&self.clone().image_preview.unwrap_or_default())
                                         .set_attr("alt", " ")
                                         .background(&format!(
                                             "var(--surface) no-repeat center/2rem url({}) ",

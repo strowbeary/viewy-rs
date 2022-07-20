@@ -11,8 +11,6 @@ function viewySelect(picker) {
     let currentValue = null;
     let mouseDown = false;
 
-    console.log(field);
-
     searchbar.addEventListener("input", e => {
         const keyword = e.target.value;
         options = originalOptions.filter(opt => {
@@ -92,10 +90,6 @@ function viewySelect(picker) {
                 picker.dispatchEvent(new Event('change'));
                 break;
             case 13: // ENTER
-                e.preventDefault();
-                dropdown.toggleAttribute("data-show");
-                break;
-            case 32: // SPACE
                 e.preventDefault();
                 dropdown.toggleAttribute("data-show");
                 break;
