@@ -6,7 +6,7 @@ use crate::components::{Alignment, Appendable, HStack, Text, TextStyle, View};
 use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone, Copy)]
-pub struct Color(pub u8, pub u8, pub u8);
+pub struct Color(pub u8, pub u8, pub u8, pub u8);
 
 impl Color {
     pub fn from_hex(hex: &str) -> Self {
@@ -14,7 +14,18 @@ impl Color {
             .to_string()
             .replace("#", "");
         let color_parsed = <[u8; 3]>::from_hex(color_string).expect("color format not valid");
-        Color(color_parsed[0], color_parsed[1], color_parsed[2])
+        Color(color_parsed[0], color_parsed[1], color_parsed[2], 255)
+    }
+
+    pub fn from_alpha_hex(hex: &str) -> Self {
+        let mut color_string = hex
+            .to_string()
+            .replace("#", "");
+        if color_string.len() == 6 {
+            color_string = format!("{}ff", color_string);
+        }
+        let color_parsed = <[u8; 4]>::from_hex(color_string).expect("color format not valid");
+        Color(color_parsed[0], color_parsed[1], color_parsed[2], color_parsed[3])
     }
 
     
