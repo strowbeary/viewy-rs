@@ -44,7 +44,7 @@ $surface-dark: {surface_dark};
         include_str!("../themes/components/popover.scss").to_string(),
         include_str!("../themes/components/stack.scss").to_string(),
         include_str!("../themes/components/text.scss").to_string(),
-        include_str!("../themes/components/textfield.scss").to_string(),
+        include_str!("../themes/components/field.scss").to_string(),
         include_str!("../themes/components/titlebar.scss").to_string(),
         include_str!("../themes/components/menu.scss").to_string(),
         include_str!("../themes/components/table.scss").to_string(),
@@ -87,6 +87,7 @@ fn get_scripts(config: &Config) -> Vec<String> {
         include_str!("../js/snackbar.js").to_string(),
         include_str!("../js/dynamic_content.js").to_string(),
         include_str!("../js/picker.js").to_string(),
+        include_str!("../js/duration-field.js").to_string(),
     ];
     if config.features.rich_text_editor {
         scripts.push(include_str!("../js/quill-editor.js").to_string());

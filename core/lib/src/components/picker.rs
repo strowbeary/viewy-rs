@@ -192,7 +192,7 @@ impl Renderable for Picker {
                         .add_class("picker--dropdown__input")
                         .set_attr("tabindex", "0")
                         .append_child({
-                            TextField::new(self.name.as_str(), FieldType::Hidden)
+                            Field::new(self.name.as_str(), FieldType::Hidden)
                                 .add_class("picker--dropdown__input__field")
                                 .value(&picker.value)
                         })
@@ -210,7 +210,7 @@ impl Renderable for Picker {
                                     VStack::new(Alignment::Stretch)
                                         .gap(vec![scale(3)])
                                         .append_child({
-                                            TextField::new("", FieldType::Search)
+                                            Field::new("", FieldType::Search)
                                                 .add_class("picker--dropdown__dropdown__search-bar")
                                                 .placeholder("Recherche")
                                         })

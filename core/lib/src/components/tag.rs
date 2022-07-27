@@ -23,7 +23,7 @@ impl Tag {
             node: Node::default(),
             label: label.to_string(),
             icon: None,
-            badge: None
+            badge: None,
         }
     }
 
@@ -32,6 +32,7 @@ impl Tag {
         self.icon = Some(name.to_string());
         self.clone()
     }
+
 }
 
 impl DefaultModifiers<Tag> for Tag {}
