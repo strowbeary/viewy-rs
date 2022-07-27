@@ -1,4 +1,4 @@
-use viewy::components::{Alignment, Appendable, Button, ButtonStyle, DynamicContent, FieldType, Form, HStack, TextField, VStack};
+use viewy::components::{Alignment, Appendable, Button, ButtonStyle, DynamicContent, FieldType, Form, HStack, Field, VStack};
 use viewy::{DefaultModifiers, scale};
 
 pub fn dynamic_content() -> VStack {
@@ -11,7 +11,7 @@ pub fn dynamic_content() -> VStack {
 					HStack::new(Alignment::Center)
 						.gap(vec![scale(2)])
 						.append_child({
-							TextField::new("q", FieldType::Search)
+							Field::new("q", FieldType::Search)
 								//.submit_on_keypress()
 						})
 						.append_child({

@@ -1,4 +1,4 @@
-.textfield {
+.field {
   display: grid;
   grid-template-areas: "label required" "input input" "helper_text helper_text";
   grid-template-columns: 1fr auto;

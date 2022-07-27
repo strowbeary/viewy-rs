@@ -1,4 +1,4 @@
-use rocket::response::content::Html;
+use rocket::response::content::RawHtml;
 use rocket::{Catcher, Request};
 use viewy::components::*;
 use viewy::*;
@@ -6,8 +6,8 @@ use crate::layouts;
 use rocket::http::Status;
 use rocket::response::Responder;
 
-fn default_catch_page(status: Status) -> Html<String>{
-    Html({
+fn default_catch_page(status: Status) -> RawHtml<String>{
+    RawHtml({
         Page::new(
             format!("Viewy showcase – {}", status.reason_lossy()).as_str(),
             &layouts::no_layout,
@@ -34,17 +34,17 @@ fn default_catch_page(status: Status) -> Html<String>{
 }
 
 #[catch(404)]
-fn not_found() -> Html<String> {
+fn not_found() -> RawHtml<String> {
     default_catch_page(Status::NotFound)
 }
 
 #[catch(403)]
-fn forbidden() -> Html<String> {
+fn forbidden() -> RawHtml<String> {
     default_catch_page(Status::Forbidden)
 }
 
 #[catch(500)]
-fn server_error() -> Html<String> {
+fn server_error() -> RawHtml<String> {
     default_catch_page(Status::InternalServerError)
 }
 

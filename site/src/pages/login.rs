@@ -19,14 +19,14 @@ pub fn login() -> View {
                     VStack::new(Alignment::Stretch)
                         .gap(vec![scale(3)])
                         .append_child({
-                            TextField::new(
+                            Field::new(
                                 "email",
                                 FieldType::Email,
                             )
                                 .label("Courriel")
                         })
                         .append_child({
-                            TextField::new(
+                            Field::new(
                                 "password",
                                 FieldType::Password,
                             )

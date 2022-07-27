@@ -92,6 +92,8 @@ function viewySelect(picker) {
             case 13: // ENTER
                 e.preventDefault();
                 dropdown.toggleAttribute("data-show");
+                setChecked(options[current < options.length - 1 ? current + 1 : options.length - 1].querySelector('[type="radio"]'));
+                picker.dispatchEvent(new Event('change'));
                 break;
             default:
                 break;
