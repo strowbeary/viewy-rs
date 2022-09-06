@@ -156,7 +156,8 @@ as opposed to using 'Content here, content here', making it look like readable E
                     })
                     .append_child({
                         Field::new("input6", FieldType::Duration(vec![
-                            Duration::minutes(15)
+                            Duration::minutes(15),
+                            Duration::minutes(75)
                         ]))
                             .label("Champ de durée")
                             .helper_text("Indication sur le type de donnée à mettre dans le champ")
