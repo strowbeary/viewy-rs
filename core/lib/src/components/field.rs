@@ -39,6 +39,7 @@ pub struct Field {
     pub value: Option<String>,
     pub min: Option<String>,
     pub max: Option<String>,
+    pub step: Option<String>,
     pub helper_text: Option<String>,
     pub placeholder: Option<String>,
     pub leading_icon: Option<String>,
@@ -67,6 +68,7 @@ impl Field {
             value: None,
             min: None,
             max: None,
+            step: None,
             helper_text: None,
             placeholder: None,
             leading_icon: None,
@@ -97,6 +99,11 @@ impl Field {
 
     pub fn max(&mut self, value: &str) -> Self {
         self.max = Some(value.to_string());
+        self.clone()
+    }
+
+    pub fn step(&mut self, value: &str) -> Self {
+        self.step = Some(value.to_string());
         self.clone()
     }
 
@@ -399,6 +406,9 @@ impl Renderable for Field {
                 }
                 if let Some(value) = field.max {
                     input.set_attr("max", &value);
+                }
+                if let Some(value) = field.step {
+                    input.set_attr("step", &value);
                 }
 
                 if matches!(field.field_type, FieldType::Hidden) {
