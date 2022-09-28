@@ -122,15 +122,14 @@ function viewySelect(picker) {
             dropdown.removeAttribute("data-show");
         })
     });
-
-    setValue(dropdown.querySelector(".picker--dropdown__dropdown__option-list__option input:checked"));
+    setValue(dropdown.querySelector(".picker--dropdown__dropdown__option-list__option input[checked]"));
 
     input.addEventListener('keydown', keyboardController);
     dropdown.addEventListener('keydown', keyboardController);
 }
 
 window.addEventListener("startViewy", ({detail}) => {
-    document.querySelectorAll(".picker--dropdown")
+    detail.root.querySelectorAll(".picker--dropdown")
         .forEach((picker) => {
             viewySelect(picker);
         });
