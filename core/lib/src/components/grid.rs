@@ -67,7 +67,7 @@ impl Grid {
 
 impl ChildContainer for Grid {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
+        self.children.borrow_mut()
     }
 }
 

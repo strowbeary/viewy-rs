@@ -32,3 +32,4 @@ mod theme;
 lazy_static!{
     pub static ref CONFIG: Config = ConfigLoader::load_from_config_folder();
 }
+

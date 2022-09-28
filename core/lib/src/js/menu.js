@@ -11,10 +11,8 @@ window.addEventListener("startViewy", ({detail}) => {
                     let linkUrl = link.getAttribute("href");
                     let href = window.location.href;
                     let match =  href.toString().includes(linkUrl);
-                    console.log(href, linkUrl, match);
                     return match;
                 });
-            console.log(item);
             if (item) {
                 item.classList.add("menu-item--selected");
             }

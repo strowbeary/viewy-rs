@@ -83,7 +83,7 @@ pub fn forms() -> VStack {
                .append_child({
                    Form::new("richtext-form", "")
                        .append_child({
-                          TextField::new("richtext", FieldType::RichTextArea)
+                          Field::new("richtext", FieldType::RichTextArea)
                               .label("Éditeur de texte riche")
                               .required(true)
                               .value("Hello")

@@ -1,6 +1,7 @@
+
 use viewy::{DefaultModifiers, Overflow, scale, sp};
 use viewy::components::*;
-
+use chrono::Duration;
 use crate::components::showcase_section;
 
 pub fn home() -> VStack {
@@ -67,7 +68,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                     .append_child({
                         VStack::new(Alignment::Start)
                             .gap(vec![16])
-                            .append_child(TextField::new("input2", FieldType::Text)
+                            .append_child(Field::new("input2", FieldType::Text)
                                 .label("Label"))
                             .append_child(
                                 Button::new("submit", ButtonStyle::Filled)
@@ -123,27 +124,27 @@ as opposed to using 'Content here, content here', making it look like readable E
                 VStack::new(Alignment::Stretch)
                     .gap(vec![16])
                     .append_child({
-                        TextField::new("input1", FieldType::Text)
+                        Field::new("input1", FieldType::Text)
                             .placeholder("Optional placeholder")
                     })
                     .append_child({
-                        TextField::new("input2", FieldType::Text)
+                        Field::new("input2", FieldType::Text)
                             .label("Label")
                     })
                     .append_child({
-                        TextField::new("input3", FieldType::Text)
+                        Field::new("input3", FieldType::Text)
                             .label("Label")
                             .helper_text("Message d'aide")
                     })
                     .append_child({
-                        TextField::new("input4", FieldType::Text)
+                        Field::new("input4", FieldType::Text)
                             .label("Label")
                             .error_message("Message d'erreur")
                     })
                     .append_child({
                         Form::new("required_test", "")
                             .append_child({
-                                TextField::new("input5", FieldType::Text)
+                                Field::new("input5", FieldType::Text)
                                     .label("Champ de text")
                                     .helper_text("Indication sur le type de donnée à mettre dans le champ")
                                     .required(true)
@@ -152,6 +153,15 @@ as opposed to using 'Content here, content here', making it look like readable E
                                 Button::new("Valider", ButtonStyle::Filled)
                                     .attach_to_form("required_test")
                             })
+                    })
+                    .append_child({
+                        Field::new("input6", FieldType::Duration(vec![
+                            Duration::minutes(15),
+                            Duration::minutes(75)
+                        ]))
+                            .label("Champ de durée")
+                            .helper_text("Indication sur le type de donnée à mettre dans le champ")
+                            .required(true)
                     })
             })
         })

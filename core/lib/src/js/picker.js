@@ -92,6 +92,8 @@ function viewySelect(picker) {
             case 13: // ENTER
                 e.preventDefault();
                 dropdown.toggleAttribute("data-show");
+                setChecked(options[current < options.length - 1 ? current + 1 : options.length - 1].querySelector('[type="radio"]'));
+                picker.dispatchEvent(new Event('change'));
                 break;
             default:
                 break;
@@ -120,15 +122,14 @@ function viewySelect(picker) {
             dropdown.removeAttribute("data-show");
         })
     });
-
-    setValue(dropdown.querySelector(".picker--dropdown__dropdown__option-list__option input:checked"));
+    setValue(dropdown.querySelector(".picker--dropdown__dropdown__option-list__option input[checked]"));
 
     input.addEventListener('keydown', keyboardController);
     dropdown.addEventListener('keydown', keyboardController);
 }
 
 window.addEventListener("startViewy", ({detail}) => {
-    document.querySelectorAll(".picker--dropdown")
+    detail.root.querySelectorAll(".picker--dropdown")
         .forEach((picker) => {
             viewySelect(picker);
         });

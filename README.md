@@ -19,8 +19,8 @@ pub fn default_layout() -> Box<dyn Fn(Box<dyn Renderable>) -> Box<dyn Renderable
 }
 
 #[get("/")]
-fn index() -> Html<String> {
-   Html({
+fn index() -> RawHtml<String> {
+   RawHtml({
        Page::new(
            &format!("{} – Viewy", "Hello World"),
            &default_layout(),

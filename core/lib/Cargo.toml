@@ -1,6 +1,6 @@
 [package]
 name = "viewy"
-version = "1.5.5"
+version = "1.5.7"
 authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
 description = "A web UI toolkit that combine the advantages of a design system and an ui library."
 keywords = ["web", "user-interface", "declarative"]
@@ -24,3 +24,6 @@ toml = "0.5"
 hex = "0.4"
 base64 = "0.13"
 lazy_static = "1.4"
+chrono = { version = "0.4", features = ["serde"] }
+chrono_locale = "0.1"
+chrono-tz = { version = "0.6", features = ["serde"] }

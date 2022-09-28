@@ -1,5 +1,5 @@
 [package]
-name = "showcase"
+name = "viewy-site"
 version = "0.1.0"
 authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
 edition = "2021"
@@ -8,5 +8,6 @@ publish = false
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-viewy = { path = "../../core/lib" }
-rocket = { version = "0.5.0-rc.1", features = ["json", "secrets"]  }
+viewy = { path = "../core/lib" }
+rocket = { version = "0.5.0-rc.2", features = ["json", "secrets"]  }
+chrono = { version = "0.4", features = ["serde"] }

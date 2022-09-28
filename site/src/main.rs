@@ -2,7 +2,7 @@
 extern crate rocket;
 extern crate viewy;
 
-use rocket::response::content::{Css, Html, JavaScript};
+use rocket::response::content::{RawCss, RawHtml, RawJavaScript};
 use rocket::State;
 
 use viewy::*;
@@ -18,18 +18,18 @@ mod layouts;
 mod pages;
 
 #[get("/app.css")]
-fn get_stylesheet(assets: &State<Assets>) -> Css<String> {
-	Css(assets.inner().clone().stylesheet)
+fn get_stylesheet(assets: &State<Assets>) -> RawCss<String> {
+	RawCss(assets.inner().clone().stylesheet)
 }
 
 #[get("/app.js")]
-fn get_scripts(assets: &State<Assets>) -> JavaScript<String> {
-	JavaScript(assets.inner().clone().script)
+fn get_scripts(assets: &State<Assets>) -> RawJavaScript<String> {
+	RawJavaScript(assets.inner().clone().script)
 }
 
 #[get("/")]
-fn home() -> Html<String> {
-	Html({
+fn home() -> RawHtml<String> {
+	RawHtml({
 		Page::new(
 			"Viewy showcase – Home",
 			&layouts::default_layout,
@@ -44,8 +44,8 @@ fn home() -> Html<String> {
 }
 
 #[get("/login")]
-fn login() -> Html<String> {
-	Html({
+fn login() -> RawHtml<String> {
+	RawHtml({
 		Page::new(
 			"Viewy showcase – Login",
 			&layouts::login_layout,
@@ -62,8 +62,8 @@ struct LoginForm {
 
 
 #[get("/table")]
-fn table() -> Html<String> {
-	Html({
+fn table() -> RawHtml<String> {
+	RawHtml({
 		Page::new(
 			"Viewy showcase – Table",
 			&layouts::default_layout,
@@ -74,8 +74,8 @@ fn table() -> Html<String> {
 }
 
 #[get("/calendar")]
-fn calendar() -> Html<String> {
-	Html({
+fn calendar() -> RawHtml<String> {
+	RawHtml({
 		Page::new(
 			"Viewy showcase – Calendar",
 			&layouts::default_layout,
@@ -86,8 +86,8 @@ fn calendar() -> Html<String> {
 }
 
 #[get("/menus")]
-fn menus() -> Html<String> {
-	Html({
+fn menus() -> RawHtml<String> {
+	RawHtml({
 		Page::new(
 			"Viewy showcase – Navigation & menus",
 			&layouts::default_layout,
@@ -98,8 +98,8 @@ fn menus() -> Html<String> {
 }
 
 #[get("/tabs")]
-fn tabs() -> Html<String> {
-	Html({
+fn tabs() -> RawHtml<String> {
+	RawHtml({
 		Page::new(
 			"Viewy showcase – Tab view",
 			&layouts::default_layout,
@@ -111,8 +111,8 @@ fn tabs() -> Html<String> {
 
 
 #[get("/search")]
-fn search_page() -> Html<String> {
-	Html({
+fn search_page() -> RawHtml<String> {
+	RawHtml({
 		Page::new(
 			"Viewy showcase – Dynamic content",
 			&layouts::default_layout,
@@ -130,8 +130,8 @@ struct SearchForm {
 #[post("/search", data = "<search_form>")]
 fn search_result(
 	search_form: rocket::form::Form<SearchForm>
-) -> Html<String> {
-	Html({
+) -> RawHtml<String> {
+	RawHtml({
 		Page::new(
 			"Viewy showcase – Dynamic content",
 			&layouts::default_layout, {
@@ -160,8 +160,8 @@ fn search_result(
 }
 
 #[get("/signature")]
-fn signature() -> Html<String> {
-	Html({
+fn signature() -> RawHtml<String> {
+	RawHtml({
 		Page::new(
 			"Viewy showcase – Signature field",
 			&layouts::default_layout,
@@ -172,8 +172,8 @@ fn signature() -> Html<String> {
 }
 
 #[get("/forms")]
-fn forms() -> Html<String> {
-	Html({
+fn forms() -> RawHtml<String> {
+	RawHtml({
 		Page::new(
 			"Viewy showcase – Forms",
 			&layouts::default_layout,
