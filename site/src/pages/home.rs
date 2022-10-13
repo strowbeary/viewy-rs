@@ -1,12 +1,47 @@
+use chrono::Duration;
 
 use viewy::{DefaultModifiers, Overflow, scale, sp};
 use viewy::components::*;
-use chrono::Duration;
+
 use crate::components::showcase_section;
 
 pub fn home() -> VStack {
     VStack::new(Alignment::Stretch)
         .gap(vec![12])
+        .append_child({
+            showcase_section("Highlighted card", {
+                HStack::new(Alignment::Center)
+                    .gap(vec![scale(3)])
+                    .append_child({
+                        Card::new(CardStyle::Outlined)
+                            .remove_highlight_on_submit("remove-highlight")
+                            .highlighted(true)
+                            .padding(vec![scale(4)])
+                            .add_class("clickable")
+                            .append_child({
+                                Text::new("Outlined", TextStyle::Headline)
+                            })
+                    })
+                    .append_child({
+                        Card::new(CardStyle::Filled)
+                            .remove_highlight_on_submit("remove-highlight")
+                            .highlighted(true)
+                            .padding(vec![scale(4)])
+                            .add_class("clickable")
+                            .append_child({
+                                Text::new("Filled", TextStyle::Headline)
+                            })
+                    })
+                    .append_child({
+                        Form::new("remove-highlight", "")
+                            .async_form()
+                            .append_child({
+                                Button::new("Remove highlight", ButtonStyle::Filled)
+                                    .attach_to_form("remove-highlight")
+                            })
+                    })
+            })
+        })
         .append_child({
             showcase_section("Badge", {
                 VStack::new(Alignment::Start)
@@ -157,7 +192,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                     .append_child({
                         Field::new("input6", FieldType::Duration(vec![
                             Duration::minutes(15),
-                            Duration::minutes(75)
+                            Duration::minutes(75),
                         ]))
                             .label("Champ de durée")
                             .helper_text("Indication sur le type de donnée à mettre dans le champ")

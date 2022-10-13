@@ -5,6 +5,7 @@
  */
 function asyncSubmit(root, form) {
     const formData = new FormData(form);
+    form.dispatchEvent(new CustomEvent("asyncSubmit"));
     if (form.dataset.dynamicContentName) {
         let dynamicContent = document.querySelector(`.dynamic-content[data-dynamic-content-name = ${form.dataset.dynamicContentName}]`)
         dynamicContent.innerHTML = "";
@@ -13,7 +14,6 @@ function asyncSubmit(root, form) {
     let req_options = {
         method: form.method,
     };
-    console.log(form);
     if (form.method === "post") {
         req_options = {
             method: form.method,

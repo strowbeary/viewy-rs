@@ -88,6 +88,7 @@ fn get_scripts(config: &Config) -> Vec<String> {
         include_str!("../js/dynamic_content.js").to_string(),
         include_str!("../js/picker.js").to_string(),
         include_str!("../js/duration-field.js").to_string(),
+        include_str!("../js/highlight-control.js").to_string(),
     ];
     if config.features.rich_text_editor {
         scripts.push(include_str!("../js/quill-editor.js").to_string());

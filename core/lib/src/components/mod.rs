@@ -29,7 +29,7 @@ mod badge;
 mod dynamic_content;
 mod sortable_stack;
 
-pub use badge::BadgeModifiers;
+pub use badge::{BadgeModifiers, Badge, BadgeType};
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
 pub use vstack::{VStack, Alignment};

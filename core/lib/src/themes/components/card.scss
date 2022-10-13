@@ -27,4 +27,22 @@
   & .card {
     border-radius: calc(var(--card-radius) / 1.5);
   }
+
+  &--highlighted {
+    &.card--outlined {
+      border: sp(1) solid var(--color-border-blue);
+      background: var(--surface-blue-lighter);
+
+      &.clickable:hover {
+        background: var(--surface-blue);
+      }
+    }
+    &.card--filled {
+      background: var(--surface-blue);
+
+      &.clickable:hover {
+        background: var(--surface-accent-darker);
+      }
+    }
+  }
 }

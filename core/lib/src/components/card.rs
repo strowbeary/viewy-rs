@@ -36,6 +36,25 @@ impl Card {
         self.add_class("clickable");
         self.clone()
     }
+
+    pub fn highlighted(&mut self, is_highlighted: bool) -> Self {
+        if is_highlighted {
+            self.add_class("card--highlighted");
+        } else {
+            self.remove_class("card--highlighted");
+        }
+        self.clone()
+    }
+
+    pub fn remove_highlight_on_submit(&mut self, form_name: &str) -> Self {
+        self.set_attr("data-remove-highlight-on-submit", form_name)
+            .clone()
+    }
+
+    pub fn highlight_on_submit(&mut self, form_name: &str) -> Self {
+        self.set_attr("data-highlight-on-submit", form_name)
+            .clone()
+    }
 }
 
 

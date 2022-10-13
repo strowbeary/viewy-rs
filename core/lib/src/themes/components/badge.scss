@@ -1,12 +1,20 @@
 .badge {
   display: inline-block;
-  font-size: sp(14);
-  min-width: sp(8);
   box-sizing: content-box;
-  line-height: sp(14);
-  padding: sp(3) sp(6);
   border-radius: sp(30);
   background: var(--color-destructive);
   color: var(--color-on-destructive);
-  text-align: center;
+  &--with-text {
+    padding: sp(3) sp(6);
+    line-height: sp(14);
+    min-width: sp(8);
+    min-height: sp(8);
+    font-size: sp(14);
+    text-align: center;
+  }
+  &--textless {
+    min-width: sp(12);
+    min-height: sp(12);
+  }
+
 }
