@@ -84,6 +84,7 @@ impl Renderable for SortableStack {
                                 Icon::new("align-justify")
                                     .stroke_width(2)
                                     .add_class("sortable-stack__item__handle")
+                                    .min_width(&sp(24))
                             })
                             .render();
 

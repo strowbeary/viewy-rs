@@ -2,8 +2,6 @@
   display: inline-block;
   box-sizing: content-box;
   border-radius: sp(30);
-  background: var(--color-destructive);
-  color: var(--color-on-destructive);
   &--with-text {
     padding: sp(3) sp(6);
     line-height: sp(14);
@@ -17,4 +15,12 @@
     min-height: sp(12);
   }
 
+  &--normal {
+    background: var(--color-accent);
+    color: var(--color-on-accent);
+  }
+  &--important {
+    background: var(--color-destructive);
+    color: var(--color-on-destructive);
+  }
 }

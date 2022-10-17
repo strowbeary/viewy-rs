@@ -1,11 +1,17 @@
 window.addEventListener("startViewy", ({detail}) => {
-    detail.root.querySelectorAll(".card[data-highlight-control-form]")
+    console.log("highlight-control");
+
+    detail.root.querySelectorAll(".card[data-remove-highlight-on-submit]")
         .forEach((card) => {
-            const form_name = card.getAttribute("data-highlight-control-form");
+            const form_name = card.getAttribute("data-remove-highlight-on-submit");
+
+            console.log("highlight-control-form", card, form_name);
 
             function remove_highlight(e) {
+                console.log("remove_highlight", card, e);
                 card.classList.remove("card--highlighted");
             }
+
             const form = document.querySelector(`form#${form_name}`);
             form.addEventListener("submit", remove_highlight);
             form.addEventListener("asyncSubmit", remove_highlight);

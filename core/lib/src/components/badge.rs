@@ -17,19 +17,19 @@ pub struct Badge {
 }
 
 impl Badge {
-    pub fn new(value: &str) -> Self {
+    pub fn new(badge_type: BadgeType, value: &str) -> Self {
         Badge {
             node: Default::default(),
             value: Some(value.to_string()),
-            badge_type: BadgeType::Normal
+            badge_type
         }
     }
 
-    pub fn textless() -> Self {
+    pub fn textless(badge_type: BadgeType) -> Self {
         Badge {
             node: Default::default(),
             value: None,
-            badge_type: BadgeType::Normal
+            badge_type
         }
     }
 
@@ -55,6 +55,10 @@ impl Renderable for Badge {
             None => badge.add_class("badge--textless"),
             Some(_) => badge.add_class("badge--with-text"),
         };
+        match &self.badge_type {
+            BadgeType::Important => badge.add_class("badge--important"),
+            BadgeType::Normal => badge.add_class("badge--normal")
+        };
         badge.node.text = self.value.clone();
         badge.node
     }
@@ -67,9 +71,9 @@ pub trait BadgeSupport {
 pub trait BadgeModifiers: Sized + Clone + BadgeSupport {
     fn badge(&mut self, count: &usize) -> Self {
         if count.gt(&99) {
-            self.add_badge(Badge::new("99+"));
+            self.add_badge(Badge::new(BadgeType::Important, "99+"));
         } else {
-            self.add_badge(Badge::new(&count.to_string()));
+            self.add_badge(Badge::new(BadgeType::Important,&count.to_string()));
         }
         self.clone()
     }
