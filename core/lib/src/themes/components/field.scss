@@ -64,7 +64,7 @@
   }
 
   &--error {
-    .textfield {
+    .field {
       &__label {
         color: var(--color-destructive);
       }

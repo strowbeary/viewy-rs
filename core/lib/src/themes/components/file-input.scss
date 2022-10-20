@@ -41,11 +41,11 @@ input[type="file"] {
 
   &--error {
     .card {
-      border-color: $destructive;
+      border-color: var(--color-destructive);
     }
 
     & .text {
-      color: $destructive;
+      color: var(--color-destructive);
     }
   }
 }

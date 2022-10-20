@@ -33,6 +33,9 @@ impl Tag {
         self.clone()
     }
 
+    pub fn destructive(&mut self) -> Self {
+        self.add_class("tag--destructive")
+    }
 }
 
 impl DefaultModifiers<Tag> for Tag {}

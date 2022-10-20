@@ -14,6 +14,10 @@
     right: sp(-12);
     top: sp(-12);
   }
+  &--destructive {
+    background: var(--surface-red);
+    color: var(--color-destructive);
+  }
 }
 .tag.clickable:hover {
   background: var(--surface-accent-darker);

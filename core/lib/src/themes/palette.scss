@@ -19,8 +19,8 @@
     --surface-blue: #{color.adjust($accent, $alpha: -0.85)};
     --surface-blue-lighter: #{color.adjust($accent, $alpha: -0.95)};
     --surface-accent-darker: #{color.adjust($accent, $alpha: -0.80)};
-    --surface-red: #{color.adjust($destructive, $alpha: -0.9)};
-    --surface-red-darker: #{color.adjust($destructive, $alpha: -0.8)};
+    --surface-red: #{color.adjust($destructive-dark, $alpha: -0.9)};
+    --surface-red-darker: #{color.adjust($destructive-dark, $alpha: -0.8)};
     --color-border-blue: #{color.adjust($accent, $alpha: -0.25)};
     --background: $background;
     --background-raised: #{color.adjust($themed-on-background, $lightness: +85%)};
@@ -35,10 +35,10 @@
     --color-focus: #{color.adjust($accent, $alpha: -0.8)};
     --color-shadow: rgba(0, 0, 0, 0.1);
     --color-success: #3DA144;
-    --color-destructive: #{$destructive};
-    --color-destructive-light: #{color.adjust($destructive, $lightness: 5%)};
-    --color-destructive-lighter: #{color.adjust($destructive, $lightness: 10%)};
-    --color-on-destructive: #{$on-destructive};
+    --color-destructive: #{$destructive-dark};
+    --color-destructive-light: #{color.adjust($destructive-dark, $lightness: 5%)};
+    --color-destructive-lighter: #{color.adjust($destructive-dark, $lightness: 10%)};
+    --color-on-destructive: #{$on-destructive-dark};
     --color-warning: #D86F48;
     --color-text-disabled: #{color.mix($background, $accent, $weight: 60%)};
 
@@ -63,8 +63,8 @@
     --surface-blue: #{color.adjust($accent, $alpha: -0.85)};
     --surface-blue-lighter: #{color.adjust($accent, $alpha: -0.95)};
     --surface-accent-darker: #{color.adjust($accent, $alpha: -0.80)};
-    --surface-red: #{color.adjust($destructive, $alpha: -0.9)};
-    --surface-red-darker: #{color.adjust($destructive, $alpha: -0.8)};
+    --surface-red: #{color.adjust($destructive-light, $alpha: -0.9)};
+    --surface-red-darker: #{color.adjust($destructive-light, $alpha: -0.8)};
     --color-border-blue: #{color.adjust($accent, $alpha: -0.25)};
     --background: $background;
     --background-raised: #{color.adjust($themed-on-background, $lightness: +88%)};
@@ -80,10 +80,10 @@
     --color-focus: #{color.adjust($accent, $alpha: -0.5)};
     --color-shadow: rgba(0, 0, 0, 0.1);
     --color-success: #3DA144;
-    --color-destructive: #{$destructive};
-    --color-destructive-light: #{color.adjust($destructive, $lightness: 5%)};
-    --color-destructive-lighter: #{color.adjust($destructive, $lightness: 10%)};
-    --color-on-destructive: #{$on-destructive};
+    --color-destructive: #{$destructive-light};
+    --color-destructive-light: #{color.adjust($destructive-light, $lightness: 5%)};
+    --color-destructive-lighter: #{color.adjust($destructive-light, $lightness: 10%)};
+    --color-on-destructive: #{$on-destructive-light};
     --color-warning: #D86F48;
   }
 }

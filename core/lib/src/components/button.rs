@@ -159,7 +159,8 @@ impl Renderable for Button {
             let mut icon = Icon::new(icon.as_str())
                 .size(16);
             if button.label.is_none() {
-                icon = icon.size(24).stroke_width(2);
+                icon.size(24);
+                icon.stroke_width(2);
             }
             button.node.children.push(icon.render());
         }

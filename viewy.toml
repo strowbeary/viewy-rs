@@ -18,7 +18,7 @@ on-background =  { light = "#000000", dark = "#ffffff" }
 surface = { light = "#efefef", dark = "#181818" }
 on-surface = { light = "#000000", dark = "#ffffff" }
 
-destructive = { light = "#C70039 ", dark = "#C70039" }
+destructive = { light = "#C70039 ", dark = "#ff0048" }
 on-destructive = { light = "#ffffff", dark = "#ffffff" }
 
 [shapes]

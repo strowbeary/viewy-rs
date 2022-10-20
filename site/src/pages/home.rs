@@ -336,7 +336,16 @@ as opposed to using 'Content here, content here', making it look like readable E
                     })
                     .append_child({
                         Tag::new("label")
+                            .destructive()
+                    })
+                    .append_child({
+                        Tag::new("label")
                             .icon("box")
+                    })
+                    .append_child({
+                        Tag::new("label")
+                            .icon("box")
+                            .destructive()
                     })
                     .append_child({
                         Tag::new("label")

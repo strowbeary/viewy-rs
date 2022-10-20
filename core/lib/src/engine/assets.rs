@@ -9,8 +9,10 @@ fn get_stylesheets(config: &Config) -> Vec<String> {
 $accent-light: {accent_light};
 $accent-dark: {accent_dark};
 $on-accent: {on_accent};
-$destructive: {destructive};
-$on-destructive: {on_destructive};
+$destructive-light: {destructive_light};
+$destructive-dark: {destructive_dark};
+$on-destructive-light: {on_destructive_light};
+$on-destructive-dark: {on_destructive_dark};
 $border-radius: {border_radius};
 $background-light: {background_light};
 $background-dark: {background_dark};
@@ -19,8 +21,10 @@ $surface-dark: {surface_dark};
             ",
                 accent_light = config.colors.accent.light,
                 accent_dark = config.colors.accent.dark,
-                destructive = config.colors.destructive.light,
-                on_destructive = config.colors.on_destructive.light,
+                destructive_light = config.colors.destructive.light,
+                on_destructive_light = config.colors.on_destructive.light,
+                destructive_dark = config.colors.destructive.dark,
+                on_destructive_dark = config.colors.on_destructive.dark,
                 on_accent = config.colors.on_accent.light,
                 border_radius = config.shapes.border_radius,
                 background_light = config.colors.background.light,

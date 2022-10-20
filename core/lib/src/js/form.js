@@ -45,13 +45,13 @@ window.addEventListener("startViewy", ({detail}) => {
         });
     detail.root.querySelectorAll("form")
         .forEach(form => {
-            form.querySelectorAll(".textfield")
+            form.querySelectorAll(".field")
                 .forEach(textfield => {
                     let input = textfield.querySelector("input");
                     if (input) {
                         input.addEventListener("invalid", e => {
                             e.preventDefault();
-                            let old_helper_text = textfield.querySelector(".textfield__helper-text");
+                            let old_helper_text = textfield.querySelector(".field__helper-text");
                             if (old_helper_text !== null) {
                                 old_helper_text.remove();
                             }
@@ -82,11 +82,11 @@ window.addEventListener("startViewy", ({detail}) => {
                         }
                     })
                 });
-            form.querySelectorAll(".textfield__rich-text-area")
+            form.querySelectorAll(".field__rich-text-area")
                 .forEach(field => {
-                    let input = field.querySelector(".textfield__input");
-                    let editor = field.querySelector(".textfield__editor");
-                    let toolbar = field.querySelector(".textfield__toolbar");
+                    let input = field.querySelector(".field__input");
+                    let editor = field.querySelector(".field__editor");
+                    let toolbar = field.querySelector(".field__toolbar");
 
                     let quill = new Quill(`#${editor.id}`, {
                         modules: {
@@ -94,8 +94,7 @@ window.addEventListener("startViewy", ({detail}) => {
                         }
                     });
 
-                    quill.on('text-change', () => {
-                        console.log("text-input", input);
+                    quill.on("text-change", function () {
                         input.value = editor.querySelector(".ql-editor").innerHTML;
                     });
                 })
