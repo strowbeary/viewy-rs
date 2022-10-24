@@ -70,14 +70,13 @@ function closeAllPopover() {
                     });
 
                 const el = document.getElementById(popupId);
-                el.classList.add("popup-oppener");
                 el.addEventListener("click", e => {
                     e.preventDefault();
                     open(popupId)
                 });
                 el.querySelectorAll("a, .button, .clickable")
                     .forEach(clickable => {
-                        if (!clickable.classList.contains("popup-oppener")) {
+                        if (!clickable.classList.contains("popup--opener") || !clickable.classList.contains("popover--opener")) {
                             clickable.addEventListener("click", e => {
                                 e.stopPropagation();
                             });

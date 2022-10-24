@@ -107,8 +107,9 @@ impl TabViewItem {
         }
     }
 
+    /// If set to true, this tab will be opened by default
     pub fn open(&mut self, is_open: bool) -> Self {
-        self.open = true;
+        self.open = is_open;
         self.clone()
     }
 }

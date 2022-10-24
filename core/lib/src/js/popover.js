@@ -46,6 +46,11 @@ window.addEventListener("startViewy", ({detail}) => {
 
                 popperInstance.update();
             });
+            el.addEventListener("click", e => {
+                e.preventDefault();
+                popover.setAttribute("data-show", "data-show");
+                popperInstance.update();
+            });
 
         });
     }

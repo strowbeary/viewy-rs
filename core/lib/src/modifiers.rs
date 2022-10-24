@@ -237,6 +237,7 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
     }
     fn popover(&mut self, popover: Popover) -> Self {
         let id = Uuid::new_v4().to_string();
+        self.add_class("popover--opener");
         self.set_attr("id", id.as_str());
         self.get_node().popover = Box::new(Some(
             popover.clone().attach_to(id.as_str())
@@ -246,6 +247,7 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
 
     fn popup(&mut self, popup: Popup) -> Self {
         let id = Uuid::new_v4().to_string();
+        self.add_class("popup--opener");
         self.set_attr("id", id.as_str());
         self.get_node().popup = Box::new(Some(
             popup.clone().attach_to(id.as_str())
