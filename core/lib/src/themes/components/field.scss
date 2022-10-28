@@ -61,6 +61,7 @@
   &__helper-text {
     grid-area: helper_text;
     color: var(--color-text-secondary);
+    width: 100%;
   }
 
   &--error {

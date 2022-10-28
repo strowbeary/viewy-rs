@@ -132,4 +132,8 @@
     text-overflow: ellipsis;
     overflow: hidden;
   }
+
+  &>*:first-of-type {
+    margin: 0;
+  }
 }

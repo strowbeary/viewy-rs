@@ -116,11 +116,12 @@ function viewySelect(picker) {
         });
         opt.addEventListener('mousedown', () => {
             mouseDown = true;
-        })
+            setChecked(opt.querySelector("input[type='radio']"));
+        });
         opt.addEventListener('mouseup', () => {
             mouseDown = false;
             dropdown.removeAttribute("data-show");
-        })
+        });
     });
     setValue(dropdown.querySelector(".picker--dropdown__dropdown__option-list__option input[checked]"));
 

@@ -6,7 +6,7 @@ use uuid::Uuid;
 
 use crate::{DefaultModifiers, Overflow, scale, sp};
 use crate::components::*;
-use crate::components::FieldType::DateTimeLocal;
+use crate::components::FieldType::{DateTimeLocal, RichTextArea};
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
 
@@ -279,7 +279,7 @@ impl Renderable for Field {
                 }
 
                 if let Some(helper_text) = field.helper_text {
-                    let text = Text::new(helper_text.as_str(), TextStyle::Caption)
+                    let text = ComplexText::new(helper_text.as_str(), TextStyle::Caption)
                         .add_class("field__helper-text");
                     field.node.children.push(text.render());
                 }
@@ -429,7 +429,7 @@ impl Renderable for Field {
                     }
 
                     if let Some(helper_text) = field.helper_text {
-                        let text = Text::new(helper_text.as_str(), TextStyle::Caption)
+                        let text = ComplexText::new(helper_text.as_str(), TextStyle::Caption)
                             .add_class("field__helper-text");
                         field.node.children.push(text.render());
                     }
