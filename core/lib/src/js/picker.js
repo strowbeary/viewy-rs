@@ -27,9 +27,6 @@ function viewySelect(picker) {
                 return true;
             }
         });
-        if (options.indexOf(dropdown.querySelector('.active')) === -1) {
-            setChecked(options[0].querySelector("input"));
-        }
         dropdown.popperInstance.forceUpdate();
     });
 
@@ -38,24 +35,28 @@ function viewySelect(picker) {
         radioButton.checked = true;
 
         radioButton.parentElement.scrollIntoView();
-        setValue(radioButton)
+        const has_changed = setValue(radioButton);
+        if (has_changed) {
+            field.dispatchEvent(new CustomEvent('change'));
+        }
     }
 
     function setValue(newValue) {
-        if (currentValue == newValue) return;
+        if (currentValue == newValue) return false;
 
         const pos = options.indexOf(newValue.parentNode) + 1;
         valueDisplay.textContent = newValue.parentNode.textContent;
         input.setAttribute('aria-label', `${newValue.parentNode.textContent}, listbox ${pos} of ${options.length}`);
         currentValue = newValue;
         field.value = newValue.parentNode.querySelector("input[type='radio']").value;
-        field.dispatchEvent(new CustomEvent('change'));
+
         originalOptions.forEach(opt => {
             opt.classList.remove('active');
             opt.setAttribute('aria-selected', 'false');
         })
         newValue.parentNode.classList.add('active');
         newValue.parentNode.setAttribute('aria-selected', 'true');
+        return true;
     }
 
     function keyboardController(e) {
