@@ -45,6 +45,7 @@ pub struct Picker {
     value: String,
     options: Vec<PickerOption>,
     is_disabled: bool,
+    auto_submit: bool,
 }
 
 impl Picker {
@@ -58,6 +59,7 @@ impl Picker {
             children: vec![],
             options: vec![],
             is_disabled: false,
+            auto_submit: false
         }
     }
 
@@ -67,11 +69,8 @@ impl Picker {
     }
 
     pub fn submit_on_change(&mut self, submit_on_change: bool) -> Self {
-        if submit_on_change {
-            self.set_attr("data-auto-submit", "data-auto-submit")
-        } else {
-            self.unset_attr("data-auto-submit")
-        }
+        self.auto_submit = submit_on_change;
+        self.clone()
     }
 
     pub fn multiple(&mut self) -> Self {
@@ -157,6 +156,9 @@ impl Renderable for Picker {
                                 if picker.value.eq(option.value.as_str()) {
                                     radio.set_attr("checked", "checked");
                                 }
+                                if self.auto_submit {
+                                    radio.set_attr("data-auto-submit", "data-auto-submit");
+                                }
                                 radio
                             });
                         option_list.append_child({
@@ -192,9 +194,13 @@ impl Renderable for Picker {
                         .add_class("picker--dropdown__input")
                         .set_attr("tabindex", "0")
                         .append_child({
-                            Field::new(self.name.as_str(), FieldType::Hidden)
+                            let mut input = Field::new(self.name.as_str(), FieldType::Hidden)
                                 .add_class("picker--dropdown__input__field")
-                                .value(&picker.value)
+                                .value(&picker.value);
+                            if self.auto_submit {
+                                input.set_attr("data-auto-submit", "data-auto-submit");
+                            }
+                            input
                         })
                         .append_child({
                             Text::new("", TextStyle::Body)
@@ -278,6 +284,10 @@ impl Renderable for Picker {
                             }
                             if picker.value.eq(option.value.as_str()) {
                                 radio_button.set_attr("checked", "checked");
+                            }
+
+                            if self.auto_submit {
+                                radio_button.set_attr("data-auto-submit", "data-auto-submit");
                             }
                             radio_row.append_child(
                                 radio_button

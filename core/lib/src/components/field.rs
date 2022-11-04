@@ -154,6 +154,18 @@ impl Renderable for Field {
         let mut field = self.clone()
             .add_class("field");
         match &self.field_type {
+            FieldType::Hidden => {
+                let mut input = field
+                    .add_class("field__input")
+                    .tag("input")
+                    .set_attr("id", self.name.as_str())
+                    .set_attr("name", self.name.as_str())
+                    .set_attr("type", "hidden");
+                if let Some(value) = field.value {
+                    input.set_attr("value", &value);
+                }
+                input.node
+            }
             FieldType::RichTextArea => {
                 field.add_class("field__rich-text-area");
                 let mut input = View::new()
@@ -411,9 +423,7 @@ impl Renderable for Field {
                     input.set_attr("step", &value);
                 }
 
-                if matches!(field.field_type, FieldType::Hidden) {
-                    input.render()
-                } else {
+
                     field.node.children.push(input.render());
 
                     if let Some(placeholder) = field.placeholder {
@@ -435,7 +445,7 @@ impl Renderable for Field {
                     }
 
                     field.node
-                }
+
             }
         }
     }
