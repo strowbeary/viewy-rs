@@ -9,7 +9,6 @@ function viewySelect(picker) {
     const originalOptions = [...dropdown.querySelectorAll(".picker--dropdown__dropdown__option-list__option")];
     let options = originalOptions;
     let currentValue = null;
-    let mouseDown = false;
 
     searchbar.addEventListener("input", e => {
         const keyword = e.target.value;
@@ -113,6 +112,9 @@ function viewySelect(picker) {
         opt.setAttribute('role', 'option');
         opt.addEventListener("change", e => {
             setChecked(e.target);
+        });
+        opt.addEventListener('mousedown', () => {
+            setChecked(opt.querySelector("input[type='radio']"));
         });
         opt.addEventListener('mouseup', () => {
             dropdown.removeAttribute("data-show");
