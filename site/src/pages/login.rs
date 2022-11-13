@@ -1,11 +1,12 @@
 use viewy::components::*;
 use viewy::{DefaultModifiers, sp, scale};
+use viewy::components::icons::Lucide;
 
 pub fn login() -> View {
     View::new()
         .append_child({
             Button::new("Retour", ButtonStyle::Link)
-                .icon("arrow-left")
+                .icon(Lucide::ArrowLeft)
                 .action("/")
         })
         .append_child(
@@ -37,7 +38,7 @@ pub fn login() -> View {
         .append_child(
             Button::new("Connexion", ButtonStyle::Filled)
                 .attach_to_form("login-form")
-                .icon("log-in")
+                .icon(Lucide::LogIn)
                 .width("100%")
                 .margin_top(scale(5))
         )

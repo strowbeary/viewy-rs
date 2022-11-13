@@ -3,6 +3,7 @@ use uuid::Uuid;
 
 use crate::{DefaultModifiers, Renderable};
 use crate::components::{Alignment, Appendable, ChildContainer, HStack, Text, TextStyle, View};
+use crate::components::icons::IconPack;
 use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
@@ -90,7 +91,7 @@ pub struct TabViewItem {
     node: Node,
     pub id: Uuid,
     pub title: String,
-    pub icon: Option<String>,
+    pub icon: Option<Box<dyn IconPack>>,
     pub open: bool,
     children: Vec<Box<dyn Renderable>>,
 }

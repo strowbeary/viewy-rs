@@ -3,6 +3,7 @@ use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, scale};
 use crate::components::{BadgeModifiers, Icon, Text, TextStyle};
 use crate::components::badge::{Badge, BadgeSupport};
+use crate::components::icons::IconPack;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
 
@@ -27,7 +28,7 @@ pub struct Button {
     badge: Option<Badge>,
     pub label: Option<String>,
     pub style: ButtonStyle,
-    pub icon: Option<String>,
+    pub icon: Option<Box<dyn IconPack>>,
 }
 
 impl Button {
@@ -47,14 +48,16 @@ impl Button {
 
 
     /// Create new icon only button
-    pub fn icon_only(icon: &str, style: ButtonStyle) -> Self {
+    pub fn icon_only<T>(icon: T, style: ButtonStyle) -> Self
+        where
+            T: 'static + IconPack, {
         Button {
             children: vec![],
             node: Node::default(),
             badge: None,
             label: None,
             style,
-            icon: Some(icon.to_string()),
+            icon: Some(Box::new(icon)),
         }
             .tag("button")
             .set_attr("type", "button")
@@ -115,8 +118,10 @@ impl Button {
     }
 
     /// Set button's icon
-    pub fn icon(&mut self, name: &str) -> Self {
-        self.icon = Some(name.to_string());
+    pub fn icon<T>(&mut self, icon: T) -> Self
+        where
+            T: 'static + IconPack {
+        self.icon = Some(Box::new(icon));
         self.clone()
     }
 
@@ -156,7 +161,7 @@ impl Renderable for Button {
         }
 
         if let Some(icon) = button.icon {
-            let mut icon = Icon::new(icon.as_str())
+            let mut icon = Icon::new(icon)
                 .size(16);
             if button.label.is_none() {
                 icon.size(24);

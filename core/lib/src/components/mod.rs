@@ -39,7 +39,7 @@ pub use grid::Grid;
 pub use view::View;
 pub use field::{Field, FieldType};
 pub use picker::{Picker, PickerStyle, PickerOption};
-pub use icon::Icon;
+pub use icon::{Icon, icons};
 pub use image::{Image, ObjectFit};
 pub use popover::{Popover, Placement};
 pub use hstack::HStack;

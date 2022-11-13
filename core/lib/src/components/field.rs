@@ -7,6 +7,7 @@ use uuid::Uuid;
 use crate::{DefaultModifiers, Overflow, scale, sp};
 use crate::components::*;
 use crate::components::FieldType::{DateTimeLocal, RichTextArea};
+use crate::components::icons::Lucide;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
 
@@ -241,32 +242,32 @@ impl Renderable for Field {
                                     HStack::new(Alignment::Center)
                                         .gap(vec![scale(2)])
                                         .append_child({
-                                            Button::icon_only("bold", ButtonStyle::Flat)
+                                            Button::icon_only(Lucide::Bold, ButtonStyle::Flat)
                                                 .add_class("ql-bold")
                                         })
                                         .append_child({
-                                            Button::icon_only("italic", ButtonStyle::Flat)
+                                            Button::icon_only(Lucide::Italic, ButtonStyle::Flat)
                                                 .add_class("ql-italic")
                                         })
                                         .append_child({
-                                            Button::icon_only("underline", ButtonStyle::Flat)
+                                            Button::icon_only(Lucide::Underline, ButtonStyle::Flat)
                                                 .add_class("ql-underline")
                                         })
                                 })
                                 .append_child({
-                                    Button::icon_only("reset-format", ButtonStyle::Flat)
+                                    Button::icon_only(Lucide::Type, ButtonStyle::Flat)
                                         .add_class("ql-clean")
                                 })
                                 .append_child({
                                     HStack::new(Alignment::Center)
                                         .gap(vec![scale(2)])
                                         .append_child({
-                                            Button::icon_only("list", ButtonStyle::Flat)
+                                            Button::icon_only(Lucide::LayoutList, ButtonStyle::Flat)
                                                 .add_class("ql-list")
                                                 .set_attr("value", "bullet")
                                         })
                                         .append_child({
-                                            Button::icon_only("link-2", ButtonStyle::Flat)
+                                            Button::icon_only(Lucide::Link2, ButtonStyle::Flat)
                                                 .add_class("ql-link")
                                         })
                                 })

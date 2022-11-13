@@ -2,20 +2,25 @@ use crate::node::{Node, NodeContainer};
 use std::collections::HashMap;
 use crate::{DefaultModifiers, sp};
 use crate::{Renderable};
+use crate::components::icons::IconPack;
+
+pub mod icons;
 
 #[derive(Debug, Clone)]
 pub struct Icon {
     node: Node,
-    pub name: String,
+    pub icon: Box<dyn IconPack>,
     pub stroke_width: String,
     pub size: i32,
 }
 
 impl Icon {
-    pub fn new(name: &str) -> Self {
+    pub fn new<T>(icon: T) -> Self
+        where
+            T: 'static + IconPack {
         Icon {
             node: Default::default(),
-            name: name.to_string(),
+            icon: Box::new(icon),
             stroke_width: "3".to_string(),
             size: 24,
         }
@@ -29,11 +34,6 @@ impl Icon {
     pub fn size(&mut self, size: i32) -> Self {
         self.size = size;
         self.clone()
-    }
-
-    fn get_path(&self, name: &str) -> String {
-        let icons: HashMap<String, String> = serde_json::from_str(include_str!("../themes/icons.json")).unwrap();
-        icons.get(name).expect(format!("Icon {} doesn't exist", name).as_str()).to_string()
     }
 }
 
@@ -59,7 +59,7 @@ impl Renderable for Icon {
             .set_attr("stroke-linecap", "round")
             .set_attr("stroke-linejoin", "round")
             .tag("svg");
-        icon.get_node().text = Some(self.get_path(self.name.as_str()));
+        icon.get_node().text = Some(self.icon.path().to_string());
         icon.get_node().clone()
     }
 }

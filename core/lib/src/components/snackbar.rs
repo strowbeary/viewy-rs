@@ -3,6 +3,7 @@ use uuid::Uuid;
 
 use crate::{DefaultModifiers, Renderable, scale};
 use crate::components::{Alignment, Appendable, Button, ButtonStyle, HStack, Text, TextStyle};
+use crate::components::icons::Lucide;
 use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
@@ -25,7 +26,7 @@ impl Snackbar {
         let id = Uuid::new_v4();
         self.set_attr("data-snackbar-id", &id.to_string());
         self.action = Some({
-            Button::icon_only("x", ButtonStyle::Flat)
+            Button::icon_only(Lucide::X, ButtonStyle::Flat)
                 .set_attr("data-snackbar-closing-button", &id.to_string())
         });
         self.clone()

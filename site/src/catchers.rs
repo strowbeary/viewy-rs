@@ -5,6 +5,7 @@ use viewy::*;
 use crate::layouts;
 use rocket::http::Status;
 use rocket::response::Responder;
+use viewy::components::icons::Lucide;
 
 fn default_catch_page(status: Status) -> RawHtml<String>{
     RawHtml({
@@ -23,7 +24,7 @@ fn default_catch_page(status: Status) -> RawHtml<String>{
                     })
                     .append_child({
                         Button::new("Return to home", ButtonStyle::Flat)
-                            .icon("home")
+                            .icon(Lucide::Home)
                             .margin_top(50)
                             .action("/")
                     })

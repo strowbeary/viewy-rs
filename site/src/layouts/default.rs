@@ -1,5 +1,6 @@
 use viewy::*;
 use viewy::components::*;
+use viewy::components::icons::Lucide;
 
 pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
     Box::new(HStack::new(Alignment::Stretch)
@@ -15,37 +16,37 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                     Menu::new(MenuStyle::Vertical)
                         .append_child({
                             MenuItem::new("Basic components")
-                                .icon("box")
+                                .icon(Lucide::Box)
                                 .action("./")
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon("columns")
+                                .icon(Lucide::Columns)
                                 .action("/table")
                         })
                         .append_child({
                             MenuItem::new("Calendar")
-                                .icon("calendar")
+                                .icon(Lucide::Calendar)
                                 .action("/calendar")
                         })
                         .append_child({
                             MenuItem::new("Navigation & menus")
-                                .icon("map")
+                                .icon(Lucide::Map)
                                 .action("/menus")
                         })
                         .append_child({
                             MenuItem::new("Forms")
-                                .icon("edit")
+                                .icon(Lucide::FormInput)
                                 .action("/forms")
                         })
                         .append_child({
                             MenuItem::new("Dynamic content")
-                                .icon("search")
+                                .icon(Lucide::Search)
                                 .action("/search")
                         })
                         .append_child({
                             MenuItem::new("Signature field")
-                                .icon("edit-2")
+                                .icon(Lucide::FileSignature)
                                 .action("/signature")
                         })
                 })
@@ -60,12 +61,12 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                            HStack::new(Alignment::Center)
                                .append_child({
                                    Button::new("Sources", ButtonStyle::Flat)
-                                       .icon("github")
+                                       .icon(Lucide::Github)
                                        .action("https://github.com/strowbeary/viewy-rs")
                                })
                                .append_child({
                                    Button::new("Documentation", ButtonStyle::Flat)
-                                       .icon("file-text")
+                                       .icon(Lucide::FileText)
                                        .action("https://docs.rs/crate/viewy/")
                                })
                         })

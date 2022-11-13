@@ -1,5 +1,6 @@
 use viewy::components::{Alignment, Appendable, Button, ButtonStyle, DynamicContent, FieldType, Form, HStack, Field, VStack};
 use viewy::{DefaultModifiers, scale};
+use viewy::components::icons::Lucide;
 
 pub fn dynamic_content() -> VStack {
 	VStack::new(Alignment::Stretch)
@@ -15,7 +16,7 @@ pub fn dynamic_content() -> VStack {
 								//.submit_on_keypress()
 						})
 						.append_child({
-							Button::icon_only("search", ButtonStyle::Filled)
+							Button::icon_only(Lucide::Search, ButtonStyle::Filled)
 								.attach_to_form("search")
 						})
 				})

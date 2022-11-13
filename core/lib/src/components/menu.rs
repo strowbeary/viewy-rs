@@ -3,6 +3,7 @@ use std::ops::Deref;
 
 use crate::components::*;
 use crate::components::badge::{Badge, BadgeSupport};
+use crate::components::icons::{IconPack, Lucide};
 use crate::DefaultModifiers;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
@@ -56,7 +57,7 @@ impl Renderable for MenuSection {
 #[derive(Debug, Clone)]
 pub struct MenuItem {
     node: Node,
-    pub icon: Option<String>,
+    pub icon: Option<Box<dyn IconPack>>,
     pub icon_color: Option<String>,
     pub label: String,
     badge: Option<Badge>,
@@ -74,8 +75,11 @@ impl MenuItem {
             is_destructive: false
         }
     }
-    pub fn icon(&mut self, name: &str) -> Self {
-        self.icon = Some(name.to_string());
+    /// Set menu's icon
+    pub fn icon<T>(&mut self, icon: T) -> Self
+        where
+            T: 'static + IconPack {
+        self.icon = Some(Box::new(icon));
         self.clone()
     }
 
@@ -128,7 +132,7 @@ impl Renderable for MenuItem {
             });
         if let Some(icon) = menu_item.icon.clone() {
             menu_item.node.children.append(&mut vec![{
-                let mut icon = Icon::new(icon.as_str())
+                let mut icon = Icon::new(icon)
                     .size(16);
                 if let Some(icon_color) = &menu_item.icon_color {
                     icon.color(icon_color);
@@ -140,7 +144,7 @@ impl Renderable for MenuItem {
             menu_item.node.children.append(&mut vec![
                 Text::new(self.label.as_str(), TextStyle::Label)
                     .render(),
-                Icon::new("chevron-down")
+                Icon::new(Lucide::ChevronsDown)
                     .size(16)
                     .render(),
             ]);

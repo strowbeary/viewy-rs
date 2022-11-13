@@ -2,6 +2,7 @@ use std::borrow::BorrowMut;
 
 use crate::{DefaultModifiers, Overflow, scale, sp};
 use crate::components::{Alignment, Appendable, Button, ButtonStyle, Card, CardStyle, ChildContainer, HStack, Icon, Image, ObjectFit, Text, TextStyle, View, VStack};
+use crate::components::icons::Lucide;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
 
@@ -155,7 +156,7 @@ impl Renderable for FileInput {
                                     .flex_grow(1)
                             })
                             .append_child({
-                                Button::icon_only("upload", ButtonStyle::Outlined)
+                                Button::icon_only(Lucide::Upload, ButtonStyle::Outlined)
                                     .add_class("file-input__button")
                             })
                     })
@@ -224,7 +225,7 @@ impl Renderable for FileInput {
                                                 .flex_grow(1)
                                         })
                                         .append_child({
-                                            Button::icon_only("upload", ButtonStyle::Outlined)
+                                            Button::icon_only(Lucide::Upload, ButtonStyle::Outlined)
                                                 .add_class("file-input__button")
                                         })
                                 })

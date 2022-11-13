@@ -6,13 +6,14 @@ use dyn_clone::DynClone;
 use crate::{DefaultModifiers, Renderable};
 use crate::components::{Alignment, Appendable, HStack, Icon, Text, TextStyle};
 use crate::components::badge::{Badge, BadgeSupport, BadgeModifiers};
+use crate::components::icons::IconPack;
 use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
 pub struct Tag {
     node: Node,
     pub label: String,
-    pub icon: Option<String>,
+    pub icon: Option<Box<dyn IconPack>>,
     pub badge: Option<Badge>,
 }
 
@@ -28,8 +29,10 @@ impl Tag {
     }
 
     /// Set tag's icon
-    pub fn icon(&mut self, name: &str) -> Self {
-        self.icon = Some(name.to_string());
+    pub fn icon<T>(&mut self, icon: T) -> Self
+        where
+            T: 'static + IconPack {
+        self.icon = Some(Box::new(icon));
         self.clone()
     }
 
@@ -61,7 +64,7 @@ impl Renderable for Tag {
         tag.get_node().class_list.insert("tag".to_string());
 
         if let Some(icon) = tag.icon {
-            let mut icon = Icon::new(icon.as_str())
+            let mut icon = Icon::new(icon)
                 .size(16)
                 .stroke_width(2);
             tag.node.children.push(icon.render());

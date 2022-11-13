@@ -4,12 +4,13 @@ use uuid::Uuid;
 
 use crate::{DefaultModifiers, scale};
 use crate::components::*;
+use crate::components::icons::{IconPack, Lucide};
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
-    pub icon: Option<String>,
+    pub icon: Option<Box<dyn IconPack>>,
     pub label: String,
     pub value: String,
 }
@@ -22,8 +23,11 @@ impl PickerOption {
             value: value.to_string(),
         }
     }
-    pub fn icon(&mut self, name: &str) -> Self {
-        self.icon = Some(name.to_string());
+    /// Set picker's icon
+    pub fn icon<T>(&mut self, icon: T) -> Self
+        where
+            T: 'static + IconPack {
+        self.icon = Some(Box::new(icon));
         self.clone()
     }
 }
@@ -169,7 +173,7 @@ impl Renderable for Picker {
 
                             if let Some(icon) = option.icon {
                                 item.append_child({
-                                    Icon::new(icon.as_str())
+                                    Icon::new(icon)
                                         .size(16)
                                         .margin_right(scale(2))
                                 });
@@ -251,7 +255,7 @@ impl Renderable for Picker {
                                                                 .no_wrap(true)
                                                         })
                                                         .append_child({
-                                                            Icon::new("check")
+                                                            Icon::new(Lucide::Check)
                                                                 .size(scale(4))
                                                         })
                                                 });

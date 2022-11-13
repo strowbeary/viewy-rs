@@ -2,6 +2,7 @@ use chrono::Duration;
 
 use viewy::{DefaultModifiers, Overflow, scale, sp};
 use viewy::components::*;
+use viewy::components::icons::Lucide;
 
 use crate::components::showcase_section;
 
@@ -60,11 +61,11 @@ pub fn home() -> VStack {
                             .badge(&1)
                     })
                     .append_child({
-                        Button::icon_only("bell", ButtonStyle::Flat)
+                        Button::icon_only(Lucide::Bell, ButtonStyle::Flat)
                             .badge(&1)
                     })
                     .append_child({
-                        Button::icon_only("bell", ButtonStyle::Flat)
+                        Button::icon_only(Lucide::Bell, ButtonStyle::Flat)
                             .badge(&900)
                     })
             })
@@ -137,19 +138,19 @@ as opposed to using 'Content here, content here', making it look like readable E
                             .margin_top(20)
                             .append_child({
                                 Button::new("Valider", ButtonStyle::Link)
-                                    .icon("check")
+                                    .icon(Lucide::Check)
                             })
                             .append_child({
                                 Button::new("Valider", ButtonStyle::Flat)
-                                    .icon("check")
+                                    .icon(Lucide::Check)
                             })
                             .append_child({
                                 Button::new("Valider", ButtonStyle::Outlined)
-                                    .icon("check")
+                                    .icon(Lucide::Check)
                             })
                             .append_child({
                                 Button::new("Valider", ButtonStyle::Filled)
-                                    .icon("check")
+                                    .icon(Lucide::Check)
                             })
                     })
             })
@@ -208,7 +209,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                         Picker::new("test1", "2", PickerStyle::Segmented)
                             .label("Segmented picker")
                             .append_child({
-                                PickerOption::new("Test 1", "1").icon("user")
+                                PickerOption::new("Test 1", "1").icon(Lucide::Users)
                             })
                             .append_child({
                                 PickerOption::new("Test 2", "2")
@@ -222,7 +223,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                             .label("Radio group picker")
                             .append_child({
                                 PickerOption::new("Test 1 - ignored icon", "1")
-                                    .icon("user")
+                                    .icon(Lucide::User)
                             })
                             .append_child({
                                 PickerOption::new("Test 2", "2")
@@ -236,7 +237,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                             .label("Dropdown picker")
                             .append_child({
                                 PickerOption::new("Test 1 - ignored icon", "1")
-                                    .icon("user")
+                                    .icon(Lucide::User)
                             })
                             .append_child({
                                 PickerOption::new("Test 2", "2")
@@ -340,16 +341,16 @@ as opposed to using 'Content here, content here', making it look like readable E
                     })
                     .append_child({
                         Tag::new("label")
-                            .icon("box")
+                            .icon(Lucide::Box)
                     })
                     .append_child({
                         Tag::new("label")
-                            .icon("box")
+                            .icon(Lucide::Box)
                             .destructive()
                     })
                     .append_child({
                         Tag::new("label")
-                            .icon("box")
+                            .icon(Lucide::Box)
                             .badge(&12)
                     })
             })

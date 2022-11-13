@@ -2,6 +2,7 @@ use std::borrow::BorrowMut;
 
 use crate::{DefaultModifiers, Renderable};
 use crate::components::{Appendable, Button, ButtonStyle, ChildContainer, View};
+use crate::components::icons::Lucide;
 use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
@@ -95,7 +96,7 @@ impl Renderable for Popup {
                 View::new()
                     .add_class("popup__window-bar")
                     .append_child({
-                        Button::icon_only("x", ButtonStyle::Link)
+                        Button::icon_only(Lucide::X, ButtonStyle::Link)
                             .add_class("popup__window-controls")
                     })
             }.render());

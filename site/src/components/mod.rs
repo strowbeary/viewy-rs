@@ -1,5 +1,6 @@
 use viewy::components::*;
 use viewy::{DefaultModifiers, Renderable};
+use viewy::components::icons::Lucide;
 
 pub fn showcase_section<C>(title: &str, content: C) -> Card
     where C: 'static + Renderable {
@@ -14,7 +15,7 @@ pub fn showcase_section<C>(title: &str, content: C) -> Card
                })
                .append_child({
                    Button::new("See documentation", ButtonStyle::Link)
-                       .icon("book-open")
+                       .icon(Lucide::BookOpen)
                })
         })
         .append_child(Divider::new())

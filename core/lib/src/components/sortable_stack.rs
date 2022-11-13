@@ -3,6 +3,7 @@ use std::borrow::BorrowMut;
 use crate::{Renderable, scale};
 use crate::{DefaultModifiers, sp};
 use crate::components::{Alignment, Appendable, ChildContainer, HStack, Icon, View};
+use crate::components::icons::Lucide;
 use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
@@ -81,7 +82,7 @@ impl Renderable for SortableStack {
                             .add_class("sortable-stack__item")
                             .gap(vec![scale(3)])
                             .append_child({
-                                Icon::new("align-justify")
+                                Icon::new(Lucide::AlignJustify)
                                     .stroke_width(2)
                                     .add_class("sortable-stack__item__handle")
                                     .min_width(&sp(24))

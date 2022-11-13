@@ -1,5 +1,6 @@
 use viewy::*;
 use viewy::components::*;
+use viewy::components::icons::Lucide;
 
 pub fn navigation_and_menus() -> VStack {
     VStack::new(Alignment::Stretch)
@@ -20,24 +21,24 @@ pub fn navigation_and_menus() -> VStack {
                     Menu::new(MenuStyle::Vertical)
                         .append_child({
                             MenuItem::new("Basic components")
-                                .icon("box")
+                                .icon(Lucide::Box)
                         })
                         .append_child({
                             MenuItem::new("With a notification badge")
-                                .icon("bell")
+                                .icon(Lucide::Bell)
                                 .badge(&12)
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon("columns")
+                                .icon(Lucide::Columns)
                         })
                         .append_child({
                             MenuItem::new("Calendar")
-                                .icon("calendar")
+                                .icon(Lucide::Calendar)
                         })
                         .append_child({
                             MenuItem::new("Navigation & menus")
-                                .icon("map")
+                                .icon(Lucide::Map)
                         })
                 })
         })
@@ -51,7 +52,7 @@ pub fn navigation_and_menus() -> VStack {
                     Menu::new(MenuStyle::HorizontalTab)
                         .append_child({
                             MenuItem::new("Basic components")
-                                .icon("box")
+                                .icon(Lucide::Box)
                                 .popover({
                                     Popover::new()
                                         .placement(Placement::Bottom)
@@ -63,20 +64,20 @@ pub fn navigation_and_menus() -> VStack {
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon("columns")
+                                .icon(Lucide::Columns)
                         })
                         .append_child({
                             MenuItem::new("With a notification badge")
-                                .icon("bell")
+                                .icon(Lucide::Bell)
                                 .badge(&12)
                         })
                         .append_child({
                             MenuItem::new("Calendar")
-                                .icon("calendar")
+                                .icon(Lucide::Calendar)
                         })
                         .append_child({
                             MenuItem::new("Navigation & menus")
-                                .icon("map")
+                                .icon(Lucide::Map)
                         })
                 })
         })
@@ -90,7 +91,7 @@ pub fn navigation_and_menus() -> VStack {
                     Menu::new(MenuStyle::HorizontalNav)
                         .append_child({
                             MenuItem::new("Basic components")
-                                .icon("box")
+                                .icon(Lucide::Box)
                                 .popover({
                                     Popover::new()
                                         .placement(Placement::Bottom)
@@ -102,20 +103,20 @@ pub fn navigation_and_menus() -> VStack {
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon("columns")
+                                .icon(Lucide::Columns)
                         })
                         .append_child({
                             MenuItem::new("Notifications")
-                                .icon("bell")
+                                .icon(Lucide::Bell)
                                 .badge(&12)
                         })
                         .append_child({
                             MenuItem::new("Calendar")
-                                .icon("calendar")
+                                .icon(Lucide::Calendar)
                         })
                         .append_child({
                             MenuItem::new("Navigation & menus")
-                                .icon("map")
+                                .icon(Lucide::Map)
                         })
                 })
         })
@@ -132,7 +133,7 @@ pub fn navigation_and_menus() -> VStack {
                         })
                         .append_child({
                             MenuItem::new("Basic components")
-                                .icon("box")
+                                .icon(Lucide::Box)
                                 .popover({
                                     Popover::new()
                                         .placement(Placement::Bottom)
@@ -144,11 +145,11 @@ pub fn navigation_and_menus() -> VStack {
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon("columns")
+                                .icon(Lucide::Columns)
                         })
                         .append_child({
                             MenuItem::new("Notifications")
-                                .icon("bell")
+                                .icon(Lucide::Bell)
                                 .badge(&12)
                         })
                         .append_child({
@@ -156,15 +157,15 @@ pub fn navigation_and_menus() -> VStack {
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon("columns")
+                                .icon(Lucide::Columns)
                         })
                         .append_child({
                             MenuItem::new("Calendar")
-                                .icon("calendar")
+                                .icon(Lucide::Calendar)
                         })
                         .append_child({
                             MenuItem::new("Navigation & menus")
-                                .icon("map")
+                                .icon(Lucide::Map)
                         })
                 })
         })
