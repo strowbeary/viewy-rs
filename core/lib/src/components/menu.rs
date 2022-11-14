@@ -144,7 +144,7 @@ impl Renderable for MenuItem {
             menu_item.node.children.append(&mut vec![
                 Text::new(self.label.as_str(), TextStyle::Label)
                     .render(),
-                Icon::new(Lucide::ChevronsDown)
+                Icon::new(Lucide::ChevronDown)
                     .size(16)
                     .render(),
             ]);

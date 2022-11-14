@@ -21,7 +21,7 @@ impl Icon {
         Icon {
             node: Default::default(),
             icon: Box::new(icon),
-            stroke_width: "3".to_string(),
+            stroke_width: "2".to_string(),
             size: 24,
         }
     }

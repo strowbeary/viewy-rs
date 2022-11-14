@@ -255,14 +255,14 @@ impl Renderable for Field {
                                         })
                                 })
                                 .append_child({
-                                    Button::icon_only(Lucide::Type, ButtonStyle::Flat)
+                                    Button::icon_only(Lucide::ListX, ButtonStyle::Flat)
                                         .add_class("ql-clean")
                                 })
                                 .append_child({
                                     HStack::new(Alignment::Center)
                                         .gap(vec![scale(2)])
                                         .append_child({
-                                            Button::icon_only(Lucide::LayoutList, ButtonStyle::Flat)
+                                            Button::icon_only(Lucide::List, ButtonStyle::Flat)
                                                 .add_class("ql-list")
                                                 .set_attr("value", "bullet")
                                         })
