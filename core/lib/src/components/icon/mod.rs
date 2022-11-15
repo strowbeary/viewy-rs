@@ -21,7 +21,7 @@ impl Icon {
         Icon {
             node: Default::default(),
             icon: Box::new(icon),
-            stroke_width: "2".to_string(),
+            stroke_width: "3".to_string(),
             size: 24,
         }
     }
@@ -47,18 +47,18 @@ impl DefaultModifiers<Icon> for Icon {}
 
 impl Renderable for Icon {
     fn render(&self) -> Node {
-        let mut icon = self.clone()
+        let mut icon = self.icon
+            .configure(self.clone())
             .add_class("icon")
             .set_attr("xmlns", "http://www.w3.org/2000/svg")
             .set_attr("width", sp(self.size).as_str())
             .set_attr("height", sp(self.size).as_str())
             .set_attr("viewBox", "0 0 24 24")
-            .set_attr("fill", "none")
-            .set_attr("stroke", "currentColor")
             .set_attr("stroke-width", self.stroke_width.as_str())
             .set_attr("stroke-linecap", "round")
             .set_attr("stroke-linejoin", "round")
             .tag("svg");
+
         icon.get_node().text = Some(self.icon.path().to_string());
         icon.get_node().clone()
     }

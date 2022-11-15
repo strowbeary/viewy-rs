@@ -4,6 +4,7 @@ use crate::components::Icon;
 
 pub trait IconPack: DynClone + Send + Sync + Debug {
     fn path(&self) -> &'static str;
+    fn configure(&self, icon: Icon) -> Icon;
 }
 
 clone_trait_object!(IconPack);
@@ -11,6 +12,10 @@ clone_trait_object!(IconPack);
 impl IconPack for Box<dyn IconPack> {
     fn path(&self) -> &'static str {
         (*self.clone()).path()
+    }
+
+    fn configure(&self, mut icon: Icon) -> Icon {
+        (*self.clone()).configure(icon)
     }
 }
 

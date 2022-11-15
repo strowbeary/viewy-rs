@@ -1,4 +1,3 @@
-
 use std::env;
 use std::fmt::format;
 use std::path::{Path, PathBuf};
@@ -7,7 +6,6 @@ use heck::ToKebabCase;
 use heck::ToPascalCase;
 use quote::format_ident;
 use quote::quote;
-
 
 fn path_from_icon(icons_folder_path: &PathBuf, icon_name: &str) -> String {
     let file_content = match std::fs::read_to_string(icons_folder_path.join(format!("{}.svg", icon_name.to_kebab_case()))) {
@@ -26,8 +24,8 @@ fn path_from_icon(icons_folder_path: &PathBuf, icon_name: &str) -> String {
     inner_html
 }
 
-pub fn generate_icon_pack(icon_pack_name: &str, icons_folder_path: &str) {
-
+pub fn generate_icon_pack(icon_pack_name: &str, only_stroked: bool, icons_folder_path: &str, icon_name_prefix: Option<&str>) -> String {
+    let icon_pack_name_ident = format_ident!("{}", icon_pack_name);
     println!("cargo:rerun-if-changed={}", icons_folder_path);
     let path = Path::new(&env::var("CARGO_MANIFEST_DIR").expect("Can't read CARGO_MANIFEST_DIR env var"))
         .join(icons_folder_path);
@@ -46,40 +44,72 @@ pub fn generate_icon_pack(icon_pack_name: &str, icons_folder_path: &str) {
         .collect::<Vec<String>>();
 
     let icon_kind_enum_inner = icon_names.iter().map(|kind| {
-        let kind = format_ident!("{}", kind.to_pascal_case());
+        let svg_content = path_from_icon(&path, kind);
+        let svg_html = if only_stroked {
+            format!(
+                "<svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>{}</svg>",
+                svg_content
+            )
+        } else {
+            format!(
+                "<svg width='24' height='24' viewBox='0 0 24 24'>{}</svg>",
+                svg_content
+            )
+        };
+        let kind = match icon_name_prefix {
+            None => format_ident!("{}", kind.to_pascal_case()),
+            Some(prefix) => format_ident!("{}{}", prefix, kind.to_pascal_case()),
+        };
         quote! {
+            #[doc = #svg_html]
             #kind,
         }
     });
 
     let path_match_arms = icon_names.iter().map(|kind| {
-        let kind_ident = format_ident!("{}", kind.to_pascal_case());
+        let kind_ident = match icon_name_prefix {
+            None => format_ident!("{}", kind.to_pascal_case()),
+            Some(prefix) => format_ident!("{}{}", prefix, kind.to_pascal_case()),
+        };
         let path = path_from_icon(&path, kind);
         quote! {
-            #icon_pack_name::#kind_ident => #path,
+            #icon_pack_name_ident::#kind_ident => #path,
         }
     });
 
+    let configuration = if only_stroked {
+        quote! {
+            icon
+                .set_attr("fill", "none")
+                .set_attr("stroke", "currentColor")
+        }
+    } else {
+        quote! {
+            icon
+                .set_attr("fill", "currentColor")
+                .set_attr("stroke", "none")
+        }
+    };
+
     let code = quote! {
+
         /// Enum storing all the Octicons
         #[derive(PartialEq, PartialOrd, Clone, Copy, Hash, Debug)]
-        pub enum #icon_pack_name {
+        pub enum #icon_pack_name_ident {
             #(#icon_kind_enum_inner)*
         }
 
-        impl IconPack for #icon_pack_name {
+        impl IconPack for #icon_pack_name_ident {
             fn path(&self) -> &'static str {
                 match self {
                     #(#path_match_arms)*
                 }
             }
+
+            fn configure(&self, mut icon: Icon) -> Icon {
+                #configuration
+            }
         }
     };
-
-    std::fs::write(
-        Path::new(&env::var("OUT_DIR").expect("Failed reading OUT_DIR environment variable"))
-            .join("icons.rs"),
-        code.to_string(),
-    )
-        .expect("Failed writing generated.rs");
+    code.to_string()
 }
