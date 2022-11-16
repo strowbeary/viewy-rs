@@ -11,6 +11,8 @@ license = "MIT"
 documentation = "https://docs.rs/viewy"
 build = "build/build.rs"
 
+include = ["./lucide/icons", "./simple-icons/icons"]
+
 [dependencies]
 grass = "0.11"
 minifier = "0.2"

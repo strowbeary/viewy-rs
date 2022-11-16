@@ -13,5 +13,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/core/lib/lucide" vcs="Git" />
+    <mapping directory="$PROJECT_DIR$/core/lib/simple-icons" vcs="Git" />
   </component>
 </project>
