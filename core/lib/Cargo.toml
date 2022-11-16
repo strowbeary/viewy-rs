@@ -9,8 +9,8 @@ readme = "../../README.md"
 repository = "https://github.com/strowbeary/viewy-rs"
 license = "MIT"
 documentation = "https://docs.rs/viewy"
-build = "build/build.rs"
 include = ["lucide/icons", "simple-icons/icons"]
+build = "build/build.rs"
 
 [dependencies]
 grass = "0.11"
