@@ -1,6 +1,6 @@
 [package]
 name = "viewy"
-version = "1.6.1"
+version = "1.6.0"
 authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
 description = "A web UI toolkit that combine the advantages of a design system and an ui library."
 keywords = ["web", "user-interface", "declarative"]
@@ -10,8 +10,7 @@ repository = "https://github.com/strowbeary/viewy-rs"
 license = "MIT"
 documentation = "https://docs.rs/viewy"
 build = "build/build.rs"
-
-include = ["./lucide/icons", "./simple-icons/icons"]
+include = ["lucide/icons", "simple-icons/icons"]
 
 [dependencies]
 grass = "0.11"
