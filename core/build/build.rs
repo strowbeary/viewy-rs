@@ -16,8 +16,8 @@ fn main() {
          use crate::modifiers::DefaultModifiers;
     }
         .to_string();
-    code += &generate_icon_pack("Lucide", true, "lucide/icons", None);
-    code += &generate_icon_pack("SimpleIcons", false, "simple-icons/icons", Some("Icon"));
+    code += &generate_icon_pack("Lucide", true, "assets/lucide/icons", None);
+    code += &generate_icon_pack("SimpleIcons", false, "assets/simple-icons/icons", Some("Icon"));
 
     std::fs::write(
         Path::new(&env::var("OUT_DIR").expect("Failed reading OUT_DIR environment variable"))

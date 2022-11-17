@@ -9,11 +9,13 @@ readme = "../../README.md"
 repository = "https://github.com/strowbeary/viewy-rs"
 license = "MIT"
 documentation = "https://docs.rs/viewy"
-include = ["lucide/icons", "simple-icons/icons"]
+include = ["assets/lucide/icons", "assets/simple-icons/icons"]
 build = "build/build.rs"
 
 [lib]
 name = "viewy"
+path = "lib/src/lib.rs"
+
 
 
 [dependencies]
