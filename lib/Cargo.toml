@@ -15,10 +15,6 @@ build = "build.rs"
 name = "viewy"
 path = "src/lib.rs"
 
-[[bin]]
-name = "viewy-tests"
-path = "tests/main.rs"
-
 [dependencies]
 grass = "0.11"
 minifier = "0.2"
