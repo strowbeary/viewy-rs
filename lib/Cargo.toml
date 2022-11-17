@@ -15,8 +15,9 @@ include = [
 ]
 build = "build/build.rs"
 
-
-
+[lib]
+name = "viewy"
+src = "src/lib.rs"
 
 [dependencies]
 grass = "0.11"
