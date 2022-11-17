@@ -9,11 +9,7 @@ readme = "../README.md"
 repository = "https://github.com/strowbeary/viewy-rs"
 license = "MIT"
 documentation = "https://docs.rs/viewy"
-include = [
-    "assets/lucide/icons",
-    "assets/simple-icons/icons"
-]
-build = "build/build.rs"
+build = "build.rs"
 
 [lib]
 name = "viewy"
@@ -38,7 +34,7 @@ hex = "0.4"
 base64 = "0.13"
 lazy_static = "1.4"
 chrono = { version = "0.4.19", features = ["serde"] }
-chrono-tz = { version = "0.7", features = ["serde"] }
+chrono-tz = { version = "0.6", features = ["serde"] }
 
 [build-dependencies]
 heck = "0.4"

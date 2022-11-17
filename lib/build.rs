@@ -1,3 +1,7 @@
+extern crate heck;
+extern crate quote;
+extern crate scraper;
+
 use std::env;
 use std::path::{Path, PathBuf};
 
@@ -110,4 +114,21 @@ pub fn generate_icon_pack(icon_pack_name: &str, only_stroked: bool, icons_folder
         }
     };
     code.to_string()
+}
+
+fn main() {
+    println!("cargo:rerun-if-env-changed=FORCE_REBUILD");
+    let mut code = quote! {
+         use crate::modifiers::DefaultModifiers;
+    }
+        .to_string();
+    code += &generate_icon_pack("Lucide", true, "assets/lucide/icons", None);
+    code += &generate_icon_pack("SimpleIcons", false, "assets/simple-icons/icons", Some("Icon"));
+
+    std::fs::write(
+        Path::new(&env::var("OUT_DIR").expect("Failed reading OUT_DIR environment variable"))
+            .join("icons.rs"),
+        code,
+    )
+        .expect("Failed writing generated.rs");
 }
