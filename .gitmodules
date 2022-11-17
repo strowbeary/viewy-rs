@@ -1,8 +1,8 @@
 [submodule "simple-icons"]
-	path = core/assets/simple-icons
+	path = lib/assets/simple-icons
 	url = https://github.com/simple-icons/simple-icons.git
 	branch = develop
 [submodule "lucide"]
-	path = core/assets/lucide
+	path = lib/assets/lucide
 	url = https://github.com/lucide-icons/lucide.git
 	branch = main

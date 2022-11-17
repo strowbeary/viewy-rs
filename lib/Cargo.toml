@@ -5,16 +5,16 @@ authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
 description = "A web UI toolkit that combine the advantages of a design system and an ui library."
 keywords = ["web", "user-interface", "declarative"]
 edition = "2021"
-readme = "../../README.md"
+readme = "../README.md"
 repository = "https://github.com/strowbeary/viewy-rs"
 license = "MIT"
 documentation = "https://docs.rs/viewy"
-include = ["assets/lucide/icons", "assets/simple-icons/icons"]
-build = "lib/build/build.rs"
+include = [
+    "assets/lucide/icons",
+    "assets/simple-icons/icons"
+]
+build = "build/build.rs"
 
-[lib]
-name = "viewy"
-path = "lib/src/lib.rs"
 
 
 
