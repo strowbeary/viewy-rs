@@ -1,5 +1,4 @@
 use std::env;
-use std::fmt::format;
 use std::path::{Path, PathBuf};
 
 use heck::ToKebabCase;
@@ -26,7 +25,6 @@ fn path_from_icon(icons_folder_path: &PathBuf, icon_name: &str) -> String {
 
 pub fn generate_icon_pack(icon_pack_name: &str, only_stroked: bool, icons_folder_path: &str, icon_name_prefix: Option<&str>) -> String {
     let icon_pack_name_ident = format_ident!("{}", icon_pack_name);
-    println!("cargo:rerun-if-changed={}", icons_folder_path);
     let path = Path::new(&env::var("CARGO_MANIFEST_DIR").expect("Can't read CARGO_MANIFEST_DIR env var"))
         .join(icons_folder_path);
     let lucide_icons =

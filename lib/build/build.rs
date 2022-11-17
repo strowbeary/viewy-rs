@@ -11,7 +11,7 @@ use crate::icon_packs::generate_icon_pack;
 
 
 fn main() {
-    println!("cargo:rerun-if-changed={}", "build/*");
+    println!("cargo:rerun-if-env-changed=FORCE_REBUILD");
     let mut code = quote! {
          use crate::modifiers::DefaultModifiers;
     }
