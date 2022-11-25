@@ -1,4 +1,5 @@
 use std::borrow::{Borrow, BorrowMut};
+
 use uuid::Uuid;
 
 use crate::{DefaultModifiers, Renderable, scale};
@@ -7,18 +8,27 @@ use crate::components::icons::Lucide;
 use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
+pub enum SnackbarType {
+    Error,
+    Success,
+    Neutral,
+}
+
+#[derive(Debug, Clone)]
 pub struct Snackbar {
     node: Node,
     pub content: String,
     pub action: Option<Button>,
+    pub snackbar_type: SnackbarType,
 }
 
 impl Snackbar {
-    pub fn new<T: AsRef<str>>(title: T) -> Snackbar {
+    pub fn new<T: AsRef<str>>(snackbar_type: SnackbarType, title: T) -> Snackbar {
         Snackbar {
             node: Default::default(),
             content: title.as_ref().to_string(),
             action: None,
+            snackbar_type,
         }
     }
 
@@ -54,6 +64,19 @@ impl Renderable for Snackbar {
     fn render(&self) -> Node {
         let mut snackbar = self.clone()
             .add_class("snackbar");
+
+        match snackbar.snackbar_type {
+            SnackbarType::Error => {
+                snackbar.add_class("snackbar--error");
+            }
+            SnackbarType::Success => {
+                snackbar.add_class("snackbar--success");
+            }
+            SnackbarType::Neutral => {
+                snackbar.add_class("snackbar--neutral");
+            }
+        }
+
         snackbar.node.children.push({
             let mut content = HStack::new(Alignment::Center)
                 .gap(vec![scale(3)])

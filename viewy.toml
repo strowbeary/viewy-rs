@@ -21,6 +21,9 @@ on-surface = { light = "#000000", dark = "#ffffff" }
 destructive = { light = "#C70039 ", dark = "#ff0048" }
 on-destructive = { light = "#ffffff", dark = "#ffffff" }
 
+success = { light = "#3DA144 ", dark = "#3DA144" }
+on-success = { light = "#ffffff", dark = "#ffffff" }
+
 [shapes]
 border-radius = 8
 spacing-factor = 4

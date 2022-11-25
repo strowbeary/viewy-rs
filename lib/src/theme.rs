@@ -1,6 +1,7 @@
-use std::path::Path;
-use std::fs::File;
 use std::{env, fs};
+use std::fs::File;
+use std::path::Path;
+
 use serde::{Deserialize, Serialize};
 
 #[derive(Deserialize, Serialize)]
@@ -12,7 +13,7 @@ pub struct AppSettings {
 #[derive(Deserialize, Serialize)]
 pub struct Favicon {
     pub rel: String,
-    pub href: String
+    pub href: String,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -37,6 +38,9 @@ pub struct Colors {
     pub destructive: Color,
     #[serde(rename = "on-destructive")]
     pub on_destructive: Color,
+    pub success: Color,
+    #[serde(rename = "on-success")]
+    pub on_success: Color,
 }
 
 #[derive(Deserialize, Serialize)]
@@ -66,11 +70,11 @@ impl Default for Config {
         Config {
             app: AppSettings {
                 name: "".to_string(),
-                favicons: vec![]
+                favicons: vec![],
             },
             features: Features {
                 rich_text_editor: false,
-                sortable_stack: false
+                sortable_stack: false,
             },
             colors: Colors {
                 accent: Color {
@@ -79,37 +83,39 @@ impl Default for Config {
                 },
                 on_accent: Color {
                     dark: "#ffffff".to_string(),
-                    light: "#ffffff".to_string()
+                    light: "#ffffff".to_string(),
                 },
                 background: Color {
                     dark: "#121212".to_string(),
-                    light: "#ffffff".to_string()
+                    light: "#ffffff".to_string(),
                 },
                 on_background: Color {
                     dark: "#ffffff".to_string(),
-                    light: "#000000".to_string()
+                    light: "#000000".to_string(),
                 },
                 surface: Color {
                     dark: "#181818".to_string(),
-                    light: "#efefef".to_string()
+                    light: "#efefef".to_string(),
                 },
                 on_surface: Color {
                     dark: "#ffffff".to_string(),
-                    light: "#000000".to_string()
+                    light: "#000000".to_string(),
                 },
                 destructive: Color {
                     dark: "#f14a61".to_string(),
-                    light: "#f14a61".to_string()
+                    light: "#f14a61".to_string(),
                 },
                 on_destructive: Color {
                     dark: "#ffffff".to_string(),
-                    light: "#ffffff".to_string()
+                    light: "#ffffff".to_string(),
                 },
+                success: Color { dark: "#3DA144".to_string(), light: "#3DA144".to_string() },
+                on_success: Color { dark: "#ffffff".to_string(), light: "#ffffff".to_string() },
             },
             shapes: Shapes {
                 border_radius: 8,
-                spacing_factor: 4
-            }
+                spacing_factor: 4,
+            },
         }
     }
 }

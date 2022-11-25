@@ -34,8 +34,6 @@
   height: max-content;
   padding: sp(12) sp(16);
   border-radius: sp($border-radius);
-  background: var(--color-destructive);
-  color: white;
   z-index: 200000000;
   box-shadow: 0 sp(8) sp(16) sp(4) var(--color-shadow);
   transform: translate(0, -#{sp(16)});
@@ -46,10 +44,37 @@
     opacity: 0;
     pointer-events: none;
   }
-  .button--flat {
+
+
+  &--success {
+    background: var(--color-success);
+    color: var(--color-on-success);
+    .button--flat {
+      color: var(--color-on-success);
+      .icon {
+        color: var(--color-on-success);
+      }
+    }
+  }
+
+  &--error {
+    background: var(--color-destructive);
     color: var(--color-on-destructive);
-    .icon {
+    .button--flat {
       color: var(--color-on-destructive);
+      .icon {
+        color: var(--color-on-destructive);
+      }
+    }
+  }
+  &--neutral {
+    background: var(--surface-accent-darker);
+    color: var(--color-on-surface);
+    .button--flat {
+      color: var(--color-on-surface);
+      .icon {
+        color: var(--color-on-surface);
+      }
     }
   }
 }

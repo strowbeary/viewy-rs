@@ -55,7 +55,7 @@ pub use popup::*;
 pub use file_input::*;
 pub use color_picker::*;
 pub use signature_field::*;
-pub use snackbar::{Snackbar};
+pub use snackbar::{Snackbar, SnackbarType};
 pub use dynamic_content::{DynamicContent};
 pub use tabs::{
     TabView,

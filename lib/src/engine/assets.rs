@@ -18,6 +18,11 @@ $background-light: {background_light};
 $background-dark: {background_dark};
 $surface-light: {surface_light};
 $surface-dark: {surface_dark};
+
+$success-light: {success_light};
+$success-dark: {success_dark};
+$on-success-light: {on_success_light};
+$on-success-dark: {on_success_dark};
             ",
                 accent_light = config.colors.accent.light,
                 accent_dark = config.colors.accent.dark,
@@ -25,6 +30,10 @@ $surface-dark: {surface_dark};
                 on_destructive_light = config.colors.on_destructive.light,
                 destructive_dark = config.colors.destructive.dark,
                 on_destructive_dark = config.colors.on_destructive.dark,
+                success_light = config.colors.success.light,
+                on_success_light = config.colors.on_success.light,
+                success_dark = config.colors.success.dark,
+                on_success_dark = config.colors.on_success.dark,
                 on_accent = config.colors.on_accent.light,
                 border_radius = config.shapes.border_radius,
                 background_light = config.colors.background.light,

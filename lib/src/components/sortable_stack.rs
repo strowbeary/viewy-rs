@@ -82,7 +82,7 @@ impl Renderable for SortableStack {
                             .add_class("sortable-stack__item")
                             .gap(vec![scale(3)])
                             .append_child({
-                                Icon::new(Lucide::AlignJustify)
+                                Icon::new(Lucide::GripVertical)
                                     .stroke_width(2)
                                     .add_class("sortable-stack__item__handle")
                                     .min_width(&sp(24))

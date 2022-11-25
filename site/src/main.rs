@@ -35,7 +35,7 @@ fn home() -> RawHtml<String> {
 			&layouts::default_layout,
 			pages::home()
 				.append_child({
-					Snackbar::new("Une erreur est survenue")
+					Snackbar::new(SnackbarType::Neutral, "Une erreur est survenue")
 						.closable()
 				}),
 		)
