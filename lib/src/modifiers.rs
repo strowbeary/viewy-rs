@@ -22,6 +22,10 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
         self.get_node().node_style.push(("color".to_string(), color.to_string()));
         self.clone()
     }
+    fn opacity(&mut self, opacity: f32) -> Self {
+        self.get_node().node_style.push(("opacity".to_string(), opacity.to_string()));
+        self.clone()
+    }
     fn add_class(&mut self, class_name: &str) -> Self {
         self.get_node().class_list.insert(class_name.to_string());
         self.clone()
