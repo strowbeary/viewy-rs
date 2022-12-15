@@ -74,6 +74,10 @@ impl Text {
     pub fn text_overflow(&mut self) -> Self {
         todo!()
     }
+    pub fn text_shadow(&mut self, rule: &str) -> Self {
+        self.get_node().node_style.push(("text-shadow".to_string(), rule.to_string()));
+        self.clone()
+    }
 }
 
 impl NodeContainer for Text {
