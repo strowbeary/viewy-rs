@@ -19,24 +19,24 @@ body {
   background: var(--background);
   color: var(--color-text);
   height: 100vh;
+}
 
-  &.app-themes {
-    &--auto {
-      @media (prefers-color-scheme: light) {
-        @include palette("light");
-      }
-      @media (prefers-color-scheme: dark) {
-        @include palette("dark");
-      }
-    }
-
-    &--light {
+.app-themes {
+  &--auto {
+    @media (prefers-color-scheme: light) {
       @include palette("light");
     }
-
-    &--dark {
+    @media (prefers-color-scheme: dark) {
       @include palette("dark");
     }
+  }
+
+  &--light {
+    @include palette("light");
+  }
+
+  &--dark {
+    @include palette("dark");
   }
 }
 
