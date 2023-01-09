@@ -6,7 +6,6 @@ use uuid::Uuid;
 
 use crate::{DefaultModifiers, Overflow, scale, sp};
 use crate::components::*;
-use crate::components::FieldType::{DateTimeLocal, RichTextArea};
 use crate::components::icons::Lucide;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
@@ -374,6 +373,7 @@ impl Renderable for Field {
 
                 if self.required {
                     input.set_attr("required", "required");
+                    field.add_class("not-empty");
                     field.node.children.push({
                         Text::new("Requis", TextStyle::Caption)
                             .color("var(--color-text-secondary)")
@@ -404,44 +404,46 @@ impl Renderable for Field {
                     input.set_attr("list", id.as_str());
                 }
 
-                if let Some(value) = field.value {
+                if let Some(value) = &field.value {
                     match &self.field_type {
                         FieldType::TextArea => {
-                            input.node.text = Some(value);
+                            input.node.text = Some(value.clone());
                         }
                         _ => {
-                            input.set_attr("value", &value);
+                            input.set_attr("value", value);
                         }
                     }
                 }
-                if let Some(value) = field.min {
-                    input.set_attr("min", &value);
+                if let Some(value) = &field.min {
+                    input.set_attr("min", value);
                 }
-                if let Some(value) = field.max {
-                    input.set_attr("max", &value);
+                if let Some(value) = &field.max {
+                    input.set_attr("max", value);
                 }
-                if let Some(value) = field.step {
-                    input.set_attr("step", &value);
+                if let Some(value) = &field.step {
+                    input.set_attr("step", value);
                 }
 
 
                     field.node.children.push(input.render());
 
-                    if let Some(placeholder) = field.placeholder {
-                        input.set_attr("placeholder", placeholder.as_str());
+                    if let Some(placeholder) = &field.placeholder {
+                        input.set_attr("placeholder", placeholder);
                     }
 
-                    if let Some(label) = field.label {
-                        let text = Text::new(label.as_str(), TextStyle::Label)
+                    if let Some(label) = &field.label {
+                        let text = Text::new(label, TextStyle::Label)
                             .add_class("field__label")
                             .set_attr("for", self.name.as_str())
                             .tag("label");
+                        field.add_class("not-empty");
                         field.node.children.push(text.render());
                     }
 
-                    if let Some(helper_text) = field.helper_text {
-                        let text = ComplexText::new(helper_text.as_str(), TextStyle::Caption)
+                    if let Some(helper_text) = &field.helper_text {
+                        let text = ComplexText::new(helper_text, TextStyle::Caption)
                             .add_class("field__helper-text");
+                        field.add_class("not-empty");
                         field.node.children.push(text.render());
                     }
 
