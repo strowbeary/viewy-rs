@@ -147,6 +147,10 @@ impl Field {
         self.required = is_required;
         self.clone()
     }
+
+    pub fn submit_on_keypress(&mut self) -> Self {
+        self.set_attr("data-submit-on-keypress", "true")
+    }
 }
 
 impl Renderable for Field {

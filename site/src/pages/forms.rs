@@ -8,6 +8,23 @@ pub fn forms() -> VStack {
             VStack::new(Alignment::Stretch)
                 .gap(vec![scale(2)])
                 .append_child({
+                    Text::new("Submit on keypress in Field component", TextStyle::H1)
+                })
+                .append_child({
+                    Form::new("async-auto-submit-form", "")
+                        .async_form()
+                        .append_child({
+                            Field::new("submit-on-keypress", FieldType::Text)
+                                .label("Submit on keypress")
+                                .submit_on_keypress()
+                        })
+                })
+        })
+        .append_child({
+            VStack::new(Alignment::Stretch)
+                .gap(vec![scale(2)])
+
+                .append_child({
                     Text::new("Auto submit picker", TextStyle::H1)
                 })
                 .append_child({
