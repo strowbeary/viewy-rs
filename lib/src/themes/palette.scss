@@ -92,6 +92,6 @@
     --color-destructive-light: #{color.adjust($destructive-light, $lightness: 5%)};
     --color-destructive-lighter: #{color.adjust($destructive-light, $lightness: 10%)};
     --color-on-destructive: #{$on-destructive-light};
-    --color-warning: #D86F48;
+    --color-warning: #d87f48;
   }
 }

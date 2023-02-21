@@ -28,6 +28,8 @@ mod tabs;
 mod badge;
 mod dynamic_content;
 mod sortable_stack;
+mod gauge;
+mod stepper;
 
 pub use badge::{BadgeModifiers, Badge, BadgeType};
 pub use button::{Button, ButtonStyle};
@@ -55,8 +57,10 @@ pub use popup::*;
 pub use file_input::*;
 pub use color_picker::*;
 pub use signature_field::*;
+pub use gauge::{Gauge, GaugeStyle};
 pub use snackbar::{Snackbar, SnackbarType};
 pub use dynamic_content::{DynamicContent};
+pub use stepper::{};
 pub use tabs::{
     TabView,
     TabViewItem

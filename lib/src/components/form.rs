@@ -33,6 +33,7 @@ impl Form {
             .set_attr("id", name)
             .set_attr("method", "POST")
     }
+
     pub fn async_form(&mut self) -> Self {
         self.is_async = true;
         self.clone()

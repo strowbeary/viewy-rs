@@ -20,7 +20,7 @@
   &--raised {
     border: sp(1) solid var(--color-border);
     background: var(--background);
-    box-shadow: 0 sp(4) sp(8) 0 var(--color-shadow);
+    box-shadow: 0 0.6px 1.8px 0 rgba(0,0,0,0.11),0 3.2px 7.2px 0 rgba(0,0,0,0.13);
 
   }
 

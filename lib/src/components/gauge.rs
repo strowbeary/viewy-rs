@@ -1,0 +1,119 @@
+use std::borrow::BorrowMut;
+use std::fmt::format;
+
+use crate::components::{Appendable, ChildContainer};
+use crate::DefaultModifiers;
+use crate::node::{Node, NodeContainer};
+use crate::Renderable;
+
+/// Used to set card style.
+#[derive(Debug, Clone)]
+pub enum GaugeStyle {
+    Bar,
+    Radial,
+}
+
+/// An outlined view to emphasize a content.
+#[derive(Debug, Clone)]
+pub struct Gauge {
+    node: Node,
+
+    /// The current numeric value. This must be between the minimum and maximum values (min attribute and max attribute) if they are specified. If unspecified or malformed, the value is 0. If specified, but not within the range given by the min attribute and max attribute, the value is equal to the nearest end of the range.
+    /// > Note: Unless the value attribute is between 0 and 1 (inclusive), the min and max attributes should define the range so that the value attribute's value is within it.
+    pub value: f32,
+
+    /// The lower numeric bound of the measured range. This must be less than the maximum value (max attribute), if specified. If unspecified, the minimum value is 0.0
+    pub min: Option<f32>,
+
+    /// The upper numeric bound of the measured range. This must be greater than the minimum value (min attribute), if specified. If unspecified, the maximum value is 1.0
+    pub max: Option<f32>,
+
+    /// The upper numeric bound of the low end of the measured range. This must be greater than the minimum value (min attribute), and it also must be less than the high value and maximum value (high attribute and max attribute, respectively), if any are specified. If unspecified, or if less than the minimum value, the low value is equal to the minimum value.
+    pub low: Option<f32>,
+
+    /// The lower numeric bound of the high end of the measured range. This must be less than the maximum value (max attribute), and it also must be greater than the low value and minimum value (low attribute and min attribute, respectively), if any are specified. If unspecified, or if greater than the maximum value, the high value is equal to the maximum value.
+    pub high: Option<f32>,
+
+    /// This attribute indicates the optimal numeric value. It must be within the range (as defined by the min attribute and max attribute). When used with the low attribute and high attribute, it gives an indication where along the range is considered preferable. For example, if it is between the min attribute and the low attribute, then the lower range is considered preferred. The browser may color the meter's bar differently depending on whether the value is less than or equal to the optimum value.
+    pub optimum: Option<f32>,
+    pub style: GaugeStyle,
+}
+
+impl Gauge {
+    pub fn new(value: f32, style: GaugeStyle) -> Self {
+        Gauge {
+            node: Node::default(),
+            value,
+            min: None,
+            max: None,
+            low: None,
+            high: None,
+            optimum: None,
+            style,
+        }
+    }
+
+    pub fn min(&mut self, min: f32) -> Self {
+        self.min = Some(min);
+        self.clone()
+    }
+
+    pub fn max(&mut self, max: f32) -> Self {
+        self.max = Some(max);
+        self.clone()
+    }
+
+    pub fn low(&mut self, low: f32) -> Self {
+        self.low = Some(low);
+        self.clone()
+    }
+
+    pub fn high(&mut self, high: f32) -> Self {
+        self.high = Some(high);
+        self.clone()
+    }
+
+    pub fn optimum(&mut self, optimum: f32) -> Self {
+        self.optimum = Some(optimum);
+        self.clone()
+    }
+}
+
+
+impl NodeContainer for Gauge {
+    fn get_node(&mut self) -> &mut Node {
+        self.node.borrow_mut()
+    }
+}
+
+impl DefaultModifiers<Gauge> for Gauge {}
+
+
+impl Renderable for Gauge {
+    fn render(&self) -> Node {
+        let mut gauge = self.clone()
+            .tag("meter")
+            .set_attr("value", &self.value.to_string())
+            .add_class("gauge")
+            .add_class(format!("gauge--{:?}", self.style).to_lowercase().as_str());
+
+        if let Some(min) = self.min {
+            gauge.set_attr("min", &min.to_string());
+        }
+        if let Some(max) = self.max {
+            gauge.set_attr("max", &max.to_string());
+        }
+        if let Some(low) = self.low {
+            gauge.set_attr("low", &low.to_string());
+        }
+        if let Some(high) = self.high {
+            gauge.set_attr("high", &high.to_string());
+        }
+        if let Some(optimum) = self.optimum {
+            gauge.set_attr("optimum", &optimum.to_string());
+        }
+
+        gauge.node.text = Some(format!("{}/{}", gauge.value, gauge.max.unwrap_or(1.0)));
+        gauge.node
+    }
+}

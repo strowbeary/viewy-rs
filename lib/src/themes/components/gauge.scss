@@ -1,0 +1,29 @@
+$bar-height: 16;
+
+.gauge {
+  appearance: none;
+  height: sp($bar-height);
+  border-radius: sp($bar-height / 2);
+  border: sp(1) solid var(--color-border);
+  background: var(--background);
+
+  &::-webkit-meter-bar, &:-moz-meter-optimum {
+    background: var(--background);
+    border-radius: sp($bar-height / 2);
+  }
+
+  &::-webkit-meter-optimum-value, &:-moz-meter-optimum::-moz-meter-bar {
+    background: var(--color-success);
+    border-radius: sp($bar-height / 2);
+  }
+
+  &::-webkit-meter-suboptimum-value, &:-moz-meter-sub-optimum::-moz-meter-bar {
+    background: var(--color-warning);
+    border-radius: sp($bar-height / 2);
+  }
+
+  &::-webkit-meter-even-less-good-value, &:-moz-meter-sub-sub-optimum::-moz-meter-bar  {
+    background: var(--color-destructive);
+    border-radius: sp($bar-height / 2);
+  }
+}

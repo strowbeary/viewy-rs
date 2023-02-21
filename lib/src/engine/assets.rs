@@ -71,6 +71,7 @@ $on-success-dark: {on_success_dark};
         include_str!("../themes/components/snackbar.scss").to_string(),
         include_str!("../themes/components/tabs.scss").to_string(),
         include_str!("../themes/components/badge.scss").to_string(),
+        include_str!("../themes/components/gauge.scss").to_string(),
         include_str!("../themes/print.scss").to_string(),
     ];
     if config.features.rich_text_editor {

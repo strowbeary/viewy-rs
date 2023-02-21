@@ -10,6 +10,18 @@ pub fn home() -> VStack {
     VStack::new(Alignment::Stretch)
         .gap(vec![12])
         .append_child({
+            showcase_section("Gauge", {
+                HStack::new(Alignment::Center)
+                    .gap(vec![scale(3)])
+                    .append_child({
+                        Gauge::new(0.5, GaugeStyle::Radial)
+                            .low(0.3)
+                            .high(0.8)
+                            .optimum(1.0)
+                    })
+            })
+        })
+        .append_child({
             showcase_section("Highlighted card", {
                 HStack::new(Alignment::Center)
                     .gap(vec![scale(3)])

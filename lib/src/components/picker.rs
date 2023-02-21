@@ -63,7 +63,7 @@ impl Picker {
             children: vec![],
             options: vec![],
             is_disabled: false,
-            auto_submit: false
+            auto_submit: false,
         }
     }
 
@@ -102,8 +102,7 @@ impl Picker {
         self.clone()
     }
 
-    pub fn append_child(&mut self, child: PickerOption) -> Self
-    {
+    pub fn append_child(&mut self, child: PickerOption) -> Self {
         self.options.push(child);
         self.clone()
     }
