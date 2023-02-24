@@ -51,7 +51,6 @@ impl Renderable for Step {
     fn render(&self) -> Node {
         let mut view = self.clone()
             .add_class("card")
-            .add_class(format!("card--{:?}", self.style).to_lowercase().as_str())
             .node;
         self.children.iter()
             .for_each(|child|
@@ -112,7 +111,6 @@ impl Renderable for Stepper {
     fn render(&self) -> Node {
         let mut view = self.clone()
             .add_class("card")
-            .add_class(format!("card--{:?}", self.style).to_lowercase().as_str())
             .node;
         self.children.iter()
             .for_each(|child|
