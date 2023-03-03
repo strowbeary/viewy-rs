@@ -72,7 +72,7 @@ impl MenuItem {
             icon_color: None,
             label: label.to_string(),
             badge: None,
-            is_destructive: false
+            is_destructive: false,
         }
     }
     /// Set menu's icon
@@ -101,6 +101,13 @@ impl MenuItem {
     pub fn attach_to_file_input(&mut self, input_id: &str) -> Self {
         self
             .set_attr("data-input-file", &format!("file-input-{}", input_id))
+    }
+    /// Make the `MenuItem` submit specified form
+    pub fn attach_to_form(&mut self, form_name: &str) -> Self {
+        self
+            .set_attr("form", form_name)
+            .set_attr("type", "submit")
+            .tag("button")
     }
 }
 

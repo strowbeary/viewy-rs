@@ -193,7 +193,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                         Form::new("required_test", "")
                             .append_child({
                                 Field::new("input5", FieldType::Text)
-                                    .label("Champ de text")
+                                    .label("Champ de texte")
                                     .helper_text("Indication sur le type de donnée à mettre dans le champ")
                                     .required(true)
                             })
