@@ -10,6 +10,7 @@ use crate::components::{Appendable, ChildContainer};
 pub struct Form {
     children: Vec<Box<dyn Renderable>>,
     node: Node,
+    pub name: String,
     pub action: String,
     pub is_async: bool
 }
@@ -27,6 +28,7 @@ impl Form {
         Form {
             children: vec![],
             node: Node::default(),
+            name: name.to_string(),
             action: action.to_string(),
             is_async: false
         }
