@@ -226,6 +226,10 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
         self.get_node().node_style.push(("line-height".to_string(), value.to_string()));
         self.clone()
     }
+    fn box_sizing(&mut self, value: &str) -> Self {
+        self.get_node().node_style.push(("box-sizing".to_string(), value.to_string()));
+        self.clone()
+    }
     fn border_radius(&mut self, value: &str) -> Self {
         self.get_node().node_style.push(("border-radius".to_string(), value.to_string()));
         self.clone()
