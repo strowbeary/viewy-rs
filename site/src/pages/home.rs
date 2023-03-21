@@ -19,6 +19,13 @@ pub fn home() -> VStack {
                             .high(0.8)
                             .optimum(1.0)
                     })
+                    .append_child({
+                        Gauge::new(0.5, GaugeStyle::Radial)
+                            .display_optimum_indicator()
+                            .low(0.3)
+                            .high(0.8)
+                            .optimum(1.0)
+                    })
             })
         })
         .append_child({
