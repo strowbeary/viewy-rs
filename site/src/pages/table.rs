@@ -1,5 +1,5 @@
-use viewy::components::*;
 use viewy::{DefaultModifiers, scale, sp};
+use viewy::components::*;
 
 pub fn table() -> VStack {
     VStack::new(Alignment::Stretch)
@@ -13,27 +13,34 @@ pub fn table() -> VStack {
                     Divider::new()
                 })
                 .append_child({
-                    let mut table = Table::new("test_tableau", vec![
-                        Column::new(Some("First col"))
-                            .width("50%"),
-                        Column::new(Some("Second col"))
-                            .width("50%"),
-                    ])
-                        .selectable(true)
-                        .width("100%");
+                    Form::new("liste", "")
+                        .append_child({
+                            let mut table = Table::new("test_tableau", vec![
+                                Column::new(Some("First col"))
+                                    .width("50%"),
+                                Column::new(Some("Second col"))
+                                    .width("50%"),
+                            ])
+                                .selectable(true)
+                                .width("100%");
 
-                    for i in 1..20 {
-                        table.append_child({
-                            Row::new(i.to_string().as_str())
-                                .append_child({
-                                    Text::new(i.to_string().as_str(), TextStyle::Body)
-                                })
-                                .append_child({
-                                    Text::new("ho 2", TextStyle::Body)
-                                })
-                        });
-                    }
-                    table
+                            for i in 1..20 {
+                                table.append_child({
+                                    Row::new(i.to_string().as_str())
+                                        .append_child({
+                                            Text::new(i.to_string().as_str(), TextStyle::Body)
+                                        })
+                                        .append_child({
+                                            Text::new("Row content", TextStyle::Body)
+                                        })
+                                });
+                            }
+                            table
+                        })
+                        .append_child({
+                            Button::new("Envoyer", ButtonStyle::Filled)
+                                .attach_to_form("liste")
+                        })
                 })
         })
         .append_child({

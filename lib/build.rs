@@ -124,6 +124,7 @@ fn main() {
         .to_string();
     code += &generate_icon_pack("Lucide", true, "assets/lucide/icons", None);
     code += &generate_icon_pack("SimpleIcons", false, "assets/simple-icons/icons", Some("Icon"));
+ //   code += &generate_icon_pack("ViewyIconPack", false, "assets/viewy-icon-pack", None);
 
     std::fs::write(
         Path::new(&env::var("OUT_DIR").expect("Failed reading OUT_DIR environment variable"))
