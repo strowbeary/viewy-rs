@@ -9,11 +9,11 @@ readme = "../README.md"
 repository = "https://github.com/strowbeary/viewy-rs"
 license = "MIT"
 documentation = "https://docs.rs/viewy"
-build = "build.rs"
 
 [lib]
 name = "viewy"
 path = "src/lib.rs"
+build = "build.rs"
 
 [dependencies]
 grass = "0.11"
