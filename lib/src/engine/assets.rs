@@ -6,6 +6,9 @@ fn get_stylesheets(config: &Config) -> Vec<String> {
         format!("
 @use \"sass:color\";
 @use \"sass:math\";
+
+$border-radius: {border_radius};
+
 $accent-light: {accent_light};
 $accent-dark: {accent_dark};
 $on-accent: {on_accent};
@@ -13,7 +16,6 @@ $destructive-light: {destructive_light};
 $destructive-dark: {destructive_dark};
 $on-destructive-light: {on_destructive_light};
 $on-destructive-dark: {on_destructive_dark};
-$border-radius: {border_radius};
 $background-light: {background_light};
 $background-dark: {background_dark};
 $surface-light: {surface_light};
@@ -72,6 +74,7 @@ $on-success-dark: {on_success_dark};
         include_str!("../themes/components/tabs.scss").to_string(),
         include_str!("../themes/components/badge.scss").to_string(),
         include_str!("../themes/components/gauge.scss").to_string(),
+        include_str!("../themes/components/disclosure.scss").to_string(),
         include_str!("../themes/print.scss").to_string(),
     ];
     if config.features.rich_text_editor {

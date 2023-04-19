@@ -30,9 +30,11 @@ mod dynamic_content;
 mod sortable_stack;
 mod gauge;
 mod stepper;
+mod disclosure;
 
 pub use badge::{BadgeModifiers, Badge, BadgeType};
 pub use button::{Button, ButtonStyle};
+pub use disclosure::{Disclosure};
 pub use card::{Card, CardStyle};
 pub use vstack::{VStack, Alignment};
 pub use complex_text::ComplexText;

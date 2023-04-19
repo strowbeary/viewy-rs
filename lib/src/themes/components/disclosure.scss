@@ -1,0 +1,12 @@
+.disclosure {
+  width: 100%;
+  cursor: pointer;
+  user-select: none;
+  summary {
+    padding: scale(3);
+    border-radius: sp($border-radius);
+    &> *:first-child {
+      flex-grow: 1;
+    }
+  }
+}

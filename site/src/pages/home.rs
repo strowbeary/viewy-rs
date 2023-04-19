@@ -10,6 +10,24 @@ pub fn home() -> VStack {
     VStack::new(Alignment::Stretch)
         .gap(vec![12])
         .append_child({
+            showcase_section("Disclosure", {
+                HStack::new(Alignment::Center)
+                    .gap(vec![scale(3)])
+                    .append_child({
+                       Disclosure::new()
+                           .opener_item({
+                               Text::new("Opener item content", TextStyle::H3)
+                           })
+                           .append_child({
+                               Text::new(
+                                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                                   TextStyle::Body
+                               )
+                                   .margin_top(scale(3))
+                           })
+                    })
+            })
+        }).append_child({
             showcase_section("Gauge", {
                 HStack::new(Alignment::Center)
                     .gap(vec![scale(3)])
@@ -170,6 +188,23 @@ as opposed to using 'Content here, content here', making it look like readable E
                             .append_child({
                                 Button::new("Valider", ButtonStyle::Filled)
                                     .icon(Lucide::Check)
+                            })
+                    })
+                    .append_child({
+                        HStack::new(Alignment::Center)
+                            .gap(vec![16])
+                            .margin_top(20)
+                            .append_child({
+                                Button::icon_only(Lucide::Check, ButtonStyle::Link)
+                            })
+                            .append_child({
+                                Button::icon_only(Lucide::Check, ButtonStyle::Flat)
+                            })
+                            .append_child({
+                                Button::icon_only(Lucide::Check, ButtonStyle::Outlined)
+                            })
+                            .append_child({
+                                Button::icon_only(Lucide::Check, ButtonStyle::Filled)
                             })
                     })
             })
