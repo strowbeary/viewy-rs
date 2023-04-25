@@ -11,7 +11,7 @@ pub fn home() -> VStack {
         .gap(vec![12])
         .append_child({
             showcase_section("Disclosure", {
-                HStack::new(Alignment::Center)
+                VStack::new(Alignment::Stretch)
                     .gap(vec![scale(3)])
                     .append_child({
                        Disclosure::new()
@@ -24,6 +24,26 @@ pub fn home() -> VStack {
                                    TextStyle::Body
                                )
                                    .margin_top(scale(3))
+                           })
+                    })
+                    .append_child({
+                       Disclosure::new()
+                           .opener_item({
+                               Text::new("Title 1", TextStyle::H3)
+                           })
+                           .append_child({
+                               Disclosure::new()
+                                   .margin_left(24)
+                                   .opener_item({
+                                       Text::new("Subtitle 1", TextStyle::H3)
+                                   })
+                                   .append_child({
+                                       Text::new(
+                                           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                                           TextStyle::Body
+                                       )
+                                           .margin_top(scale(3))
+                                   })
                            })
                     })
             })

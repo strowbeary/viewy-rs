@@ -1,5 +1,4 @@
 .disclosure {
-  width: 100%;
   cursor: pointer;
   user-select: none;
   summary {
@@ -8,5 +7,9 @@
     &> *:first-child {
       flex-grow: 1;
     }
+  }
+
+  &[open] > summary > .icon {
+    transform: rotate(180deg);
   }
 }
