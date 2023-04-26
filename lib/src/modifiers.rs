@@ -18,6 +18,10 @@ pub enum Position {
 }
 
 pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
+    fn id(&mut self, id: &str) -> Self {
+        self.get_node().attributes.insert("id".to_string(), id.to_string());
+        self.clone()
+    }
     fn color(&mut self, color: &str) -> Self {
         self.get_node().node_style.push(("color".to_string(), color.to_string()));
         self.clone()

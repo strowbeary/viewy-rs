@@ -3,6 +3,7 @@ use viewy::components::*;
 
 pub fn forms() -> VStack {
     VStack::new(Alignment::Stretch)
+        .padding(vec![scale(4)])
         .gap(vec![scale(4)])
         .append_child({
             VStack::new(Alignment::Stretch)

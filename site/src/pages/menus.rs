@@ -4,6 +4,7 @@ use viewy::components::icons::Lucide;
 
 pub fn navigation_and_menus() -> VStack {
     VStack::new(Alignment::Stretch)
+        .padding(vec![scale(4)])
         .gap(vec![scale(3)])
         .append_child({
             Text::new("Navigation & menus", TextStyle::H1)

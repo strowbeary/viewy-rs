@@ -3,6 +3,7 @@ use viewy::components::*;
 
 pub fn table() -> VStack {
     VStack::new(Alignment::Stretch)
+        .padding(vec![scale(4)])
         .gap(vec![scale(5)])
         .append_child({
             VStack::new(Alignment::Stretch)

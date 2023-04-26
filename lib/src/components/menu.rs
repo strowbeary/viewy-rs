@@ -102,6 +102,7 @@ impl MenuItem {
         self
             .set_attr("data-input-file", &format!("file-input-{}", input_id))
     }
+
     /// Make the `MenuItem` submit specified form
     pub fn attach_to_form(&mut self, form_name: &str) -> Self {
         self

@@ -8,6 +8,7 @@ use crate::components::showcase_section;
 
 pub fn home() -> VStack {
     VStack::new(Alignment::Stretch)
+        .padding(vec![scale(4)])
         .gap(vec![12])
         .append_child({
             showcase_section("Disclosure", {

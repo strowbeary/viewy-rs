@@ -49,6 +49,11 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                                 .icon(Lucide::FileSignature)
                                 .action("/signature")
                         })
+                        .append_child({
+                            MenuItem::new("Table of content")
+                                .icon(Lucide::ListTree)
+                                .action("/table-of-content")
+                        })
                 })
         })
         .append_child({
@@ -67,15 +72,15 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                                .append_child({
                                    Button::new("Documentation", ButtonStyle::Flat)
                                        .icon(Lucide::FileText)
-                                       .action("https://docs.rs/crate/viewy/")
+                                       .action("https://docs.rs/viewy/latest/viewy/")
                                })
                         })
                 })
                 .append_child({
                     View::new()
+                        .overflow(Overflow::Auto)
                         .height("100%")
                         .width("100%")
-                        .padding(vec![16])
                         .append_child(content)
                 })
         }))

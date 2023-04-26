@@ -8,6 +8,7 @@ mod signature_field;
 mod forms;
 mod tabs;
 mod dynamic_content;
+mod table_of_content;
 
 pub use home::home;
 pub use login::login;
@@ -19,3 +20,4 @@ pub use signature_field::signature_field;
 pub use forms::forms;
 pub use tabs::tabs;
 pub use dynamic_content::dynamic_content;
+pub use table_of_content::table_of_content;

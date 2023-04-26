@@ -4,6 +4,7 @@ use viewy::components::icons::Lucide;
 
 pub fn dynamic_content() -> VStack {
 	VStack::new(Alignment::Stretch)
+		.padding(vec![scale(4)])
 		.append_child({
 			Form::new("search", "/search")
 				.async_form()

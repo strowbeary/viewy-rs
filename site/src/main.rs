@@ -183,6 +183,18 @@ fn forms() -> RawHtml<String> {
 	})
 }
 
+#[get("/table-of-content")]
+fn table_of_content() -> RawHtml<String> {
+	RawHtml({
+		Page::new(
+			"Viewy showcase – Table of content",
+			&layouts::default_layout,
+			pages::table_of_content(),
+		)
+			.compile(RenderMode::Complete)
+	})
+}
+
 #[launch]
 fn rocket() -> _ {
 	rocket::build()
@@ -198,7 +210,8 @@ fn rocket() -> _ {
             search_result,
             signature,
             forms,
-            tabs
+            tabs,
+			table_of_content
         ])
 		.register("/", catchers::routes())
 		.manage(Assets::new())

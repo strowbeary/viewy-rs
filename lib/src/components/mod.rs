@@ -31,6 +31,7 @@ mod sortable_stack;
 mod gauge;
 mod stepper;
 mod disclosure;
+mod table_of_content;
 
 pub use badge::{BadgeModifiers, Badge, BadgeType};
 pub use button::{Button, ButtonStyle};
