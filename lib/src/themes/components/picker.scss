@@ -60,10 +60,10 @@
       &__radio:checked + &__option {
         border-color: var(--color-accent);
         background: var(--color-accent);
-        color: white;
+        color: var(--color-text-on-accent);
 
         .icon, .text {
-          color: white;
+          color: var(--color-text-on-accent);
         }
       }
     }
@@ -115,11 +115,9 @@
 
   &--dropdown {
     &__input {
-      display: inline-block;
       position: relative;
       color: var(--color-text);
       width: 100%;
-      position: relative;
       cursor: pointer;
       list-style: none;
       display: flex;

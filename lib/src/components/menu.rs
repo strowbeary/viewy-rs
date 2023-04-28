@@ -1,6 +1,4 @@
 use std::borrow::BorrowMut;
-use std::ops::Deref;
-
 use crate::components::*;
 use crate::components::badge::{Badge, BadgeSupport};
 use crate::components::icons::{IconPack, Lucide};

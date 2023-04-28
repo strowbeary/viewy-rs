@@ -183,16 +183,16 @@
   }
 
   &--filled {
-    color: white;
+    color: var(--color-text-on-accent);
     background: var(--color-accent);
     border: none;
 
     .icon {
-      color: white;
+      color: var(--color-text-on-accent);
     }
 
     .text {
-      color: white;
+      color: var(--color-text-on-accent);
     }
 
     &:hover {
