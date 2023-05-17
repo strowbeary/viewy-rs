@@ -1,0 +1,5 @@
+tag-name = "v{{version}}"
+pre-release-commit-message="Viewy.rs release v{{version}} 🍾"
+shared-version = true
+consolidate-commits = true
+allow-branch = ["main"]
