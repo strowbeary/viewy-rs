@@ -2404,7 +2404,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 
 [[package]]
 name = "viewy"
-version = "1.6.18"
+version = "1.6.19"
 dependencies = [
  "base64 0.13.1",
  "chrono",
