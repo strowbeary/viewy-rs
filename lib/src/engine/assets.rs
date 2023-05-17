@@ -75,6 +75,7 @@ $on-success-dark: {on_success_dark};
         include_str!("../themes/components/badge.scss").to_string(),
         include_str!("../themes/components/gauge.scss").to_string(),
         include_str!("../themes/components/disclosure.scss").to_string(),
+        include_str!("../themes/components/table-of-contents.scss").to_string(),
         include_str!("../themes/print.scss").to_string(),
     ];
     if config.features.rich_text_editor {
@@ -106,6 +107,7 @@ fn get_scripts(config: &Config) -> Vec<String> {
         include_str!("../js/picker.js").to_string(),
         include_str!("../js/duration-field.js").to_string(),
         include_str!("../js/highlight-control.js").to_string(),
+        include_str!("../js/table-of-contents.js").to_string(),
     ];
     if config.features.rich_text_editor {
         scripts.push(include_str!("../js/quill-editor.js").to_string());

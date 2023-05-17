@@ -1,15 +1,15 @@
-use viewy::components::{Alignment, Appendable, HStack, Menu, MenuItem, MenuStyle, Text, TextStyle, VStack};
+use viewy::components::{Alignment, Appendable, HStack, TableOfContents, TableOfContentsItem, Text, TextStyle, VStack};
 use viewy::{DefaultModifiers, Overflow, scale};
 
 pub fn table_of_content() -> HStack {
-    let mut toc =  Menu::new(MenuStyle::Vertical);
     let mut content = VStack::new(Alignment::Stretch)
+        .id("article-list")
         .overflow(Overflow::Auto);
+    let mut toc =  TableOfContents::new("#article-list");
 
     for i in 0..10 {
-        toc .append_child({
-            MenuItem::new(&format!("Title {i}"))
-                .action(&format!("#title-{i}"))
+        toc.append_child({
+            TableOfContentsItem::new(&format!("Title {i}"), &format!("#title-{i}"))
         });
         content.append_child({
             VStack::new(Alignment::Stretch)

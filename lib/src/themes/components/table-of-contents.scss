@@ -1,0 +1,14 @@
+.table-of-contents {
+  display: flex;
+  flex-direction: column;
+  gap: scale(3);
+
+  &__item {
+    padding: sp(8) sp(16);
+    border-radius: sp($border-radius / 2);
+    &.active {
+      background: var(--color-accent);
+      color: var(--color-on-accent);
+    }
+  }
+}

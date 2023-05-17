@@ -8,9 +8,12 @@
   }
 }
 
+* {
+  scroll-behavior: smooth;
+}
+
 html {
   text-rendering: optimizeLegibility;
-
   @include font-stack;
 }
 
