@@ -1,3 +1,4 @@
+use grass::OutputStyle;
 use crate::CONFIG;
 use crate::theme::{Config, ConfigLoader};
 
@@ -166,11 +167,11 @@ impl Assets {
         let stylesheets = get_stylesheets(&config).join("");
         match grass::from_string(
             stylesheets,
-            &grass::Options::default(),
+            &grass::Options::default().style(OutputStyle::Compressed),
         ) {
             Ok(css) => {
                 println!(" [Done]");
-                minifier::css::minify(css.as_str()).unwrap().to_string()
+                css
             }
             Err(err) => {
                 println!(" [Error]");

@@ -1,6 +1,5 @@
 .card {
-  --card-radius: sp($border-radius);
-  border-radius: var(--card-radius);
+  border-radius: sp($border-radius);
   padding: 0;
 
   &--outlined {
@@ -25,7 +24,7 @@
   }
 
   & .card {
-    border-radius: calc(var(--card-radius) / 1.5);
+    border-radius: calc(#{$border-radius} / 1.5);
   }
 
   &--highlighted {
