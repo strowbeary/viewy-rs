@@ -374,6 +374,20 @@ as opposed to using 'Content here, content here', making it look like readable E
                                     .append_child(Text::new("Popover content 2", TextStyle::H1))
                             })
                     })
+                    .append_child({
+                        Button::new("Open menu popover", ButtonStyle::Filled)
+                            .popover({
+                                Popover::new()
+                                    .placement(Placement::BottomEnd)
+                                    .append_child({
+                                        Menu::new(MenuStyle::Vertical)
+                                            .append_child({
+                                                MenuItem::new("Open popup")
+                                                    .popup(Popup::new().append_child(Text::new("Hello", TextStyle::H1)))
+                                            })
+                                    })
+                            })
+                    })
             })
         })
         .append_child({

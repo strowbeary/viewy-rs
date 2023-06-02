@@ -27,11 +27,12 @@
 
   &--vertical, &--horizontal-tab {
     .menu-item {
+      border: none;
       display: flex;
       flex-direction: row;
       align-items: center;
       gap: sp(12);
-      padding: sp(8) sp(16) sp(8) sp(10);
+      padding: sp(8) sp(16);
       border-radius: sp($border-radius / 2);
       cursor: pointer;
       transition: background 150ms, color 150ms;
@@ -39,6 +40,10 @@
       text-decoration: none;
       color: var(--color-text);
       white-space: nowrap;
+
+      &:has(> .icon) {
+        padding: sp(8) sp(16) sp(8) sp(10);
+      }
 
       &--normal {
         &:hover {
