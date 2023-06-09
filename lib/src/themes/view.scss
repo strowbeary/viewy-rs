@@ -14,4 +14,7 @@
       background: var(--color-active);
     }
   }
+  &.shadow {
+    filter: contrast(20%) grayscale(100%) brightness(140%);
+  }
 }
