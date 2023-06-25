@@ -18,6 +18,7 @@ html {
 }
 
 body {
+  --border-radius: #{sp($border-radius)};
   margin: 0;
   font-size: sp(14);
   background: var(--background);
