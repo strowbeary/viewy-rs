@@ -1,0 +1,40 @@
+.multiple-file-input {
+    &__file-list {
+        flex-grow: 1;
+        gap: scale(4);
+
+    }
+
+    &--hidden {
+        &__file-list {
+            display: none;
+            position: fixed;
+            bottom: scale(4);
+            right: scale(4);
+            width: max-content;
+            height: max-content;
+            padding: scale(4);
+            border-radius: sp($border-radius);
+            background: var(--background);
+            box-shadow: 0 sp(8) sp(16) sp(4) var(--color-shadow);
+        }
+    }
+    &--simple {
+        display: flex;
+        flex-direction: column;
+        gap: scale(4);
+        border-radius: sp($border-radius);
+        padding: scale(4);
+        border: sp(1) solid var(--color-border);
+        background: var(--background);
+
+        & > .button {
+            width: 100%;
+        }
+    
+        &__input {
+            display: none;
+        }
+    }
+
+}
