@@ -3,4 +3,4 @@ target/
 Cargo.lock
 /.idea/codestream.xml
 **/.DS_Store
-
+**/uploads
