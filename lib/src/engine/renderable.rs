@@ -1,5 +1,6 @@
 use std::fmt::Debug;
-use std::collections::HashMap;
+use std::hash::{Hash, Hasher};
+use std::collections::{HashMap};
 use grass;
 use crate::node::Node;
 use std::ops::Deref;
@@ -8,19 +9,19 @@ use dyn_clone::{DynClone, clone_trait_object};
 pub trait Renderable: DynClone + Send + Sync + Debug {
     fn render(&self) -> Node;
 
+    fn component_name(&self) -> &str {
+        "View"
+    }
+
     fn to_html(&self) -> String {
-        let root_node: Node = self.render();
-        let popovers_html: Vec<String> = root_node.get_popovers().iter()
-            .map(|popover| popover.to_html())
-            .collect();
-        let popups_html: Vec<String> = root_node.get_popups().iter()
-            .map(|popup| popup.to_html())
+        let current_view: Node = self.render();
+        let root_nodes_html: Vec<String> = current_view.get_root_nodes().iter()
+            .map(|root_node| root_node.to_html())
             .collect();
         format!(
-            "{view} {popover} {popup}",
-            view = root_node.get_html(),
-            popover = popovers_html.join(""),
-            popup = popups_html.join("")
+            "{view} {root_nodes}",
+            view = current_view.get_html(),
+            root_nodes = root_nodes_html.join(""),
         )
     }
 }
@@ -30,5 +31,21 @@ clone_trait_object!(Renderable);
 impl Renderable for Box<dyn Renderable> {
     fn render(&self) -> Node {
         self.deref().render()
+    }
+}
+
+impl PartialEq for Box<dyn Renderable> {
+    fn eq(&self, other: &Box<dyn Renderable>) -> bool {
+        self.deref().component_name().eq(other.deref().component_name())
+    }
+}
+impl Eq for Box<dyn Renderable> {
+
+}
+
+
+impl Hash for Box<dyn Renderable> {
+    fn hash<H: Hasher>(&self, state: &mut H) {
+        self.deref().component_name().hash(state);
     }
 }

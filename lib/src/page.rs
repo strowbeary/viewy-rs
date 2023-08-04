@@ -1,5 +1,6 @@
 use crate::components::*;
 use crate::node::*;
+use std::collections::HashSet;
 use std::{fmt, env};
 use crate::Renderable;
 use std::collections::HashMap;
@@ -31,8 +32,10 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, ins
         <html>
             <head>
                 <title>{title}</title>
+                <link rel='preconnect' href='https://rsms.me/'>
                 {base_elem}
                 {favicons}
+                <link rel='stylesheet' href='https://rsms.me/inter/inter.css'>
                 <link href='{base_url}/app.css' rel='stylesheet'>
                 <script src='{base_url}/app.js'></script>
                 <meta charset='utf-8' />
@@ -85,8 +88,7 @@ impl Renderable for ContentComment {
             class_list: Default::default(),
             node_style: vec![],
             attributes: HashMap::new(),
-            popover: Box::new(None),
-            popup: Box::new(None)
+            root_nodes: HashSet::new(),
         }
     }
 }

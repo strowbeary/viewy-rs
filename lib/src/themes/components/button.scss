@@ -39,8 +39,10 @@
     border: none;
     background: transparent;
 
+    color: var(--color-accent);
+
     .text, .icon {
-      color: var(--color-accent);
+      color: currentColor;
     }
 
     &:hover .text, &:hover .icon {
@@ -187,12 +189,8 @@
     background: var(--color-accent);
     border: none;
 
-    .icon {
-      color: var(--color-text-on-accent);
-    }
-
-    .text {
-      color: var(--color-text-on-accent);
+    .icon, .text {
+      color: currentColor;
     }
 
     &:hover {
@@ -215,16 +213,12 @@
     }
 
     &--destructive {
-      color: white;
+      color: var(--color-on-destructive);
       background: var(--color-destructive);
       border: none;
 
-      .icon {
-        color: white;
-      }
-
-      .text {
-        color: white;
+      .icon, .text {
+        color: currentColor;
       }
 
       &:hover {

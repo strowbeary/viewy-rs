@@ -74,6 +74,9 @@ impl Appendable for Popover {}
 
 
 impl Renderable for Popover {
+    fn component_name(&self) -> &str {
+        "Popover"
+    }
     fn render(&self) -> Node {
         let mut popover = self.clone()
             .add_class("popover")

@@ -1,0 +1,10 @@
+[global]
+port = 8000
+address = "0.0.0.0"
+secret_key = "hPRYygVRiMyxpw5sBB1XeCMN1kFsDCqKvBi2QJxBVHQk"
+temp_dir = "./uploads"
+
+[default.limits]
+file = "2000 MiB"
+form = "3 MiB"
+data-form = "2000 MiB"

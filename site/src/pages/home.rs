@@ -11,6 +11,19 @@ pub fn home() -> VStack {
         .padding(vec![scale(4)])
         .gap(vec![12])
         .append_child({
+            showcase_section("Progress bar", {
+                VStack::new(Alignment::Stretch)
+                    .gap(vec![scale(3)])
+                    .append_child({
+                        ProgressBar::new()
+                    })
+                    .append_child({
+                        ProgressBar::new()
+                            .value(0.5)
+                    })
+            })
+        })
+        .append_child({
             showcase_section("Disclosure", {
                 VStack::new(Alignment::Stretch)
                     .gap(vec![scale(3)])

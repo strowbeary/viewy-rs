@@ -146,19 +146,11 @@ impl Renderable for MenuItem {
                 icon.render()
             }]);
         }
-        if menu_item.node.popover.is_some() {
-            menu_item.node.children.append(&mut vec![
-                Text::new(self.label.as_str(), TextStyle::Label)
-                    .render(),
-                Icon::new(Lucide::ChevronDown)
-                    .size(16)
-                    .render(),
-            ]);
-        } else {
+
             menu_item.node.children.append(&mut vec![
                 Text::new(self.label.as_str(), TextStyle::Label).render()
             ]);
-        }
+
 
         if let Some(badge) = &menu_item.badge {
             menu_item.node.children.push(badge.render());

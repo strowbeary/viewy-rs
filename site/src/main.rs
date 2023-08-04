@@ -2,15 +2,16 @@
 extern crate rocket;
 extern crate viewy;
 
+use std::path::Path;
+use rocket::fs::TempFile;
 use rocket::response::content::{RawCss, RawHtml, RawJavaScript};
 use rocket::State;
 
-use viewy::*;
-use viewy::components::*;
-use crate::catchers::routes;
 use viewy::engine::Assets;
 use rocket::serde::{Serialize, Deserialize};
-use rocket::serde::json::Json;
+use rocket::form::Form;
+use viewy::{DefaultModifiers, Page, RenderMode, scale};
+use viewy::components::{Alignment, Appendable, Card, CardStyle, Popover, Snackbar, SnackbarType, Text, TextStyle, VStack};
 
 mod catchers;
 mod components;
@@ -183,6 +184,18 @@ fn forms() -> RawHtml<String> {
 	})
 }
 
+
+
+#[post("/upload-file", data = "<form>")]
+async fn upload_file(
+	form: Form<TempFile<'_>>
+) -> String {
+	let mut file = form.into_inner();
+	let result = file.persist_to(Path::new("../uploads").join(file.name().unwrap_or("hello"))).await;
+	println!("{:?}", result);
+	format!("File size  = {:?}", file.len())
+}
+
 #[get("/table-of-content")]
 fn table_of_content() -> RawHtml<String> {
 	RawHtml({
@@ -210,6 +223,7 @@ fn rocket() -> _ {
             search_result,
             signature,
             forms,
+			upload_file,
             tabs,
 			table_of_content
         ])

@@ -124,7 +124,7 @@ pub struct ConfigLoader;
 
 impl ConfigLoader {
     pub fn load_from_config_folder() -> Config {
-        let theme_path = Path::new("./viewy.toml");
+        let theme_path = Path::new("../../site/viewy.toml");
         let mut theme = if theme_path.exists() {
             fs::read_to_string(theme_path)
                 .map(|theme_config| -> Config {

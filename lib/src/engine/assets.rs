@@ -69,6 +69,7 @@ $on-success-dark: {on_success_dark};
         include_str!("../themes/components/tag.scss").to_string(),
         include_str!("../themes/components/popup.scss").to_string(),
         include_str!("../themes/components/file-input.scss").to_string(),
+        include_str!("../themes/components/multiple-file-input.scss").to_string(),
         include_str!("../themes/components/color-picker.scss").to_string(),
         include_str!("../themes/components/signature-field.scss").to_string(),
         include_str!("../themes/components/snackbar.scss").to_string(),
@@ -77,6 +78,7 @@ $on-success-dark: {on_success_dark};
         include_str!("../themes/components/gauge.scss").to_string(),
         include_str!("../themes/components/disclosure.scss").to_string(),
         include_str!("../themes/components/table-of-contents.scss").to_string(),
+        include_str!("../themes/components/progress-bar.scss").to_string(),
         include_str!("../themes/print.scss").to_string(),
     ];
     if config.features.rich_text_editor {
@@ -109,6 +111,7 @@ fn get_scripts(config: &Config) -> Vec<String> {
         include_str!("../js/duration-field.js").to_string(),
         include_str!("../js/highlight-control.js").to_string(),
         include_str!("../js/table-of-contents.js").to_string(),
+        include_str!("../js/multiple-file-input.js").to_string(),
     ];
     if config.features.rich_text_editor {
         scripts.push(include_str!("../js/quill-editor.js").to_string());

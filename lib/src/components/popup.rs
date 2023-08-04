@@ -72,6 +72,9 @@ impl Appendable for Popup {}
 
 
 impl Renderable for Popup {
+    fn component_name(&self) -> &str {
+        "Popup"
+    }
     fn render(&self) -> Node {
         let mut popup = View::new()
             .add_class("popup")

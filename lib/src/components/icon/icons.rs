@@ -14,7 +14,7 @@ impl IconPack for Box<dyn IconPack> {
         (*self.clone()).path()
     }
 
-    fn configure(&self, mut icon: Icon) -> Icon {
+    fn configure(&self, icon: Icon) -> Icon {
         (*self.clone()).configure(icon)
     }
 }

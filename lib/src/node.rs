@@ -1,5 +1,6 @@
 use std::collections::{HashSet, HashMap};
 use crate::components::{Popover, Popup};
+use crate::engine::Renderable;
 
 #[derive(Debug, Clone)]
 pub enum NodeType {
@@ -16,8 +17,7 @@ pub struct Node {
     pub class_list: HashSet<String>,
     pub node_style: Vec<(String, String)>,
     pub attributes: HashMap<String, String>,
-    pub popover: Box<Option<Popover>>,
-    pub popup: Box<Option<Popup>>,
+    pub root_nodes: HashSet<Box<dyn Renderable>>,
 }
 
 impl Default for Node {
@@ -31,40 +31,22 @@ impl Default for Node {
             class_list,
             node_style: vec![],
             attributes: HashMap::new(),
-            popover: Box::new(None),
-            popup: Box::new(None),
+            root_nodes: HashSet::new()
         }
     }
 }
 
 impl Node {
-    pub fn get_popovers(&self) -> Vec<Popover> {
-        let mut popovers: Vec<Popover> = vec![];
+    pub fn get_root_nodes(&self) -> Vec<Box<dyn Renderable>> {
+        let mut all_root_nodes: Vec<Box<dyn Renderable>> = Vec::from_iter(self.root_nodes.clone());
 
-        if let Some(popover) = self.popover.clone().take() {
-            popovers.push(popover)
-        }
         self.children.iter()
             .for_each(|child| {
-                child.get_popovers().iter()
-                    .for_each(|popover| popovers.push(popover.clone()))
+                all_root_nodes.append(&mut child.get_root_nodes())
             });
-        popovers
+        all_root_nodes
     }
 
-    pub fn get_popups(&self) -> Vec<Popup> {
-        let mut popups: Vec<Popup> = vec![];
-
-        if let Some(popup) = self.popup.clone().take() {
-            popups.push(popup)
-        }
-        self.children.iter()
-            .for_each(|child| {
-                child.get_popups().iter()
-                    .for_each(|popup| popups.push(popup.clone()))
-            });
-        popups
-    }
 
     pub fn get_html(&self) -> String {
         let classes: Vec<String> = self.class_list.iter()
