@@ -10,6 +10,7 @@ use rocket::State;
 use viewy::engine::Assets;
 use rocket::serde::{Serialize, Deserialize};
 use rocket::form::Form;
+use rocket::http::Status;
 use viewy::{DefaultModifiers, Page, RenderMode, scale};
 use viewy::components::{Alignment, Appendable, Card, CardStyle, Popover, Snackbar, SnackbarType, Text, TextStyle, VStack};
 
@@ -189,11 +190,13 @@ fn forms() -> RawHtml<String> {
 #[post("/upload-file", data = "<form>")]
 async fn upload_file(
 	form: Form<TempFile<'_>>
-) -> String {
+) -> Status {
 	let mut file = form.into_inner();
-	let result = file.persist_to(Path::new("../uploads").join(file.name().unwrap_or("hello"))).await;
-	println!("{:?}", result);
-	format!("File size  = {:?}", file.len())
+	let filename = format!("{}.{}", file.name().unwrap_or("hello"), file.content_type().and_then(|ct| ct.extension()).unwrap());
+	match file.persist_to(Path::new("./uploads").join(filename)).await {
+		Ok(_) => Status::Ok,
+		Err(_) => Status::InternalServerError
+	}
 }
 
 #[get("/table-of-content")]
