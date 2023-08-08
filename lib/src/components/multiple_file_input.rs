@@ -76,48 +76,66 @@ impl Renderable for MultipleFileInput {
             .add_class("multiple-file-input__file-list")
             .id(&instance_id.to_string())
             .append_child({
-                VStack::new(Alignment::Center)
-                    .flex_grow(1)
-                    .justify_content("center")
-                    .gap(vec![scale(2)])
+                let mut control_bar = HStack::new(Alignment::Center)
+                    .add_class("multiple-file-input__file-list__control-bar")
                     .append_child({
-                        Icon::new(Lucide::UploadCloud)
-                            .size(64)
-                            .stroke_width(1)
-                            .color("var(--color-accent)")
-                    })
-                    .append_child({
-                        Text::new("Téléverser vos fichiers", TextStyle::H1)
-                    })
+                        Button::icon_only(Lucide::X, ButtonStyle::Link)
+                            .add_class("multiple-file-input--hidden__file-list__control-bar__close-button")
+                    });
+                if self.input_type == FileInputType::Hidden {
+                    control_bar
+                        .add_class("multiple-file-input--hidden__file-list__control-bar");
+                }
+                control_bar
             })
             .append_child({
-               View::new()
-                   .tag("template")
-                   .append_child({
-                       HStack::new(Alignment::Center)
-                           .gap(vec![scale(3)])
-                           .add_class("multiple-file-input__file-list__item")
-                           .append_child({
-                               Icon::new(Lucide::File)
-                                   .stroke_width(1)
-                                   .size(37)
-                           })
-                           .append_child({
-                               VStack::new(Alignment::Stretch)
-                                   .flex_grow(1)
-                                   .gap(vec![scale(2)])
-                                   .append_child({
-                                       Text::new("Filename", TextStyle::Headline)
-                                           .add_class("t-file-name")
-                                   })
-                                   .append_child({
-                                       ProgressBar::new()
-                                           .add_class("t-progress")
-                                           .flex_grow(1)
-                                   })
-                           })
-                   })
-            });
+                VStack::new(Alignment::Stretch)
+                    .add_class("multiple-file-input__file-list__content")
+                    .append_child({
+                        VStack::new(Alignment::Center)
+                            .flex_grow(1)
+                            .justify_content("center")
+                            .gap(vec![scale(2)])
+                            .append_child({
+                                Icon::new(Lucide::UploadCloud)
+                                    .size(64)
+                                    .stroke_width(1)
+                                    .color("var(--color-accent)")
+                            })
+                            .append_child({
+                                Text::new("Téléverser vos fichiers", TextStyle::H1)
+                            })
+                    })
+                    .append_child({
+                        View::new()
+                            .tag("template")
+                            .append_child({
+                                HStack::new(Alignment::Center)
+                                    .gap(vec![scale(3)])
+                                    .add_class("multiple-file-input__file-list__item")
+                                    .append_child({
+                                        Icon::new(Lucide::File)
+                                            .stroke_width(1)
+                                            .size(37)
+                                    })
+                                    .append_child({
+                                        VStack::new(Alignment::Stretch)
+                                            .flex_grow(1)
+                                            .gap(vec![scale(2)])
+                                            .append_child({
+                                                Text::new("Filename", TextStyle::Headline)
+                                                    .add_class("t-file-name")
+                                            })
+                                            .append_child({
+                                                ProgressBar::new()
+                                                    .add_class("t-progress")
+                                                    .flex_grow(1)
+                                            })
+                                    })
+                            })
+                    })
+            })
+          ;
 
         match self.input_type {
             FileInputType::Hidden => {

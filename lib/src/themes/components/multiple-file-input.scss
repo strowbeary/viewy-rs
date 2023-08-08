@@ -1,8 +1,13 @@
 .multiple-file-input {
     &__file-list {
+        overflow: auto;
         flex-grow: 1;
-        gap: scale(4);
-
+        &__control-bar {
+            display: none;
+        }
+        &__content {
+            gap: scale(4);
+        }
     }
 
     &--hidden {
@@ -13,10 +18,17 @@
             right: scale(4);
             width: max-content;
             height: max-content;
-            padding: scale(4);
             border-radius: sp($border-radius);
             background: var(--background);
             box-shadow: 0 sp(8) sp(16) sp(4) var(--color-shadow);
+            &__control-bar {
+                display: flex;
+                padding: scale(2);
+                background-color: var(--surface);
+            }
+            .multiple-file-input__file-list__content {
+                padding: scale(4);
+            }
         }
     }
     &--simple {

@@ -6,7 +6,7 @@ use crate::components::icons::Lucide;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, PartialEq)]
 pub enum FileInputType {
     /// Ce champ n'est pas affiché et est destiné à être attaché à un MenuItem ou un Button
     Hidden,
