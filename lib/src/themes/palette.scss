@@ -3,10 +3,11 @@
     $accent: $accent-dark;
     $on-accent: contrast-color($accent);
     $background: $background-dark;
-    $on-background: #ffffff;
+    $on-background: contrast-color($background);
     $surface: $surface-dark;
     $themed-on-background: color.mix($on-background, $accent, $weight: 90%);
     $themed-on-accent: color.mix($on-accent, $accent, $weight: 90%);
+    --dark: true;
 
     --color-accent: #{$accent};
     --color-accent-light: #{color.adjust($accent, $lightness: +20%)};
@@ -52,10 +53,12 @@
     $accent: $accent-light;
     $on-accent: contrast-color($accent);
     $background: $background-light;
-    $on-background: #000000;
+    $on-background: contrast-color($background);
     $surface: $surface-light;
     $themed-on-background: color.mix($on-background, $accent, $weight: 85%);
     $themed-on-accent: color.mix($on-accent, $accent, $weight: 90%);
+
+    --light: true;
 
     --color-accent: #{$accent};
     --color-on-accent: #{$on-accent};

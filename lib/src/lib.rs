@@ -13,8 +13,7 @@ pub use engine::Renderable;
 pub use helper_fn::*;
 pub use modifiers::{DefaultModifiers, Overflow, Position};
 pub use page::{Page, RenderMode};
-use lazy_static::lazy_static;
-use theme::{Config, ConfigLoader};
+pub use theme::Config;
 
 mod helper_fn;
 mod node;
@@ -27,9 +26,4 @@ pub mod layouts;
 
 pub mod engine;
 mod theme;
-
-
-lazy_static!{
-    pub static ref CONFIG: Config = ConfigLoader::load_from_config_folder();
-}
 

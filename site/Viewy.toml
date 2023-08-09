@@ -1,7 +1,7 @@
 [app]
 name = "Viewy showcase"
 favicons = [
-    { rel = "shortcut icon", href="/assets/logo.svg"}
+    { rel = "shortcut icon", href="/assets/square-logo.svg"}
 ]
 
 [features]

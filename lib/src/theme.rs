@@ -1,22 +1,20 @@
-use std::{env, fs};
-use std::fs::File;
-use std::path::Path;
-
+use figment::Figment;
+use figment::providers::{Env, Format, Toml};
 use serde::{Deserialize, Serialize};
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct AppSettings {
     pub name: String,
     pub favicons: Vec<Favicon>,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct Favicon {
     pub rel: String,
     pub href: String,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct Features {
     #[serde(rename = "rich-text-editor")]
     pub rich_text_editor: bool,
@@ -24,7 +22,7 @@ pub struct Features {
     pub sortable_stack: bool,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct Colors {
     pub accent: Color,
     #[serde(rename = "on-accent")]
@@ -43,13 +41,13 @@ pub struct Colors {
     pub on_success: Color,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct Color {
     pub dark: String,
     pub light: String,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct Shapes {
     #[serde(rename = "border-radius")]
     pub border_radius: i32,
@@ -57,12 +55,33 @@ pub struct Shapes {
     pub spacing_factor: i32,
 }
 
-#[derive(Deserialize, Serialize)]
+#[derive(Deserialize, Serialize, Debug)]
 pub struct Config {
     pub app: AppSettings,
     pub features: Features,
     pub colors: Colors,
     pub shapes: Shapes,
+}
+
+impl Config {
+    pub fn load() -> Self {
+        let figment = Figment::from({
+            Figment::new()
+                .merge(Toml::file("Viewy.toml"))
+                .merge(Toml::file("viewy.toml"))
+        })
+
+            .merge(Env::prefixed("VIEWY_").split("_"));
+
+        let config = figment.extract::<Config>()
+            .map_err(|err| {
+                println!("Viewy config error {:?}", err);
+                err
+            })
+            .unwrap_or_default();
+        println!("{:?}", config);
+        config
+    }
 }
 
 impl Default for Config {
@@ -117,29 +136,5 @@ impl Default for Config {
                 spacing_factor: 4,
             },
         }
-    }
-}
-
-pub struct ConfigLoader;
-
-impl ConfigLoader {
-    pub fn load_from_config_folder() -> Config {
-        let theme_path = Path::new("../../site/viewy.toml");
-        let mut theme = if theme_path.exists() {
-            fs::read_to_string(theme_path)
-                .map(|theme_config| -> Config {
-                    toml::from_str(&theme_config).expect("Can't parse theme config file")
-                })
-                .expect("Can't open config file")
-        } else {
-            Config::default()
-        };
-
-        theme.colors.accent.light = env::var("VIEWY_COLOR_ACCENT_LIGHT")
-            .unwrap_or(theme.colors.accent.light);
-        theme.colors.accent.dark = env::var("VIEWY_COLOR_ACCENT_DARK")
-            .unwrap_or(theme.colors.accent.dark);
-
-        theme
     }
 }

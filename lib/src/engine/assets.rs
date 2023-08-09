@@ -1,6 +1,5 @@
 use grass::OutputStyle;
-use crate::CONFIG;
-use crate::theme::{Config, ConfigLoader};
+use crate::theme::{Config};
 
 fn get_stylesheets(config: &Config) -> Vec<String> {
     let mut styles = vec![
@@ -156,17 +155,17 @@ pub struct Assets {
 impl Assets {
     pub fn new() -> Self {
         print!("Load config");
-        let config = &*CONFIG;
+        let config = Config::load();
+        println!(" [Done]");
         let theme = Self {
-            script: Assets::compile_scripts(config),
-            stylesheet: Assets::compile_theme(config),
+            script: Assets::compile_scripts(&config),
+            stylesheet: Assets::compile_theme(&config),
         };
 
-        println!(" [Done]");
         theme
     }
     fn compile_theme(config: &Config) -> String {
-        println!("Compile theme ");
+        print!("Compile theme");
         let stylesheets = get_stylesheets(&config).join("");
         match grass::from_string(
             stylesheets,

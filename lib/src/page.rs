@@ -5,7 +5,8 @@ use std::{fmt, env};
 use crate::Renderable;
 use std::collections::HashMap;
 use std::fmt::format;
-use crate::CONFIG;
+use crate::theme::Config;
+
 fn get_full_html_page(title: String, content: String, theme_variant: String, insert_base_element: bool) -> String {
     let base_url = match env::var("BASE_URL") {
         Ok(url) => url,
@@ -18,7 +19,7 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, ins
             "".to_string()
         }
     };
-    let config = &*CONFIG;
+    let config = Config::load();
     let favicons = config.app.favicons.iter()
         .map(|favicon| format!("<link rel=\"{rel}\" href=\"{base_url}{href}\">",
                                rel = favicon.rel,

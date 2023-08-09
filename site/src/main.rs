@@ -2,8 +2,9 @@
 extern crate rocket;
 extern crate viewy;
 
+use std::env;
 use std::path::Path;
-use rocket::fs::TempFile;
+use rocket::fs::{FileServer, relative, TempFile};
 use rocket::response::content::{RawCss, RawHtml, RawJavaScript};
 use rocket::State;
 
@@ -213,6 +214,7 @@ fn table_of_content() -> RawHtml<String> {
 
 #[launch]
 fn rocket() -> _ {
+	println!("{:?}", env::var("VIEWY_COLORS_ACCENT_LIGHT"));
 	rocket::build()
 		.mount("/", routes![
             get_stylesheet,
@@ -230,6 +232,7 @@ fn rocket() -> _ {
             tabs,
 			table_of_content
         ])
+		.mount("/assets", FileServer::from(relative!("assets")))
 		.register("/", catchers::routes())
 		.manage(Assets::new())
 }
