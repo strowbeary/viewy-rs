@@ -9,6 +9,7 @@
       <sourceFolder url="file://$MODULE_DIR$/lib/codegen/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lib/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/lib/tests" isTestSource="true" />
+      <sourceFolder url="file://$MODULE_DIR$/codegen/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
       <excludeFolder url="file://$MODULE_DIR$/view/target" />
       <excludeFolder url="file://$MODULE_DIR$/examples/target" />
