@@ -50,6 +50,7 @@ pub struct Field {
     pub datalist: bool,
     pub required: bool,
     pub read_only: bool,
+    pub disabled: bool,
 }
 
 impl NodeContainer for Field {
@@ -150,6 +151,10 @@ impl Field {
 
     pub fn submit_on_keypress(&mut self) -> Self {
         self.set_attr("data-submit-on-keypress", "true")
+    }
+    pub fn disabled(&mut self) -> Self {
+        self.disabled = true;
+        self.clone()
     }
 }
 
@@ -371,9 +376,12 @@ impl Renderable for Field {
                         _ => "input",
                     })
                     .add_class("field__input")
-
                     .set_attr("id", self.name.as_str())
                     .set_attr("name", self.name.as_str());
+
+                if self.disabled {
+                    input.set_attr("disabled", "disabled");
+                }
 
                 if self.required {
                     input.set_attr("required", "required");

@@ -37,3 +37,8 @@ heck = "0.4"
 quote = "1.0"
 scraper = "0.13"
 figment = { version = "0.10.10", features = ["toml", "env"]}
+serde = { version = "1.0", features = ["serde_derive"] }
+git-download = "0.1"
+
+[dev-dependencies]
+heck = "0.4"

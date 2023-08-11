@@ -26,3 +26,24 @@ pub mod layouts;
 pub mod engine;
 mod config;
 
+#[cfg(test)]
+mod tests {
+    use std::time::Instant;
+    use crate::components::{Appendable, View};
+    use crate::Renderable;
+
+    #[test]
+    fn it_works() {
+
+        let start = Instant::now();
+        let mut view = View::new();
+        for i in 0..10000 {
+            view.append_child(View::new());
+        }
+
+        println!("{}", view.to_html());
+        let duration = start.elapsed();
+
+        println!("{:?}", duration);
+    }
+}

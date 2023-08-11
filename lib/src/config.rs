@@ -1,3 +1,4 @@
+use std::collections::HashMap;
 use figment::Figment;
 use figment::providers::{Env, Format, Toml};
 use serde::{Deserialize, Serialize};
@@ -56,11 +57,18 @@ pub struct Shapes {
 }
 
 #[derive(Deserialize, Serialize, Debug)]
+pub struct IconPack {
+    pub git: Option<String>,
+    pub path: Option<String>,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
 pub struct Config {
     pub app: AppSettings,
     pub features: Features,
     pub colors: Colors,
     pub shapes: Shapes,
+    pub icons: HashMap<String, IconPack>
 }
 
 impl Config {
@@ -135,6 +143,7 @@ impl Default for Config {
                 border_radius: 8,
                 spacing_factor: 4,
             },
+            icons: Default::default(),
         }
     }
 }

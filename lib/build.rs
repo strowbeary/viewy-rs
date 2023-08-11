@@ -1,14 +1,39 @@
 extern crate heck;
 extern crate quote;
 extern crate scraper;
+extern crate serde;
+extern crate git_download;
 
+
+use std::collections::HashMap;
 use std::env;
 use std::path::{Path, PathBuf};
-
-use heck::ToKebabCase;
+use figment::Figment;
+use figment::providers::{Env, Format, Toml};
+use serde::{Serialize, Deserialize};
+use heck::{ToKebabCase, ToUpperCamelCase};
 use heck::ToPascalCase;
 use quote::format_ident;
 use quote::quote;
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct IconPack {
+    pub git: Option<String>,
+    pub path: Option<String>,
+}
+
+#[derive(Deserialize, Serialize, Debug)]
+pub struct Config {
+    pub icons: HashMap<String, IconPack>
+}
+
+impl Default for Config {
+    fn default() -> Self {
+        Config {
+            icons: Default::default(),
+        }
+    }
+}
 
 fn path_from_icon(icons_folder_path: &PathBuf, icon_name: &str) -> String {
     let file_content = match std::fs::read_to_string(
@@ -30,7 +55,7 @@ fn path_from_icon(icons_folder_path: &PathBuf, icon_name: &str) -> String {
 pub fn generate_icon_pack(
     icon_pack_name: &str,
     only_stroked: bool,
-    icons_folder_path: &str,
+    icons_folder_path: &PathBuf,
     icon_name_prefix: Option<&str>,
 ) -> String {
     let icon_pack_name_ident = format_ident!("{}", icon_pack_name);
@@ -124,18 +149,38 @@ pub fn generate_icon_pack(
 
 fn main() {
     println!("cargo:rerun-if-env-changed=FORCE_REBUILD");
+
+    let config = Figment::new()
+        .merge(Toml::file("Viewy.toml"))
+        .merge(Toml::file("viewy.toml"))
+        .extract::<Config>()
+        .map_err(|err| {
+            println!("Viewy config error {:?}", err);
+            err
+        })
+        .unwrap_or_default();
+
+    println!("{:?}", config);
+    println!("{:?}", env::var("OUT_DIR"));
+
     let mut code = quote! {
          use crate::modifiers::DefaultModifiers;
     }
     .to_string();
-    code += &generate_icon_pack("Lucide", true, "assets/lucide/icons", None);
-    code += &generate_icon_pack(
-        "SimpleIcons",
-        false,
-        "assets/simple-icons/icons",
-        Some("Icon"),
-    );
-    //   code += &generate_icon_pack("ViewyIconPack", false, "assets/viewy-icon-pack", None);
+
+    for (icon_pack_name, pack) in config.icons {
+        if let Some(git_url) = pack.git {
+            let icons_path = Path::new(&env::var("OUT_DIR").expect("Failed reading OUT_DIR environment variable")).join(&icon_pack_name);
+            git_download::repo(git_url)
+                .add_file(pack.path.unwrap_or_default(), &icons_path)
+                .exec()
+                .expect("Icon pack can't be downloaded");
+
+            code += &generate_icon_pack(&icon_pack_name.to_upper_camel_case(), true, &icons_path, None);
+        } else {
+            code += &generate_icon_pack(&icon_pack_name.to_upper_camel_case(), true, &pack.path.unwrap_or_default().into(), None);
+        }
+    }
 
     std::fs::write(
         Path::new(&env::var("OUT_DIR").expect("Failed reading OUT_DIR environment variable"))
