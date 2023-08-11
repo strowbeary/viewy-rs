@@ -1,0 +1,16 @@
+[package]
+name = "viewy-codegen"
+version = "1.7.0"
+authors = ["Rémi Caillot <dev@remicaillot.fr>"]
+description = "Procedural macros for Viewy web ui library."
+keywords = ["viewy", "web", "ui", "code", "generation"]
+edition = "2021"
+readme = "../README.md"
+repository = "https://github.com/strowbeary/viewy-rs"
+license = "MIT"
+documentation = "https://docs.rs/viewy"
+
+[lib]
+proc-macro = true
+
+[dependencies]

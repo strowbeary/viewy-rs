@@ -1,5 +1,5 @@
 use grass::OutputStyle;
-use crate::theme::{Config};
+use crate::config::{Config};
 
 fn get_stylesheets(config: &Config) -> Vec<String> {
     let mut styles = vec![

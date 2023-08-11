@@ -2428,7 +2428,6 @@ dependencies = [
  "heck",
  "hex",
  "html-escape",
- "lazy_static",
  "markdown",
  "minifier",
  "palette",
@@ -2439,6 +2438,10 @@ dependencies = [
  "toml 0.5.11",
  "uuid",
 ]
+
+[[package]]
+name = "viewy-codegen"
+version = "1.7.0"
 
 [[package]]
 name = "viewy-site"

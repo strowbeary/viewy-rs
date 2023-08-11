@@ -7,13 +7,12 @@ extern crate uuid;
 extern crate dyn_clone;
 extern crate toml;
 extern crate base64;
-extern crate lazy_static;
 
 pub use engine::Renderable;
 pub use helper_fn::*;
 pub use modifiers::{DefaultModifiers, Overflow, Position};
 pub use page::{Page, RenderMode};
-pub use theme::Config;
+pub use config::Config;
 
 mod helper_fn;
 mod node;
@@ -25,5 +24,5 @@ pub mod components;
 pub mod layouts;
 
 pub mod engine;
-mod theme;
+mod config;
 
