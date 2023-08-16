@@ -1,8 +1,6 @@
 use std::collections::{HashMap, HashSet};
 use std::hash::{Hash, Hasher};
-use std::ops::{Deref, DerefMut};
 use uuid::Uuid;
-use crate::core::modifiers::Appendable;
 
 #[derive(Clone)]
 pub enum NodeType {

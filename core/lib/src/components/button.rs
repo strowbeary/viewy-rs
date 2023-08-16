@@ -1,7 +1,6 @@
 use crate::core::modifiers::{Appendable, Classable, Attributable};
 use crate::core::node::{Node, NodeType};
 use crate::core::widget::Widget;
-use crate::prelude::View;
 
 /// Used to set a button's importance level.
 #[derive(Debug, Clone)]

@@ -1,8 +1,6 @@
 #[macro_use]
 extern crate viewy_codegen;
 
-use std::ops::{Deref, DerefMut};
-
 use crate::core::widget::Widget;
 
 
@@ -30,16 +28,6 @@ mod tests {
         pub user_name: String,
         pub user_profile_img: String,
     }
-
-    impl UserProfileTag {
-        pub fn new(name: &str, profile_img: &str) -> Self {
-            UserProfileTag {
-                user_name: name.to_string(),
-                user_profile_img: profile_img.to_string(),
-            }
-        }
-    }
-
     impl Into<Node> for UserProfileTag {
         fn into(self) -> Node {
             self.render()
@@ -57,11 +45,10 @@ mod tests {
         let start = Instant::now();
         let mut view = View::new();
 
-        for i in 0..10000 {
+        for _ in 0..10000 {
             view
                 .append_child({
                     Button::new("Label", ButtonStyle::Filled)
-                        .reversed(true)
                 });
         }
 
