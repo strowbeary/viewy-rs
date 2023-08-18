@@ -1,7 +1,5 @@
 use crate::components::Color;
 use palette::*;
-use palette::luma::Luma;
-use palette::rgb::Rgb;
 
 const PHI: f32 = 1.61803398 * 1.3;
 
