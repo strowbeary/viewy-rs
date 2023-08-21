@@ -187,13 +187,14 @@ fn main() {
             println!("{:?}",  twd);
             let git_result = run_cmd!{
                 mkdir -p $twd;
-                git clone --verbose -b $branch_name $git_url $twd;
+                git clone --verbose -b $branch_name $git_url $twd 2>&1;
             };
             println!("GIT RESULT {:?}", git_result);
 
             let move_result  = run_cmd!{
+                ls -a $twd 2>&1;
                 mkdir -p $icons_path;
-                cp -R $in_repo_path/ $icons_path > icon_pack_name.log 2>&1;
+                cp -R $in_repo_path/ $icons_path 2>&1;
             };
             println!("MOVE RESULT {:?}", move_result);
             code += &generate_icon_pack(&icon_pack_name.to_upper_camel_case(), true, &icons_path, pack.prefix);
