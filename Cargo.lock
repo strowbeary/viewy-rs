@@ -2509,6 +2509,7 @@ dependencies = [
  "base64 0.13.1",
  "chrono",
  "chrono-tz",
+ "cmd_lib",
  "dyn-clone",
  "figment",
  "git-download",

@@ -56,11 +56,6 @@ pub struct Shapes {
     pub spacing_factor: i32,
 }
 
-#[derive(Deserialize, Serialize, Debug)]
-pub struct IconPack {
-    pub git: Option<String>,
-    pub path: Option<String>,
-}
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Config {
@@ -68,7 +63,6 @@ pub struct Config {
     pub features: Features,
     pub colors: Colors,
     pub shapes: Shapes,
-    pub icons: HashMap<String, IconPack>
 }
 
 impl Config {
@@ -76,7 +70,7 @@ impl Config {
         let figment = Figment::from({
             Figment::new()
                 .merge(Toml::file("Viewy.toml"))
-                .merge(Toml::file("viewy.toml"))
+                .merge(Toml::file("Viewy.toml"))
         })
 
             .merge(Env::prefixed("VIEWY_").split("_"));
@@ -143,7 +137,6 @@ impl Default for Config {
                 border_radius: 8,
                 spacing_factor: 4,
             },
-            icons: Default::default(),
         }
     }
 }

@@ -80,6 +80,7 @@ impl Field {
             datalist: false,
             required: false,
             read_only: false,
+            disabled: false,
         }
     }
 
@@ -156,6 +157,7 @@ impl Field {
         self.disabled = true;
         self.clone()
     }
+
 }
 
 impl Renderable for Field {

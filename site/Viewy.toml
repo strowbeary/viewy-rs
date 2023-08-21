@@ -36,8 +36,3 @@ line-height-factor = 1.2
 
 
 [shadows]
-
-[icons]
-lucide = { git = "https://github.com/lucide-icons/lucide.git", path = "./icons"}
-simple-icons = { git = "https://github.com/simple-icons/simple-icons.git", path = "./icons"}
-viewy-icons = { path = "../icons"}
