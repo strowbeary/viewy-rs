@@ -194,7 +194,7 @@ fn main() {
             let move_result  = run_cmd!{
                 ls -a $twd 2>&1;
                 mkdir -p $icons_path;
-                cp -R $in_repo_path/ $icons_path 2>&1;
+                cp -R $in_repo_path/. $icons_path 2>&1;
             };
             println!("MOVE RESULT {:?}", move_result);
             code += &generate_icon_pack(&icon_pack_name.to_upper_camel_case(), true, &icons_path, pack.prefix);
