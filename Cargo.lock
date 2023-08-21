@@ -2534,7 +2534,7 @@ version = "1.7.2"
 
 [[package]]
 name = "viewy-site"
-version = "1.7.2"
+version = "1.8.0"
 dependencies = [
  "chrono",
  "rocket",
