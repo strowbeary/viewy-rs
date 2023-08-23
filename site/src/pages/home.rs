@@ -1,6 +1,6 @@
 use chrono::Duration;
 
-use viewy::{DefaultModifiers, Overflow, scale, sp};
+use viewy::{DefaultModifiers, scale, sp};
 use viewy::components::*;
 use viewy::components::icons::Lucide;
 
@@ -10,6 +10,21 @@ pub fn home() -> VStack {
     VStack::new(Alignment::Stretch)
         .padding(vec![scale(4)])
         .gap(vec![12])
+
+        .append_child({
+            Card::new(CardStyle::Outlined)
+                .popup(Popup::new())
+                .append_child({
+                    Form::new("totofile", "")
+                        .append_child({
+                            FileInput::new("toto", FileInputType::Hidden)
+                        })
+                        .append_child({
+                            Button::new("Files", ButtonStyle::Filled)
+                                .attach_to_file_input("toto")
+                        })
+                })
+        })
         .append_child({
             showcase_section("Progress bar", {
                 VStack::new(Alignment::Stretch)
@@ -28,58 +43,58 @@ pub fn home() -> VStack {
                 VStack::new(Alignment::Stretch)
                     .gap(vec![scale(3)])
                     .append_child({
-                       Disclosure::new()
-                           .opener_item({
-                               Text::new("Opener item content", TextStyle::H3)
-                           })
-                           .append_child({
-                               Text::new(
-                                   "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                                   TextStyle::Body
-                               )
-                                   .margin_top(scale(3))
-                           })
+                        Disclosure::new()
+                            .opener_item({
+                                Text::new("Opener item content", TextStyle::H3)
+                            })
+                            .append_child({
+                                Text::new(
+                                    "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                                    TextStyle::Body,
+                                )
+                                    .margin_top(scale(3))
+                            })
                     })
                     .append_child({
-                       Disclosure::new()
-                           .opener_item({
-                               Text::new("Title 1", TextStyle::H3)
-                           })
-                           .append_child({
-                               Disclosure::new()
-                                   .margin_left(24)
-                                   .opener_item({
-                                       Text::new("Subtitle 1", TextStyle::H3)
-                                   })
-                                   .append_child({
-                                       Text::new(
-                                           "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
-                                           TextStyle::Body
-                                       )
-                                           .margin_top(scale(3))
-                                   })
-                           })
+                        Disclosure::new()
+                            .opener_item({
+                                Text::new("Title 1", TextStyle::H3)
+                            })
+                            .append_child({
+                                Disclosure::new()
+                                    .margin_left(24)
+                                    .opener_item({
+                                        Text::new("Subtitle 1", TextStyle::H3)
+                                    })
+                                    .append_child({
+                                        Text::new(
+                                            "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.",
+                                            TextStyle::Body,
+                                        )
+                                            .margin_top(scale(3))
+                                    })
+                            })
                     })
             })
         }).append_child({
-            showcase_section("Gauge", {
-                HStack::new(Alignment::Center)
-                    .gap(vec![scale(3)])
-                    .append_child({
-                        Gauge::new(0.5, GaugeStyle::Radial)
-                            .low(0.3)
-                            .high(0.8)
-                            .optimum(1.0)
-                    })
-                    .append_child({
-                        Gauge::new(0.5, GaugeStyle::Radial)
-                            .display_optimum_indicator()
-                            .low(0.3)
-                            .high(0.8)
-                            .optimum(1.0)
-                    })
-            })
+        showcase_section("Gauge", {
+            HStack::new(Alignment::Center)
+                .gap(vec![scale(3)])
+                .append_child({
+                    Gauge::new(0.5, GaugeStyle::Radial)
+                        .low(0.3)
+                        .high(0.8)
+                        .optimum(1.0)
+                })
+                .append_child({
+                    Gauge::new(0.5, GaugeStyle::Radial)
+                        .display_optimum_indicator()
+                        .low(0.3)
+                        .high(0.8)
+                        .optimum(1.0)
+                })
         })
+    })
         .append_child({
             showcase_section("Highlighted card", {
                 HStack::new(Alignment::Center)

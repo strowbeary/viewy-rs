@@ -162,6 +162,9 @@ impl Renderable for Picker {
                                 if self.auto_submit {
                                     radio.set_attr("data-auto-submit", "data-auto-submit");
                                 }
+                                if picker.is_disabled {
+                                    radio.set_attr("disabled", "disabled");
+                                }
                                 radio
                             });
                         option_list.append_child({

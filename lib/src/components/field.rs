@@ -384,6 +384,9 @@ impl Renderable for Field {
                 if self.disabled {
                     input.set_attr("disabled", "disabled");
                 }
+                if self.read_only {
+                    input.set_attr("readonly", "readonly");
+                }
 
                 if self.required {
                     input.set_attr("required", "required");
@@ -394,9 +397,6 @@ impl Renderable for Field {
                             .grid_area("required")
                             .render()
                     });
-                }
-                if self.read_only {
-                    input.set_attr("readonly", "readonly");
                 }
                 if let Some(placeholder) = &self.placeholder {
                     input.set_attr("placeholder", placeholder);
