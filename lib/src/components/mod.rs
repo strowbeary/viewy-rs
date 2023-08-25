@@ -73,7 +73,7 @@ pub use tabs::{
     TabViewItem
 };
 pub use sortable_stack::SortableStack;
-pub use table_of_content::{TableOfContents, TableOfContentsItem};
+pub use table_of_content::{TableOfContents, TableOfContentsItem, TableOfContentItemType};
 
 use crate::node::Node;
 use crate::Renderable;

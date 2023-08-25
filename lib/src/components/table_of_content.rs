@@ -1,21 +1,31 @@
-use crate::node::{Node, NodeContainer};
-use crate::{DefaultModifiers, Renderable};
 use std::borrow::BorrowMut;
+
+use crate::{DefaultModifiers, Renderable};
 use crate::components::{Text, TextStyle};
+use crate::node::{Node, NodeContainer};
+
+#[derive(Debug, Clone)]
+pub enum TableOfContentItemType {
+    H1,
+    H2,
+    H3,
+}
 
 #[derive(Debug, Clone)]
 pub struct TableOfContentsItem {
     children: Vec<TableOfContentsItem>,
     pub label: String,
     pub referrer_id: String,
+    pub item_type: TableOfContentItemType,
 }
 
 impl TableOfContentsItem {
-    pub fn new(label: &str, referrer_id: &str) -> Self {
+    pub fn new(label: &str, referrer_id: &str, item_type: TableOfContentItemType) -> Self {
         Self {
             children: vec![],
             label: label.to_string(),
             referrer_id: referrer_id.to_string(),
+            item_type,
         }
     }
     pub fn append_child(&mut self, item: TableOfContentsItem) -> Self {
@@ -62,7 +72,17 @@ impl Renderable for TableOfContents {
 
         for child in &toc.children {
             toc.node.children.push({
-                Text::new(&child.label, TextStyle::Label)
+                match child.item_type {
+                    TableOfContentItemType::H1 => {
+                        Text::new(&child.label, TextStyle::H2)
+                    }
+                    TableOfContentItemType::H2 => {
+                        Text::new(&child.label, TextStyle::Subtitle2)
+                    }
+                    TableOfContentItemType::H3 => {
+                        Text::new(&child.label, TextStyle::Subtitle3)
+                    }
+                }
                     .add_class("table-of-contents__item")
                     .tag("a")
                     .set_attr("href", &child.referrer_id)
