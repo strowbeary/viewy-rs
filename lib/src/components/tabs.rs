@@ -1,8 +1,8 @@
 use std::borrow::BorrowMut;
 use uuid::Uuid;
 
-use crate::{DefaultModifiers, Renderable};
-use crate::components::{Alignment, Appendable, ChildContainer, HStack, Text, TextStyle, View};
+use crate::{DefaultModifiers, Renderable, scale, sp};
+use crate::components::{Alignment, Appendable, ChildContainer, HStack, Icon, Text, TextStyle, View};
 use crate::components::icons::IconPack;
 use crate::node::{Node, NodeContainer};
 
@@ -46,12 +46,20 @@ impl Renderable for TabView {
             self.children.iter()
                 .for_each(|child| {
                     tab_bar.append_child({
-                        let mut tab = View::new()
+                        let mut tab = HStack::new(Alignment::Center)
+                            .gap(vec![scale(3)])
                             .set_attr("data-tabId", &child.id.to_string())
                             .add_class("tab-view__tab-container__tab")
                             .append_child({
                                 Text::new(&child.title, TextStyle::Label)
                             });
+                        if let Some(icon) = child.icon.clone() {
+                            tab.prepend_child({
+                                Icon::new(icon)
+                                    .size(18)
+                                    .stroke_width(2)
+                            });
+                        }
                         if child.open {
                             tab.set_attr("data-is-open", "data-is-open");
                             tab.add_class("tab-view__tab-container__tab--active");
@@ -111,6 +119,14 @@ impl TabViewItem {
     /// If set to true, this tab will be opened by default
     pub fn open(&mut self, is_open: bool) -> Self {
         self.open = is_open;
+        self.clone()
+    }
+
+    /// Define the icon displayed on the left of the tab
+    pub fn icon<T>(&mut self, icon: T) -> Self
+        where
+            T: 'static + IconPack {
+        self.icon = Some(Box::new(icon));
         self.clone()
     }
 }
