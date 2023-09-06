@@ -81,7 +81,6 @@ impl Config {
                 err
             })
             .unwrap_or_default();
-        println!("{:?}", config);
         config
     }
 }

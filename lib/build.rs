@@ -166,7 +166,6 @@ fn main() {
         })
         .unwrap_or_default();
 
-    println!("{:?}", config);
     println!("{:?}", env::var("OUT_DIR"));
 
     let mut code = quote! {

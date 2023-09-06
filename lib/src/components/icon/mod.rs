@@ -58,7 +58,8 @@ impl Renderable for Icon {
             .set_attr("stroke-linecap", "round")
             .set_attr("stroke-linejoin", "round")
             .tag("svg");
-
+        icon.min_height(&sp(self.size));
+        icon.min_width(&sp(self.size));
         icon.get_node().text = Some(self.icon.path().to_string());
         icon.get_node().clone()
     }
