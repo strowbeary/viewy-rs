@@ -2504,7 +2504,7 @@ checksum = "49874b5167b65d7193b8aba1567f5c7d93d001cafc34600cee003eda787e483f"
 
 [[package]]
 name = "viewy"
-version = "1.8.5"
+version = "1.8.6"
 dependencies = [
  "base64 0.13.1",
  "chrono",
@@ -2530,11 +2530,11 @@ dependencies = [
 
 [[package]]
 name = "viewy-codegen"
-version = "1.8.5"
+version = "1.8.6"
 
 [[package]]
 name = "viewy-site"
-version = "1.8.5"
+version = "1.8.6"
 dependencies = [
  "chrono",
  "rocket",
