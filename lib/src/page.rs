@@ -130,22 +130,22 @@ impl<'a> Page<'a> {
         self.base_url = true;
         self.clone()
     }
-    pub fn compile(&self, render_mode: RenderMode) -> String {
-        let page = self;
-        let theme_variant = page.theme.to_string().to_lowercase();
+    pub fn compile(self, render_mode: RenderMode) -> String {
+
+        let theme_variant = self.theme.to_string().to_lowercase();
 
         match render_mode {
             RenderMode::Complete => {
-                get_full_html_page(page.name.clone(), {
-                    (page.layout)(page.content.clone()).to_html()
+                get_full_html_page(self.name, {
+                    (self.layout)(self.content).to_html()
                 }, theme_variant, self.base_url)
             }
             RenderMode::ContentOnly => {
-                page.content.to_html()
+                self.content.to_html()
             }
             RenderMode::LayoutOnly => {
-                get_full_html_page(page.name.clone(), {
-                    (page.layout)(Box::new(ContentComment)).to_html()
+                get_full_html_page(self.name, {
+                    (self.layout)(Box::new(ContentComment)).to_html()
                 }, theme_variant, self.base_url)
             }
         }
