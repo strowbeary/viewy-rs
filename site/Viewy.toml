@@ -1,0 +1,18 @@
+[app]
+name = "Viewy showcase"
+favicons = [
+    { rel = "shortcut icon", href="/assets/logo.svg"}
+]
+
+[colors]
+accent = { light = "#0052cc", dark = "#3385ff" }
+background = { light = "#ffffff", dark = "#121212" }
+surface = { light = "#efefef", dark = "#181818" }
+destructive = { light = "#C70039 ", dark = "#ff0048" }
+success = { light = "#3DA144 ", dark = "#3DA144" }
+warning = { light = "#FFA000 ", dark = "#FFAE1E" }
+
+[shapes]
+border-radius = 8
+spacing-factor = 4
+

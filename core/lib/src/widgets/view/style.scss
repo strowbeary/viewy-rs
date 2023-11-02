@@ -1,0 +1,20 @@
+.view {
+  box-sizing: border-box;
+  &.clickable {
+    cursor: pointer;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    -webkit-user-select: none;
+    user-select: none;
+    transition: background 150ms;
+    &:hover {
+      background: var(--color-hover);
+    }
+    &:active {
+      background: var(--color-active);
+    }
+  }
+  &.shadow {
+    filter: contrast(20%) grayscale(100%) brightness(140%);
+  }
+}

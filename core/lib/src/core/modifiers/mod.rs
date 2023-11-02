@@ -1,7 +1,13 @@
 use uuid::Uuid;
-use crate::components::popup::Popup;
+use crate::widgets::popup::Popup;
 use crate::core::node::Node;
 use crate::core::widget::Widget;
+
+pub mod box_stylable;
+
+#[doc(inline)]
+pub use box_stylable::*;
+use crate::core::theme::Color;
 
 pub trait Appendable: Widget {
     fn append_child<C>(&mut self, child: C) -> &mut Self
@@ -40,13 +46,35 @@ pub trait Attributable: Widget {
 
 }
 
-pub trait Popupable: Widget + Classable + Attributable {
-    fn popup(&mut self, mut popup: Popup) -> &mut Self {
+pub trait PopupReceiver: Widget + Classable + Attributable {
+    fn popup<P>(&mut self, mut popup: P) -> &mut Self where P: AsMut<Popup> {
+        let popup = popup.as_mut();
         let id = Uuid::new_v4().to_string();
         self.add_class("popup--opener");
         self.set_attr("id", id.as_str());
         let node: &mut Node = self.deref_mut();
         node.root_nodes.insert(popup.attach_to(id.as_str()).into());
+        self
+    }
+}
+
+
+pub trait Colorable: Widget {
+   fn color(&mut self, color: Color) -> &mut Self {
+       let node: &mut Node = self.deref_mut();
+       node.node_style.push(("color".to_string(), format!("var({})", color.as_str())));
+       self
+   }
+
+    fn background_color(&mut self, color: Color) -> &mut Self {
+
+        let node: &mut Node = self.deref_mut();
+        node.node_style.push(("background-color".to_string(), format!("var({})", color.as_str())));
+        self
+    }
+    fn border_color(&mut self, color: Color) -> &mut Self {
+        let node: &mut Node = self.deref_mut();
+        node.node_style.push(("border-color".to_string(), format!("var({})", color.as_str())));
         self
     }
 }

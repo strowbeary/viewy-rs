@@ -53,52 +53,55 @@ impl Default for Node {
 
 impl Node {
     pub fn get_root_nodes(&self) -> Vec<Node> {
-        let mut all_root_nodes: Vec<Node> = Vec::from_iter(self.root_nodes.iter().cloned());
-
-        self.children.iter()
-            .for_each(|child| {
-                all_root_nodes.append(&mut child.get_root_nodes())
-            });
-        all_root_nodes
+        let mut root_nodes: Vec<Node> = Vec::from_iter(self.root_nodes.iter().cloned());
+        let mut children_root_nodes = self.children.iter()
+            .map(|child| {
+                child.get_root_nodes()
+            }).flatten().collect::<Vec<Node>>();
+        root_nodes.append(&mut children_root_nodes);
+        root_nodes
     }
 
 }
 
 impl Into<String> for Node {
     fn into(self) -> String {
-        let classes: Vec<String> = self.class_list.iter()
-            .map(|class_name| format!("{}", class_name))
-            .collect();
-        let attributes: Vec<String> = self.attributes.iter()
+        let mut attributes = self.attributes;
+        if !self.class_list.is_empty() {
+            attributes.insert("class".to_string(), Vec::from_iter(self.class_list).join(" "));
+
+        }
+
+        if !self.node_style.is_empty() {
+            attributes.insert("style".to_string(),self.node_style.iter()
+                .map(|(name, value)| format!("{}: {};", name, value))
+                .collect::<Vec<String>>()
+                .join(""));
+
+        }
+
+        let attributes: Vec<String> = attributes.iter()
             .map(|(name, value)| format!("{}=\"{}\"", name, value))
             .collect();
-        let style: Vec<String> = self.node_style.iter()
-            .map(|(name, value)| format!("{}: {};", name, value))
-            .collect();
-        let content: Vec<String> = self.children.into_iter()
-            .collect();
+
+        let content: Vec<String> = Vec::from_iter(self.children);
+
         match self.node_type.clone() {
             NodeType::Normal(tag_name) => format!(
-                "<{tag} class=\"{class_list}\" style=\"{view_style}\" {attributes}>{children}</{tag}>",
-                tag = tag_name,
-                class_list = classes.join(" "),
+                "<{tag_name} {attributes}>{children}</{tag_name}>",
                 attributes = attributes.join(" "),
-                view_style = style.join(""),
                 children = match self.text.clone() {
                     None => content.join(""),
                     Some(text) => text
                 }
             ),
             NodeType::SelfClosing(tag_name) => format!(
-                "<{tag} class=\"{class_list}\" {attributes} style=\"{view_style}\" />",
-                tag = tag_name,
-                class_list = classes.join(" "),
+                "<{tag_name} {attributes}/>",
+
                 attributes = attributes.join(" "),
-                view_style = style.join("")
             ),
             NodeType::Comment(comment) => format!(
-                "<!--{comment}-->",
-                comment = comment
+                "<!--{comment}-->"
             )
         }
     }

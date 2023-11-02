@@ -3,6 +3,7 @@ use quote::quote;
 use syn;
 
 
+
 #[proc_macro_derive(Widget)]
 pub fn widget_derive(input: TokenStream) -> TokenStream {
     // Construct a representation of Rust code as a syntax tree
@@ -48,8 +49,33 @@ fn impl_widget_macro(ast: &syn::DeriveInput) -> TokenStream {
         }
 
         impl Widget for #name {
+            const STYLE: &'static str = include_str!("./style.scss");
             fn widget_name() -> &'static str {
                 "#name"
+            }
+
+        }
+    };
+    gen.into()
+}
+
+
+#[proc_macro_derive(Component)]
+pub fn component_derive(input: TokenStream) -> TokenStream {
+    // Construct a representation of Rust code as a syntax tree
+    // that we can manipulate
+    let ast = syn::parse(input).unwrap();
+
+    // Build the trait implementation
+    impl_component_macro(&ast)
+}
+
+fn impl_component_macro(ast: &syn::DeriveInput) -> TokenStream {
+    let name = &ast.ident;
+    let gen = quote! {
+       impl Into<Node> for #name {
+            fn into(self) -> Node {
+                self.render()
             }
         }
     };
@@ -107,6 +133,23 @@ fn impl_classable_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
     let gen = quote! {
         impl Classable for #name {}
+    };
+    gen.into()
+}
+#[proc_macro_derive(Colorable)]
+pub fn colorable_derive(input: TokenStream) -> TokenStream {
+    // Construct a representation of Rust code as a syntax tree
+    // that we can manipulate
+    let ast = syn::parse(input).unwrap();
+
+    // Build the trait implementation
+    impl_colorable_macro(&ast)
+}
+
+fn impl_colorable_macro(ast: &syn::DeriveInput) -> TokenStream {
+    let name = &ast.ident;
+    let gen = quote! {
+        impl Colorable for #name {}
     };
     gen.into()
 }

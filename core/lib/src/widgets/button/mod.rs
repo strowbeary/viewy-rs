@@ -1,6 +1,7 @@
 use crate::core::modifiers::{Appendable, Classable, Attributable};
 use crate::core::node::{Node, NodeType};
 use crate::core::widget::Widget;
+use crate::modifiers::PopupReceiver;
 
 /// Used to set a button's importance level.
 #[derive(Debug, Clone)]
@@ -17,12 +18,14 @@ pub enum ButtonStyle {
 /// Button::new("Label", ButtonStyle::Filled)
 ///     .action("/") // Here create a link to "/"
 /// ```
-#[derive(Widget, Appendable, Classable, Attributable)]
+#[derive(Widget, Classable, Attributable)]
 pub struct Button {
     node: Node,
     pub label: Option<String>,
     pub style: ButtonStyle,
 }
+
+impl PopupReceiver for Button {}
 
 impl Button {
     pub fn new(label: &str, style: ButtonStyle) -> Self {
@@ -38,8 +41,7 @@ impl Button {
     }
 
     /// Reverse the icon and text
-    /// Will be removed in next release
-    #[deprecated]
+    #[deprecated(since="2.0.0", note="please use `reverse` instead. Will be removed in 2.1")]
     pub fn reversed(&mut self, is_reversed: bool) -> &mut Self {
         if is_reversed {
             self.add_class("button--reversed")
@@ -121,5 +123,6 @@ impl Button {
         self
             .add_class("button")
             .add_class(format!("button--{:?}", style).to_lowercase().as_str());
+        self.node.text = self.label.clone();
     }
 }

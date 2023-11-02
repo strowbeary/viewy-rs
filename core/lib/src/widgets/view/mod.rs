@@ -1,8 +1,8 @@
 use crate::core::node::{Node};
 use crate::core::widget::Widget;
-use crate::core::modifiers::Appendable;
+use crate::core::modifiers::{Appendable, Colorable, Dimensionable};
 
-#[derive(Widget, Appendable)]
+#[derive(Widget, Appendable, Colorable)]
 pub struct View {
     node: Node
 }
@@ -19,3 +19,5 @@ impl View {
     }
 }
 
+
+impl Dimensionable for View {}

@@ -1,0 +1,264 @@
+$border-radius: 8;
+
+@function sp($sp) {
+  @return ($sp / 16) * 1rem;
+}
+
+.button {
+  font-size: sp(16);
+  border: none;
+  border-radius: sp($border-radius * (3/4));
+  padding: sp(8) sp(16);
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  width: max-content;
+  box-sizing: border-box;
+  transition: background 150ms, color 150ms, border 150ms;
+  font-family: inherit;
+  text-decoration: none;
+  flex-wrap: nowrap;
+  position: relative;
+
+  & > .badge {
+    position: absolute;
+    right: sp(-10);
+    top: sp(-10);
+  }
+
+  .icon {
+    margin: 0 sp(5) 0 0;
+  }
+
+  &--reversed {
+    flex-direction: row-reverse;
+
+    .icon {
+      margin: 0 0 0 sp(5);
+    }
+  }
+
+  &--link {
+    padding: sp(8) 0;
+    border: none;
+    background: transparent;
+
+    color: var(--accent);
+
+    .text, .icon {
+      color: currentColor;
+    }
+
+    &:hover .text, &:hover .icon {
+      color: var(--accent-lighter);
+    }
+
+    &:active .text, &:active .icon {
+      color: var(--accent-lighter);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 sp(3) var(--color-focus);
+    }
+
+    &:disabled .text, &:disabled .icon {
+      pointer-events: none;
+      background: none;
+      color: var(--color-text-disabled);
+    }
+
+    &--destructive {
+      .text, .icon {
+        color: var(--color-destructive);
+      }
+
+      &:hover .text, &:hover .icon {
+        color: var(--color-destructive-light);
+      }
+
+      &:active .text, &:active .icon {
+        color: var(--color-destructive-lighter);
+      }
+
+      &:focus-visible {
+        box-shadow: 0 0 0 sp(3) var(--surface-red);
+      }
+    }
+
+  }
+
+  &--flat {
+    border: none;
+    background: transparent;
+
+    .text,
+    .icon {
+      color: var(--color-accent);
+    }
+
+    &:hover {
+      background: var(--color-hover);
+    }
+
+    &:active {
+      background: var(--color-active);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 sp(3) var(--color-focus);
+    }
+
+    &:disabled {
+      pointer-events: none;
+      background: none;
+      .text, .icon {
+        color: var(--color-text-disabled);
+      }
+    }
+
+    &--destructive {
+      .text,
+      .icon {
+        color: var(--color-destructive);
+      }
+
+      &:hover {
+        background: var(--surface-red);
+      }
+
+      &:active {
+        background: var(--surface-red-darker);
+      }
+
+      &:focus-visible {
+        box-shadow: 0 0 0 sp(3) var(--surface-red-darker);
+      }
+    }
+  }
+
+  &--outlined {
+    background: transparent;
+    border: 1px solid var(--color-border);
+
+    .text,
+    .icon {
+      color: var(--color-accent);
+    }
+
+    &:hover {
+      background: var(--color-hover);
+      border: 1px solid var(--color-border-hover);
+    }
+
+    &:active {
+      background: var(--color-active);
+      border: sp(1) solid var(--color-border-hover);
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 sp(3) var(--color-focus);
+    }
+
+    &:disabled {
+      pointer-events: none;
+      background: none;
+      color: var(--color-text-disabled);
+      border: sp(1) solid var(--color-shadow);
+    }
+
+    &--destructive {
+      .text,
+      .icon {
+        color: var(--color-destructive);
+      }
+
+      &:hover {
+        background: var(--surface-red);
+        border: 1px solid var(--color-border-hover);
+      }
+
+      &:active {
+        background: var(--surface-red-darker);
+        border: sp(1) solid var(--color-border-hover);
+      }
+
+      &:focus-visible {
+        box-shadow: 0 0 0 sp(3) var(--surface-red-darker);
+      }
+    }
+  }
+
+  &--filled {
+    color: var(--on-accent);
+    background: var(--accent);
+    border: none;
+
+    .icon, .text {
+      color: currentColor;
+    }
+
+    &:hover {
+      background: color-mix(in hsl, var(--accent) 85%, var(--background));
+    }
+
+    &:active {
+      background: color-mix(in hsl, var(--accent) 70%, var(--background));
+    }
+
+    &:focus-visible {
+      box-shadow: 0 0 0 sp(3) var(--accent-dim);
+    }
+
+    &:disabled {
+      pointer-events: none;
+      background: none;
+      color: white;
+      background: var(--color-shadow);
+    }
+
+    &--destructive {
+      color: var(--on-destructive);
+      background: var(--destructive);
+      border: none;
+
+      .icon, .text {
+        color: currentColor;
+      }
+
+      &:hover {
+        background: color-mix(in hsl, var(--destructive) 85%, var(--background));
+      }
+
+      &:active {
+        background: color-mix(in hsl, var(--destructive) 70%, var(--background));
+      }
+
+      &:focus-visible {
+        box-shadow: 0 0 0 sp(3) var(--color-focus);
+      }
+
+      &:disabled {
+        pointer-events: none;
+        background: none;
+        color: white;
+        background: var(--color-shadow);
+      }
+    }
+
+  }
+  &--icon-only {
+    padding: sp(4);
+
+    & > .badge {
+      width: max-content;
+      top: sp(-10);
+      right: sp(-6);
+    }
+
+    .icon {
+      margin: 0;
+    }
+  }
+}
