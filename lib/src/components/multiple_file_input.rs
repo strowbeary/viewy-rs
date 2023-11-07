@@ -17,6 +17,7 @@ pub struct MultipleFileInput {
     label: Option<String>,
     error_text: Option<String>,
     accept: Option<String>,
+    redirect_uri: Option<String>,
 }
 
 impl NodeContainer for MultipleFileInput {
@@ -38,6 +39,7 @@ impl MultipleFileInput {
             label: None,
             error_text: None,
             accept: None,
+            redirect_uri: None
         }
     }
 
@@ -62,6 +64,11 @@ impl MultipleFileInput {
 
     pub fn auto_submit(&mut self, is_auto_submit: bool) -> Self {
         self.auto_submit = is_auto_submit;
+        self.clone()
+    }
+
+    pub fn redirect_to_after_submit(&mut self, uri: &str) -> Self {
+        self.redirect_uri = Some(uri.to_string());
         self.clone()
     }
 }
@@ -150,6 +157,9 @@ impl Renderable for MultipleFileInput {
                     .set_attr("multiple", "multiple")
                     .tag("input")
                     .set_attr("name", &self.name);
+                if let Some(redirect_uri) = &self.redirect_uri {
+                    field.set_attr("data-redirect-uri", redirect_uri);
+                }
                 field.node.root_nodes.insert(Box::new(file_list.add_class("multiple-file-input--hidden__file-list")));
                 if !field.node.attributes.contains_key("id") {
                     field.set_attr("id", &format!("file-input-{}", self.name));
