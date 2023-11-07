@@ -10,7 +10,23 @@ pub fn home() -> VStack {
     VStack::new(Alignment::Stretch)
         .padding(vec![scale(4)])
         .gap(vec![12])
-
+        .append_child({
+            Button::new("Open Popup with vidéo", ButtonStyle::Filled)
+                .popup({
+                    Popup::new()
+                        .append_child({
+                            //<iframe width="560" height="315" src="https://www.youtube.com/embed/G603PcNkl6k?si=smNq_FJcs19a_jTH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
+                            View::new()
+                                .tag("iframe")
+                                .set_attr("src", "https://www.youtube.com/embed/G603PcNkl6k?si=smNq_FJcs19a_jTH")
+                                .set_attr("allow", "accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share")
+                                .set_attr("allow-fullscreen", "allow-fullscreen")
+                                .border("none")
+                                .width("100%")
+                                .height("100%")
+                        })
+                })
+        })
         .append_child({
             Card::new(CardStyle::Outlined)
                 .popup(Popup::new())

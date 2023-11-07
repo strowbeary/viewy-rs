@@ -6,12 +6,13 @@ use std::env;
 use std::path::Path;
 use rocket::fs::{FileServer, relative, TempFile};
 use rocket::response::content::{RawCss, RawHtml, RawJavaScript};
-use rocket::State;
+use rocket::{Request, Response, State};
+use rocket::fairing::{Fairing, Info, Kind};
 
 use viewy::engine::Assets;
 use rocket::serde::{Serialize, Deserialize};
 use rocket::form::Form;
-use rocket::http::Status;
+use rocket::http::{Header, Status};
 use viewy::{DefaultModifiers, Page, RenderMode, scale};
 use viewy::components::{Alignment, Appendable, Card, CardStyle, Popover, Snackbar, SnackbarType, Text, TextStyle, VStack};
 
@@ -212,10 +213,32 @@ fn table_of_content() -> RawHtml<String> {
 	})
 }
 
+struct ContentSecurityPolicy;
+
+#[rocket::async_trait]
+impl Fairing for ContentSecurityPolicy {
+	fn info(&self) -> Info {
+		Info {
+			name: "Content Security Policy",
+			kind: Kind::Response,
+		}
+	}
+
+	async fn on_response<'r>(&self, request: &'r Request<'_>, response: &mut Response<'r>) {
+
+		response.set_header(Header::new(
+			"Content-Security-Policy",
+				"frame-src 'self' data: gap: *.gouvizee.com youtube.com *.youtube.com twitter.com *.twitter.com; script-src 'self' cdn.redoc.ly *.gouvizee.com youtube.com *.youtube.com twitter.com *.twitter.com *.twimg.com unpkg.com 'unsafe-inline'",
+
+		));
+
+	}
+}
+
 #[launch]
 fn rocket() -> _ {
-	println!("{:?}", env::var("VIEWY_COLORS_ACCENT_LIGHT"));
 	rocket::build()
+		.attach(ContentSecurityPolicy)
 		.mount("/", routes![
             get_stylesheet,
             get_scripts,
