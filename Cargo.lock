@@ -1102,6 +1102,15 @@ dependencies = [
 ]
 
 [[package]]
+name = "isolang"
+version = "2.3.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "f80f221db1bc708b71128757b9396727c04de86968081e18e89b0575e03be071"
+dependencies = [
+ "phf 0.11.2",
+]
+
+[[package]]
 name = "itoa"
 version = "0.4.8"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2356,6 +2365,16 @@ dependencies = [
 ]
 
 [[package]]
+name = "timeago"
+version = "0.4.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1710e589de0a76aaf295cd47a6699f6405737dbfd3cf2b75c92d000b548d0e6"
+dependencies = [
+ "chrono",
+ "isolang",
+]
+
+[[package]]
 name = "tokio"
 version = "1.33.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2639,6 +2658,7 @@ dependencies = [
  "scraper",
  "serde",
  "serde_json",
+ "timeago",
  "toml 0.5.11",
  "uuid",
 ]

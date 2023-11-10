@@ -1,6 +1,6 @@
 use std::borrow::BorrowMut;
 
-use chrono::{DateTime, Duration, NaiveDateTime, TimeZone, Utc};
+use chrono::{Duration, NaiveDateTime, TimeZone, Utc};
 use html_escape::encode_text;
 use uuid::Uuid;
 
@@ -157,7 +157,6 @@ impl Field {
         self.disabled = true;
         self.clone()
     }
-
 }
 
 impl Renderable for Field {
@@ -341,19 +340,14 @@ impl Renderable for Field {
                         })
                         .append_child({
                             let mut tags = HStack::new(Alignment::Center).gap(vec![scale(2)]);
+
+                            let mut f = timeago::Formatter::with_language(timeago::languages::french::French);
+                            f.ago("");
                             for duration in values {
                                 tags.append_child({
-                                    Tag::new(&{
-                                        if duration.num_minutes() < 60 {
-                                            format!("+{} min", duration.num_minutes())
-                                        } else {
-                                            if duration.num_minutes() % 60 != 0 {
-                                                format!("+{}h{:02}", duration.num_minutes() / 60, duration.num_minutes() % 60)
-                                            } else {
-                                                format!("+{}h", duration.num_minutes() / 60)
-                                            }
-                                        }
-                                    })
+                                    Tag::new(&
+                                        format!("+ {}", f.convert(std::time::Duration::from_millis(duration.num_milliseconds() as u64)))
+                                    )
                                         .add_class("clickable")
                                         .set_attr("data-duration", &duration.num_minutes().to_string())
                                 });
@@ -439,30 +433,29 @@ impl Renderable for Field {
                 }
 
 
-                    field.node.children.push(input.render());
+                field.node.children.push(input.render());
 
-                    if let Some(placeholder) = &field.placeholder {
-                        input.set_attr("placeholder", placeholder);
-                    }
+                if let Some(placeholder) = &field.placeholder {
+                    input.set_attr("placeholder", placeholder);
+                }
 
-                    if let Some(label) = &field.label {
-                        let text = Text::new(label, TextStyle::Label)
-                            .add_class("field__label")
-                            .set_attr("for", self.name.as_str())
-                            .tag("label");
-                        field.add_class("not-empty");
-                        field.node.children.push(text.render());
-                    }
+                if let Some(label) = &field.label {
+                    let text = Text::new(label, TextStyle::Label)
+                        .add_class("field__label")
+                        .set_attr("for", self.name.as_str())
+                        .tag("label");
+                    field.add_class("not-empty");
+                    field.node.children.push(text.render());
+                }
 
-                    if let Some(helper_text) = &field.helper_text {
-                        let text = ComplexText::new(helper_text, TextStyle::Caption)
-                            .add_class("field__helper-text");
-                        field.add_class("not-empty");
-                        field.node.children.push(text.render());
-                    }
+                if let Some(helper_text) = &field.helper_text {
+                    let text = ComplexText::new(helper_text, TextStyle::Caption)
+                        .add_class("field__helper-text");
+                    field.add_class("not-empty");
+                    field.node.children.push(text.render());
+                }
 
-                    field.node
-
+                field.node
             }
         }
     }

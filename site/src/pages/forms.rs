@@ -1,3 +1,4 @@
+use chrono::Duration;
 use viewy::components::icons::Lucide;
 use viewy::components::*;
 use viewy::{scale, DefaultModifiers};
@@ -8,6 +9,17 @@ pub fn forms() -> VStack {
     VStack::new(Alignment::Stretch)
         .padding(vec![scale(4)])
         .gap(vec![scale(4)])
+        .append_child({
+            showcase_section("Input for durations", {
+                Field::new("duration", FieldType::Duration(vec![
+                    Duration::days(92),
+                    Duration::days(45),
+                    Duration::weeks(2),
+                    Duration::weeks(1),
+                    Duration::hours(2),
+                ]))
+            })
+        })
         .append_child({
             showcase_section("Multiple file input", {
                 VStack::new(Alignment::Stretch)
