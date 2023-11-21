@@ -55,6 +55,24 @@ impl Card {
         self.set_attr("data-highlight-on-submit", form_name)
             .clone()
     }
+
+
+    /// Make the card submit specified form when clicked
+    /// ```rust
+    ///use viewy::components::CardStyle;
+    /// View::new()
+    ///    .append_child({
+    ///        Form::new("formName", "/")
+    ///    })
+    ///    .append_child({
+    ///        Card::new(CardStyle::Filled)
+    ///            .attach_to_form("formName")
+    ///        })
+    /// ```
+    pub fn attach_to_form(&mut self, form_name: &str) -> Self {
+        self.add_class("clickable");
+        self.set_attr("data-submit-form", form_name)
+    }
 }
 
 

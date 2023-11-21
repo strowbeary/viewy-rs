@@ -8,7 +8,7 @@ use crate::node::{Node, NodeContainer};
 #[derive(Debug, Clone)]
 pub struct Popup {
     children: Vec<Box<dyn Renderable>>,
-    node: Node,
+    pub node: Node,
     pub el_to_attach_to: String,
     form_to_submit_on_open: Option<String>,
     form_to_submit_on_close: Option<String>,

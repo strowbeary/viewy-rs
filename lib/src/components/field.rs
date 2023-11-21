@@ -2,6 +2,7 @@ use std::borrow::BorrowMut;
 
 use chrono::{Duration, NaiveDateTime, TimeZone, Utc};
 use html_escape::encode_text;
+use palette::chromatic_adaptation::AdaptInto;
 use uuid::Uuid;
 
 use crate::{DefaultModifiers, Overflow, scale, sp};

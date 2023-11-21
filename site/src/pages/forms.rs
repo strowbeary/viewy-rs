@@ -13,10 +13,9 @@ pub fn forms() -> VStack {
             showcase_section("Input for durations", {
                 Field::new("duration", FieldType::Duration(vec![
                     Duration::days(92),
-                    Duration::days(45),
-                    Duration::weeks(2),
+                    Duration::minutes(43801),
+                    Duration::days(15),
                     Duration::weeks(1),
-                    Duration::hours(2),
                 ]))
             })
         })
