@@ -1,4 +1,4 @@
 [icons]
 lucide = { git = "git@github.com:lucide-icons/lucide.git", path = "icons", branch = "main"}
-simple-icons = { git = "git@github.com:simple-icons/simple-icons.git", path = "icons", branch = "develop", prefix = "Icon"}
+simple-icons = { git = "git@github.com:simple-icons/simple-icons.git", stroked = false, path = "icons", branch = "develop", prefix = "Icon"}
 viewy-icons = { path = "site/assets"}

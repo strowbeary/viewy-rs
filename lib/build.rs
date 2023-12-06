@@ -26,7 +26,8 @@ pub struct IconPack {
     pub git: Option<String>,
     pub path: Option<String>,
     pub branch: Option<String>,
-    pub prefix: Option<String>
+    pub prefix: Option<String>,
+    pub stroked: Option<bool>
 }
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -196,11 +197,11 @@ fn main() {
                 cp -R $in_repo_path/. $icons_path 2>&1;
             };
             println!("MOVE RESULT {:?}", move_result);
-            code += &generate_icon_pack(&icon_pack_name.to_upper_camel_case(), true, &icons_path, pack.prefix);
+            code += &generate_icon_pack(&icon_pack_name.to_upper_camel_case(), pack.stroked.unwrap_or(true), &icons_path, pack.prefix);
         } else {
             let local_icon_pack_path = viewy_builded_project.join(pack.path.unwrap_or_default());
             println!("local_icon_pack_path {:?}", local_icon_pack_path);
-            code += &generate_icon_pack(&icon_pack_name.to_upper_camel_case(), true, &local_icon_pack_path, pack.prefix);
+            code += &generate_icon_pack(&icon_pack_name.to_upper_camel_case(), pack.stroked.unwrap_or(true), &local_icon_pack_path, pack.prefix);
         }
     }
 
@@ -210,4 +211,6 @@ fn main() {
         code,
     )
         .expect("Failed writing generated.rs");
+
+    println!("cargo:rustc-cfg=has_generated_feature")
 }
