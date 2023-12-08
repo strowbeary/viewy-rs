@@ -16,3 +16,5 @@ warning = { light = "#FFA000 ", dark = "#FFAE1E" }
 border-radius = 8
 spacing-factor = 4
 
+[fonts]
+roboto = { url = "https://fonts.googleapis.com/css2?family=Roboto&display=swap", role = "normal", default = true }

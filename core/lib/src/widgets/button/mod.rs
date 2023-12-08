@@ -19,8 +19,10 @@ pub enum ButtonStyle {
 ///     .action("/") // Here create a link to "/"
 /// ```
 #[derive(Widget, Classable, Attributable)]
+#[widget(style = "./style.scss")]
 pub struct Button {
     node: Node,
+    /// Button label, If `None` it's an icon only button
     pub label: Option<String>,
     pub style: ButtonStyle,
 }

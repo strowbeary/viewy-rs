@@ -62,11 +62,15 @@ extern crate viewy_codegen;
 extern crate serde;
 extern crate figment;
 
+use std::sync::RwLock;
+use lazy_static::lazy_static;
 #[doc(inline)]
 pub use crate::core::component::*;
 pub use crate::core::modifiers;
 pub use crate::core::node;
 use crate::core::widget::Widget;
+
+pub use strum;
 
 mod core;
 
@@ -87,6 +91,10 @@ mod helper_fn;
 pub use crate::helper_fn::*;
 
 pub use crate::core::page;
+use crate::core::config::Config;
+lazy_static!{
+ static ref CONFIG: Config = Config::load();
+}
 
 pub mod prelude {
     pub use crate::widgets::button::*;
@@ -105,6 +113,7 @@ pub mod prelude {
 #[cfg(test)]
 mod tests {
     use std::time::Instant;
+    use grass::{InputSyntax, Options, OutputStyle};
 
     use crate::core::modifiers::Appendable;
     use crate::core::node::Node;
@@ -129,7 +138,7 @@ mod tests {
         let start = Instant::now();
         let mut view = View::new();
 
-        for _ in 0..10000 {
+        for _ in 0..50000 {
             view
                 .append_child({
                     Button::new("Label", ButtonStyle::Filled)
@@ -153,7 +162,7 @@ mod tests {
             .with_content({
                 View::new().append_child({
                     Button::new("Hello", ButtonStyle::Filled)
-                });
+                })
             })
             .compile(RenderMode::Complete);
 
@@ -162,6 +171,12 @@ mod tests {
 
     #[test]
     fn compile_styles() {
-        println!("{}", crate::widgets::get_all_stylesheet().join(""));
+        let stylesheets = crate::widgets::get_all_stylesheet().join("");
+        println!("SCSS stylesheets size = {} bytes", stylesheets.len());
+        if let Ok(compiled_stylesheet) = grass::from_string(stylesheets, &Options::default().style(OutputStyle::Compressed).quiet(true).input_syntax(InputSyntax::Scss)) {
+            println!("Stylesheet size = {} bytes", compiled_stylesheet.len());
+        } else {
+            panic!("Error during scss compilation")
+        }
     }
 }

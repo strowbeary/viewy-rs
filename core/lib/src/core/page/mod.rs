@@ -86,8 +86,13 @@ impl<'a> Page<'a> {
             RenderMode::Complete => {
                 get_full_html_page(&self.config, self.title, {
                     let mut content = (self.layout)(self.content);
-                    content.children.append(&mut content.get_root_nodes());
-                    content.into()
+                    let root_nodes=  content.get_root_nodes();
+
+                    let mut content_str: String = content.into();
+                    content_str.push_str(&root_nodes.into_iter()
+                        .collect::<Vec<String>>()
+                        .join(""));
+                    content_str
                 }, theme_variant.to_string(), false)
             }
             RenderMode::ContentOnly => {

@@ -4,6 +4,7 @@ use crate::core::modifiers::{Appendable, Attributable};
 use crate::core::node::Node;
 use crate::Widget;
 #[derive(Widget, Attributable, Appendable)]
+#[widget(style = "./style.scss", script = "./script.js")]
 pub struct Popup {
     node: Node,
 }

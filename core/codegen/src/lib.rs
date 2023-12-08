@@ -1,21 +1,46 @@
 use proc_macro::TokenStream;
-use quote::quote;
+use quote::{quote, ToTokens};
 use syn;
+use syn::{LitStr, Meta};
 
-
-
-#[proc_macro_derive(Widget)]
+#[proc_macro_derive(Widget, attributes(widget))]
 pub fn widget_derive(input: TokenStream) -> TokenStream {
-    // Construct a representation of Rust code as a syntax tree
-    // that we can manipulate
-    let ast = syn::parse(input).unwrap();
+    // Parse the input tokens into a syntax tree
+    let input = syn::parse_macro_input!(input as syn::DeriveInput);
+    // Extract name of the struct
+    let name = &input.ident;
 
-    // Build the trait implementation
-    impl_widget_macro(&ast)
-}
+    // Parse `#[widget(script = "./script.js", style = "style.scss")]` attribute, if present
+    let mut style_value: Option<String> = None;
+    let mut script_value: Option<String> = None;
 
-fn impl_widget_macro(ast: &syn::DeriveInput) -> TokenStream {
-    let name = &ast.ident;
+    for option in input.attrs.into_iter() {
+
+        if let Meta::List(ref list) = option.meta {
+            if list.path.is_ident("widget") {
+                list.parse_nested_meta(|meta| {
+                    if meta.path.is_ident("style") {
+                        let value = meta.value()?;
+                        let s: LitStr = value.parse()?;
+                        style_value = Some(s.value());
+                        Ok(())
+                    } else if meta.path.is_ident("script") {
+                        let value = meta.value()?;
+                        let s: LitStr = value.parse()?;
+                        script_value = Some(s.value());
+                        Ok(())
+                    } else {
+                        Err(meta.error("unsupported attribute"))
+                    }
+                }).expect("Can parse attribute widget, check syntax");
+            }
+        }
+
+    }
+
+    let style_str = style_value.expect("style is a mandatory attribute in widget macro");
+    // If script is not provided, use a default script file
+    let script_str = script_value.map(|path| quote!(include_str!(#path))).unwrap_or(quote!(""));
     let gen = quote! {
         use std::ops::{Deref, DerefMut};
 
@@ -49,7 +74,8 @@ fn impl_widget_macro(ast: &syn::DeriveInput) -> TokenStream {
         }
 
         impl Widget for #name {
-            const STYLE: &'static str = include_str!("./style.scss");
+            const STYLE: &'static str = include_str!(#style_str);
+            const SCRIPT: &'static str = #script_str;
             fn widget_name() -> &'static str {
                 "#name"
             }

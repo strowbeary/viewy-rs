@@ -2,14 +2,14 @@ use std::collections::{HashMap, HashSet};
 use std::hash::{Hash, Hasher};
 use uuid::Uuid;
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub enum NodeType {
     Normal(&'static str),
     SelfClosing(&'static str),
     Comment(&'static str)
 }
 
-#[derive(Clone)]
+#[derive(Clone, Debug)]
 pub struct Node {
     pub identifier: Uuid,
     pub node_type: NodeType,

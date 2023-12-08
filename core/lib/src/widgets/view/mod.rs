@@ -3,6 +3,7 @@ use crate::core::widget::Widget;
 use crate::core::modifiers::{Appendable, Colorable, Dimensionable};
 
 #[derive(Widget, Appendable, Colorable)]
+#[widget(style = "./style.scss")]
 pub struct View {
     node: Node
 }

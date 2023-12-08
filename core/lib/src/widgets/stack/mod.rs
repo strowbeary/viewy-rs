@@ -11,6 +11,7 @@ pub enum Alignment {
 }
 
 #[derive(Widget, Appendable, Colorable, Classable)]
+#[widget(style = "./style.scss")]
 pub struct VStack {
     node: Node,
 }

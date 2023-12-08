@@ -9,5 +9,5 @@ publish = false
 
 [dependencies]
 viewy = { path = "../core/lib", features = ["rocket"] }
-rocket = { version = "0.5.0-rc.3", features = ["json", "secrets", "http2"]  }
-chrono = { version = "0.4.19", features = ["serde"] }
+rocket = { version = "0.5.0", features = ["json", "secrets", "http2"]  }
+chrono = { version = "0.4", features = ["serde"] }
