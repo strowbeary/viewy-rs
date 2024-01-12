@@ -1,13 +1,15 @@
-use crate::node::{Node, NodeContainer};
-use crate::{Renderable};
 use std::borrow::BorrowMut;
+
+use crate::components::{Alignment, Appendable, Text, TextStyle, VStack};
 use crate::DefaultModifiers;
-use crate::components::{TextStyle, Text, View};
+use crate::node::{Node, NodeContainer};
+use crate::Renderable;
 
 #[derive(Debug, Clone)]
 pub struct TitleBar {
     node: Node,
     pub title: String,
+    pub subtitle: Option<String>,
     pub is_sticky: bool,
     pub left_item: Option<Box<dyn Renderable>>,
     pub right_item: Option<Box<dyn Renderable>>,
@@ -27,11 +29,17 @@ impl TitleBar {
         TitleBar {
             node: Default::default(),
             title: title.to_string(),
+            subtitle: None,
             is_sticky: true,
             left_item: None,
             right_item: None,
             bottom_item: None,
         }
+    }
+
+    pub fn subtitle(&mut self, subtitle: &str) -> Self {
+        self.subtitle = Some(subtitle.to_string());
+        self.clone()
     }
     fn grid_areas(&mut self, schema: &str) -> Self {
         self.node.node_style.push(("grid-template-areas".to_string(), schema.to_string()));
@@ -85,10 +93,23 @@ impl Renderable for TitleBar {
             view.sticky_to_top(0);
         }
 
-        let text = Text::new(self.title.as_str(), TextStyle::LargeTitle)
-            .grid_area("title")
-            .render();
-        view.node.children.push(text);
+        view.node.children.push({
+            if let Some(subtitle) = &self.subtitle {
+                VStack::new(Alignment::Stretch)
+                    .grid_area("title")
+                    .append_child({
+                        Text::new(self.title.as_str(), TextStyle::LargeTitle)
+                    })
+                    .append_child({
+                        Text::new(subtitle, TextStyle::H3)
+                    })
+                    .render()
+            } else {
+                Text::new(self.title.as_str(), TextStyle::LargeTitle)
+                    .grid_area("title")
+                    .render()
+            }
+        });
         if let Some(left_item) = self.left_item.clone() {
             let mut item = left_item.render();
             item.node_style.push(("grid-area".to_string(), "left_item".to_string()));
