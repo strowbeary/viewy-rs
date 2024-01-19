@@ -111,6 +111,7 @@ fn get_scripts(config: &Config) -> Vec<String> {
         include_str!("../js/highlight-control.js").to_string(),
         include_str!("../js/table-of-contents.js").to_string(),
         include_str!("../js/multiple-file-input.js").to_string(),
+        include_str!("../js/multivalue-field.js").to_string(),
     ];
     if config.features.rich_text_editor {
         scripts.push(include_str!("../js/quill-editor.js").to_string());

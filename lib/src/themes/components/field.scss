@@ -86,4 +86,9 @@
       }
     }
   }
+  &--multi-value {
+    &__multi-value-field {
+      grid-area: input;
+    }
+  }
 }

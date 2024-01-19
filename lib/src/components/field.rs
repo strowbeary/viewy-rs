@@ -2,7 +2,6 @@ use std::borrow::BorrowMut;
 
 use chrono::{Duration, NaiveDateTime, TimeZone, Utc};
 use html_escape::encode_text;
-use palette::chromatic_adaptation::AdaptInto;
 use uuid::Uuid;
 
 use crate::{DefaultModifiers, Overflow, scale, sp};
@@ -52,6 +51,8 @@ pub struct Field {
     pub required: bool,
     pub read_only: bool,
     pub disabled: bool,
+    pub multiple: Option<Vec<String>>,
+    pub form: Option<String>,
 }
 
 impl NodeContainer for Field {
@@ -82,6 +83,8 @@ impl Field {
             required: false,
             read_only: false,
             disabled: false,
+            multiple: None,
+            form: None,
         }
     }
 
@@ -112,6 +115,17 @@ impl Field {
 
     pub fn read_only(&mut self, is_read_only: bool) -> Self {
         self.read_only = is_read_only;
+        self.clone()
+    }
+
+    /// Activable only on non textarea fields
+    pub fn multiple_value(&mut self, values: Vec<String>) -> Self {
+        self.multiple = Some(values);
+        self.clone()
+    }
+
+    pub fn attach_to_form(&mut self, form_name: &str) -> Self {
+        self.form = Some(form_name.to_string());
         self.clone()
     }
 
@@ -367,96 +381,209 @@ impl Renderable for Field {
                 field.node
             }
             _ => {
-                let mut input = View::new()
-                    .tag(&match &self.field_type {
-                        FieldType::TextArea => "textarea",
-                        _ => "input",
-                    })
-                    .add_class("field__input")
-                    .set_attr("id", self.name.as_str())
-                    .set_attr("name", self.name.as_str());
+                if let Some(values) = &self.multiple {
+                    field.add_class("field--multi-value");
 
-                if self.disabled {
-                    input.set_attr("disabled", "disabled");
-                }
-                if self.read_only {
-                    input.set_attr("readonly", "readonly");
-                }
-
-                if self.required {
-                    input.set_attr("required", "required");
-                    field.add_class("not-empty");
                     field.node.children.push({
-                        Text::new("Requis", TextStyle::Caption)
-                            .color("var(--color-text-secondary)")
-                            .grid_area("required")
-                            .render()
-                    });
-                }
-                if let Some(placeholder) = &self.placeholder {
-                    input.set_attr("placeholder", placeholder);
-                }
+                        let mut field_input = VStack::new(Alignment::Stretch)
+                            .add_class("field--multi-value__multi-value-field")
+                            .gap(vec![scale(3)])
+                            .append_child({
+                                let mut value_list = VStack::new(Alignment::Stretch)
+                                    .add_class("field--multi-value__value-list")
+                                    .gap(vec![scale(3)])
+                                    .append_child({
+                                        View::new().tag("template").id("value-template")
+                                            .append_child({
+                                                Card::new(CardStyle::Filled)
+                                                    .add_class("field--multi-value__value-list__value")
+                                                    .append_child({
+                                                        let mut input = View::new()
+                                                            .tag("input")
+                                                            .set_attr("type", "hidden")
+                                                            .set_attr("name", &self.name);
+                                                        if let Some(form) = &self.form {
+                                                            input.set_attr("form", form);
+                                                        }
+                                                        input
+                                                    })
+                                                    .append_child({
+                                                        HStack::new(Alignment::Center)
+                                                            .padding(vec![scale(2)])
+                                                            .gap(vec![scale(3)])
+                                                            .append_child({
+                                                                Text::new("value", TextStyle::Body)
+                                                                    .add_class("field--multi-value__value-list__value__value-text")
+                                                                    .flex_grow(1)
+                                                                    .padding_left(scale(2))
+                                                            })
+                                                            .append_child({
+                                                                Button::icon_only(Lucide::Trash2, ButtonStyle::Flat)
+                                                                    .destructive()
+                                                            })
+                                                    })
+                                            })
+                                    });
+                                for (i, value) in values.iter().enumerate() {
+                                    value_list.append_child(Card::new(CardStyle::Filled)
+                                        .add_class("field--multi-value__value-list__value")
+                                        .append_child({
+                                            let mut input = View::new()
+                                                .tag("input")
+                                                .set_attr("type", "hidden")
+                                                .set_attr("name", &self.name)
+                                                .set_attr("value", value);
+                                            if let Some(form) = &self.form {
+                                                input.set_attr("form", form);
+                                            }
+                                            input
+                                        })
+                                        .append_child({
+                                            HStack::new(Alignment::Center)
+                                                .padding(vec![scale(2)])
+                                                .gap(vec![scale(3)])
+                                                .append_child({
+                                                    Text::new(value, TextStyle::Body)
+                                                        .flex_grow(1)
+                                                        .padding_left(scale(2))
+                                                })
+                                                .append_child({
+                                                    Button::icon_only(Lucide::Trash2, ButtonStyle::Flat)
+                                                        .destructive()
+                                                })
+                                        }));
+                                }
 
-                match &self.field_type {
-                    FieldType::TextArea => {}
-                    _ => {
-                        input.set_attr("type", &match &field.field_type {
-                            FieldType::DateTimeLocal => { "datetime-local".to_string() }
-                            field_type => {
-                                format!("{:?}", field_type).to_lowercase()
-                            }
+
+                                value_list
+                            });
+
+                        if !self.disabled && !self.read_only {
+                            field_input.append_child({
+                                HStack::new(Alignment::Center)
+                                    .gap(vec![scale(3)])
+                                    .append_child({
+                                        Field::new(&format!("add-value-{}", self.name), self.field_type.clone())
+                                            .add_class("field--multi-value__add-value-field")
+                                            .flex_grow(1)
+                                            .attach_to_form("")
+                                    })
+                                    .append_child({
+                                        Button::icon_only(Lucide::Plus, ButtonStyle::Outlined)
+                                            .add_class("field--multi-value__add-value-button")
+                                    })
+                            });
+                        }
+                        field_input
+                    }.render());
+
+
+                    if let Some(label) = &field.label {
+                        let text = Text::new(label, TextStyle::Label)
+                            .add_class("field__label")
+                            .set_attr("for", self.name.as_str())
+                            .tag("label");
+                        field.add_class("not-empty");
+                        field.node.children.push(text.render());
+                    }
+
+                    field.node
+                } else {
+                    let mut input = View::new()
+                        .tag(&match &self.field_type {
+                            FieldType::TextArea => "textarea",
+                            _ => "input",
+                        })
+                        .add_class("field__input")
+                        .set_attr("id", self.name.as_str())
+                        .set_attr("name", self.name.as_str());
+
+                    if self.disabled {
+                        input.set_attr("disabled", "disabled");
+                    }
+                    if self.read_only {
+                        input.set_attr("readonly", "readonly");
+                    }
+
+                    if let Some(form) = &self.form {
+                        input.set_attr("form", form);
+                    }
+
+                    if self.required {
+                        input.set_attr("required", "required");
+                        field.add_class("not-empty");
+                        field.node.children.push({
+                            Text::new("Requis", TextStyle::Caption)
+                                .color("var(--color-text-secondary)")
+                                .grid_area("required")
+                                .render()
                         });
                     }
-                }
-                if self.datalist && !matches!(field.field_type, FieldType::TextArea) {
-                    let id = Uuid::new_v4().to_string();
-                    input.set_attr("list", id.as_str());
-                }
+                    if let Some(placeholder) = &self.placeholder {
+                        input.set_attr("placeholder", placeholder);
+                    }
 
-                if let Some(value) = &field.value {
                     match &self.field_type {
-                        FieldType::TextArea => {
-                            input.node.text = Some(value.clone());
-                        }
+                        FieldType::TextArea => {}
                         _ => {
-                            input.set_attr("value", value);
+                            input.set_attr("type", &match &field.field_type {
+                                FieldType::DateTimeLocal => { "datetime-local".to_string() }
+                                field_type => {
+                                    format!("{:?}", field_type).to_lowercase()
+                                }
+                            });
                         }
                     }
-                }
-                if let Some(value) = &field.min {
-                    input.set_attr("min", value);
-                }
-                if let Some(value) = &field.max {
-                    input.set_attr("max", value);
-                }
-                if let Some(value) = &field.step {
-                    input.set_attr("step", value);
-                }
+                    if self.datalist && !matches!(field.field_type, FieldType::TextArea) {
+                        let id = Uuid::new_v4().to_string();
+                        input.set_attr("list", id.as_str());
+                    }
+
+                    if let Some(value) = &field.value {
+                        match &self.field_type {
+                            FieldType::TextArea => {
+                                input.node.text = Some(value.clone());
+                            }
+                            _ => {
+                                input.set_attr("value", value);
+                            }
+                        }
+                    }
+                    if let Some(value) = &field.min {
+                        input.set_attr("min", value);
+                    }
+                    if let Some(value) = &field.max {
+                        input.set_attr("max", value);
+                    }
+                    if let Some(value) = &field.step {
+                        input.set_attr("step", value);
+                    }
 
 
-                field.node.children.push(input.render());
+                    field.node.children.push(input.render());
 
-                if let Some(placeholder) = &field.placeholder {
-                    input.set_attr("placeholder", placeholder);
+                    if let Some(placeholder) = &field.placeholder {
+                        input.set_attr("placeholder", placeholder);
+                    }
+
+                    if let Some(label) = &field.label {
+                        let text = Text::new(label, TextStyle::Label)
+                            .add_class("field__label")
+                            .set_attr("for", self.name.as_str())
+                            .tag("label");
+                        field.add_class("not-empty");
+                        field.node.children.push(text.render());
+                    }
+
+                    if let Some(helper_text) = &field.helper_text {
+                        let text = ComplexText::new(helper_text, TextStyle::Caption)
+                            .add_class("field__helper-text");
+                        field.add_class("not-empty");
+                        field.node.children.push(text.render());
+                    }
+
+                    field.node
                 }
-
-                if let Some(label) = &field.label {
-                    let text = Text::new(label, TextStyle::Label)
-                        .add_class("field__label")
-                        .set_attr("for", self.name.as_str())
-                        .tag("label");
-                    field.add_class("not-empty");
-                    field.node.children.push(text.render());
-                }
-
-                if let Some(helper_text) = &field.helper_text {
-                    let text = ComplexText::new(helper_text, TextStyle::Caption)
-                        .add_class("field__helper-text");
-                    field.add_class("not-empty");
-                    field.node.children.push(text.render());
-                }
-
-                field.node
             }
         }
     }

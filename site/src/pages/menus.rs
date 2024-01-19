@@ -31,7 +31,7 @@ pub fn navigation_and_menus() -> VStack {
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon(Lucide::Columns)
+                                .icon(Lucide::Columns3)
                         })
                         .append_child({
                             MenuItem::new("Calendar")
@@ -65,7 +65,7 @@ pub fn navigation_and_menus() -> VStack {
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon(Lucide::Columns)
+                                .icon(Lucide::Columns3)
                         })
                         .append_child({
                             MenuItem::new("With a notification badge")
@@ -104,7 +104,7 @@ pub fn navigation_and_menus() -> VStack {
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon(Lucide::Columns)
+                                .icon(Lucide::Columns3)
                         })
                         .append_child({
                             MenuItem::new("Notifications")
@@ -146,7 +146,7 @@ pub fn navigation_and_menus() -> VStack {
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon(Lucide::Columns)
+                                .icon(Lucide::Columns3)
                         })
                         .append_child({
                             MenuItem::new("Notifications")
@@ -158,7 +158,7 @@ pub fn navigation_and_menus() -> VStack {
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon(Lucide::Columns)
+                                .icon(Lucide::Columns3)
                         })
                         .append_child({
                             MenuItem::new("Calendar")

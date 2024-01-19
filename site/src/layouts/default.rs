@@ -21,7 +21,7 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                         })
                         .append_child({
                             MenuItem::new("Table")
-                                .icon(Lucide::Columns)
+                                .icon(Lucide::Columns4)
                                 .action("/table")
                         })
                         .append_child({
@@ -46,7 +46,7 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                         })
                         .append_child({
                             MenuItem::new("Signature field")
-                                .icon(Lucide::FileSignature)
+                                .icon(Lucide::FilePenLine)
                                 .action("/signature")
                         })
                         .append_child({

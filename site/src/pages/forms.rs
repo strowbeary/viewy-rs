@@ -47,6 +47,20 @@ pub fn forms() -> VStack {
             })
         })
         .append_child({
+            showcase_section("Multiple value text field", {
+                VStack::new(Alignment::Stretch)
+                    .gap(vec![scale(4)])
+                    .append_child({
+                       Field::new("multivalue", FieldType::Email)
+                           .label("Adresses de courriel")
+                           .multiple_value(vec![
+                               "dev@remicaillot.fr".to_string(),
+                               "remi.caillot@opitee.fr".to_string()
+                           ])
+                    })
+            })
+        })
+        .append_child({
             VStack::new(Alignment::Stretch)
                 .gap(vec![scale(2)])
                 .append_child({ Text::new("Submit on keypress in Field component", TextStyle::H1) })
