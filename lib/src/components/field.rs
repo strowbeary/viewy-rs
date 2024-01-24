@@ -10,6 +10,26 @@ use crate::components::icons::Lucide;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
 
+fn multi_value_row(field_name: &str, field_type: &FieldType, value: &str, form: &Option<String>) -> HStack {
+    HStack::new(Alignment::Center)
+        .flex_grow(1)
+        .add_class("field--multi-value__value-list__value")
+        .gap(vec![scale(2)])
+        .append_child({
+            let mut input = Field::new(field_name, field_type.clone())
+                .flex_grow(1)
+                .value(value);
+            if let Some(form) = form {
+                input.set_attr("form", form);
+            }
+            input
+        })
+        .append_child({
+            Button::icon_only(Lucide::Trash2, ButtonStyle::Flat)
+                .destructive()
+        })
+}
+
 #[derive(Debug, Clone)]
 pub enum FieldType {
     Text,
@@ -385,96 +405,42 @@ impl Renderable for Field {
                     field.add_class("field--multi-value");
 
                     field.node.children.push({
-                        let mut field_input = VStack::new(Alignment::Stretch)
-                            .add_class("field--multi-value__multi-value-field")
-                            .gap(vec![scale(3)])
+                        Card::new(CardStyle::Filled)
+                            .add_class("field--multi-value__multi-value-container")
+                            .padding(vec![scale(3)])
                             .append_child({
-                                let mut value_list = VStack::new(Alignment::Stretch)
-                                    .add_class("field--multi-value__value-list")
+                                let mut field_input = VStack::new(Alignment::Stretch)
                                     .gap(vec![scale(3)])
                                     .append_child({
-                                        View::new().tag("template").id("value-template")
+                                        let mut value_list = VStack::new(Alignment::Stretch)
+                                            .add_class("field--multi-value__value-list")
+                                            .gap(vec![scale(3)])
                                             .append_child({
-                                                Card::new(CardStyle::Filled)
-                                                    .add_class("field--multi-value__value-list__value")
+                                                View::new().tag("template").id("value-template")
                                                     .append_child({
-                                                        let mut input = View::new()
-                                                            .tag("input")
-                                                            .set_attr("type", "hidden")
-                                                            .set_attr("name", &self.name);
-                                                        if let Some(form) = &self.form {
-                                                            input.set_attr("form", form);
-                                                        }
-                                                        input
+                                                        multi_value_row(&self.name, &self.field_type, "", &self.form)
                                                     })
-                                                    .append_child({
-                                                        HStack::new(Alignment::Center)
-                                                            .padding(vec![scale(2)])
-                                                            .gap(vec![scale(3)])
-                                                            .append_child({
-                                                                Text::new("value", TextStyle::Body)
-                                                                    .add_class("field--multi-value__value-list__value__value-text")
-                                                                    .flex_grow(1)
-                                                                    .padding_left(scale(2))
-                                                            })
-                                                            .append_child({
-                                                                Button::icon_only(Lucide::Trash2, ButtonStyle::Flat)
-                                                                    .destructive()
-                                                            })
-                                                    })
-                                            })
+                                            });
+                                        for  value in values.iter(){
+                                            value_list.append_child(
+
+                                                multi_value_row(&self.name, &self.field_type, value, &self.form)
+                                            );
+                                        }
+
+
+                                        value_list
                                     });
-                                for (i, value) in values.iter().enumerate() {
-                                    value_list.append_child(Card::new(CardStyle::Filled)
-                                        .add_class("field--multi-value__value-list__value")
-                                        .append_child({
-                                            let mut input = View::new()
-                                                .tag("input")
-                                                .set_attr("type", "hidden")
-                                                .set_attr("name", &self.name)
-                                                .set_attr("value", value);
-                                            if let Some(form) = &self.form {
-                                                input.set_attr("form", form);
-                                            }
-                                            input
-                                        })
-                                        .append_child({
-                                            HStack::new(Alignment::Center)
-                                                .padding(vec![scale(2)])
-                                                .gap(vec![scale(3)])
-                                                .append_child({
-                                                    Text::new(value, TextStyle::Body)
-                                                        .flex_grow(1)
-                                                        .padding_left(scale(2))
-                                                })
-                                                .append_child({
-                                                    Button::icon_only(Lucide::Trash2, ButtonStyle::Flat)
-                                                        .destructive()
-                                                })
-                                        }));
-                                }
 
-
-                                value_list
-                            });
-
-                        if !self.disabled && !self.read_only {
-                            field_input.append_child({
-                                HStack::new(Alignment::Center)
-                                    .gap(vec![scale(3)])
-                                    .append_child({
-                                        Field::new(&format!("add-value-{}", self.name), self.field_type.clone())
-                                            .add_class("field--multi-value__add-value-field")
-                                            .flex_grow(1)
-                                            .attach_to_form("")
-                                    })
-                                    .append_child({
+                                if !self.disabled && !self.read_only {
+                                    field_input.append_child({
                                         Button::icon_only(Lucide::Plus, ButtonStyle::Outlined)
                                             .add_class("field--multi-value__add-value-button")
-                                    })
-                            });
-                        }
-                        field_input
+                                    });
+                                }
+                                field_input
+                            })
+
                     }.render());
 
 

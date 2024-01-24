@@ -87,8 +87,17 @@
     }
   }
   &--multi-value {
-    &__multi-value-field {
+    &__multi-value-container {
       grid-area: input;
+      .field input {
+
+        background: var(--background);
+      }
+    }
+    &__add-value-button {
+      width: 100%;
+      flex-grow: 1;
+      background: var(--background);
     }
   }
 }
