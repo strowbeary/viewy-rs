@@ -58,6 +58,17 @@ pub fn forms() -> VStack {
                                "remi.caillot@opitee.fr".to_string()
                            ])
                     })
+                    .append_child({
+                      Button::new("Open popup", ButtonStyle::Filled)
+                          .popup(Popup::new().append_child({
+                              Field::new("multivalue", FieldType::Email)
+                                  .label("Adresses de courriel")
+                                  .multiple_value(vec![
+                                      "dev@remicaillot.fr".to_string(),
+                                      "remi.caillot@opitee.fr".to_string()
+                                  ])
+                          }))
+                    })
             })
         })
         .append_child({

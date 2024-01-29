@@ -33,6 +33,9 @@
     .titlebar {
       background: var(--surface);
     }
+    .field--multi-value__multi-value-container {
+      background: var(--background);
+    }
   }
   &__window-bar {
     background: var(--surface-dark);
