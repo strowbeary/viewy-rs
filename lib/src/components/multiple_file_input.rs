@@ -67,7 +67,7 @@ impl MultipleFileInput {
         self.clone()
     }
 
-    pub fn redirect_to_after_submit(&mut self, uri: &str) -> Self {
+    pub fn redirect_to_after_upload(&mut self, uri: &str) -> Self {
         self.redirect_uri = Some(uri.to_string());
         self.clone()
     }
@@ -188,6 +188,9 @@ impl Renderable for MultipleFileInput {
                         .set_attr("multiple", "multiple")
                         .tag("input")
                         .set_attr("name", &self.name);
+                    if let Some(redirect_uri) = &self.redirect_uri {
+                        field.set_attr("data-redirect-uri", redirect_uri);
+                    }
                     if !field.node.attributes.contains_key("id") {
                         field.set_attr("id", &format!("file-input-{}", self.name));
                     }

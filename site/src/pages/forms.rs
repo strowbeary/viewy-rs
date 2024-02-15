@@ -55,7 +55,6 @@ pub fn forms() -> VStack {
                            .label("Adresses de courriel")
                            .multiple_value(vec![
                                "dev@remicaillot.fr".to_string(),
-                               "remi.caillot@opitee.fr".to_string()
                            ])
                     })
                     .append_child({
@@ -65,7 +64,6 @@ pub fn forms() -> VStack {
                                   .label("Adresses de courriel")
                                   .multiple_value(vec![
                                       "dev@remicaillot.fr".to_string(),
-                                      "remi.caillot@opitee.fr".to_string()
                                   ])
                           }))
                     })
