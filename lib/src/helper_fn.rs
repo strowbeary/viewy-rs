@@ -43,6 +43,6 @@ pub fn harden_color(color_hex: &String) -> String {
         color.1 as f32 / 255.0,
         color.2 as f32 / 255.0,
     )
-        .mix(&LinSrgb::new(1.0, 1.0, 1.0), 1.0 - alpha);
+        .mix(LinSrgb::new(1.0, 1.0, 1.0), 1.0 - alpha);
     format!("#{:02x?}{:02x?}{:02x?}", (new_color.red * 255.0) as u8, (new_color.green * 255.0) as u8, (new_color.blue * 255.0) as u8)
 }

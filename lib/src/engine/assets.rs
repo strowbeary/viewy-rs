@@ -1,5 +1,7 @@
+use css_minify::optimizations::{Level, Minifier};
 use grass::OutputStyle;
-use crate::config::{Config};
+
+use crate::config::Config;
 
 fn get_stylesheets(config: &Config) -> Vec<String> {
     let mut styles = vec![
@@ -91,7 +93,6 @@ $on-success-dark: {on_success_dark};
 }
 
 fn get_scripts(config: &Config) -> Vec<String> {
-
     let mut scripts = vec![
         include_str!("../js/index.js").to_string(),
         include_str!("../js/popper.js").to_string(),
@@ -170,11 +171,20 @@ impl Assets {
         let stylesheets = get_stylesheets(&config).join("");
         match grass::from_string(
             stylesheets,
-            &grass::Options::default().style(OutputStyle::Compressed),
+            &grass::Options::default().style(OutputStyle::Expanded),
         ) {
             Ok(css) => {
-                println!(" [Done]");
-                css
+                match Minifier::default().minify(&css, Level::One) {
+                    Ok(minified_css) => {
+                        println!(" [Done]");
+                        minified_css
+                    }
+                    Err(err) => {
+                        println!(" [Error]");
+                        println!("{:?}", err);
+                        css
+                    }
+                }
             }
             Err(err) => {
                 println!(" [Error]");
