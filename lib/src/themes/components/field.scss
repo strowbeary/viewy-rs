@@ -1,8 +1,9 @@
 .field {
   display: grid;
-  grid-template-areas: "label required" "input input" "helper_text helper_text";
+  grid-template-areas: "label required" "input input";
   grid-template-columns: 1fr auto;
-  grid-template-rows: auto 1fr auto;
+  grid-template-rows: auto 1fr;
+  grid-auto-rows: auto;
   align-items: center;
 
   &.not-empty {
@@ -62,9 +63,10 @@
   }
 
   &__helper-text {
-    grid-area: helper_text;
+    grid-column: span 2;
     color: var(--color-text-secondary);
     width: 100%;
+
   }
 
   &--error {
