@@ -36,7 +36,7 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                         })
                         .append_child({
                             MenuItem::new("Forms")
-                                .icon(Lucide::FormInput)
+                                .icon(Lucide::TextCursorInput)
                                 .action("/forms")
                         })
                         .append_child({

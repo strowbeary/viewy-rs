@@ -104,7 +104,7 @@ impl Renderable for MultipleFileInput {
                             .justify_content("center")
                             .gap(vec![scale(2)])
                             .append_child({
-                                Icon::new(Lucide::UploadCloud)
+                                Icon::new(Lucide::CloudUpload)
                                     .size(64)
                                     .stroke_width(1)
                                     .color("var(--color-accent)")
