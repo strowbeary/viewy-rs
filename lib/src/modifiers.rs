@@ -247,6 +247,12 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
             .push(("overflow".to_string(), format!("{:?}", overflow).to_lowercase()));
         self.clone()
     }
+    fn aspect_ratio(&mut self, ratio: &str) -> Self {
+        self.get_node().node_style
+            .push(("object-fit".to_string(), ratio.to_string()));
+
+        self.clone()
+    }
     fn popover(&mut self, popover: Popover) -> Self {
         let id = Uuid::new_v4().to_string();
         self.add_class("popover--opener");

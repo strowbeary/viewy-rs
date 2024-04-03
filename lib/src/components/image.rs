@@ -47,12 +47,7 @@ impl Image {
 
         self.clone()
     }
-    pub fn aspect_ratio(&mut self, ratio: &str) -> Self {
-        self.get_node().node_style
-            .push(("object-fit".to_string(), ratio.to_string()));
 
-        self.clone()
-    }
 }
 
 impl Renderable for Image {
