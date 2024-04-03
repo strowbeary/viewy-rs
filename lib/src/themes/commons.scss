@@ -2,9 +2,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Fira+Mono&family=Merriweather&display=swap');
 
 @mixin font-stack() {
-  font-family: 'Inter', sans-serif;
+  @supports not (font-variation-settings: normal) {
+    font-family: Inter, sans-serif;
+  }
+
   @supports (font-variation-settings: normal) {
-    font-family: 'Inter var', sans-serif;
+    font-family: InterVariable, sans-serif;
   }
 }
 
