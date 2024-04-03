@@ -249,7 +249,7 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
     }
     fn aspect_ratio(&mut self, ratio: &str) -> Self {
         self.get_node().node_style
-            .push(("object-fit".to_string(), ratio.to_string()));
+            .push(("aspect-ratio".to_string(), ratio.to_string()));
 
         self.clone()
     }
