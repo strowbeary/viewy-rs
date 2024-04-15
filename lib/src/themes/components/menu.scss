@@ -112,9 +112,10 @@
     flex-wrap: nowrap;
     text-decoration: none;
     color: var(--color-text-disabled);
-    white-space: nowrap;
+    overflow-wrap: break-word;
     position: relative;
-
+    max-width: sp(60);
+    overflow: hidden;
     &> .badge {
       position: absolute;
       left: 50%;
@@ -123,13 +124,19 @@
     }
 
     .icon {
-      width: sp(24);
-      height: sp(24);
+      width: sp(18);
+      height: sp(18);
     }
 
     .text {
-      font-size: sp(12);
-      line-height: sp(12);
+      font-size: sp(10);
+      line-height: sp(10);
+      width: 100%;
+      flex-grow: 1;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      text-align: center;
     }
 
     &--normal {

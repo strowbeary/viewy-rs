@@ -80,6 +80,7 @@ $on-success-dark: {on_success_dark};
         include_str!("../themes/components/disclosure.scss").to_string(),
         include_str!("../themes/components/table-of-contents.scss").to_string(),
         include_str!("../themes/components/progress-bar.scss").to_string(),
+        include_str!("../themes/app-layout.scss").to_string(),
         include_str!("../themes/print.scss").to_string(),
     ];
     if config.features.rich_text_editor {

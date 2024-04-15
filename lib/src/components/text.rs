@@ -72,7 +72,8 @@ impl Text {
     }
 
     pub fn text_overflow(&mut self) -> Self {
-        todo!()
+        self.get_node().node_style.push(("text-overflow".to_string(), "ellipsis".to_string()));
+        self.clone()
     }
     pub fn text_shadow(&mut self, rule: &str) -> Self {
         self.get_node().node_style.push(("text-shadow".to_string(), rule.to_string()));

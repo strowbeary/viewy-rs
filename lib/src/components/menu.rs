@@ -162,7 +162,7 @@ impl Renderable for MenuItem {
 #[derive(Debug, Clone)]
 pub struct Menu {
     node: Node,
-    style: MenuStyle,
+    pub style: MenuStyle,
     children: Vec<Box<dyn Renderable>>,
 }
 
