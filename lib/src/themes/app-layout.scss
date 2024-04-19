@@ -5,7 +5,7 @@
   align-items: stretch;
   justify-content: stretch;
   width: 100vw;
-  height: 100vh;
+  height: 100dvh;
 
   @media screen and (max-width: 500px) {
     grid-template-columns: 1fr;
@@ -35,9 +35,6 @@
   &__main-content {
     grid-area: content;
     overflow: auto;
-
   }
-
-
 }
 

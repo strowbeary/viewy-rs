@@ -206,6 +206,10 @@ impl Renderable for Field {
                     .set_attr("id", self.name.as_str())
                     .set_attr("name", self.name.as_str())
                     .set_attr("type", "hidden");
+                if let Some(form) = &self.form {
+                    input.set_attr("form", form);
+                }
+
                 if let Some(value) = field.value {
                     input.set_attr("value", &value);
                 }
