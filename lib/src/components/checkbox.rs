@@ -24,6 +24,7 @@ pub struct Checkbox {
     value: String,
     checked: bool,
     auto_submit: bool,
+    id: Uuid,
     children: Vec<Box<dyn Renderable>>,
 }
 
@@ -38,6 +39,7 @@ impl Checkbox {
             value: value.to_string(),
             checked: false,
             auto_submit: false,
+            id: Uuid::new_v4(),
             children: vec![],
         }
     }
@@ -60,6 +62,11 @@ impl Checkbox {
         }
         self.clone()
     }
+
+    pub fn id(&mut self, id: Uuid) -> Self {
+        self.id = id;
+        self.clone()
+    }
 }
 
 impl NodeContainer for Checkbox {
@@ -80,14 +87,13 @@ impl Appendable for Checkbox {}
 
 impl Renderable for Checkbox {
     fn render(&self) -> Node {
-        let radio_id = Uuid::new_v4().to_string();
 
         let mut checkbox = View::new()
             .tag("input")
             .set_attr("type", "checkbox")
             .set_attr("name", &self.name)
             .set_attr("value", &self.value)
-            .set_attr("id", radio_id.as_str());
+            .set_attr("id", &self.id.to_string());
 
 
         if self.checked {
@@ -107,7 +113,7 @@ impl Renderable for Checkbox {
         if let Some(label) = self.clone().label {
             container.append_child({
                 Text::new(label.as_str(), TextStyle::Body)
-                    .set_attr("for", radio_id.as_str())
+                    .set_attr("for", &self.id.to_string())
                     .tag("label")
                     .margin_left(4)
             });
