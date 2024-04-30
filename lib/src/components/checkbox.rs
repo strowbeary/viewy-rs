@@ -70,7 +70,7 @@ impl Checkbox {
     }
 
     pub fn attach_to_form(&mut self, form_name: &str) -> Self {
-        self.form = form_name.to_string();
+        self.form = Some(form_name.to_string());
         self.clone()
     }
 }
