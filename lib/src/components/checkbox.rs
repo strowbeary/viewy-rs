@@ -1,11 +1,10 @@
 use std::borrow::BorrowMut;
-use std::ops::Deref;
 
 use uuid::Uuid;
 
-use crate::{DefaultModifiers, scale};
 use crate::components::*;
-use crate::node::{Node, NodeContainer, NodeType};
+use crate::DefaultModifiers;
+use crate::node::{Node, NodeContainer};
 use crate::Renderable;
 
 #[derive(Debug, Clone)]
@@ -26,6 +25,7 @@ pub struct Checkbox {
     auto_submit: bool,
     id: Uuid,
     children: Vec<Box<dyn Renderable>>,
+    form: Option<String>,
 }
 
 impl Checkbox {
@@ -41,6 +41,7 @@ impl Checkbox {
             auto_submit: false,
             id: Uuid::new_v4(),
             children: vec![],
+            form: None,
         }
     }
 
@@ -67,6 +68,11 @@ impl Checkbox {
         self.id = id;
         self.clone()
     }
+
+    pub fn attach_to_form(&mut self, form_name: &str) -> Self {
+        self.form = form_name.to_string();
+        self.clone()
+    }
 }
 
 impl NodeContainer for Checkbox {
@@ -87,7 +93,6 @@ impl Appendable for Checkbox {}
 
 impl Renderable for Checkbox {
     fn render(&self) -> Node {
-
         let mut checkbox = View::new()
             .tag("input")
             .set_attr("type", "checkbox")
@@ -95,6 +100,9 @@ impl Renderable for Checkbox {
             .set_attr("value", &self.value)
             .set_attr("id", &self.id.to_string());
 
+        if let Some(form) = &self.form {
+            checkbox.set_attr("form", form);
+        }
 
         if self.checked {
             checkbox.set_attr("checked", "checked");
