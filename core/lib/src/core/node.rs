@@ -1,6 +1,11 @@
 use std::collections::{HashMap, HashSet};
 use std::hash::{Hash, Hasher};
+use std::pin::Pin;
+use std::task::{Context, Poll};
 use uuid::Uuid;
+use rayon::prelude::*;
+use rocket::futures::Stream;
+use rocket::response::stream::ReaderStream;
 
 #[derive(Clone, Debug)]
 pub enum NodeType {
@@ -84,7 +89,7 @@ impl Into<String> for Node {
             .map(|(name, value)| format!("{}=\"{}\"", name, value))
             .collect();
 
-        let content: Vec<String> = Vec::from_iter(self.children);
+        let content: Vec<String> = self.children.into_par_iter().map(|node| node.into()).collect();
 
         match self.node_type.clone() {
             NodeType::Normal(tag_name) => format!(
@@ -116,5 +121,3 @@ impl FromIterator<Node> for Vec<String> {
         collection
     }
 }
-
-

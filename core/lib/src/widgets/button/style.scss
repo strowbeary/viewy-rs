@@ -10,7 +10,7 @@ $border-radius: 8;
   border-radius: sp($border-radius * (3/4));
   padding: sp(8) sp(16);
   cursor: pointer;
-  display: flex;
+  display: inline-flex;
   flex-direction: row;
   align-items: center;
   justify-content: center;

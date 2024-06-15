@@ -1,6 +1,6 @@
-use figment::{Error, Figment, Metadata, Profile, Provider};
 use figment::providers::{Env, Format, Toml};
 use figment::value::{Dict, Map};
+use figment::{Error, Figment, Metadata, Profile, Provider};
 use hex::FromHex;
 use palette::Srgba;
 use serde::{Deserialize, Deserializer, Serialize};
@@ -10,15 +10,16 @@ pub struct HexColor(pub [u8; 4]);
 
 impl From<&str> for HexColor {
     fn from(value: &str) -> Self {
-
-        Self(<[u8; 4]>::from_hex(format!("{:f<8}", value.trim()
-            .replace("#", ""))).unwrap_or([0, 0, 0, 0]))
+        Self(
+            <[u8; 4]>::from_hex(format!("{:f<8}", value.trim().replace("#", "")))
+                .unwrap_or([0, 0, 0, 0]),
+        )
     }
 }
 
 impl From<Srgba<u8>> for HexColor {
     fn from(value: Srgba<u8>) -> Self {
-       Self([value.red, value.green, value.blue, value.alpha])
+        Self([value.red, value.green, value.blue, value.alpha])
     }
 }
 
@@ -36,8 +37,8 @@ impl Into<Srgba<u8>> for HexColor {
 
 impl<'de> Deserialize<'de> for HexColor {
     fn deserialize<D>(deserializer: D) -> Result<HexColor, D::Error>
-        where
-            D: Deserializer<'de>,
+    where
+        D: Deserializer<'de>,
     {
         let color_string = String::deserialize(deserializer)?;
 
@@ -148,10 +149,10 @@ impl Config {
                 .merge(Toml::file("Viewy.toml"))
                 .merge(Toml::file("viewy.toml"))
         })
+        .merge(Env::prefixed("VIEWY_").split("_"));
 
-            .merge(Env::prefixed("VIEWY_").split("_"));
-
-        let config = figment.extract::<Config>()
+        let config = figment
+            .extract::<Config>()
             .map_err(|err| {
                 println!("Viewy config error {:?}", err);
                 err
@@ -165,7 +166,7 @@ impl Default for Config {
     fn default() -> Self {
         Config {
             app: AppSettings {
-                name: "".to_string(),
+                name: "My Viewy App".to_string(),
                 favicons: vec![],
             },
             colors: Colors {
@@ -189,8 +190,14 @@ impl Default for Config {
                     light: "#C70039".into(),
                 },
 
-                success: ThemedColor { dark: "#3DA144".into(), light: "#3DA144".into() },
-                warning: ThemedColor { dark: "#FFB073".into(), light: "#DF7B5E".into() },
+                success: ThemedColor {
+                    dark: "#3DA144".into(),
+                    light: "#3DA144".into(),
+                },
+                warning: ThemedColor {
+                    dark: "#FFB073".into(),
+                    light: "#DF7B5E".into(),
+                },
             },
             shapes: Shapes {
                 border_radius: 8,

@@ -1,9 +1,13 @@
 window.addEventListener("DOMContentLoaded", () => {
+    console.log("Viewy started");
     window.dispatchEvent(new CustomEvent("startViewy", {
         detail: {
             root: document
         }
     }));
+});
+document.addEventListener("MozAfterPaint", (e) => {
+    console.log("MozAfterPaint");
 });
 function closeAllPopover() {
     document.querySelectorAll(".popover").forEach(popover => {

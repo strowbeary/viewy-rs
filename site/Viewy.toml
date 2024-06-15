@@ -13,7 +13,7 @@ success = { light = "#3DA144 ", dark = "#3DA144" }
 warning = { light = "#FFA000 ", dark = "#FFAE1E" }
 
 [shapes]
-border-radius = 8
+border-radius = 0
 spacing-factor = 4
 
 [fonts]

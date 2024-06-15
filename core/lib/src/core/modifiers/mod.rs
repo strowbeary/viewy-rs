@@ -1,3 +1,5 @@
+use rayon::prelude::IntoParallelIterator;
+use rocket::futures::StreamExt;
 use uuid::Uuid;
 use crate::widgets::popup::Popup;
 use crate::core::node::Node;
@@ -15,6 +17,13 @@ pub trait Appendable: Widget {
      {
         let node: &mut Node = self.deref_mut();
         node.children.push(child.into());
+        self
+    }
+
+    fn set_children(&mut self, children: Vec<Node>) -> &mut Self
+    {
+        let node: &mut Node = self.deref_mut();
+        node.children = children;
         self
     }
 }

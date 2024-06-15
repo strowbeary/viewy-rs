@@ -5,7 +5,7 @@ use crate::core::modifiers::{Appendable, Colorable, Dimensionable};
 #[derive(Widget, Appendable, Colorable)]
 #[widget(style = "./style.scss")]
 pub struct View {
-    node: Node
+    pub node: Node
 }
 
 impl View {

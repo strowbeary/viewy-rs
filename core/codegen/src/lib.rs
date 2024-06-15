@@ -1,5 +1,5 @@
 use proc_macro::TokenStream;
-use quote::{quote, ToTokens};
+use quote::quote;
 use syn;
 use syn::{LitStr, Meta};
 
@@ -15,7 +15,6 @@ pub fn widget_derive(input: TokenStream) -> TokenStream {
     let mut script_value: Option<String> = None;
 
     for option in input.attrs.into_iter() {
-
         if let Meta::List(ref list) = option.meta {
             if list.path.is_ident("widget") {
                 list.parse_nested_meta(|meta| {
@@ -32,15 +31,17 @@ pub fn widget_derive(input: TokenStream) -> TokenStream {
                     } else {
                         Err(meta.error("unsupported attribute"))
                     }
-                }).expect("Can parse attribute widget, check syntax");
+                })
+                .expect("Can parse attribute widget, check syntax");
             }
         }
-
     }
 
     let style_str = style_value.expect("style is a mandatory attribute in widget macro");
     // If script is not provided, use a default script file
-    let script_str = script_value.map(|path| quote!(include_str!(#path))).unwrap_or(quote!(""));
+    let script_str = script_value
+        .map(|path| quote!(include_str!(#path)))
+        .unwrap_or(quote!(""));
     let gen = quote! {
         use std::ops::{Deref, DerefMut};
 
@@ -85,7 +86,6 @@ pub fn widget_derive(input: TokenStream) -> TokenStream {
     gen.into()
 }
 
-
 #[proc_macro_derive(Component)]
 pub fn component_derive(input: TokenStream) -> TokenStream {
     // Construct a representation of Rust code as a syntax tree
@@ -107,7 +107,6 @@ fn impl_component_macro(ast: &syn::DeriveInput) -> TokenStream {
     };
     gen.into()
 }
-
 
 #[proc_macro_derive(Appendable)]
 pub fn appendable_derive(input: TokenStream) -> TokenStream {

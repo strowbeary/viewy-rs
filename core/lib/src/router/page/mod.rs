@@ -1,9 +1,13 @@
 use std::collections::{HashMap, HashSet};
+use std::pin::Pin;
+use std::task::{Context, Poll};
+use std::thread;
+use rocket::tokio::io::{AsyncRead, ReadBuf};
 
 use uuid::Uuid;
 
 use crate::core::config::Config;
-use crate::core::page::html_page::get_full_html_page;
+use crate::router::page::html_page::get_full_html_page;
 use crate::core::theme::Theme;
 use crate::node::{Node, NodeType};
 
@@ -88,10 +92,14 @@ impl<'a> Page<'a> {
                     let mut content = (self.layout)(self.content);
                     let root_nodes=  content.get_root_nodes();
 
-                    let mut content_str: String = content.into();
-                    content_str.push_str(&root_nodes.into_iter()
+                    let content_thread_handle = thread::spawn(move || {
+                        content.into()
+                    });
+                    let root_nodes_str = root_nodes.into_iter()
                         .collect::<Vec<String>>()
-                        .join(""));
+                        .join("");
+                    let mut content_str: String = content_thread_handle.join().unwrap();
+                    content_str.push_str(&root_nodes_str);
                     content_str
                 }, theme_variant.to_string(), false)
             }
@@ -117,5 +125,11 @@ impl<'a> Page<'a> {
                 }, theme_variant.to_string(), false)
             }
         }
+    }
+}
+
+impl<'a> AsyncRead for Page<'a> {
+    fn poll_read(self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &mut ReadBuf<'_>) -> Poll<std::io::Result<()>> {
+        todo!()
     }
 }

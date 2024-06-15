@@ -16,17 +16,19 @@ pub fn get_all_scripts()-> Vec<&'static str> {
         view::View::SCRIPT,
         button::Button::SCRIPT,
         popup::Popup::SCRIPT,
-        stack::VStack::SCRIPT
+        stack::VStack::SCRIPT,
+        stack::HStack::SCRIPT
     ]
 }
 
 
-pub const fn get_all_stylesheet() -> &'static [&'static str; 4] {
+pub const fn get_all_stylesheet() -> &'static [&'static str; 5] {
     &[
         view::View::STYLE,
         button::Button::STYLE,
         popup::Popup::STYLE,
-        stack::VStack::STYLE
+        stack::VStack::STYLE,
+        stack::HStack::STYLE
     ]
 }
 

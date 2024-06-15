@@ -31,7 +31,8 @@
 //!     fn render(self) -> Node {
 //!         View::new().append_child({
 //!              Button::new(&self.btn_label, ButtonStyle::Filled)
-//!          });
+//!          })
+//!             .into()
 //!     }
 //! }
 //! fn main() {
@@ -83,6 +84,7 @@ mod core;
 /// | Rocket-rs            | `rocket`    |
 pub mod bindings;
 pub mod widgets;
+pub mod router;
 
 
 mod helper_fn;
@@ -90,7 +92,6 @@ mod helper_fn;
 #[doc(inline)]
 pub use crate::helper_fn::*;
 
-pub use crate::core::page;
 use crate::core::config::Config;
 lazy_static!{
  static ref CONFIG: Config = Config::load();
@@ -104,7 +105,7 @@ pub mod prelude {
     pub use crate::core::modifiers::*;
     pub use crate::core::node::*;
     pub use crate::helper_fn::*;
-    pub use crate::core::page::*;
+    pub use crate::router::*;
     pub use crate::core::config::Config;
     pub use crate::core::theme::*;
 }
@@ -117,21 +118,9 @@ mod tests {
 
     use crate::core::modifiers::Appendable;
     use crate::core::node::Node;
-    use crate::core::page::{Page, RenderMode};
+    use crate::router::{Page, RenderMode};
     use crate::core::widget::Widget;
     use crate::prelude::*;
-
-    #[derive(Component)]
-    pub struct UserProfileTag {
-        pub user_name: String,
-        pub user_profile_img: String,
-    }
-
-    impl Component for UserProfileTag {
-        fn render(self) -> Node {
-            Button::new("label", ButtonStyle::Filled).into()
-        }
-    }
 
     #[test]
     fn benchmark() {
@@ -145,12 +134,15 @@ mod tests {
                 });
         }
 
+        let render_start = Instant::now();
         let _ = Page::with_title("Test")
             .with_content(view)
             .compile(RenderMode::Complete);
+        let render_duration = render_start.elapsed();
         let duration = start.elapsed();
 
-        println!("{:?}", duration);
+        println!("Render duration = {:?}", render_duration);
+        println!("Global duration = {:?}", duration);
         // fs::write("./output.html", html).expect("Can't write output");
     }
 
