@@ -2,11 +2,11 @@ use std::borrow::BorrowMut;
 
 use uuid::Uuid;
 
-use crate::{DefaultModifiers, scale};
-use crate::components::*;
 use crate::components::icons::{IconPack, Lucide};
+use crate::components::*;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
+use crate::{scale, DefaultModifiers};
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
@@ -25,8 +25,9 @@ impl PickerOption {
     }
     /// Set picker's icon
     pub fn icon<T>(&mut self, icon: T) -> Self
-        where
-            T: 'static + IconPack {
+    where
+        T: 'static + IconPack,
+    {
         self.icon = Some(Box::new(icon));
         self.clone()
     }
@@ -47,7 +48,7 @@ pub struct Picker {
     label: Option<String>,
     name: String,
     value: String,
-    options: Vec<PickerOption>,
+    pub options: Vec<PickerOption>,
     is_disabled: bool,
     auto_submit: bool,
 }
@@ -93,8 +94,7 @@ impl Picker {
     ///        })
     /// ```
     pub fn attach_to_form(&mut self, form_name: &str) -> Self {
-        self
-            .set_attr("form", form_name)
+        self.set_attr("form", form_name)
     }
 
     pub fn disabled(&mut self, is_disabled: bool) -> Self {
@@ -102,12 +102,11 @@ impl Picker {
         self.clone()
     }
 
-    pub fn append_child(&mut self, child: PickerOption) -> Self {
+    pub fn append_child(&mut self, child: PickerOption) -> &mut Self {
         self.options.push(child);
-        self.clone()
+        self
     }
 }
-
 
 impl NodeContainer for Picker {
     fn get_node(&mut self) -> &mut Node {
@@ -123,10 +122,10 @@ impl ChildContainer for Picker {
     }
 }
 
-
 impl Renderable for Picker {
     fn render(&self) -> Node {
-        let mut picker = self.clone()
+        let mut picker = self
+            .clone()
             .add_class("picker")
             .add_class(format!("picker--{:?}", self.style).to_lowercase().as_str());
 
@@ -135,7 +134,6 @@ impl Renderable for Picker {
             picker.node.children.push(text.render());
         }
 
-
         let picker_id = Uuid::new_v4().to_string();
         match self.style {
             PickerStyle::Segmented => {
@@ -143,30 +141,29 @@ impl Renderable for Picker {
                     picker.add_class("picker--segmented--disabled");
                 }
                 picker.node.children.push({
-                    let mut option_list = HStack::new(Alignment::Stretch)
-                        .add_class("picker--segmented__option-list");
+                    let mut option_list =
+                        HStack::new(Alignment::Stretch).add_class("picker--segmented__option-list");
                     for option in picker.options {
                         let radio_id = format!("picker-segmented-{}-{}", picker_id, option.label);
-                        option_list
-                            .append_child({
-                                let mut radio = View::new()
-                                    .tag("input")
-                                    .set_attr("type", "radio")
-                                    .set_attr("name", self.name.as_str())
-                                    .set_attr("value", option.value.as_str())
-                                    .set_attr("id", radio_id.as_str())
-                                    .add_class("picker--segmented__option-list__radio");
-                                if picker.value.eq(option.value.as_str()) {
-                                    radio.set_attr("checked", "checked");
-                                }
-                                if self.auto_submit {
-                                    radio.set_attr("data-auto-submit", "data-auto-submit");
-                                }
-                                if picker.is_disabled {
-                                    radio.set_attr("disabled", "disabled");
-                                }
-                                radio
-                            });
+                        option_list.append_child({
+                            let mut radio = View::new()
+                                .tag("input")
+                                .set_attr("type", "radio")
+                                .set_attr("name", self.name.as_str())
+                                .set_attr("value", option.value.as_str())
+                                .set_attr("id", radio_id.as_str())
+                                .add_class("picker--segmented__option-list__radio");
+                            if picker.value.eq(option.value.as_str()) {
+                                radio.set_attr("checked", "checked");
+                            }
+                            if self.auto_submit {
+                                radio.set_attr("data-auto-submit", "data-auto-submit");
+                            }
+                            if picker.is_disabled {
+                                radio.set_attr("disabled", "disabled");
+                            }
+                            radio
+                        });
                         option_list.append_child({
                             let mut item = HStack::new(Alignment::Center)
                                 .add_class("picker--segmented__option-list__option")
@@ -175,9 +172,7 @@ impl Renderable for Picker {
 
                             if let Some(icon) = option.icon {
                                 item.append_child({
-                                    Icon::new(icon)
-                                        .size(16)
-                                        .margin_right(scale(2))
+                                    Icon::new(icon).size(16).margin_right(scale(2))
                                 });
                             }
                             item.append_child({
@@ -269,47 +264,43 @@ impl Renderable for Picker {
                         .render()
                 });
             }
-            PickerStyle::RadioGroup => {
-                picker.node.children.push({
-                    let mut option_list = VStack::new(Alignment::Stretch)
-                        .add_class("picker__option-list")
-                        .gap(vec![scale(3)]);
-                    for option in picker.options {
-                        option_list.append_child({
-                            let mut radio_row = HStack::new(Alignment::Center)
-                                .gap(vec![scale(2)]);
-                            let radio_id = format!("picker-radio-{}-{}", self.name.as_str(), option.label);
-                            let mut radio_button = View::new()
-                                .tag("input")
-                                .set_attr("type", "radio")
-                                .set_attr("name", self.name.as_str())
-                                .set_attr("id", radio_id.as_str())
-                                .set_attr("value", option.value.as_str());
-                            if picker.is_disabled {
-                                radio_button.set_attr("disabled", "disabled");
-                            }
-                            if picker.value.eq(option.value.as_str()) {
-                                radio_button.set_attr("checked", "checked");
-                            }
+            PickerStyle::RadioGroup => picker.node.children.push({
+                let mut option_list = VStack::new(Alignment::Stretch)
+                    .add_class("picker__option-list")
+                    .gap(vec![scale(3)]);
+                for option in picker.options {
+                    option_list.append_child({
+                        let mut radio_row = HStack::new(Alignment::Center).gap(vec![scale(2)]);
+                        let radio_id =
+                            format!("picker-radio-{}-{}", self.name.as_str(), option.label);
+                        let mut radio_button = View::new()
+                            .tag("input")
+                            .set_attr("type", "radio")
+                            .set_attr("name", self.name.as_str())
+                            .set_attr("id", radio_id.as_str())
+                            .set_attr("value", option.value.as_str());
+                        if picker.is_disabled {
+                            radio_button.set_attr("disabled", "disabled");
+                        }
+                        if picker.value.eq(option.value.as_str()) {
+                            radio_button.set_attr("checked", "checked");
+                        }
 
-                            if self.auto_submit {
-                                radio_button.set_attr("data-auto-submit", "data-auto-submit");
-                            }
-                            radio_row.append_child(
-                                radio_button
-                            );
-                            radio_row.append_child(
-                                Text::new(option.label.as_str(), TextStyle::Body)
-                                    .set_attr("for", radio_id.as_str())
-                                    .tag("label")
-                            );
+                        if self.auto_submit {
+                            radio_button.set_attr("data-auto-submit", "data-auto-submit");
+                        }
+                        radio_row.append_child(radio_button);
+                        radio_row.append_child(
+                            Text::new(option.label.as_str(), TextStyle::Body)
+                                .set_attr("for", radio_id.as_str())
+                                .tag("label"),
+                        );
 
-                            radio_row
-                        });
-                    }
-                    option_list.render()
-                })
-            }
+                        radio_row
+                    });
+                }
+                option_list.render()
+            }),
         }
 
         picker.node
