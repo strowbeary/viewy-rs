@@ -17,6 +17,15 @@ impl From<&str> for HexColor {
     }
 }
 
+impl From<String> for HexColor {
+    fn from(value: String) -> Self {
+        Self(
+            <[u8; 4]>::from_hex(format!("{:f<8}", value.trim().replace("#", "")))
+                .unwrap_or([0, 0, 0, 0]),
+        )
+    }
+}
+
 impl From<Srgba<u8>> for HexColor {
     fn from(value: Srgba<u8>) -> Self {
         Self([value.red, value.green, value.blue, value.alpha])
