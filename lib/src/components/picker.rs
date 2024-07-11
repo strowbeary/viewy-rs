@@ -51,6 +51,7 @@ pub struct Picker {
     pub options: Vec<PickerOption>,
     is_disabled: bool,
     auto_submit: bool,
+    required: bool
 }
 
 impl Picker {
@@ -65,11 +66,16 @@ impl Picker {
             options: vec![],
             is_disabled: false,
             auto_submit: false,
+            required: false,
         }
     }
 
     pub fn label(&mut self, label: &str) -> Self {
         self.label = Some(label.to_string());
+        self.clone()
+    }
+    pub fn required(&mut self) -> Self {
+        self.required = true;
         self.clone()
     }
 
@@ -156,6 +162,9 @@ impl Renderable for Picker {
                             if picker.value.eq(option.value.as_str()) {
                                 radio.set_attr("checked", "checked");
                             }
+                            if self.required {
+                                radio.set_attr("required", "required");
+                            }
                             if self.auto_submit {
                                 radio.set_attr("data-auto-submit", "data-auto-submit");
                             }
@@ -200,6 +209,10 @@ impl Renderable for Picker {
                                 .value(&picker.value);
                             if self.auto_submit {
                                 input.set_attr("data-auto-submit", "data-auto-submit");
+                            }
+
+                            if self.required {
+                                input.set_attr("required", "required");
                             }
                             input
                         })
@@ -284,6 +297,11 @@ impl Renderable for Picker {
                         }
                         if picker.value.eq(option.value.as_str()) {
                             radio_button.set_attr("checked", "checked");
+                        }
+
+
+                        if self.required {
+                            radio_button.set_attr("required", "required");
                         }
 
                         if self.auto_submit {
