@@ -22,6 +22,11 @@ $border-radius: 8;
   flex-wrap: nowrap;
   position: relative;
 
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+
   & > .badge {
     position: absolute;
     right: sp(-10);
@@ -47,43 +52,42 @@ $border-radius: 8;
 
     color: var(--accent);
 
-    .text, .icon {
-      color: currentColor;
+    &:hover {
+      color: color-mix(in hsl, var(--accent) 80%, var(--on-accent));
     }
 
-    &:hover .text, &:hover .icon {
-      color: var(--accent-lighter);
-    }
-
-    &:active .text, &:active .icon {
-      color: var(--accent-lighter);
+    &:active {
+      color: color-mix(in hsl, var(--accent) 60%, var(--on-accent));
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 sp(3) var(--color-focus);
+      box-shadow: 0 0 0 sp(3) var(--accent);
     }
 
-    &:disabled .text, &:disabled .icon {
-      pointer-events: none;
+    &:disabled {
       background: none;
-      color: var(--color-text-disabled);
+      color: color-mix(in hsl, var(--accent) 60%, var(--on-accent));
     }
 
     &--destructive {
-      .text, .icon {
-        color: var(--color-destructive);
+      color: var(--destructive);
+
+
+      &:hover {
+        color: color-mix(in hsl, var(--destructive) 80%, var(--on-destructive));
       }
 
-      &:hover .text, &:hover .icon {
-        color: var(--color-destructive-light);
-      }
-
-      &:active .text, &:active .icon {
-        color: var(--color-destructive-lighter);
+      &:active {
+        color: color-mix(in hsl, var(--destructive) 60%, var(--on-destructive));
       }
 
       &:focus-visible {
-        box-shadow: 0 0 0 sp(3) var(--surface-red);
+        box-shadow: 0 0 0 sp(3) var(--destructive);
+      }
+
+      &:disabled {
+        background: none;
+        color: color-mix(in hsl, var(--destructive) 60%, var(--on-destructive));
       }
     }
 
@@ -91,49 +95,50 @@ $border-radius: 8;
 
   &--flat {
     border: none;
-    background: transparent;
-
-    .text,
-    .icon {
-      color: var(--color-accent);
-    }
+    background: var(--accentuated-surface-bright);
+    color: var(--accent);
 
     &:hover {
-      background: var(--color-hover);
+      background: var(--accentuated-surface);
     }
 
     &:active {
-      background: var(--color-active);
+      background: var(--accentuated-surface-dim);
+
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 sp(3) var(--color-focus);
+      box-shadow: 0 0 0 sp(3) color-mix(in hsl, transparent 30%, var(--accent));
+
     }
 
     &:disabled {
-      pointer-events: none;
-      background: none;
-      .text, .icon {
-        color: var(--color-text-disabled);
-      }
+      background: var(--surface-bright);
+      color: color-mix(in hsl, var(--on-surface) 55%, var(--surface-bright));
+
     }
 
     &--destructive {
-      .text,
-      .icon {
-        color: var(--destructive);
-      }
+      color: var(--destructive);
+      background: var(--destructive-surface-bright);
 
       &:hover {
         background: var(--destructive-surface);
       }
 
       &:active {
-        background: var(--surface-red-darker);
+        background: var(--destructive-surface-dim);
       }
 
       &:focus-visible {
-        box-shadow: 0 0 0 sp(3) var(--surface-red-darker);
+        box-shadow: 0 0 0 sp(3) color-mix(in hsl, transparent 30%, var(--destructive));
+      }
+
+
+      &:disabled {
+        background:  color-mix(in hsl, var(--background) 30%, var(--destructive-surface-bright));
+        color: color-mix(in hsl, var(--destructive) 55%, var(--on-surface));
+
       }
     }
   }
@@ -141,52 +146,53 @@ $border-radius: 8;
   &--outlined {
     background: transparent;
     border: 1px solid var(--border);
-
-    .text,
-    .icon {
-      color: var(--color-accent);
-    }
+    color: var(--accent);
 
     &:hover {
-      background: var(--color-hover);
-      border: 1px solid var(--color-border-hover);
+      background: var(--accentuated-surface-bright);
+      border: sp(1) solid color-mix(in hsl, var(--border) 85%, var(--accent));
     }
 
     &:active {
-      background: var(--color-active);
-      border: sp(1) solid var(--color-border-hover);
+      background: var(--accentuated-surface);
+      border: sp(1) solid color-mix(in hsl, var(--border) 80%, var(--accent));
     }
 
     &:focus-visible {
-      box-shadow: 0 0 0 sp(3) var(--color-focus);
+      box-shadow: 0 0 0 sp(3) color-mix(in hsl, transparent 30%, var(--accent));
     }
 
     &:disabled {
-      pointer-events: none;
       background: none;
-      color: var(--color-text-disabled);
-      border: sp(1) solid var(--color-shadow);
+      color: color-mix(in hsl, var(--on-background) 30%, var(--background));
+      border: sp(1) solid color-mix(in hsl, var(--border) 70%, var(--background));
     }
 
     &--destructive {
-      .text,
-      .icon {
-        color: var(--color-destructive);
-      }
+
+      color: var(--destructive);
+
 
       &:hover {
-        background: var(--surface-red);
-        border: 1px solid var(--color-border-hover);
+        background: var(--destructive-surface-bright);
+        border: sp(1) solid color-mix(in hsl, var(--border) 80%, var(--destructive));
       }
 
       &:active {
-        background: var(--surface-red-darker);
-        border: sp(1) solid var(--color-border-hover);
+        background: var(--destructive-surface);
+        border: sp(1) solid color-mix(in hsl, var(--border) 75%, var(--destructive));
       }
 
       &:focus-visible {
-        box-shadow: 0 0 0 sp(3) var(--surface-red-darker);
+        box-shadow: 0 0 0 sp(3) color-mix(in hsl, transparent 30%, var(--destructive));
       }
+
+      &:disabled {
+        background: none;
+        color: color-mix(in hsl, var(--on-background) 30%, var(--background));
+        border: sp(1) solid color-mix(in hsl, var(--border) 70%, var(--background));
+      }
+
     }
   }
 
@@ -212,10 +218,8 @@ $border-radius: 8;
     }
 
     &:disabled {
-      pointer-events: none;
-      background: none;
-      color: white;
-      background: var(--color-shadow);
+      color: var(--on-destructive);
+      background: var(--surface-dim);
     }
 
     &--destructive {
@@ -240,14 +244,14 @@ $border-radius: 8;
       }
 
       &:disabled {
-        pointer-events: none;
         background: none;
-        color: white;
-        background: var(--color-shadow);
+        color: var(--on-destructive);
+        background: var(--destructive-surface);
       }
     }
 
   }
+
   &--icon-only {
     padding: sp(4);
 

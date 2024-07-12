@@ -26,7 +26,6 @@ pub struct Button {
     pub label: Option<String>,
     pub style: ButtonStyle,
 }
-
 impl PopupReceiver for Button {}
 
 impl Button {
@@ -64,6 +63,15 @@ impl Button {
     /// ```
     pub fn destructive(&mut self) -> &mut Self {
         self.add_class(format!("button--{:?}--destructive", self.style).to_lowercase().as_str())
+    }
+
+    /// Make the button as disabled
+    /// ```rust
+    /// Button::new("Disabled action", ButtonStyle::Filled)
+    ///    .disabled()
+    /// ```
+    pub fn disabled(&mut self) -> &mut Self {
+        self.set_attr("disabled", "disabled")
     }
 
     /// Turn the button to a link with href attribute set to the url passed in action

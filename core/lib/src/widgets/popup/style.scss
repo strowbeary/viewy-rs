@@ -1,5 +1,5 @@
 $border-radius: 8;
-
+$animation-duration: 150ms;
 @function sp($sp) {
     @return ($sp / 16) * 1rem;
 }
@@ -19,14 +19,14 @@ $border-radius: 8;
     visibility: hidden;
     transition:
         visibility 0ms 250ms,
-        opacity 250ms 0ms,
-        z-index 250ms 0ms,
-        backdrop-filter 250ms 0ms;
+        opacity $animation-duration 0ms,
+        z-index $animation-duration 0ms,
+        backdrop-filter $animation-duration 0ms;
     -webkit-backdrop-filter: blur(0px);
     backdrop-filter: blur(0px);
     &__window {
         position: relative;
-        transition: transform 500ms ease;
+        transition: transform $animation-duration * 2 ease;
         transform: translateY(10px);
         pointer-events: none;
         margin: auto;
@@ -42,15 +42,16 @@ $border-radius: 8;
         .titlebar {
             background: var(--surface);
         }
-    }
-    &__window-bar {
-        background: var(--surface-dark);
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-    }
-    &__window-content {
-        overflow: auto;
+        &__window-bar {
+            background: var(--surface-dark);
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+        }
+        &__window-content {
+            overflow: auto;
+            padding: sp(10);
+        }
     }
 
     &.visible {
@@ -60,10 +61,10 @@ $border-radius: 8;
         -webkit-backdrop-filter: blur(15px);
         backdrop-filter: blur(15px);
         transition:
-            visibility 250ms 0ms,
-            opacity 250ms 0ms,
-            z-index 250ms 0ms,
-            backdrop-filter 250ms 0ms;
+            visibility $animation-duration 0ms,
+            opacity $animation-duration 0ms,
+            z-index $animation-duration 0ms,
+            backdrop-filter $animation-duration 0ms;
         .popup__window {
             transform: translateY(0px);
             pointer-events: all;

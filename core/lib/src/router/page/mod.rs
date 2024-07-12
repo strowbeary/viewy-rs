@@ -1,9 +1,6 @@
 use std::collections::{HashMap, HashSet};
-use std::pin::Pin;
-use std::task::{Context, Poll};
-use std::thread;
-use rocket::tokio::io::{AsyncRead, ReadBuf};
 
+use std::thread;
 use uuid::Uuid;
 
 use crate::core::config::Config;
@@ -125,11 +122,5 @@ impl<'a> Page<'a> {
                 }, theme_variant.to_string(), false)
             }
         }
-    }
-}
-
-impl<'a> AsyncRead for Page<'a> {
-    fn poll_read(self: Pin<&mut Self>, cx: &mut Context<'_>, buf: &mut ReadBuf<'_>) -> Poll<std::io::Result<()>> {
-        todo!()
     }
 }

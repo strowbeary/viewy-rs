@@ -6,4 +6,18 @@
   &--horizontal {
     flex-direction: row;
   }
+  &--align {
+    &-center {
+      align-items: center;
+    } 
+    &-end {
+      align-items: end;
+    }
+    &-start {
+      align-items: start;
+    }
+    &-stretch {
+      align-items: stretch;
+    }
+  }
 }

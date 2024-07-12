@@ -1,6 +1,3 @@
 [workspace]
-members = [
-    "core/lib",
-    "core/codegen",
-    "site"
-]
+resolver = "2"
+members = ["core/lib", "core/codegen", "site"]

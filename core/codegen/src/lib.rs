@@ -178,3 +178,21 @@ fn impl_colorable_macro(ast: &syn::DeriveInput) -> TokenStream {
     };
     gen.into()
 }
+
+#[proc_macro_derive(Dimensionable)]
+pub fn dimensionable_derive(input: TokenStream) -> TokenStream {
+    // Construct a representation of Rust code as a syntax tree
+    // that we can manipulate
+    let ast = syn::parse(input).unwrap();
+
+    // Build the trait implementation
+    impl_dimensionable_macro(&ast)
+}
+
+fn impl_dimensionable_macro(ast: &syn::DeriveInput) -> TokenStream {
+    let name = &ast.ident;
+    let gen = quote! {
+        impl Dimensionable for #name {}
+    };
+    gen.into()
+}

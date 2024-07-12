@@ -25,7 +25,9 @@ pub enum Color {
     SuccessSurface,
     Destructive,
     OnDestructive,
+    DestructiveSurfaceDim,
     DestructiveSurface,
+    DestructiveSurfaceBright,
     Warning,
     WarningSurface,
 }
@@ -48,10 +50,12 @@ impl Color {
             Color::Success => "--success",
             Color::SuccessSurface => "--success-surface",
             Color::Destructive => "--destructive",
+            Color::OnDestructive => "--on-destructive",
+            Color::DestructiveSurfaceDim => "--destructive-surface-dim",
             Color::DestructiveSurface => "--destructive-surface",
+            Color::DestructiveSurfaceBright => "--destructive-surface-bright",
             Color::Warning => "--warning",
             Color::WarningSurface => "--warning-surface",
-            Color::OnDestructive => "--on-destructive"
         }
     }
 
@@ -249,7 +253,7 @@ impl Color {
                 let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
                 let border = match theme_variant {
                     Theme::Dark => {
-                        background_color.with_hue(accent_color.hue).darken(0.8).desaturate(0.9)
+                        background_color.with_hue(accent_color.hue).darken(0.7).desaturate(0.9)
                     }
                     Theme::Auto | Theme::Light => {
                         background_color.with_hue(accent_color.hue).lighten(0.85).desaturate(0.9)
@@ -269,7 +273,7 @@ impl Color {
                 }
             }
             Color::DestructiveSurface => {
-                let surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurfaceBright, theme_variant).into();
+                let surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurface, theme_variant).into();
                 let surface_color: Hsluv = surface.without_alpha().into_linear::<f32>().into_color();
                 let base: Srgba<u8> = Color::get_hex_color(&Color::Destructive, theme_variant).into();
                 let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
@@ -351,6 +355,50 @@ impl Color {
                         let on_background = base_color.with_hue(accent_color.hue).saturate(0.8).lighten(0.02);
 
                         HexColor::from(Srgb::from_linear(on_background.into_color()).with_alpha(255))
+                    }
+                }
+            }
+            Color::DestructiveSurfaceDim => {
+                match theme_variant {
+                    Theme::Dark => {
+                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
+                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
+
+                        let lightened_color = color.darken(0.1);
+                        // Converting back to non-linear sRGB with u8 components.
+                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
+                        HexColor::from(surface)
+                    }
+                    Theme::Auto | Theme::Light => {
+                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
+                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
+
+                        let lightened_color = color.darken(0.06);
+                        // Converting back to non-linear sRGB with u8 components.
+                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
+                        HexColor::from(surface)
+                    }
+                }
+            }
+            Color::DestructiveSurfaceBright => {
+                match theme_variant {
+                    Theme::Dark => {
+                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
+                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
+
+                        let lightened_color = color.lighten(0.06);
+                        // Converting back to non-linear sRGB with u8 components.
+                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
+                        HexColor::from(surface)
+                    }
+                    Theme::Auto | Theme::Light => {
+                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
+                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
+
+                        let lightened_color = color.lighten(0.5);
+                        // Converting back to non-linear sRGB with u8 components.
+                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
+                        HexColor::from(surface)
                     }
                 }
             }

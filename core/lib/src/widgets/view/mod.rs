@@ -1,24 +1,19 @@
-use crate::core::node::{Node};
+use crate::core::modifiers::{Appendable, Classable, Colorable, Dimensionable};
+use crate::core::node::Node;
 use crate::core::widget::Widget;
-use crate::core::modifiers::{Appendable, Colorable, Dimensionable};
 
-#[derive(Widget, Appendable, Colorable)]
+#[derive(Widget, Appendable, Colorable, Classable, Dimensionable)]
 #[widget(style = "./style.scss")]
 pub struct View {
-    pub node: Node
+    pub node: Node,
 }
 
 impl View {
     pub fn new() -> Self {
         View {
-            node: Node::default()
+            node: Node::default(),
         }
     }
 
-    pub fn render(&mut self) {
-
-    }
+    pub fn render(&mut self) {}
 }
-
-
-impl Dimensionable for View {}

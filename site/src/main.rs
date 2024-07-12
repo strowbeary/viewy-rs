@@ -29,19 +29,38 @@ fn get_scripts() -> RawJavaScript<String> {
 #[get("/")]
 async fn home() -> Page<'static> {
     Page::with_title("Viewy showcase – Home").with_content({
-        View::new()
+        VStack::new(Alignment::Stretch)
+            .gap(vec![scale(5)])
             .append_child({
-                let mut list = VStack::new(Alignment::Stretch);
+                VStack::new(Alignment::Start).gap(vec![scale(4)])
+                    .append_child(Button::new("Action", ButtonStyle::Filled))
+                    .append_child(Button::new("Destructive action", ButtonStyle::Filled).destructive())
+                    .append_child(Button::new("Disabled action", ButtonStyle::Filled).disabled())
+                    .append_child(Button::new("Disabled action", ButtonStyle::Filled).disabled().destructive())
 
-                list.append_child({
-                    Button::new("Label", ButtonStyle::Filled).popup({
-                        Popup::new().append_child({ Button::new("Haha", ButtonStyle::Outlined) })
-                    })
-                });
-
-                list
             })
-            .append_child(Button::new("Label", ButtonStyle::Filled).destructive())
+            .append_child({
+                VStack::new(Alignment::Start).gap(vec![scale(4)])
+                    .append_child(Button::new("Action", ButtonStyle::Outlined))
+                    .append_child(Button::new("Destructive action", ButtonStyle::Outlined).destructive())
+                    .append_child(Button::new("Disabled action", ButtonStyle::Outlined).disabled())
+                    .append_child(Button::new("Disabled action", ButtonStyle::Outlined).disabled().destructive())
+
+            })
+            .append_child({
+                VStack::new(Alignment::Start).gap(vec![scale(4)])
+                    .append_child(Button::new("Action", ButtonStyle::Flat))
+                    .append_child(Button::new("Destructive action", ButtonStyle::Flat).destructive())
+                    .append_child(Button::new("Disabled action", ButtonStyle::Flat).disabled())
+                    .append_child(Button::new("Disabled action", ButtonStyle::Flat).disabled().destructive())
+            })
+            .append_child({
+                VStack::new(Alignment::Start).gap(vec![scale(4)])
+                    .append_child(Button::new("Action", ButtonStyle::Link))
+                    .append_child(Button::new("Destructive action", ButtonStyle::Link).destructive())
+                    .append_child(Button::new("Disabled action", ButtonStyle::Link).disabled())
+                    .append_child(Button::new("Disabled action", ButtonStyle::Link).disabled().destructive())
+            })
             .append_child({
                 let mut color_list = VStack::new(Alignment::Stretch);
                 color_list.gap(vec![scale(3)]);
@@ -89,7 +108,7 @@ fn hello(n: usize) -> RawHtml<TextStream![String]> {
             yield node.clone().into();
         //interval.tick().await;
         }
-        //yield page[1].to_string();
+        yield page[1].to_string();
     })
 }
 
