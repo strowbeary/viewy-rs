@@ -5,12 +5,12 @@ favicons = [
 ]
 
 [colors]
-accent = { light = "#0052cc", dark = "#3385ff" }
-background = { light = "#ffffff", dark = "#121212" }
-surface = { light = "#efefef", dark = "#181818" }
-destructive = { light = "#C70039 ", dark = "#ff0048" }
-success = { light = "#3DA144 ", dark = "#3DA144" }
-warning = { light = "#FFA000 ", dark = "#FFAE1E" }
+accent = { light = "#026adb", dark = "#0A84FF" }
+background = { light = "#FFFFFF", dark = "#000000" }
+surface = { light = "#f2f2f7", dark = "#323236" }
+destructive = { light = "#d13128", dark = "#FF453A" }
+success = { light = "#34C759", dark = "#30D158" }
+warning = { light = "#FF9500", dark = "#FF9F0A" }
 
 [shapes]
 border-radius = 0

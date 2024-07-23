@@ -14,7 +14,7 @@ use rocket::tokio::time::{interval, Interval};
 
 use viewy::prelude::*;
 use viewy::strum::IntoEnumIterator;
-use viewy::widgets::stack::{Alignment, Stack, VStack};
+use viewy::widgets::stack::{Alignment, HStack, Stack, VStack};
 
 #[get("/app.css")]
 fn get_stylesheet() -> RawCss<String> {
@@ -34,42 +34,51 @@ async fn home() -> Page<'static> {
             .append_child({
                 VStack::new(Alignment::Start).gap(vec![scale(4)])
                     .append_child(Button::new("Action", ButtonStyle::Filled))
-                    .append_child(Button::new("Destructive action", ButtonStyle::Filled).destructive())
                     .append_child(Button::new("Disabled action", ButtonStyle::Filled).disabled())
-                    .append_child(Button::new("Disabled action", ButtonStyle::Filled).disabled().destructive())
+                    .append_child(Button::new("Destructive action", ButtonStyle::Filled).destructive())
+                    .append_child(Button::new("Disabled destructive action", ButtonStyle::Filled).disabled().destructive())
 
             })
             .append_child({
                 VStack::new(Alignment::Start).gap(vec![scale(4)])
                     .append_child(Button::new("Action", ButtonStyle::Outlined))
-                    .append_child(Button::new("Destructive action", ButtonStyle::Outlined).destructive())
                     .append_child(Button::new("Disabled action", ButtonStyle::Outlined).disabled())
-                    .append_child(Button::new("Disabled action", ButtonStyle::Outlined).disabled().destructive())
+                    .append_child(Button::new("Destructive action", ButtonStyle::Outlined).destructive())
+                    .append_child(Button::new("Disabled destructive action", ButtonStyle::Outlined).disabled().destructive())
 
             })
             .append_child({
                 VStack::new(Alignment::Start).gap(vec![scale(4)])
                     .append_child(Button::new("Action", ButtonStyle::Flat))
-                    .append_child(Button::new("Destructive action", ButtonStyle::Flat).destructive())
                     .append_child(Button::new("Disabled action", ButtonStyle::Flat).disabled())
-                    .append_child(Button::new("Disabled action", ButtonStyle::Flat).disabled().destructive())
+                    .append_child(Button::new("Destructive action", ButtonStyle::Flat).destructive())
+                    .append_child(Button::new("Disabled destructive action", ButtonStyle::Flat).disabled().destructive())
             })
             .append_child({
                 VStack::new(Alignment::Start).gap(vec![scale(4)])
                     .append_child(Button::new("Action", ButtonStyle::Link))
-                    .append_child(Button::new("Destructive action", ButtonStyle::Link).destructive())
                     .append_child(Button::new("Disabled action", ButtonStyle::Link).disabled())
-                    .append_child(Button::new("Disabled action", ButtonStyle::Link).disabled().destructive())
+                    .append_child(Button::new("Destructive action", ButtonStyle::Link).destructive())
+                    .append_child(Button::new("Disabled destructive action", ButtonStyle::Link).disabled().destructive())
             })
             .append_child({
                 let mut color_list = VStack::new(Alignment::Stretch);
                 color_list.gap(vec![scale(3)]);
                 for color in Color::iter() {
                     color_list.append_child({
-                        let mut view = View::new();
-                        view.width("100px").height("50px").background_color(color);
-                        view.text = Some(color.as_str().to_string());
-                        view
+                        HStack::new(Alignment::Center)
+                            .gap(vec![scale(3)])
+                            .append_child({
+                                let mut view = View::new();
+                                view.width("50px").height("50px").background_color(color);
+                                view
+                            })
+                            .append_child({
+                                let mut view = View::new();
+                                view.text = Some(color.as_str().to_string());
+                                view
+                            })
+
                     });
                 }
                 color_list

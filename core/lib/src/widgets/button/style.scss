@@ -113,8 +113,9 @@ $border-radius: 8;
     }
 
     &:disabled {
-      background: var(--surface-bright);
-      color: color-mix(in hsl, var(--on-surface) 55%, var(--surface-bright));
+      --background: color-mix(in hsl, transparent 50%, var(--accentuated-surface-bright));
+      background: var(--background);
+      color: color-mix(in hsl, var(--accent) 50%, var(--background));
 
     }
 
@@ -136,8 +137,9 @@ $border-radius: 8;
 
 
       &:disabled {
-        background:  color-mix(in hsl, var(--background) 30%, var(--destructive-surface-bright));
-        color: color-mix(in hsl, var(--destructive) 55%, var(--on-surface));
+        --background: color-mix(in hsl, transparent 50%, var(--destructive-surface-bright));
+        background: var(--background);
+        color: color-mix(in hsl, var(--destructive) 50%, var(--background));
 
       }
     }
@@ -189,7 +191,7 @@ $border-radius: 8;
 
       &:disabled {
         background: none;
-        color: color-mix(in hsl, var(--on-background) 30%, var(--background));
+        color: color-mix(in hsl, var(--destructive) 30%, var(--background));
         border: sp(1) solid color-mix(in hsl, var(--border) 70%, var(--background));
       }
 

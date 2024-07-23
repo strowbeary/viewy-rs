@@ -32,7 +32,7 @@ impl Theme {
 }
 
 fn negative_contrast(color: HexColor) -> HexColor {
-    let mut color: Srgba<u8> = color.into();
+    let color: Srgba<u8> = color.into();
     let real_color = Srgba::<f64>::from_format(color);
 
     if real_color.relative_luminance().luma > 0.5 {
@@ -41,6 +41,7 @@ fn negative_contrast(color: HexColor) -> HexColor {
         HexColor([255, 255, 255, 255])
     }
 }
+
 
 
 

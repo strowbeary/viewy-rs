@@ -1,5 +1,5 @@
 use std::slice::Iter;
-use palette::{Darken, Desaturate, Hsluv, IntoColor, Lighten, Oklab, Saturate, Srgb, Srgba, WithAlpha, WithHue};
+use palette::{Darken, Desaturate, Hsl, Hsluv, IntoColor, Lighten, Oklab, RelativeContrast, Saturate, Srgb, Srgba, WithAlpha, WithHue};
 use palette::color_difference::Wcag21RelativeContrast;
 use strum::EnumIter;
 use crate::CONFIG;
@@ -7,6 +7,7 @@ use crate::core::config::HexColor;
 use crate::core::theme::negative_contrast;
 use crate::prelude::Theme;
 
+/// Describe UI colors
 #[derive(EnumIter, Copy, Clone)]
 pub enum Color {
     Accent,
@@ -15,8 +16,8 @@ pub enum Color {
     OnBackground,
     SurfaceDim,
     Surface,
-    OnSurface,
     SurfaceBright,
+    OnSurface,
     AccentuatedSurfaceDim,
     AccentuatedSurface,
     AccentuatedSurfaceBright,
@@ -60,192 +61,185 @@ impl Color {
     }
 
     pub fn get_hex_color(&self, theme_variant: &Theme) -> HexColor {
-
         match self {
-            Color::Accent => {
-                match theme_variant {
-                    Theme::Dark => {CONFIG.colors.accent.dark}
-                    Theme::Auto | Theme::Light => {CONFIG.colors.accent.light}
-                }
-            }
-            Color::Background => {
-                match theme_variant {
-                    Theme::Dark => {CONFIG.colors.background.dark}
-                    Theme::Auto | Theme::Light => {CONFIG.colors.background.light}
-                }
-            }
-            Color::OnBackground => {
+            Color::Accent => match theme_variant {
+                Theme::Dark => CONFIG.colors.accent.dark,
+                Theme::Auto | Theme::Light => CONFIG.colors.accent.light,
+            },
+            Color::OnAccent => {
                 match theme_variant {
                     Theme::Dark => {
-                        let base: Srgba<u8> = negative_contrast(CONFIG.colors.background.dark).into();
-                        let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
-                        let accent: Srgba<u8> = CONFIG.colors.accent.dark.into();
-                        let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
-
-                        let on_background = base_color.with_hue(accent_color.hue).saturate(0.8).darken(0.02);
-
-                        HexColor::from(Srgb::from_linear(on_background.into_color()).with_alpha(255))
+                        println!("OnAccent dark");
+                        negative_contrast(CONFIG.colors.accent.dark)
                     }
                     Theme::Auto | Theme::Light => {
-                        let base: Srgba<u8> = negative_contrast(CONFIG.colors.background.light).into();
-                        let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
-                        let accent: Srgba<u8> = CONFIG.colors.accent.light.into();
-                        let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
-
-                        let on_background = base_color.with_hue(accent_color.hue).saturate(0.8).lighten(0.02);
-
-                        HexColor::from(Srgb::from_linear(on_background.into_color()).with_alpha(255))
+                        println!("OnAccent Light");
+                        negative_contrast(CONFIG.colors.accent.light)
                     }
                 }
-            }
-            Color::Surface => {
-                match theme_variant {
-                    Theme::Dark => {CONFIG.colors.surface.dark}
-                    Theme::Auto | Theme::Light => {
-                        let mut base: Srgba<u8> = CONFIG.colors.surface.light.into();
-                        let accent: Srgba<u8> = CONFIG.colors.accent.light.into();
-
-                        let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
-                        let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
-
-                        let accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.1);
-
-                        HexColor::from(Srgb::from_linear(accentuated_surface.into_color()).with_alpha(255))
-
-                    }
+            },
+            Color::Background => match theme_variant {
+                Theme::Dark => CONFIG.colors.background.dark,
+                Theme::Auto | Theme::Light => CONFIG.colors.background.light,
+            },
+            Color::OnBackground => match theme_variant {
+                Theme::Dark => {
+                    negative_contrast(CONFIG.colors.background.dark)
                 }
-            }
-            Color::SurfaceDim => {
-                match theme_variant {
-                    Theme::Dark => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::Surface, theme_variant).into();
-                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
-
-                        let lightened_color = color.darken(0.1);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
-                    Theme::Auto | Theme::Light => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::Surface, theme_variant).into();
-                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
-
-                        let lightened_color = color.darken(0.06);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
+                Theme::Auto | Theme::Light => {
+                    negative_contrast(CONFIG.colors.background.light)
                 }
-            }
-            Color::SurfaceBright => {
-                match theme_variant {
-                    Theme::Dark => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::Surface, theme_variant).into();
-                        let color: Hsluv = surface.without_alpha().into_linear::<f32>().into_color();
+            },
+            Color::SurfaceDim => match theme_variant {
+                Theme::Dark => {
+                    let mut surface: Srgba<u8> = Color::get_hex_color(&Color::Surface, theme_variant).into();
+                    let color: Hsluv = surface.without_alpha().into_linear::<f32>().into_color();
 
-                        let lightened_color = color.lighten(0.06);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
-                    Theme::Auto | Theme::Light => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::Surface, theme_variant).into();
-                        let color: Hsluv = surface.without_alpha().into_linear::<f32>().into_color();
-
-                        let lightened_color = color.lighten(0.5);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
+                    let lightened_color = color.darken(0.3);
+                    surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
+                    HexColor::from(surface)
                 }
-            }
-            Color::AccentuatedSurfaceDim => {
-                match theme_variant {
-                    Theme::Dark => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurface, theme_variant).into();
-                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
+                Theme::Auto | Theme::Light => {
+                    let mut surface: Srgba<u8> = Color::get_hex_color(&Color::Surface, theme_variant).into();
+                    let color: Hsluv = surface.without_alpha().into_linear::<f32>().into_color();
 
-                        let lightened_color = color.darken(0.1);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
-                    Theme::Auto | Theme::Light => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurface, theme_variant).into();
-                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
-
-                        let lightened_color = color.darken(0.06);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
+                    let lightened_color = color.darken(0.06);
+                    surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
+                    HexColor::from(surface)
                 }
-            }
-            Color::AccentuatedSurface => {
-                match theme_variant {
-                    Theme::Dark => {
-                        let mut background: Srgba<u8> = CONFIG.colors.surface.dark.into();
-                        let accent: Srgba<u8> = CONFIG.colors.accent.dark.into();
-                        let background_color: Hsluv = background.without_alpha().into_linear::<f32>().into_color();
-                        let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
-                        let luminance = Srgba::<f64>::from_format(accent).relative_luminance();
-                        let accentuated_surface = if luminance.luma == 1.0 {
-                            background_color.lighten(0.1)
-                        } else {
-                            background_color.with_hue(accent_color.hue).saturate(1.0).lighten(0.1)
-                        };
+            },
+            Color::Surface => match theme_variant {
+                Theme::Dark => {
+                    let base: Srgba<u8> = CONFIG.colors.surface.dark.into();
+                    let accent: Srgba<u8> = CONFIG.colors.accent.dark.into();
 
+                    let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
+                    let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
 
-                        HexColor::from(Srgb::from_linear(accentuated_surface.into_color()).with_alpha(255))
-                    }
-                    Theme::Auto | Theme::Light => {
-                        let mut background: Srgba<u8> = CONFIG.colors.surface.light.into();
-                        let accent: Srgba<u8> = CONFIG.colors.accent.light.into();
-                        let background_color: Hsluv = background.without_alpha().into_linear::<f32>().into_color();
-                        let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
-                        let luminance = Srgba::<f64>::from_format(accent).relative_luminance();
-                        let accentuated_surface = if luminance.luma == 0.0 {
-                            background_color.darken(0.05)
-                        } else {
-                            background_color.with_hue(accent_color.hue).saturate(1.0).darken(0.05)
-                        };
+                    let mut accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.1);
 
-                        HexColor::from(Srgb::from_linear(accentuated_surface.into_color()).with_alpha(255))
-                    }
+                    HexColor::from(Srgb::from_linear(accentuated_surface.into_color()).with_alpha(255))
                 }
-            }
-            Color::AccentuatedSurfaceBright => {
-                match theme_variant {
-                    Theme::Dark => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurface, theme_variant).into();
-                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
+                Theme::Auto | Theme::Light => {
+                    let base: Srgba<u8> = CONFIG.colors.surface.light.into();
+                    let accent: Srgba<u8> = CONFIG.colors.accent.light.into();
 
-                        let lightened_color = color.lighten(0.06);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
-                    Theme::Auto | Theme::Light => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurface, theme_variant).into();
-                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
+                    let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
+                    let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
 
-                        let lightened_color = color.lighten(0.5);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
+                    let mut accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.1);
+
+
+                    HexColor::from(Srgb::from_linear(accentuated_surface.into_color()).with_alpha(255))
                 }
-            }
-            Color::Success => {
-                match theme_variant {
-                    Theme::Dark => {
-                        CONFIG.colors.success.dark
-                    }
-                    Theme::Auto | Theme::Light => {
-                        CONFIG.colors.success.light
-                    }
+            },
+            Color::SurfaceBright => match theme_variant {
+                Theme::Dark => {
+                    let mut surface: Srgba<u8> = Color::get_hex_color(&Color::Surface, theme_variant).into();
+                    let color: Hsluv = surface.without_alpha().into_linear::<f32>().into_color();
+
+                    let lightened_color = color.lighten(0.06);
+                    surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
+                    HexColor::from(surface)
                 }
-            }
+                Theme::Auto | Theme::Light => {
+                    let mut surface: Srgba<u8> = Color::get_hex_color(&Color::Surface, theme_variant).into();
+                    let color: Hsluv = surface.without_alpha().into_linear::<f32>().into_color();
+
+                    let lightened_color = color.lighten(0.06);
+                    surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
+                    HexColor::from(surface)
+                }
+            },
+            Color::OnSurface => match theme_variant {
+                Theme::Dark => {
+                    let base: Srgba<u8> = negative_contrast(CONFIG.colors.surface.dark).into();
+                    let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
+                    let accent: Srgba<u8> = CONFIG.colors.accent.dark.into();
+                    let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
+
+                    let mut on_surface = base_color.with_hue(accent_color.hue).saturate(0.8).darken(0.02);
+                    if !is_contrast_sufficient(CONFIG.colors.surface.dark, on_surface, 4.5) {
+                        on_surface = adjust_contrast(on_surface, true);
+                    }
+
+                    HexColor::from(Srgb::from_linear(on_surface.into_color()).with_alpha(255))
+                }
+                Theme::Auto | Theme::Light => {
+                    let base: Srgba<u8> = negative_contrast(CONFIG.colors.surface.light).into();
+                    let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
+                    let accent: Srgba<u8> = CONFIG.colors.accent.light.into();
+                    let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
+
+                    let mut on_surface = base_color.with_hue(accent_color.hue).saturate(0.8).lighten(0.02);
+                    if !is_contrast_sufficient(CONFIG.colors.surface.light, on_surface, 4.5) {
+                        on_surface = adjust_contrast(on_surface, false);
+                    }
+
+                    HexColor::from(Srgb::from_linear(on_surface.into_color()).with_alpha(255))
+                }
+            },
+            Color::AccentuatedSurfaceDim => match theme_variant {
+                Theme::Dark => {
+                    let mut accentuated_surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurface, theme_variant).into();
+                    let color: Hsluv = accentuated_surface.without_alpha().into_linear::<f32>().into_color();
+
+                    let lightened_color = color.darken(0.3);
+                    accentuated_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(accentuated_surface.alpha);
+                    HexColor::from(accentuated_surface)
+                }
+                Theme::Auto | Theme::Light => {
+                    let mut accentuated_surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurface, theme_variant).into();
+                    let color: Hsluv = accentuated_surface.without_alpha().into_linear::<f32>().into_color();
+
+                    let lightened_color = color.darken(0.06);
+                    accentuated_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(accentuated_surface.alpha);
+                    HexColor::from(accentuated_surface)
+                }
+            },
+            Color::AccentuatedSurface => match theme_variant {
+                Theme::Dark => {
+                    let base: Srgba<u8> = CONFIG.colors.surface.dark.into();
+                    let accent: Srgba<u8> = CONFIG.colors.accent.dark.into();
+
+                    let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
+                    let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
+
+                    let mut accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.5);
+
+                    HexColor::from(Srgb::from_linear(accentuated_surface.into_color()).with_alpha(255))
+                }
+                Theme::Auto | Theme::Light => {
+                    let base: Srgba<u8> = CONFIG.colors.surface.light.into();
+                    let accent: Srgba<u8> = CONFIG.colors.accent.light.into();
+
+                    let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
+                    let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
+
+                    let mut accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.5);
+
+
+                    HexColor::from(Srgb::from_linear(accentuated_surface.into_color()).with_alpha(255))
+                }
+            },
+            Color::AccentuatedSurfaceBright => match theme_variant {
+                Theme::Dark => {
+                    let mut accentuated_surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurface, theme_variant).into();
+                    let color: Hsluv = accentuated_surface.without_alpha().into_linear::<f32>().into_color();
+
+                    let lightened_color = color.lighten(0.06);
+                    accentuated_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(accentuated_surface.alpha);
+                    HexColor::from(accentuated_surface)
+                }
+                Theme::Auto | Theme::Light => {
+                    let mut accentuated_surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurface, theme_variant).into();
+                    let color: Hsluv = accentuated_surface.without_alpha().into_linear::<f32>().into_color();
+
+                    let lightened_color = color.lighten(0.06);
+                    accentuated_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(accentuated_surface.alpha);
+                    HexColor::from(accentuated_surface)
+                }
+            },
             Color::Border => {
                 let background: Srgba<u8> = Color::get_hex_color(&Color::OnBackground, theme_variant).into();
                 let background_color: Hsluv = background.without_alpha().into_linear::<f32>().into_color();
@@ -261,147 +255,142 @@ impl Color {
                 };
 
                 HexColor::from(Srgb::from_linear(border.into_color()).with_alpha(255))
-            }
-            Color::Destructive => {
-                match theme_variant {
-                    Theme::Dark => {
-                        CONFIG.colors.destructive.dark
-                    }
-                    Theme::Auto | Theme::Light => {
-                        CONFIG.colors.destructive.light
-                    }
+            },
+            Color::Success => match theme_variant {
+                Theme::Dark => CONFIG.colors.success.dark,
+                Theme::Auto | Theme::Light => CONFIG.colors.success.light,
+            },
+            Color::SuccessSurface => match theme_variant {
+                Theme::Dark => {
+                    let mut success_surface: Srgba<u8> = Color::get_hex_color(&Color::Success, theme_variant).into();
+                    let color: Hsluv = success_surface.without_alpha().into_linear::<f32>().into_color();
+
+                    let lightened_color = color.darken(0.15);
+                    success_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(success_surface.alpha);
+                    HexColor::from(success_surface)
                 }
-            }
-            Color::DestructiveSurface => {
-                let surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurface, theme_variant).into();
-                let surface_color: Hsluv = surface.without_alpha().into_linear::<f32>().into_color();
-                let base: Srgba<u8> = Color::get_hex_color(&Color::Destructive, theme_variant).into();
-                let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
+                Theme::Auto | Theme::Light => {
+                    let mut success_surface: Srgba<u8> = Color::get_hex_color(&Color::Success, theme_variant).into();
+                    let color: Hsluv = success_surface.without_alpha().into_linear::<f32>().into_color();
 
-                let success_surface = surface_color.with_hue(base_color.hue);
-
-                HexColor::from(Srgb::from_linear(success_surface.into_color()).with_alpha(255))
-            }
-            Color::Warning => {
-                match theme_variant {
-                    Theme::Dark => {
-                        CONFIG.colors.warning.dark
-                    }
-                    Theme::Auto | Theme::Light => {
-                        CONFIG.colors.warning.light
-                    }
+                    let lightened_color = color.lighten(0.03);
+                    success_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(success_surface.alpha);
+                    HexColor::from(success_surface)
                 }
-            }
-            Color::WarningSurface => {
-                let surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurfaceBright, theme_variant).into();
-                let surface_color: Hsluv = surface.without_alpha().into_linear::<f32>().into_color();
-                let base: Srgba<u8> = Color::get_hex_color(&Color::Warning, theme_variant).into();
-                let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
-
-                let success_surface = surface_color.with_hue(base_color.hue);
-
-                HexColor::from(Srgb::from_linear(success_surface.into_color()).with_alpha(255))
-            }
-            Color::OnAccent => {
-                match theme_variant {
-                    Theme::Dark => {
-                        negative_contrast(CONFIG.colors.accent.dark)
-                    }
-                    Theme::Auto | Theme::Light => {
-                        negative_contrast(CONFIG.colors.accent.light)
-                    }
+            },
+            Color::Destructive => match theme_variant {
+                Theme::Dark => CONFIG.colors.destructive.dark,
+                Theme::Auto | Theme::Light => CONFIG.colors.destructive.light,
+            },
+            Color::OnDestructive => match theme_variant {
+                Theme::Dark => {
+                    negative_contrast(CONFIG.colors.destructive.dark)
                 }
-            }
-
-            Color::OnSurface => {
-                match theme_variant {
-                    Theme::Dark => {
-                        negative_contrast(CONFIG.colors.surface.dark)
-                    }
-                    Theme::Auto | Theme::Light => {
-                        negative_contrast(CONFIG.colors.surface.light)
-                    }
+                Theme::Auto | Theme::Light => {
+                    negative_contrast(CONFIG.colors.destructive.light)
                 }
-            }
-            Color::SuccessSurface => {
-                let surface: Srgba<u8> = Color::get_hex_color(&Color::AccentuatedSurfaceBright, theme_variant).into();
-                let surface_color: Hsluv = surface.without_alpha().into_linear::<f32>().into_color();
-                let success: Srgba<u8> = Color::get_hex_color(&Color::Success, theme_variant).into();
-                let success_color: Hsluv = success.without_alpha().into_linear::<f32>().into_color();
+            },
+            Color::DestructiveSurfaceDim => match theme_variant {
+                Theme::Dark => {
+                    let mut destructive_surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
+                    let color: Hsluv = destructive_surface.without_alpha().into_linear::<f32>().into_color();
 
-                let success_surface = surface_color.with_hue(success_color.hue);
-
-                HexColor::from(Srgb::from_linear(success_surface.into_color()).with_alpha(255))
-
-            }
-            Color::OnDestructive => {
-                match theme_variant {
-                    Theme::Dark => {
-                        let base: Srgba<u8> = negative_contrast(CONFIG.colors.destructive.dark).into();
-                        let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
-                        let accent: Srgba<u8> = CONFIG.colors.destructive.dark.into();
-                        let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
-
-                        let on_background = base_color.with_hue(accent_color.hue).saturate(0.8).darken(0.02);
-
-                        HexColor::from(Srgb::from_linear(on_background.into_color()).with_alpha(255))
-                    }
-                    Theme::Auto | Theme::Light => {
-                        let base: Srgba<u8> = negative_contrast(CONFIG.colors.destructive.light).into();
-                        let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
-                        let accent: Srgba<u8> = CONFIG.colors.destructive.light.into();
-                        let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
-
-                        let on_background = base_color.with_hue(accent_color.hue).saturate(0.8).lighten(0.02);
-
-                        HexColor::from(Srgb::from_linear(on_background.into_color()).with_alpha(255))
-                    }
+                    let lightened_color = color.darken(0.3);
+                    destructive_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(destructive_surface.alpha);
+                    HexColor::from(destructive_surface)
                 }
-            }
-            Color::DestructiveSurfaceDim => {
-                match theme_variant {
-                    Theme::Dark => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
-                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
+                Theme::Auto | Theme::Light => {
+                    let mut destructive_surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
+                    let color: Hsluv = destructive_surface.without_alpha().into_linear::<f32>().into_color();
 
-                        let lightened_color = color.darken(0.1);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
-                    Theme::Auto | Theme::Light => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
-                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
-
-                        let lightened_color = color.darken(0.06);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
+                    let lightened_color = color.darken(0.06);
+                    destructive_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(destructive_surface.alpha);
+                    HexColor::from(destructive_surface)
                 }
-            }
-            Color::DestructiveSurfaceBright => {
-                match theme_variant {
-                    Theme::Dark => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
-                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
+            },
+            Color::DestructiveSurface => match theme_variant {
+                Theme::Dark => {
+                    let base: Srgba<u8> = CONFIG.colors.surface.dark.into();
+                    let destructive: Srgba<u8> = CONFIG.colors.destructive.dark.into();
 
-                        let lightened_color = color.lighten(0.06);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
-                    Theme::Auto | Theme::Light => {
-                        let mut surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
-                        let color: Oklab = surface.without_alpha().into_linear::<f32>().into_color();
+                    let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
+                    let destructive_color: Hsluv = destructive.without_alpha().into_linear::<f32>().into_color();
 
-                        let lightened_color = color.lighten(0.5);
-                        // Converting back to non-linear sRGB with u8 components.
-                        surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(surface.alpha);
-                        HexColor::from(surface)
-                    }
+                    let mut destructive_surface = base_color.with_hue(destructive_color.hue).saturate(0.7);
+
+
+                    HexColor::from(Srgb::from_linear(destructive_surface.into_color()).with_alpha(255))
                 }
-            }
+                Theme::Auto | Theme::Light => {
+                    let base: Srgba<u8> = CONFIG.colors.surface.light.into();
+                    let destructive: Srgba<u8> = CONFIG.colors.destructive.light.into();
+
+                    let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
+                    let destructive_color: Hsluv = destructive.without_alpha().into_linear::<f32>().into_color();
+
+                    let mut destructive_surface = base_color.with_hue(destructive_color.hue).saturate(0.7);
+
+
+                    HexColor::from(Srgb::from_linear(destructive_surface.into_color()).with_alpha(255))
+                }
+            },
+            Color::DestructiveSurfaceBright => match theme_variant {
+                Theme::Dark => {
+                    let mut destructive_surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
+                    let color: Hsluv = destructive_surface.without_alpha().into_linear::<f32>().into_color();
+
+                    let lightened_color = color.lighten(0.06);
+                    destructive_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(destructive_surface.alpha);
+                    HexColor::from(destructive_surface)
+                }
+                Theme::Auto | Theme::Light => {
+                    let mut destructive_surface: Srgba<u8> = Color::get_hex_color(&Color::DestructiveSurface, theme_variant).into();
+                    let color: Hsluv = destructive_surface.without_alpha().into_linear::<f32>().into_color();
+
+                    let lightened_color = color.lighten(0.06);
+                    destructive_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(destructive_surface.alpha);
+                    HexColor::from(destructive_surface)
+                }
+            },
+            Color::Warning => match theme_variant {
+                Theme::Dark => CONFIG.colors.warning.dark,
+                Theme::Auto | Theme::Light => CONFIG.colors.warning.light,
+            },
+            Color::WarningSurface => match theme_variant {
+                Theme::Dark => {
+                    let mut warning_surface: Srgba<u8> = Color::get_hex_color(&Color::Warning, theme_variant).into();
+                    let color: Hsluv = warning_surface.without_alpha().into_linear::<f32>().into_color();
+
+                    let lightened_color = color.darken(0.15);
+                    warning_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(warning_surface.alpha);
+                    HexColor::from(warning_surface)
+                }
+                Theme::Auto | Theme::Light => {
+                    let mut warning_surface: Srgba<u8> = Color::get_hex_color(&Color::Warning, theme_variant).into();
+                    let color: Hsluv = warning_surface.without_alpha().into_linear::<f32>().into_color();
+
+                    let lightened_color = color.lighten(0.03);
+                    warning_surface = Srgb::from_linear(lightened_color.into_color()).with_alpha(warning_surface.alpha);
+                    HexColor::from(warning_surface)
+                }
+            },
         }
+    }
+}
+
+/// Function to check if contrast is sufficient according to WCAG 2.1
+fn is_contrast_sufficient(background: HexColor, foreground: Hsluv, mcr: f32) -> bool {
+    let background_color: Srgba<f32> = background.into();
+    let foreground_color: Srgba<f32> = Srgb::from_linear(foreground.into_color()).with_alpha(1.0);
+    let contrast = background_color.relative_contrast(*foreground_color);
+    contrast >= mcr // Minimum contrast ratio for normal text
+}
+
+/// Function to adjust color to meet contrast requirements
+fn adjust_contrast(color: Hsluv, dark_mode: bool) -> Hsluv {
+    if dark_mode {
+        color.lighten(0.4)
+    } else {
+        color.darken(0.4)
     }
 }
