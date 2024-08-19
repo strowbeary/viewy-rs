@@ -1,9 +1,8 @@
-use crate::node::{Node, NodeContainer};
 use crate::components::Alignment;
-use std::borrow::BorrowMut;
-use crate::{DefaultModifiers, sp, Renderable};
 use crate::components::{Appendable, ChildContainer};
-
+use crate::node::{Node, NodeContainer};
+use crate::{sp, DefaultModifiers, Renderable};
+use std::borrow::BorrowMut;
 
 #[derive(Debug, Clone)]
 pub struct Grid {
@@ -30,41 +29,61 @@ impl Grid {
     }
     pub fn gap(&mut self, gaps: Vec<i32>) -> Self {
         let params: Vec<String> = gaps.iter().map(|size| sp(size.clone())).collect();
-        self.node.node_style.push(("grid-gap".to_string(), params.join(" ")));
+        self.node
+            .node_style
+            .push(("grid-gap".to_string(), params.join(" ")));
         self.clone()
     }
     pub fn columns(&mut self, schema: &str) -> Self {
-        self.node.node_style.push(("grid-template-columns".to_string(), schema.to_string()));
+        self.node
+            .node_style
+            .push(("grid-template-columns".to_string(), schema.to_string()));
         self.clone()
     }
 
+    pub fn responsive_columns(&mut self, schemas: Vec<(&str, &str)>) -> Self {}
+
     pub fn areas(&mut self, schema: &str) -> Self {
-        self.node.node_style.push(("grid-template-areas".to_string(), schema.to_string()));
+        self.node
+            .node_style
+            .push(("grid-template-areas".to_string(), schema.to_string()));
         self.clone()
     }
 
     pub fn rows(&mut self, schema: &str) -> Self {
-        self.node.node_style.push(("grid-template-rows".to_string(), schema.to_string()));
+        self.node
+            .node_style
+            .push(("grid-template-rows".to_string(), schema.to_string()));
         self.clone()
     }
     pub fn auto_columns(&mut self, size: &str) -> Self {
-        self.node.node_style.push(("grid-auto-columns".to_string(), size.to_string()));
+        self.node
+            .node_style
+            .push(("grid-auto-columns".to_string(), size.to_string()));
         self.clone()
     }
     pub fn auto_rows(&mut self, size: &str) -> Self {
-        self.node.node_style.push(("grid-auto-rows".to_string(), size.to_string()));
+        self.node
+            .node_style
+            .push(("grid-auto-rows".to_string(), size.to_string()));
         self.clone()
     }
     pub fn auto_flow(&mut self, direction: &str) -> Self {
-        self.node.node_style.push(("grid-auto-flow".to_string(), direction.to_string()));
+        self.node
+            .node_style
+            .push(("grid-auto-flow".to_string(), direction.to_string()));
         self.clone()
     }
     pub fn align_items(&mut self, value: &str) -> Self {
-        self.node.node_style.push(("align-items".to_string(), value.to_string()));
+        self.node
+            .node_style
+            .push(("align-items".to_string(), value.to_string()));
         self.clone()
     }
     pub fn justify_content(&mut self, value: &str) -> Self {
-        self.node.node_style.push(("justify-content".to_string(), value.to_string()));
+        self.node
+            .node_style
+            .push(("justify-content".to_string(), value.to_string()));
         self.clone()
     }
 }
@@ -85,12 +104,12 @@ impl Renderable for Grid {
             .add_class(
                 format!("grid--align-{:?}", self.alignment)
                     .to_lowercase()
-                    .as_str()
+                    .as_str(),
             )
             .node;
-        self.children.iter()
-            .for_each(|child|
-                view.children.push(child.render()));
+        self.children
+            .iter()
+            .for_each(|child| view.children.push(child.render()));
         view
     }
 }

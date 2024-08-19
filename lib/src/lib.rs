@@ -29,42 +29,27 @@ mod config;
 #[cfg(test)]
 mod tests {
     use std::time::Instant;
-    use crate::components::{Appendable, View};
-    use crate::Renderable;
+    use crate::components::{Appendable, Button, ButtonStyle, View};
+    use crate::{Page, Renderable, RenderMode};
 
     #[test]
-    fn it_works() {
+    fn benchmark() {
 
         let start = Instant::now();
         let mut view = View::new();
-        for i in 0..10000 {
-            view.append_child(View::new());
+        for i in 0..50000 {
+            view.append_child(
+                Button::new("Label", ButtonStyle::Filled));
         }
+        let render_start = Instant::now();
+        let _ = Page::new("Render test", &|content| {
+            Box::new(View::new().append_child(content))
+        } ,view).compile(RenderMode::Complete);
 
-        println!("{}", view.to_html());
+
+        let render_duration = render_start.elapsed();
         let duration = start.elapsed();
-
-        println!("{:?}", duration);
-    }
-}
-#[cfg(test)]
-mod tests {
-    use std::time::Instant;
-    use crate::components::{Appendable, View};
-    use crate::Renderable;
-
-    #[test]
-    fn it_works() {
-
-        let start = Instant::now();
-        let mut view = View::new();
-        for i in 0..10000 {
-            view.append_child(View::new());
-        }
-
-        println!("{}", view.to_html());
-        let duration = start.elapsed();
-
-        println!("{:?}", duration);
+        println!("Render duration = {:?}", render_duration);
+        println!("Global duration = {:?}", duration);
     }
 }

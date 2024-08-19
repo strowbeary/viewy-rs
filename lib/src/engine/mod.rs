@@ -1,8 +1,8 @@
 mod assets;
-mod rendering;
 mod renderable;
+mod rendering;
+mod responsive;
 
 pub use assets::*;
-pub use rendering::*;
 pub use renderable::*;
-
+pub use rendering::*;
