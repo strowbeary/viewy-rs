@@ -41,7 +41,7 @@ impl Grid {
         self.clone()
     }
 
-    pub fn responsive_columns(&mut self, schemas: Vec<(&str, &str)>) -> Self {}
+    //pub fn responsive_columns(&mut self, schemas: Vec<(&str, &str)>) -> Self {}
 
     pub fn areas(&mut self, schema: &str) -> Self {
         self.node

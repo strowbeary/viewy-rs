@@ -24,7 +24,7 @@ fn default_catch_page(status: Status) -> RawHtml<String>{
                     })
                     .append_child({
                         Button::new("Return to home", ButtonStyle::Flat)
-                            .icon(Lucide::Home)
+                            .icon(Lucide::House)
                             .margin_top(50)
                             .action("/")
                     })

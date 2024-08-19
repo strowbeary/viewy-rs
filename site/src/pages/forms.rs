@@ -91,33 +91,36 @@ pub fn forms() -> VStack {
                     Form::new("async-auto-submit-form", "")
                         .async_form()
                         .append_child({
-                            Picker::new("auto-submit-picker", "2", PickerStyle::Segmented)
-                                .submit_on_change(true)
-                                .append_child({ PickerOption::new("One", "1") })
-                                .append_child({ PickerOption::new("Two", "2") })
-                                .append_child({ PickerOption::new("Three", "3") })
+                            let mut picker = Picker::new("auto-submit-picker", "2", PickerStyle::Segmented)
+                                .submit_on_change(true);
+                            picker.append_child({ PickerOption::new("One", "1") });
+                            picker.append_child({ PickerOption::new("Two", "2") });
+                            picker.append_child({ PickerOption::new("Three", "3") });
+                            picker
                         })
                 })
                 .append_child({
                     Form::new("async-auto-submit-dropdown", "")
                         .async_form()
                         .append_child({
-                            Picker::new("auto-submit-dropdown", "2", PickerStyle::Dropdown)
-                                .submit_on_change(true)
-                                .append_child({ PickerOption::new("One", "1") })
-                                .append_child({ PickerOption::new("Two", "2") })
-                                .append_child({ PickerOption::new("Three", "3") })
+                            let mut picker = Picker::new("auto-submit-dropdown", "2", PickerStyle::Dropdown)
+                                .submit_on_change(true);
+                            picker.append_child({ PickerOption::new("One", "1") });
+                            picker.append_child({ PickerOption::new("Two", "2") });
+                            picker.append_child({ PickerOption::new("Three", "3") });
+                            picker
                         })
                 })
                 .append_child({
                     Form::new("async-auto-submit-radio", "")
                         .async_form()
                         .append_child({
-                            Picker::new("auto-submit-radio", "2", PickerStyle::RadioGroup)
-                                .submit_on_change(true)
-                                .append_child({ PickerOption::new("One", "1") })
-                                .append_child({ PickerOption::new("Two", "2") })
-                                .append_child({ PickerOption::new("Three", "3") })
+                            let mut picker = Picker::new("auto-submit-radio", "2", PickerStyle::RadioGroup)
+                                .submit_on_change(true);
+                            picker.append_child({ PickerOption::new("One", "1") });
+                            picker.append_child({ PickerOption::new("Two", "2") });
+                            picker.append_child({ PickerOption::new("Three", "3") });
+                            picker
                         })
                 })
         })

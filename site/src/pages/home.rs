@@ -325,45 +325,48 @@ as opposed to using 'Content here, content here', making it look like readable E
                 VStack::new(Alignment::Stretch)
                     .gap(vec![16])
                     .append_child({
-                        Picker::new("test1", "2", PickerStyle::Segmented)
-                            .label("Segmented picker")
-                            .append_child({
+                        let mut picker = Picker::new("test1", "2", PickerStyle::Segmented)
+                            .label("Segmented picker");
+                        picker.append_child({
                                 PickerOption::new("Test 1", "1").icon(Lucide::Users)
-                            })
-                            .append_child({
+                            });
+                        picker.append_child({
                                 PickerOption::new("Test 2", "2")
-                            })
-                            .append_child({
+                            });
+                        picker.append_child({
                                 PickerOption::new("Test 3", "3")
-                            })
+                            });picker
+
                     })
                     .append_child({
-                        Picker::new("test2", "2", PickerStyle::RadioGroup)
-                            .label("Radio group picker")
-                            .append_child({
+                        let mut picker = Picker::new("test2", "2", PickerStyle::RadioGroup)
+                            .label("Radio group picker");
+                        picker.append_child({
                                 PickerOption::new("Test 1 - ignored icon", "1")
                                     .icon(Lucide::User)
-                            })
-                            .append_child({
+                            });
+                        picker.append_child({
                                 PickerOption::new("Test 2", "2")
-                            })
-                            .append_child({
+                            });
+                        picker.append_child({
                                 PickerOption::new("Test 3", "3")
-                            })
+                            });
+                        picker
                     })
                     .append_child({
-                        Picker::new("test3", "2", PickerStyle::Dropdown)
-                            .label("Dropdown picker")
-                            .append_child({
+                        let mut picker = Picker::new("test3", "2", PickerStyle::Dropdown)
+                            .label("Dropdown picker");
+                        picker.append_child({
                                 PickerOption::new("Test 1 - ignored icon", "1")
                                     .icon(Lucide::User)
-                            })
-                            .append_child({
+                            });
+                        picker.append_child({
                                 PickerOption::new("Test 2", "2")
-                            })
-                            .append_child({
+                            });
+                        picker.append_child({
                                 PickerOption::new("Test 3", "3")
-                            })
+                            });
+                        picker
                     })
             })
         })
