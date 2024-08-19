@@ -10,6 +10,7 @@
 
   &--horizontal-nav {
     flex-direction: row;
+    justify-content: space-evenly;
     gap: sp(6);
   }
 
