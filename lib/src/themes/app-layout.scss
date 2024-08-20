@@ -1,3 +1,4 @@
+$break-point: 810px;
 .app-layout {
   display: grid;
   grid-template-columns: auto 1fr;
@@ -7,7 +8,7 @@
   width: 100vw;
   height: 100dvh;
 
-  @media screen and (max-width: 500px) {
+  @media screen and (max-width: $break-point) {
     grid-template-columns: 1fr;
     grid-template-rows: 1fr auto;
     grid-template-areas: "content" "navigation-view";
@@ -16,14 +17,14 @@
   &__navigation-view {
     background: var(--surface);
     grid-area: navigation-view;
-    @media screen and (min-width: 501px) {
+    @media screen and (min-width: ($break-point + 1)) {
       padding: scale(4);
       &--mobile {
         display: none;
       }
     }
 
-    @media screen and (max-width: 501px) {
+    @media screen and (max-width: ($break-point + 1)) {
       padding: scale(2);
       &--desktop {
         display: none;
