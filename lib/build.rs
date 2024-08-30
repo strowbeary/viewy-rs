@@ -2,7 +2,7 @@ extern crate heck;
 extern crate quote;
 extern crate scraper;
 extern crate serde;
-extern crate git_download;
+extern crate download_git;
 extern crate cmd_lib;
 
 use cmd_lib::run_cmd;

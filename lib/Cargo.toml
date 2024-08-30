@@ -41,7 +41,7 @@ quote = "1.0"
 scraper = "0.18"
 figment = { version = "0.10", features = ["toml", "env"]}
 serde = { version = "1.0", features = ["serde_derive"] }
-git-download = "0.1"
+download_git = "0.0.2"
 cmd_lib = "1.9"
 uuid = { version = "1", features = ["v4"] }
 

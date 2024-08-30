@@ -258,21 +258,21 @@ impl Renderable for Field {
                                     HStack::new(Alignment::Center)
                                         .gap(vec![scale(2)])
                                         .append_child({
-                                            Button::new("Titre 1", ButtonStyle::Flat)
+                                            Button::new("H1", ButtonStyle::Flat)
                                                 .padding(vec![8])
                                                 .height(&sp(32))
                                                 .add_class("ql-header")
                                                 .set_attr("value", "1")
                                         })
                                         .append_child({
-                                            Button::new("Titre 2", ButtonStyle::Flat)
+                                            Button::new("H2", ButtonStyle::Flat)
                                                 .padding(vec![8])
                                                 .height(&sp(32))
                                                 .add_class("ql-header")
                                                 .set_attr("value", "2")
                                         })
                                         .append_child({
-                                            Button::new("Titre 3", ButtonStyle::Flat)
+                                            Button::new("H3", ButtonStyle::Flat)
                                                 .padding(vec![8])
                                                 .height(&sp(32))
                                                 .add_class("ql-header")
@@ -303,21 +303,35 @@ impl Renderable for Field {
                                         })
                                 })
                                 .append_child({
-                                    Button::icon_only(Lucide::ListX, ButtonStyle::Flat)
-                                        .add_class("ql-clean")
-                                })
-                                .append_child({
                                     HStack::new(Alignment::Center)
+                                        .add_class("ql-formats")
                                         .gap(vec![scale(2)])
                                         .append_child({
                                             Button::icon_only(Lucide::List, ButtonStyle::Flat)
                                                 .add_class("ql-list")
                                                 .set_attr("value", "bullet")
+                                        }) .append_child({
+                                            Button::icon_only(Lucide::ListOrdered, ButtonStyle::Flat)
+                                                .add_class("ql-list")
+                                                .set_attr("value", "ordered")
                                         })
+                                })
+                                .append_child({
+                                    HStack::new(Alignment::Center)
+                                        .add_class("ql-formats")
+                                        .gap(vec![scale(2)])
                                         .append_child({
                                             Button::icon_only(Lucide::Link2, ButtonStyle::Flat)
                                                 .add_class("ql-link")
                                         })
+                                        .append_child({
+                                            Button::icon_only(Lucide::ImagePlus, ButtonStyle::Flat)
+                                                .add_class("ql-image")
+                                        })
+                                })
+                                .append_child({
+                                    Button::icon_only(Lucide::RemoveFormatting, ButtonStyle::Flat)
+                                        .add_class("ql-clean")
                                 })
                         })
                         .append_child(input)

@@ -228,7 +228,7 @@ impl Fairing for ContentSecurityPolicy {
 
 		response.set_header(Header::new(
 			"Content-Security-Policy",
-				"frame-src 'self' data: gap: *.gouvizee.com youtube.com *.youtube.com twitter.com *.twitter.com; script-src 'self' cdn.redoc.ly *.gouvizee.com youtube.com *.youtube.com twitter.com *.twitter.com *.twimg.com unpkg.com 'unsafe-inline'",
+				"frame-src 'self' data: gap: *.gouvizee.com youtube.com *.youtube.com twitter.com *.twitter.com; script-src 'self' cdn.jsdelivr.net cdn.redoc.ly *.gouvizee.com youtube.com *.youtube.com twitter.com *.twitter.com *.twimg.com unpkg.com 'unsafe-inline'",
 
 		));
 

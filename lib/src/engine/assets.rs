@@ -115,9 +115,6 @@ fn get_scripts(config: &Config) -> Vec<String> {
         include_str!("../js/multiple-file-input.js").to_string(),
         include_str!("../js/multivalue-field.js").to_string(),
     ];
-    if config.features.rich_text_editor {
-        scripts.push(include_str!("../js/quill-editor.js").to_string());
-    }
     if config.features.sortable_stack {
         scripts.push(include_str!("../js/Sortable.min.js").to_string());
         scripts.push(include_str!("../js/sortable-stack.js").to_string());
