@@ -1,6 +1,6 @@
 [package]
 name = "viewy-codegen"
-version = "1.12.7-beta.1"
+version = "1.12.7"
 authors = ["Rémi Caillot <dev@remicaillot.fr>"]
 description = "Procedural macros for Viewy web ui library."
 keywords = ["viewy", "web", "ui", "code", "generation"]
