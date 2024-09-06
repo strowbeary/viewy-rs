@@ -285,7 +285,7 @@ impl Renderable for Picker {
                     option_list.append_child({
                         let mut radio_row = HStack::new(Alignment::Center).gap(vec![scale(2)]);
                         let radio_id =
-                            format!("picker-radio-{}-{}", self.name.as_str(), option.label);
+                            format!("picker-radio-{}-{}", self.name.as_str(), option.value);
                         let mut radio_button = View::new()
                             .tag("input")
                             .set_attr("type", "radio")

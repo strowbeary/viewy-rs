@@ -1,7 +1,7 @@
 use std::borrow::BorrowMut;
 
 use chrono::{Duration, NaiveDateTime, TimeZone, Utc};
-use html_escape::encode_text;
+use html_escape::{encode_double_quoted_attribute};
 use uuid::Uuid;
 
 use crate::{DefaultModifiers, Overflow, scale, sp};
@@ -224,7 +224,7 @@ impl Renderable for Field {
                     .display("none")
                     .set_attr("id", self.name.as_str())
                     .set_attr("name", self.name.as_str())
-                    .set_attr("value", &encode_text(&field.value.unwrap_or_default()));
+                    .set_attr("value", &encode_double_quoted_attribute(&field.value.unwrap_or_default()));
 
                 if self.required {
                     input.set_attr("required", "required");
