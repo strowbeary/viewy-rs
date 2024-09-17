@@ -39,7 +39,9 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, ins
                 <link rel='stylesheet' href='https://rsms.me/inter/inter.css'>
                 <link href='{base_url}/app.css' rel='stylesheet'>
                 <script src='https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js'></script>
-                <link href='https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.core.css' rel='stylesheet'>
+                <link href='https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.bubble.css' rel='stylesheet' />
+
+                <script src='https://cdn.jsdelivr.net/npm/quill-blot-formatter@1.0.5/dist/quill-blot-formatter.min.js'></script>
 
                 <script src='{base_url}/app.js'></script>
                 <meta charset='utf-8' />

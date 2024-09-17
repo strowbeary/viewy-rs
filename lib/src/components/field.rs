@@ -242,98 +242,10 @@ impl Renderable for Field {
 
                 let id = Uuid::new_v4().to_string();
                 let editor_id = &format!("editor-{}", id);
-                let toolbar_id = &format!("toolbar-{}", id);
                 field.node.children.push({
                     Card::new(CardStyle::Outlined)
+                        .add_class("field__card")
                         .grid_area("input")
-                        .overflow(Overflow::Hidden)
-                        .append_child({
-                            HStack::new(Alignment::Center)
-                                .padding(vec![scale(3)])
-                                .set_attr("id", &toolbar_id)
-                                .gap(vec![scale(4)])
-                                .background("var(--surface)")
-                                .add_class("field__toolbar")
-                                .append_child({
-                                    HStack::new(Alignment::Center)
-                                        .gap(vec![scale(2)])
-                                        .append_child({
-                                            Button::new("H1", ButtonStyle::Flat)
-                                                .padding(vec![8])
-                                                .height(&sp(32))
-                                                .add_class("ql-header")
-                                                .set_attr("value", "1")
-                                        })
-                                        .append_child({
-                                            Button::new("H2", ButtonStyle::Flat)
-                                                .padding(vec![8])
-                                                .height(&sp(32))
-                                                .add_class("ql-header")
-                                                .set_attr("value", "2")
-                                        })
-                                        .append_child({
-                                            Button::new("H3", ButtonStyle::Flat)
-                                                .padding(vec![8])
-                                                .height(&sp(32))
-                                                .add_class("ql-header")
-                                                .set_attr("value", "3")
-                                        })
-                                        .append_child({
-                                            Button::new("Corps de texte", ButtonStyle::Flat)
-                                                .padding(vec![8])
-                                                .height(&sp(32))
-                                                .add_class("ql-header")
-                                                .set_attr("value", "")
-                                        })
-                                })
-                                .append_child({
-                                    HStack::new(Alignment::Center)
-                                        .gap(vec![scale(2)])
-                                        .append_child({
-                                            Button::icon_only(Lucide::Bold, ButtonStyle::Flat)
-                                                .add_class("ql-bold")
-                                        })
-                                        .append_child({
-                                            Button::icon_only(Lucide::Italic, ButtonStyle::Flat)
-                                                .add_class("ql-italic")
-                                        })
-                                        .append_child({
-                                            Button::icon_only(Lucide::Underline, ButtonStyle::Flat)
-                                                .add_class("ql-underline")
-                                        })
-                                })
-                                .append_child({
-                                    HStack::new(Alignment::Center)
-                                        .add_class("ql-formats")
-                                        .gap(vec![scale(2)])
-                                        .append_child({
-                                            Button::icon_only(Lucide::List, ButtonStyle::Flat)
-                                                .add_class("ql-list")
-                                                .set_attr("value", "bullet")
-                                        }) .append_child({
-                                            Button::icon_only(Lucide::ListOrdered, ButtonStyle::Flat)
-                                                .add_class("ql-list")
-                                                .set_attr("value", "ordered")
-                                        })
-                                })
-                                .append_child({
-                                    HStack::new(Alignment::Center)
-                                        .add_class("ql-formats")
-                                        .gap(vec![scale(2)])
-                                        .append_child({
-                                            Button::icon_only(Lucide::Link2, ButtonStyle::Flat)
-                                                .add_class("ql-link")
-                                        })
-                                        .append_child({
-                                            Button::icon_only(Lucide::ImagePlus, ButtonStyle::Flat)
-                                                .add_class("ql-image")
-                                        })
-                                })
-                                .append_child({
-                                    Button::icon_only(Lucide::RemoveFormatting, ButtonStyle::Flat)
-                                        .add_class("ql-clean")
-                                })
-                        })
                         .append_child(input)
                         .append_child({
                             let mut editor = View::new()
@@ -358,14 +270,6 @@ impl Renderable for Field {
                         .add_class("field__helper-text");
                     field.node.children.push(text.render());
                 }
-
-                field.node.children.push({
-                    let mut script = View::new()
-                        .tag("script")
-                        .render();
-                    script.text = Some(format!("new Quill('#{}', {{ modules: {{ toolbar: '#{}' }} }})", editor_id, toolbar_id));
-                    script
-                });
 
 
                 field.node

@@ -163,18 +163,6 @@ fn search_result(
 	})
 }
 
-#[get("/signature")]
-fn signature() -> RawHtml<String> {
-	RawHtml({
-		Page::new(
-			"Viewy showcase – Signature field",
-			&layouts::default_layout,
-			pages::signature_field(),
-		)
-			.compile(RenderMode::Complete)
-	})
-}
-
 #[get("/forms")]
 fn forms() -> RawHtml<String> {
 	RawHtml({
@@ -249,7 +237,6 @@ fn rocket() -> _ {
             menus,
             search_page,
             search_result,
-            signature,
             forms,
 			upload_file,
             tabs,

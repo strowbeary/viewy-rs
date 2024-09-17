@@ -45,11 +45,6 @@ pub fn default_layout(content: Box<dyn Renderable>) -> Box<dyn Renderable> {
                                 .action("/search")
                         })
                         .append_child({
-                            MenuItem::new("Signature field")
-                                .icon(Lucide::FilePenLine)
-                                .action("/signature")
-                        })
-                        .append_child({
                             MenuItem::new("Table of content")
                                 .icon(Lucide::ListTree)
                                 .action("/table-of-content")

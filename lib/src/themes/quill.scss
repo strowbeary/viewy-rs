@@ -1,3 +1,7 @@
 .ql-editor img {
-  width: 100%;
+  width: unset;
+}
+
+.ql-bubble .ql-tooltip {
+  left: 0% !important;
 }
