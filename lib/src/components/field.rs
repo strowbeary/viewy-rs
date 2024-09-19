@@ -244,6 +244,7 @@ impl Renderable for Field {
                 let editor_id = &format!("editor-{}", id);
                 field.node.children.push({
                     Card::new(CardStyle::Outlined)
+                        .overflow(Overflow::Hidden)
                         .add_class("field__card")
                         .grid_area("input")
                         .append_child(input)

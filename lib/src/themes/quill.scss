@@ -1,7 +1,10 @@
 .ql-editor img {
   width: unset;
 }
-
-.ql-bubble .ql-tooltip {
-  left: 0% !important;
+.field__card .ql-toolbar.ql-snow {
+  border: none;
+  border-bottom: sp(1) solid var(--color-border);
+}
+.field__editor.ql-container.ql-snow {
+  border: none;
 }
