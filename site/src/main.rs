@@ -107,17 +107,17 @@ fn layout(content: Node) -> Node {
 }
 #[get("/infinite-hellos?<n>")]
 fn hello(n: usize) -> RawHtml<TextStream![String]> {
-    // let mut interval = interval(Duration::from_secs(1));
+     let mut interval = interval(Duration::from_millis(100));
     RawHtml(TextStream! {
         let page_content = Page::with_title("Streaming")
         .with_layout(&layout).compile(RenderMode::LayoutOnly);
         let page = page_content.split("<!--VIEWY_CONTENT-->").collect::<Vec<&str>>();
         yield page[0].to_string();
-        //interval.tick().await;
+        interval.tick().await;
         for i in 0..n {
         let node: Node = Button::new(&format!("Button {i}"), ButtonStyle::Filled).into();
-            yield <viewy::prelude::Node as Into<HtmlCssJs>>::into(node).html;
-        //interval.tick().await;
+            yield <Node as Into<HtmlCssJs>>::into(node).html;
+        interval.tick().await;
         }
         yield page[1].to_string();
     })
