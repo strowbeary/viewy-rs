@@ -1,5 +1,5 @@
 use std::ops::{Deref, DerefMut};
-
+use crate::node::HtmlCssJs;
 use super::node::Node;
 
 pub trait Widget: Deref<Target=Node> + DerefMut<Target=Node> + Into<Node> {
@@ -12,11 +12,14 @@ pub trait Widget: Deref<Target=Node> + DerefMut<Target=Node> + Into<Node> {
     fn to_html(self) -> String {
         let node: Node = self.into();
         let root_nodes = node.get_root_nodes().into_iter()
+            .collect::<Vec<HtmlCssJs>>()
+            .into_iter().map(|HtmlCssJs{html, ..}| html)
             .collect::<Vec<String>>()
             .join("");
-        let view: String = node.into();
+        let view: HtmlCssJs = node.into();
         format!(
-            "{view} {root_nodes}",
+            "{} {root_nodes}",
+            view.html
         )
     }
 }

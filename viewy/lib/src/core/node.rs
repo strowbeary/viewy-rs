@@ -2,8 +2,10 @@ use std::{
     collections::{HashMap, HashSet},
     hash::{Hash, Hasher},
 };
-
+use std::default::Default;
+use short_uuid::ShortUuid;
 use rayon::prelude::*;
+use serde::de::Unexpected::Str;
 use uuid::Uuid;
 
 #[derive(Clone, Debug)]
@@ -48,8 +50,8 @@ impl Default for Node {
             children: vec![],
             class_list,
             node_style: vec![],
-            attributes: Default::default(),
-            root_nodes: Default::default(),
+            attributes: HashMap::default(),
+            root_nodes: HashSet::default(),
         }
     }
 }
@@ -66,10 +68,41 @@ impl Node {
         root_nodes.append(&mut children_root_nodes);
         root_nodes
     }
+
+    pub fn get_node_style(&self) -> Option<(String, String)> {
+        if !self.node_style.is_empty() {
+            let short_identifier = ShortUuid::from_uuid(&self.identifier).to_string();
+            let concat_property = self.node_style.iter().map(|(prop_name, prop_value)| format!("    {prop_name}: {prop_value};")).collect::<Vec<String>>().join("\n");
+            Some((short_identifier.clone(), format!("\
+.{short_identifier} {{
+{concat_property}
+}}\n")))
+        } else {
+            None
+        }
+
+    }
 }
 
-impl Into<String> for Node {
-    fn into(self) -> String {
+
+/// HtmlCssJs type describe the 3 components for a dynamic page :
+/// HTML code, CSS code, JavaScript code
+#[derive(Default, Clone, Debug)]
+pub struct HtmlCssJs {
+    pub html: String,
+    pub css: String,
+    pub js: String,
+}
+
+impl Into<HtmlCssJs> for Node {
+
+    fn into(mut self) -> HtmlCssJs {
+        let css_style = if let Some((node_class_name, node_style)) = self.get_node_style() {
+            self.class_list.insert(node_class_name);
+            node_style
+        } else {
+            String::new()
+        };
         let mut attributes = self.attributes;
         if !self.class_list.is_empty() {
             attributes.insert(
@@ -77,6 +110,7 @@ impl Into<String> for Node {
                 Vec::from_iter(self.class_list).join(" "),
             );
         }
+
 
         if !self.node_style.is_empty() {
             attributes.insert(
@@ -94,18 +128,18 @@ impl Into<String> for Node {
             .map(|(name, value)| format!("{}=\"{}\"", name, value))
             .collect();
 
-        let content: Vec<String> = self
+        let content: Vec<HtmlCssJs> = self
             .children
             .into_par_iter()
             .map(|node| node.into())
             .collect();
 
-        match self.node_type.clone() {
+        let html = match self.node_type.clone() {
             NodeType::Normal(tag_name) => format!(
                 "<{tag_name} {attributes}>{children}</{tag_name}>",
                 attributes = attributes.join(" "),
                 children = match self.text.clone() {
-                    None => content.join(""),
+                    None => content.into_iter().map(|HtmlCssJs{html, ..}| html).collect::<Vec<String>>().join(""),
                     Some(text) => text,
                 }
             ),
@@ -114,16 +148,32 @@ impl Into<String> for Node {
                 attributes = attributes.join(" "),
             ),
             NodeType::Comment(comment) => format!("<!--{comment}-->"),
+        };
+        HtmlCssJs {
+            html,
+            css: css_style,
+            js: String::new()
         }
     }
 }
 
-impl FromIterator<Node> for Vec<String> {
+impl FromIterator<Node> for Vec<HtmlCssJs> {
     fn from_iter<T: IntoIterator<Item = Node>>(iter: T) -> Self {
         let mut collection = Self::new();
         for node in iter {
             collection.push(node.into());
         }
         collection
+    }
+}
+
+impl From<Vec<HtmlCssJs>> for HtmlCssJs {
+    fn from(value: Vec<HtmlCssJs>) -> Self {
+        value.into_iter().fold(HtmlCssJs::default(), |mut a, b| {
+            a.html.push_str(&b.html);
+            a.css.push_str(&b.css);
+            a.js.push_str(&b.js);
+            return a;
+        })
     }
 }

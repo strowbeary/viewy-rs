@@ -16,6 +16,8 @@ use viewy::prelude::*;
 use viewy::strum::IntoEnumIterator;
 use viewy::widgets::stack::{Alignment, HStack, Stack, VStack};
 
+mod dynroutetest;
+
 #[get("/app.css")]
 fn get_stylesheet() -> RawCss<String> {
     RawCss(viewy::prelude::get_stylesheet())
@@ -114,7 +116,7 @@ fn hello(n: usize) -> RawHtml<TextStream![String]> {
         //interval.tick().await;
         for i in 0..n {
         let node: Node = Button::new(&format!("Button {i}"), ButtonStyle::Filled).into();
-            yield node.clone().into();
+            yield <viewy::prelude::Node as Into<HtmlCssJs>>::into(node).html;
         //interval.tick().await;
         }
         yield page[1].to_string();

@@ -19,6 +19,7 @@ hex = "0.4"
 strum = { version = "0.25.0", features = ["derive"]}
 lazy_static = { version = "1.4.0", features = [] }
 rayon = "1.8.1"
+short-uuid = "0.1.2"
 
 [build-dependencies]
 heck = "0.4"

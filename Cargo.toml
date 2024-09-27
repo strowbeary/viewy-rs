@@ -1,3 +1,3 @@
 [workspace]
 resolver = "2"
-members = ["core/lib", "core/codegen", "site"]
+members = ["viewy/lib", "viewy/codegen", "sprucy/lib", "site"]

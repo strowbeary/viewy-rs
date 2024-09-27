@@ -6,7 +6,8 @@ use uuid::Uuid;
 use crate::core::config::Config;
 use crate::router::page::html_page::get_full_html_page;
 use crate::core::theme::Theme;
-use crate::node::{Node, NodeType};
+use crate::node;
+use crate::node::{HtmlCssJs, Node, NodeType};
 
 mod html_page;
 
@@ -93,17 +94,19 @@ impl<'a> Page<'a> {
                         content.into()
                     });
                     let root_nodes_str = root_nodes.into_iter()
+                        .collect::<Vec<HtmlCssJs>>()
+                        .iter().map(|HtmlCssJs{html, ..}| html.to_string())
                         .collect::<Vec<String>>()
                         .join("");
-                    let mut content_str: String = content_thread_handle.join().unwrap();
-                    content_str.push_str(&root_nodes_str);
-                    content_str
+                    let mut content_str: HtmlCssJs = content_thread_handle.join().unwrap();
+                    content_str.html.push_str(&root_nodes_str);
+                    content_str.html
                 }, theme_variant.to_string(), false)
             }
             RenderMode::ContentOnly => {
                 let mut content = self.content;
                 content.children.append(&mut content.get_root_nodes());
-                content.into()
+                <node::Node as Into<HtmlCssJs>>::into(content).html
             }
             RenderMode::LayoutOnly => {
                 get_full_html_page(&self.config, self.title, {
@@ -118,7 +121,7 @@ impl<'a> Page<'a> {
                         root_nodes: HashSet::new(),
                     });
                     content.children.append(&mut content.get_root_nodes());
-                    content.into()
+                    <node::Node as Into<HtmlCssJs>>::into(content).html
                 }, theme_variant.to_string(), false)
             }
         }
