@@ -60,6 +60,7 @@ pub struct MenuItem {
     pub label: String,
     badge: Option<Badge>,
     is_destructive: bool,
+    is_selected: bool,
 }
 
 impl MenuItem {
@@ -71,6 +72,7 @@ impl MenuItem {
             label: label.to_string(),
             badge: None,
             is_destructive: false,
+            is_selected: false,
         }
     }
     /// Set menu's icon
@@ -88,6 +90,11 @@ impl MenuItem {
 
     pub fn destructive(&mut self) -> Self {
         self.is_destructive = true;
+        self.clone()
+    }
+
+    pub fn selected(&mut self) -> Self {
+        self.is_selected = true;
         self.clone()
     }
 
@@ -136,6 +143,9 @@ impl Renderable for MenuItem {
                 true => { "menu-item--destructive" }
                 false => { "menu-item--normal" }
             });
+        if self.is_selected {
+            menu_item.add_class("menu-item--selected");
+        }
         if let Some(icon) = menu_item.icon.clone() {
             menu_item.node.children.append(&mut vec![{
                 let mut icon = Icon::new(icon)
