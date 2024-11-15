@@ -222,6 +222,9 @@ as opposed to using 'Content here, content here', making it look like readable E
                         HStack::new(Alignment::Center)
                             .gap(vec![16])
                             .append_child({
+                                Button::new("Hello", ButtonStyle::SmallLink)
+                            })
+                            .append_child({
                                 Button::new("Hello", ButtonStyle::Link)
                             })
                             .append_child({
@@ -238,6 +241,10 @@ as opposed to using 'Content here, content here', making it look like readable E
                         HStack::new(Alignment::Center)
                             .gap(vec![16])
                             .margin_top(20)
+                            .append_child({
+                                Button::new("Valider", ButtonStyle::SmallLink)
+                                    .icon(Lucide::Check)
+                            })
                             .append_child({
                                 Button::new("Valider", ButtonStyle::Link)
                                     .icon(Lucide::Check)
@@ -259,6 +266,9 @@ as opposed to using 'Content here, content here', making it look like readable E
                         HStack::new(Alignment::Center)
                             .gap(vec![16])
                             .margin_top(20)
+                            .append_child({
+                                Button::icon_only(Lucide::Check, ButtonStyle::SmallLink)
+                            })
                             .append_child({
                                 Button::icon_only(Lucide::Check, ButtonStyle::Link)
                             })

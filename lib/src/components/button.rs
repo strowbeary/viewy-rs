@@ -1,15 +1,16 @@
 use std::borrow::BorrowMut;
 
-use crate::{DefaultModifiers, scale};
-use crate::components::{BadgeModifiers, Icon, Text, TextStyle};
 use crate::components::badge::{Badge, BadgeSupport};
 use crate::components::icons::IconPack;
+use crate::components::{BadgeModifiers, Icon, Text, TextStyle};
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
+use crate::DefaultModifiers;
 
 /// Used to set a button's importance level.
 #[derive(Debug, Clone)]
 pub enum ButtonStyle {
+    SmallLink,
     Link,
     Flat,
     Outlined,
@@ -49,8 +50,9 @@ impl Button {
 
     /// Create new icon only button
     pub fn icon_only<T>(icon: T, style: ButtonStyle) -> Self
-        where
-            T: 'static + IconPack, {
+    where
+        T: 'static + IconPack,
+    {
         Button {
             children: vec![],
             node: Node::default(),
@@ -119,15 +121,16 @@ impl Button {
 
     /// Set button's icon
     pub fn icon<T>(&mut self, icon: T) -> Self
-        where
-            T: 'static + IconPack {
+    where
+        T: 'static + IconPack,
+    {
         self.icon = Some(Box::new(icon));
         self.clone()
     }
 
     fn append_child<'a, T>(&'a mut self, child: T)
-        where
-            T: 'static + Renderable,
+    where
+        T: 'static + Renderable,
     {
         self.children.push(Box::new(child));
     }
@@ -162,16 +165,26 @@ impl Renderable for Button {
 
         if let Some(icon) = button.icon {
             let mut icon = Icon::new(icon)
-                .size(16);
+                .size(match self.style {
+                    ButtonStyle::SmallLink => 14,
+                    _ => 16
+                });
             if button.label.is_none() {
-                icon.size(24);
+                icon.size(match self.style {
+                    ButtonStyle::SmallLink => 16,
+                    _ => 24
+                });
                 icon.stroke_width(2);
             }
             button.node.children.push(icon.render());
         }
 
         if let Some(label) = button.label {
-            let text = Text::new(label.as_str(), TextStyle::Button).render();
+            let text = Text::new(label.as_str(), match self.style {
+                ButtonStyle::SmallLink => TextStyle::Caption,
+                _ => TextStyle::Button
+            }).render();
+
             button.node.children.push(text);
         }
 
