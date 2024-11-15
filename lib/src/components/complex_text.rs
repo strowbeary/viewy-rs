@@ -35,6 +35,7 @@ impl Renderable for ComplexText {
     fn render(&self) -> Node {
         let text = self.clone()
             .add_class("text")
+            .add_class("complex-text")
             .add_class(format!("text--{:?}", self.style).to_lowercase().as_str());
         text.node
     }
