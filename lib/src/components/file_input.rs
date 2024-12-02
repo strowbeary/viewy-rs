@@ -49,7 +49,8 @@ impl FileInput {
             name: name.to_string(),
             label: None,
             error_text: None,
-            image_preview: None
+            image_preview: None,
+            accept: None,
         }
     }
 
