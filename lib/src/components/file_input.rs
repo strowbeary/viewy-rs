@@ -27,6 +27,7 @@ pub struct FileInput {
     label: Option<String>,
     error_text: Option<String>,
     image_preview: Option<String>,
+    accept: Option<String>
 }
 
 impl NodeContainer for FileInput {
@@ -53,7 +54,8 @@ impl FileInput {
     }
 
     pub fn accept(&mut self, mime_types: &str) -> Self {
-        self.set_attr("accept", mime_types)
+        self.accept = Some(mime_types.to_string());
+        self.clone()
     }
     pub fn required(&mut self, is_required: bool) -> Self {
         self.required = is_required;
@@ -103,6 +105,9 @@ impl Renderable for FileInput {
                 if self.required {
                     field.set_attr("required", "required");
                 }
+                if let Some(accept) = &self.accept {
+                    field.set_attr("accept", accept);
+                }
                 if self.auto_submit {
                     field.set_attr("data-auto-submit", &self.auto_submit.to_string());
                 }
@@ -142,6 +147,10 @@ impl Renderable for FileInput {
                         }
                         if self.auto_submit {
                             input.set_attr("data-auto-submit", &self.auto_submit.to_string());
+                        }
+
+                        if let Some(accept) = &self.accept {
+                            input.set_attr("accept", accept);
                         }
                         input
                     })
@@ -204,6 +213,9 @@ impl Renderable for FileInput {
                             }
                             if self.auto_submit {
                                 input.set_attr("data-auto-submit", &self.auto_submit.to_string());
+                            }
+                            if let Some(accept) = &self.accept {
+                                input.set_attr("accept", accept);
                             }
                             input
                         })
