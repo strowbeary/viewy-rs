@@ -87,7 +87,7 @@ impl<'a> Page<'a> {
         match render_mode {
             RenderMode::Complete => {
                 get_full_html_page(&self.config, self.title, {
-                    let mut content = (self.layout)(self.content);
+                    let content = (self.layout)(self.content);
                     let root_nodes=  content.get_root_nodes();
 
                     let content_thread_handle = thread::spawn(move || {

@@ -1,4 +1,4 @@
-use crate::core::modifiers::{Appendable, Classable, Attributable};
+use crate::core::modifiers::{Classable, Attributable};
 use crate::core::node::{Node, NodeType};
 use crate::core::widget::Widget;
 use crate::modifiers::PopupReceiver;

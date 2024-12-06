@@ -1,8 +1,6 @@
 use grass::OutputStyle;
-use palette::{Darken, Desaturate, FromColor, IntoColor, Lighten, Mix, Saturate, Srgba, WithAlpha, WithHue};
-use palette::chromatic_adaptation::AdaptInto;
+use palette::Srgba;
 use palette::color_difference::Wcag21RelativeContrast;
-use palette::stimulus::{FromStimulus, IntoStimulus};
 use strum::IntoEnumIterator;
 
 pub use colors::Color;

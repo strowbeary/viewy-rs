@@ -1,5 +1,4 @@
-use std::slice::Iter;
-use palette::{Darken, Desaturate, Hsl, Hsluv, IntoColor, Lighten, Oklab, RelativeContrast, Saturate, Srgb, Srgba, WithAlpha, WithHue};
+use palette::{Darken, Desaturate, Hsluv, IntoColor, Lighten, Saturate, Srgb, Srgba, WithAlpha, WithHue};
 use palette::color_difference::Wcag21RelativeContrast;
 use strum::EnumIter;
 use crate::CONFIG;
@@ -116,7 +115,7 @@ impl Color {
                     let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
                     let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
 
-                    let mut accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.1);
+                    let accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.1);
 
                     HexColor::from(Srgb::from_linear(accentuated_surface.into_color()).with_alpha(255))
                 }
@@ -127,7 +126,7 @@ impl Color {
                     let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
                     let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
 
-                    let mut accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.1);
+                    let accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.1);
 
 
                     HexColor::from(Srgb::from_linear(accentuated_surface.into_color()).with_alpha(255))
@@ -205,7 +204,7 @@ impl Color {
                     let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
                     let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
 
-                    let mut accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.5);
+                    let accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.5);
 
                     HexColor::from(Srgb::from_linear(accentuated_surface.into_color()).with_alpha(255))
                 }
@@ -216,7 +215,7 @@ impl Color {
                     let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
                     let accent_color: Hsluv = accent.without_alpha().into_linear::<f32>().into_color();
 
-                    let mut accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.5);
+                    let accentuated_surface = base_color.with_hue(accent_color.hue).saturate(0.5);
 
 
                     HexColor::from(Srgb::from_linear(accentuated_surface.into_color()).with_alpha(255))
@@ -316,7 +315,7 @@ impl Color {
                     let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
                     let destructive_color: Hsluv = destructive.without_alpha().into_linear::<f32>().into_color();
 
-                    let mut destructive_surface = base_color.with_hue(destructive_color.hue).saturate(0.7);
+                    let destructive_surface = base_color.with_hue(destructive_color.hue).saturate(0.7);
 
 
                     HexColor::from(Srgb::from_linear(destructive_surface.into_color()).with_alpha(255))
@@ -328,7 +327,7 @@ impl Color {
                     let base_color: Hsluv = base.without_alpha().into_linear::<f32>().into_color();
                     let destructive_color: Hsluv = destructive.without_alpha().into_linear::<f32>().into_color();
 
-                    let mut destructive_surface = base_color.with_hue(destructive_color.hue).saturate(0.7);
+                    let destructive_surface = base_color.with_hue(destructive_color.hue).saturate(0.7);
 
 
                     HexColor::from(Srgb::from_linear(destructive_surface.into_color()).with_alpha(255))

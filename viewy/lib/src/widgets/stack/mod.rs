@@ -1,5 +1,4 @@
 
-use crate::modifiers::*;
 use crate::{sp, Widget};
 
 pub mod vertical;

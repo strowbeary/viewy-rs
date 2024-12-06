@@ -1,12 +1,10 @@
 use crate::core::modifiers::{Appendable, Attributable};
 use crate::core::node::Node;
 use crate::modifiers::Classable;
-use crate::node::NodeType;
 use crate::widgets::view::View;
 use crate::Widget;
 use uuid::uuid;
 
-use super::button::Button;
 #[derive(Widget, Attributable)]
 #[widget(style = "./style.scss", script = "./script.js")]
 pub struct Popup {
@@ -51,7 +49,7 @@ impl Popup {
         self.node.children.push({
             View::new()
                 .add_class("popup__window")
-                .append_child({ View::new().add_class("popup__window__window-bar") })
+                .append_child(View::new().add_class("popup__window__window-bar"))
                 .append_child({
                     let mut content = self.window_content.clone();
                     content

@@ -68,7 +68,6 @@ pub use crate::core::component::*;
 pub use crate::core::modifiers;
 pub use crate::core::node;
 use crate::core::widget::Widget;
-use figment::error;
 use lazy_static::lazy_static;
 
 pub use strum;
