@@ -1,25 +1,25 @@
-use uuid::Uuid;
-use crate::widgets::popup::Popup;
 use crate::core::node::Node;
 use crate::core::widget::Widget;
+use crate::widgets::popup::Popup;
+use uuid::Uuid;
 
 pub mod box_stylable;
 
+use crate::core::theme::Color;
 #[doc(inline)]
 pub use box_stylable::*;
-use crate::core::theme::Color;
 
 pub trait Appendable: Widget {
     fn append_child<C>(&mut self, child: C) -> &mut Self
-        where C: Into<Node>
-     {
+    where
+        C: Into<Node>,
+    {
         let node: &mut Node = self.deref_mut();
         node.children.push(child.into());
         self
     }
 
-    fn set_children(&mut self, children: Vec<Node>) -> &mut Self
-    {
+    fn set_children(&mut self, children: Vec<Node>) -> &mut Self {
         let node: &mut Node = self.deref_mut();
         node.children = children;
         self
@@ -50,11 +50,13 @@ pub trait Attributable: Widget {
         node.attributes.remove(name);
         self
     }
-
 }
 
 pub trait PopupReceiver: Widget + Classable + Attributable {
-    fn popup<P>(&mut self, mut popup: P) -> &mut Self where P: AsMut<Popup> {
+    fn popup<P>(&mut self, mut popup: P) -> &mut Self
+    where
+        P: AsMut<Popup>,
+    {
         let popup = popup.as_mut();
         let id = Uuid::new_v4().to_string();
         self.add_class("popup--opener");
@@ -65,23 +67,28 @@ pub trait PopupReceiver: Widget + Classable + Attributable {
     }
 }
 
-
 pub trait Colorable: Widget {
-   fn color(&mut self, color: Color) -> &mut Self {
-       let node: &mut Node = self.deref_mut();
-       node.node_style.push(("color".to_string(), format!("var({})", color.as_str())));
-       self
-   }
+    fn color(&mut self, color: Color) -> &mut Self {
+        let node: &mut Node = self.deref_mut();
+        node.node_style
+            .push(("color".to_string(), format!("var({})", color.as_str())));
+        self
+    }
 
     fn background_color(&mut self, color: Color) -> &mut Self {
-
         let node: &mut Node = self.deref_mut();
-        node.node_style.push(("background-color".to_string(), format!("var({})", color.as_str())));
+        node.node_style.push((
+            "background-color".to_string(),
+            format!("var({})", color.as_str()),
+        ));
         self
     }
     fn border_color(&mut self, color: Color) -> &mut Self {
         let node: &mut Node = self.deref_mut();
-        node.node_style.push(("border-color".to_string(), format!("var({})", color.as_str())));
+        node.node_style.push((
+            "border-color".to_string(),
+            format!("var({})", color.as_str()),
+        ));
         self
     }
 }

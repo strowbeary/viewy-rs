@@ -107,7 +107,7 @@ fn layout(content: Node) -> Node {
 }
 #[get("/infinite-hellos?<n>")]
 fn hello(n: usize) -> RawHtml<TextStream![String]> {
-     let mut interval = interval(Duration::from_millis(100));
+     let mut interval = interval(Duration::from_millis(10));
     RawHtml(TextStream! {
         let page_content = Page::with_title("Streaming")
         .with_layout(&layout).compile(RenderMode::LayoutOnly);

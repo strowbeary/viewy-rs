@@ -1,7 +1,7 @@
 #![doc(html_favicon_url = "https://viewy.rs/logos/favicon.svg")]
 #![doc(html_logo_url = "https://viewy.rs/logos/logo-light.svg")]
-
 #![warn(missing_docs)]
+#![deny(unwrap, expect)]
 
 //! # Viewy Rust Documentation
 //!
@@ -60,16 +60,16 @@
 
 #[macro_use]
 extern crate viewy_codegen;
-extern crate serde;
 extern crate figment;
+extern crate serde;
 
-use std::sync::RwLock;
-use lazy_static::lazy_static;
 #[doc(inline)]
 pub use crate::core::component::*;
 pub use crate::core::modifiers;
 pub use crate::core::node;
 use crate::core::widget::Widget;
+use figment::error;
+use lazy_static::lazy_static;
 
 pub use strum;
 
@@ -83,9 +83,8 @@ mod core;
 /// | :--------------------|:-----------:|
 /// | Rocket-rs            | `rocket`    |
 pub mod bindings;
-pub mod widgets;
 pub mod router;
-
+pub mod widgets;
 
 mod helper_fn;
 
@@ -93,34 +92,32 @@ mod helper_fn;
 pub use crate::helper_fn::*;
 
 use crate::core::config::Config;
-lazy_static!{
- static ref CONFIG: Config = Config::load();
+lazy_static! {
+    static ref CONFIG: Config = Config::load();
 }
 
 pub mod prelude {
+
+    pub use crate::core::component::Component;
+    pub use crate::core::config::Config;
+    pub use crate::core::modifiers::*;
+    pub use crate::core::node::*;
+    pub use crate::core::theme::*;
+    pub use crate::helper_fn::*;
+    pub use crate::router::*;
     pub use crate::widgets::button::*;
     pub use crate::widgets::popup::*;
     pub use crate::widgets::view::*;
-    pub use crate::core::component::Component;
-    pub use crate::core::modifiers::*;
-    pub use crate::core::node::*;
-    pub use crate::helper_fn::*;
-    pub use crate::router::*;
-    pub use crate::core::config::Config;
-    pub use crate::core::theme::*;
 }
-
 
 #[cfg(test)]
 mod tests {
-    use std::time::Instant;
     use grass::{InputSyntax, Options, OutputStyle};
+    use std::time::Instant;
 
     use crate::core::modifiers::Appendable;
-    use crate::core::node::Node;
-    use crate::router::{Page, RenderMode};
-    use crate::core::widget::Widget;
     use crate::prelude::*;
+    use crate::router::{Page, RenderMode};
 
     #[test]
     fn benchmark() {
@@ -128,10 +125,7 @@ mod tests {
         let mut view = View::new();
 
         for _ in 0..50000 {
-            view
-                .append_child({
-                    Button::new("Label", ButtonStyle::Filled)
-                });
+            view.append_child({ Button::new("Label", ButtonStyle::Filled) });
         }
 
         let render_start = Instant::now();
@@ -148,13 +142,9 @@ mod tests {
 
     #[test]
     fn can_append_child() {
-
-
         let html = Page::with_title("Test")
             .with_content({
-                View::new().append_child({
-                    Button::new("Hello", ButtonStyle::Filled)
-                })
+                View::new().append_child({ Button::new("Hello", ButtonStyle::Filled) })
             })
             .compile(RenderMode::Complete);
 
@@ -165,7 +155,13 @@ mod tests {
     fn compile_styles() {
         let stylesheets = crate::widgets::get_all_stylesheet().join("");
         println!("SCSS stylesheets size = {} bytes", stylesheets.len());
-        if let Ok(compiled_stylesheet) = grass::from_string(stylesheets, &Options::default().style(OutputStyle::Compressed).quiet(true).input_syntax(InputSyntax::Scss)) {
+        if let Ok(compiled_stylesheet) = grass::from_string(
+            stylesheets,
+            &Options::default()
+                .style(OutputStyle::Compressed)
+                .quiet(true)
+                .input_syntax(InputSyntax::Scss),
+        ) {
             println!("Stylesheet size = {} bytes", compiled_stylesheet.len());
         } else {
             panic!("Error during scss compilation")
