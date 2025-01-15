@@ -9,10 +9,6 @@
       flex-grow: 0;
       color: var(--color-accent);
     }
-    &__handle + *,
-    &--disabled > * {
-      flex-grow: 1;
-    }
   }
 }
 
