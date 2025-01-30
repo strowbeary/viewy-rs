@@ -1,7 +1,7 @@
-use std::collections::HashMap;
-use figment::Figment;
 use figment::providers::{Env, Format, Toml};
+use figment::Figment;
 use serde::{Deserialize, Serialize};
+use std::collections::HashMap;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct AppSettings {
@@ -56,7 +56,6 @@ pub struct Shapes {
     pub spacing_factor: i32,
 }
 
-
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Config {
     pub app: AppSettings,
@@ -69,13 +68,13 @@ impl Config {
     pub fn load() -> Self {
         let figment = Figment::from({
             Figment::new()
-                .merge(Toml::file("Viewy.toml"))
+                .merge(Toml::file("viewy.toml"))
                 .merge(Toml::file("Viewy.toml"))
         })
+        .merge(Env::prefixed("VIEWY_").split("_"));
 
-            .merge(Env::prefixed("VIEWY_").split("_"));
-
-        let config = figment.extract::<Config>()
+        let config = figment
+            .extract::<Config>()
             .map_err(|err| {
                 println!("Viewy config error {:?}", err);
                 err
@@ -129,8 +128,14 @@ impl Default for Config {
                     dark: "#ffffff".to_string(),
                     light: "#ffffff".to_string(),
                 },
-                success: Color { dark: "#3DA144".to_string(), light: "#3DA144".to_string() },
-                on_success: Color { dark: "#ffffff".to_string(), light: "#ffffff".to_string() },
+                success: Color {
+                    dark: "#3DA144".to_string(),
+                    light: "#3DA144".to_string(),
+                },
+                on_success: Color {
+                    dark: "#ffffff".to_string(),
+                    light: "#ffffff".to_string(),
+                },
             },
             shapes: Shapes {
                 border_radius: 8,

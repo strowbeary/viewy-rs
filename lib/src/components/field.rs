@@ -1,16 +1,21 @@
 use std::borrow::BorrowMut;
 
 use chrono::{Duration, NaiveDateTime, TimeZone, Utc};
-use html_escape::{encode_double_quoted_attribute};
+use html_escape::encode_double_quoted_attribute;
 use uuid::Uuid;
 
-use crate::{DefaultModifiers, Overflow, scale, sp};
-use crate::components::*;
 use crate::components::icons::Lucide;
+use crate::components::*;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
+use crate::{scale, sp, DefaultModifiers, Overflow};
 
-fn multi_value_row(field_name: &str, field_type: &FieldType, value: &str, form: &Option<String>) -> HStack {
+fn multi_value_row(
+    field_name: &str,
+    field_type: &FieldType,
+    value: &str,
+    form: &Option<String>,
+) -> HStack {
     HStack::new(Alignment::Center)
         .flex_grow(1)
         .add_class("field--multi-value__value-list__value")
@@ -24,10 +29,7 @@ fn multi_value_row(field_name: &str, field_type: &FieldType, value: &str, form: 
             }
             input
         })
-        .append_child({
-            Button::icon_only(Lucide::Trash2, ButtonStyle::Flat)
-                .destructive()
-        })
+        .append_child({ Button::icon_only(Lucide::Trash2, ButtonStyle::Flat).destructive() })
 }
 
 #[derive(Debug, Clone)]
@@ -50,7 +52,6 @@ pub enum FieldType {
     TextArea,
     RichTextArea,
 }
-
 
 #[derive(Debug, Clone)]
 pub struct Field {
@@ -196,8 +197,7 @@ impl Field {
 
 impl Renderable for Field {
     fn render(&self) -> Node {
-        let mut field = self.clone()
-            .add_class("field");
+        let mut field = self.clone().add_class("field");
         match &self.field_type {
             FieldType::Hidden => {
                 let mut input = field
@@ -224,7 +224,10 @@ impl Renderable for Field {
                     .display("none")
                     .set_attr("id", self.name.as_str())
                     .set_attr("name", self.name.as_str())
-                    .set_attr("value", &encode_double_quoted_attribute(&field.value.unwrap_or_default()));
+                    .set_attr(
+                        "value",
+                        &encode_double_quoted_attribute(&field.value.unwrap_or_default()),
+                    );
 
                 if self.required {
                     input.set_attr("required", "required");
@@ -239,24 +242,25 @@ impl Renderable for Field {
                     input.set_attr("readonly", "readonly");
                 }
 
-
                 let id = Uuid::new_v4().to_string();
                 let editor_id = &format!("editor-{}", id);
-                field.node.children.push({
-                    Card::new(CardStyle::Outlined)
-                        .overflow(Overflow::Hidden)
-                        .add_class("field__card")
-                        .grid_area("input")
-                        .append_child(input)
-                        .append_child({
-                            let mut editor = View::new()
-                                .add_class("field__editor")
-                                .padding(vec![scale(3)])
-                                .set_attr("id", editor_id);
-                            editor.node.text = self.value.clone();
-                            editor
-                        })
-                }.render());
+                field.node.children.push(
+                    {
+                        Card::new(CardStyle::Outlined)
+                            .add_class("field__card")
+                            .grid_area("input")
+                            .append_child(input)
+                            .append_child({
+                                let mut editor = View::new()
+                                    .add_class("field__editor")
+                                    .padding(vec![scale(3)])
+                                    .set_attr("id", editor_id);
+                                editor.node.text = self.value.clone();
+                                editor
+                            })
+                    }
+                    .render(),
+                );
 
                 if let Some(label) = field.label {
                     let text = Text::new(label.as_str(), TextStyle::Label)
@@ -272,11 +276,12 @@ impl Renderable for Field {
                     field.node.children.push(text.render());
                 }
 
-
                 field.node
             }
             FieldType::Duration(values) => {
-                let default_start_date = field.value.clone()
+                let default_start_date = field
+                    .value
+                    .clone()
                     .and_then(|value| {
                         NaiveDateTime::parse_from_str(&value, "%Y-%m-%dT%R")
                             .map(|naive_datetime| Utc.from_utc_datetime(&naive_datetime))
@@ -285,41 +290,58 @@ impl Renderable for Field {
                     .unwrap_or(Utc::now());
                 field.add_class("field--duration");
 
-                field.node.children.push({
-                    VStack::new(Alignment::Stretch)
-                        .gap(vec![scale(3)])
-                        .append_child({
-                            Field::new(&format!("{}_start_datetime", self.name), FieldType::DateTimeLocal)
+                field.node.children.push(
+                    {
+                        VStack::new(Alignment::Stretch)
+                            .gap(vec![scale(3)])
+                            .append_child({
+                                Field::new(
+                                    &format!("{}_start_datetime", self.name),
+                                    FieldType::DateTimeLocal,
+                                )
                                 .required(self.required)
                                 .label("Date de début")
                                 .value(&default_start_date.format("%FT%R").to_string())
                                 .set_attr("id", &format!("{}_start_datetime", self.name))
                                 .set_attr("name", &format!("{}_start_datetime", self.name))
-                        })
-                        .append_child({
-                            let mut tags = HStack::new(Alignment::Center).gap(vec![scale(2)]);
+                            })
+                            .append_child({
+                                let mut tags = HStack::new(Alignment::Center).gap(vec![scale(2)]);
 
-                            let mut f = timeago::Formatter::with_language(timeago::languages::french::French);
-                            f.ago("");
-                            for duration in values {
-                                tags.append_child({
-                                    Tag::new(&
-                                        format!("+ {}", f.convert(std::time::Duration::from_millis(duration.num_milliseconds() as u64)))
-                                    )
+                                let mut f = timeago::Formatter::with_language(
+                                    timeago::languages::french::French,
+                                );
+                                f.ago("");
+                                for duration in values {
+                                    tags.append_child({
+                                        Tag::new(&format!(
+                                            "+ {}",
+                                            f.convert(std::time::Duration::from_millis(
+                                                duration.num_milliseconds() as u64
+                                            ))
+                                        ))
                                         .add_class("clickable")
-                                        .set_attr("data-duration", &duration.num_minutes().to_string())
-                                });
-                            }
-                            tags
-                        })
-                        .append_child({
-                            Field::new(&format!("{}_end_datetime", self.name), FieldType::DateTimeLocal)
+                                        .set_attr(
+                                            "data-duration",
+                                            &duration.num_minutes().to_string(),
+                                        )
+                                    });
+                                }
+                                tags
+                            })
+                            .append_child({
+                                Field::new(
+                                    &format!("{}_end_datetime", self.name),
+                                    FieldType::DateTimeLocal,
+                                )
                                 .required(self.required)
                                 .label("Date de fin")
                                 .set_attr("id", &format!("{}_end_datetime", self.name))
                                 .set_attr("name", &format!("{}_end_datetime", self.name))
-                        })
-                }.render());
+                            })
+                    }
+                    .render(),
+                );
 
                 field.node
             }
@@ -327,45 +349,54 @@ impl Renderable for Field {
                 if let Some(values) = &self.multiple {
                     field.add_class("field--multi-value");
 
-                    field.node.children.push({
-                        Card::new(CardStyle::Filled)
-                            .add_class("field--multi-value__multi-value-container")
-                            .padding(vec![scale(3)])
-                            .append_child({
-                                let mut field_input = VStack::new(Alignment::Stretch)
-                                    .gap(vec![scale(3)])
-                                    .append_child({
-                                        let mut value_list = VStack::new(Alignment::Stretch)
-                                            .add_class("field--multi-value__value-list")
-                                            .gap(vec![scale(3)])
-                                            .append_child({
-                                                View::new().tag("template").id("value-template")
-                                                    .append_child({
-                                                        multi_value_row(&self.name, &self.field_type, "", &self.form)
-                                                    })
-                                            });
-                                        for  value in values.iter(){
-                                            value_list.append_child(
+                    field.node.children.push(
+                        {
+                            Card::new(CardStyle::Filled)
+                                .add_class("field--multi-value__multi-value-container")
+                                .padding(vec![scale(3)])
+                                .append_child({
+                                    let mut field_input = VStack::new(Alignment::Stretch)
+                                        .gap(vec![scale(3)])
+                                        .append_child({
+                                            let mut value_list = VStack::new(Alignment::Stretch)
+                                                .add_class("field--multi-value__value-list")
+                                                .gap(vec![scale(3)])
+                                                .append_child({
+                                                    View::new()
+                                                        .tag("template")
+                                                        .id("value-template")
+                                                        .append_child({
+                                                            multi_value_row(
+                                                                &self.name,
+                                                                &self.field_type,
+                                                                "",
+                                                                &self.form,
+                                                            )
+                                                        })
+                                                });
+                                            for value in values.iter() {
+                                                value_list.append_child(multi_value_row(
+                                                    &self.name,
+                                                    &self.field_type,
+                                                    value,
+                                                    &self.form,
+                                                ));
+                                            }
 
-                                                multi_value_row(&self.name, &self.field_type, value, &self.form)
-                                            );
-                                        }
+                                            value_list
+                                        });
 
-
-                                        value_list
-                                    });
-
-                                if !self.disabled && !self.read_only {
-                                    field_input.append_child({
-                                        Button::icon_only(Lucide::Plus, ButtonStyle::Outlined)
-                                            .add_class("field--multi-value__add-value-button")
-                                    });
-                                }
-                                field_input
-                            })
-
-                    }.render());
-
+                                    if !self.disabled && !self.read_only {
+                                        field_input.append_child({
+                                            Button::icon_only(Lucide::Plus, ButtonStyle::Outlined)
+                                                .add_class("field--multi-value__add-value-button")
+                                        });
+                                    }
+                                    field_input
+                                })
+                        }
+                        .render(),
+                    );
 
                     if let Some(label) = &field.label {
                         let text = Text::new(label, TextStyle::Label)
@@ -415,12 +446,13 @@ impl Renderable for Field {
                     match &self.field_type {
                         FieldType::TextArea => {}
                         _ => {
-                            input.set_attr("type", &match &field.field_type {
-                                FieldType::DateTimeLocal => { "datetime-local".to_string() }
-                                field_type => {
-                                    format!("{:?}", field_type).to_lowercase()
-                                }
-                            });
+                            input.set_attr(
+                                "type",
+                                &match &field.field_type {
+                                    FieldType::DateTimeLocal => "datetime-local".to_string(),
+                                    field_type => format!("{:?}", field_type).to_lowercase(),
+                                },
+                            );
                         }
                     }
                     if self.datalist && !matches!(field.field_type, FieldType::TextArea) {
@@ -447,7 +479,6 @@ impl Renderable for Field {
                     if let Some(value) = &field.step {
                         input.set_attr("step", value);
                     }
-
 
                     field.node.children.push(input.render());
 

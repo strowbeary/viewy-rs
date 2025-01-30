@@ -1,6 +1,6 @@
 [
   {
-    "label": "Run",
+    "label": "Run viewy demo site",
     "command": "cargo run",
     //"args": [],
     // Env overrides for the command, will be appended to the terminal's environment from the settings.
