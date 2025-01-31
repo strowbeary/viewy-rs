@@ -1,25 +1,33 @@
 .tag {
-  padding: sp(4) sp(10);
-  background: var(--surface-blue-lighter);
-  color: var(--color-accent);
-  border-radius: sp(20);
-  display: flex;
-  align-items: center;
-  width: max-content;
-  gap: sp(4);
-  position: relative;
+    padding: sp(4) sp(10);
+    background: var(--surface-blue-lighter);
+    color: var(--color-accent);
+    border-radius: sp(20);
+    display: flex;
+    align-items: center;
+    width: max-content;
+    gap: sp(4);
+    position: relative;
 
-  & > .badge {
-    position: absolute;
-    right: sp(-12);
-    top: sp(-12);
-  }
-  &--destructive {
-    background: var(--surface-red);
-    color: var(--color-destructive);
-  }
+    & > .badge {
+        position: absolute;
+        right: sp(-12);
+        top: sp(-12);
+    }
+    &--destructive {
+        background: var(--surface-red);
+        color: var(--color-destructive);
+    }
+    &--warning {
+        background: var(--surface-warning);
+        color: var(--color-warning);
+    }
+    &--success {
+        background: var(--surface-success);
+        color: var(--color-success);
+    }
 }
 .tag.clickable:hover {
-  background: var(--surface-accent-darker);
-  color: var(--color-accent);
+    background: var(--surface-accent-darker);
+    color: var(--color-accent);
 }

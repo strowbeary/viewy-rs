@@ -1,8 +1,8 @@
 use chrono::Duration;
 
-use viewy::{DefaultModifiers, scale, sp};
-use viewy::components::*;
 use viewy::components::icons::Lucide;
+use viewy::components::*;
+use viewy::{scale, sp, DefaultModifiers};
 
 use crate::components::showcase_section;
 
@@ -488,6 +488,16 @@ as opposed to using 'Content here, content here', making it look like readable E
                     .append_child({
                         Tag::new("label")
                             .icon(Lucide::Box)
+                    })
+                    .append_child({
+                        Tag::new("label")
+                            .icon(Lucide::Box)
+                            .success()
+                    })
+                    .append_child({
+                        Tag::new("label")
+                            .icon(Lucide::Box)
+                            .warning()
                     })
                     .append_child({
                         Tag::new("label")

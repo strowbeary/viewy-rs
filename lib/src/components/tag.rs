@@ -3,11 +3,11 @@ use std::fmt::{Debug, Formatter};
 
 use dyn_clone::DynClone;
 
-use crate::{DefaultModifiers, Renderable};
-use crate::components::{Alignment, Appendable, HStack, Icon, Text, TextStyle};
-use crate::components::badge::{Badge, BadgeSupport, BadgeModifiers};
+use crate::components::badge::{Badge, BadgeModifiers, BadgeSupport};
 use crate::components::icons::IconPack;
+use crate::components::{Alignment, Appendable, HStack, Icon, Text, TextStyle};
 use crate::node::{Node, NodeContainer};
+use crate::{DefaultModifiers, Renderable};
 
 #[derive(Debug, Clone)]
 pub struct Tag {
@@ -16,7 +16,6 @@ pub struct Tag {
     pub icon: Option<Box<dyn IconPack>>,
     pub badge: Option<Badge>,
 }
-
 
 impl Tag {
     pub fn new(label: &str) -> Self {
@@ -30,19 +29,27 @@ impl Tag {
 
     /// Set tag's icon
     pub fn icon<T>(&mut self, icon: T) -> Self
-        where
-            T: 'static + IconPack {
+    where
+        T: 'static + IconPack,
+    {
         self.icon = Some(Box::new(icon));
         self.clone()
+    }
+
+    pub fn warning(&mut self) -> Self {
+        self.add_class("tag--warning")
     }
 
     pub fn destructive(&mut self) -> Self {
         self.add_class("tag--destructive")
     }
+
+    pub fn success(&mut self) -> Self {
+        self.add_class("tag--success")
+    }
 }
 
 impl DefaultModifiers<Tag> for Tag {}
-
 
 impl BadgeSupport for Tag {
     fn add_badge(&mut self, badge: Badge) {
@@ -64,15 +71,13 @@ impl Renderable for Tag {
         tag.get_node().class_list.insert("tag".to_string());
 
         if let Some(icon) = tag.icon {
-            let mut icon = Icon::new(icon)
-                .size(16)
-                .stroke_width(2);
+            let mut icon = Icon::new(icon).size(16).stroke_width(2);
             tag.node.children.push(icon.render());
         }
 
-        tag.node.children.push({
-            Text::new(&self.label, TextStyle::Overline)
-        }.render());
+        tag.node
+            .children
+            .push({ Text::new(&self.label, TextStyle::Overline) }.render());
 
         if let Some(badge) = tag.badge {
             tag.node.children.push(badge.render());
