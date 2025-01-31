@@ -1,7 +1,7 @@
 use crate::node::{Node, NodeContainer};
-use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::{Renderable};
+use crate::Renderable;
+use std::borrow::BorrowMut;
 
 #[derive(Debug, Clone)]
 pub enum ObjectFit {
@@ -34,20 +34,29 @@ impl Image {
         }
     }
     pub fn object_fit(&mut self, fit: ObjectFit) -> Self {
-        self.get_node().node_style
-            .push(("object-fit".to_string(), {
+        self.get_node().node_style.push((
+            "object-fit".to_string(),
+            {
                 match fit {
                     ObjectFit::Fill => "fill",
                     ObjectFit::Contain => "contain",
                     ObjectFit::Cover => "cover",
                     ObjectFit::None => "none",
-                    ObjectFit::ScaleDown => "scale-down"
+                    ObjectFit::ScaleDown => "scale-down",
                 }
-            }.to_string()));
+            }
+            .to_string(),
+        ));
 
         self.clone()
     }
+    pub fn aspect_ratio(&mut self, ratio: &str) -> Self {
+        self.get_node()
+            .node_style
+            .push(("aspect-ratio".to_string(), ratio.to_string()));
 
+        self.clone()
+    }
 }
 
 impl Renderable for Image {
