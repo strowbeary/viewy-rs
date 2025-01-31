@@ -86,6 +86,12 @@ impl Grid {
             .push(("justify-content".to_string(), value.to_string()));
         self.clone()
     }
+    pub fn justify_items(&mut self, value: &str) -> Self {
+        self.node
+            .node_style
+            .push(("justify-items".to_string(), value.to_string()));
+        self.clone()
+    }
 }
 
 impl ChildContainer for Grid {
