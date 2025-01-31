@@ -1,6 +1,6 @@
 [package]
 name = "viewy-site"
-version = "1.13.12"
+version = "1.13.13"
 authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
 edition = "2021"
 publish = false
