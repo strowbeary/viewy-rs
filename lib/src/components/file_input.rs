@@ -1,10 +1,13 @@
 use std::borrow::BorrowMut;
 
-use crate::{DefaultModifiers, Overflow, scale, sp};
-use crate::components::{Alignment, Appendable, Button, ButtonStyle, Card, CardStyle, ChildContainer, HStack, Icon, Image, ObjectFit, Text, TextStyle, View, VStack};
 use crate::components::icons::Lucide;
+use crate::components::{
+    Alignment, Appendable, Button, ButtonStyle, Card, CardStyle, ChildContainer, HStack, Icon,
+    Image, ObjectFit, Text, TextStyle, VStack, View,
+};
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
+use crate::{scale, sp, DefaultModifiers, Overflow};
 
 #[derive(Debug, Clone, PartialEq)]
 pub enum FileInputType {
@@ -27,7 +30,8 @@ pub struct FileInput {
     label: Option<String>,
     error_text: Option<String>,
     image_preview: Option<String>,
-    accept: Option<String>
+    accept: Option<String>,
+    multiple: bool,
 }
 
 impl NodeContainer for FileInput {
@@ -51,6 +55,7 @@ impl FileInput {
             error_text: None,
             image_preview: None,
             accept: None,
+            multiple: false,
         }
     }
 
@@ -74,7 +79,8 @@ impl FileInput {
     }
 
     pub fn multiple(&mut self) -> Self {
-        self.set_attr("multiple", "multiple")
+        self.multiple = true;
+        self.clone()
     }
 
     pub fn auto_submit(&mut self, is_auto_submit: bool) -> Self {
@@ -89,12 +95,12 @@ impl FileInput {
     }
 }
 
-
 impl Renderable for FileInput {
     fn render(&self) -> Node {
         match self.input_type {
             FileInputType::Hidden => {
-                let mut field = self.clone()
+                let mut field = self
+                    .clone()
                     .add_class("file-input")
                     .add_class("file-input--hidden")
                     .set_attr("type", "file")
@@ -112,10 +118,12 @@ impl Renderable for FileInput {
                 if self.auto_submit {
                     field.set_attr("data-auto-submit", &self.auto_submit.to_string());
                 }
+                if self.multiple {
+                    field.set_attr("multiple", "multiple");
+                }
                 field.node
             }
             FileInputType::Simple => {
-
                 let mut simple_file_input = View::new()
                     .add_class("file-input")
                     .add_class("file-input--simple");
@@ -129,49 +137,50 @@ impl Renderable for FileInput {
                 }
                 if self.required {
                     simple_file_input.append_child({
-                        Text::new("Requis", TextStyle::Caption)
-                            .add_class("file-input__required")
+                        Text::new("Requis", TextStyle::Caption).add_class("file-input__required")
                     });
                 }
                 simple_file_input.append_child({
-                        Card::new(CardStyle::Outlined)
-                            .add_class("file-input__input")
-                    .append_child({
-                        let mut input = View::new()
-                            .set_attr("id", &format!("file-input-{}", self.name))
-                            .set_attr("name", &self.name)
-                            .set_attr("type", "file")
-                            .tag("input");
-                        if self.required {
-                            input.set_attr("required", "required");
+                    Card::new(CardStyle::Outlined)
+                        .add_class("file-input__input")
+                        .append_child({
+                            let mut input = View::new()
+                                .set_attr("id", &format!("file-input-{}", self.name))
+                                .set_attr("name", &self.name)
+                                .set_attr("type", "file")
+                                .tag("input");
+                            if self.required {
+                                input.set_attr("required", "required");
+                            }
+                            if self.auto_submit {
+                                input.set_attr("data-auto-submit", &self.auto_submit.to_string());
+                            }
 
-                        }
-                        if self.auto_submit {
-                            input.set_attr("data-auto-submit", &self.auto_submit.to_string());
-                        }
+                            if let Some(accept) = &self.accept {
+                                input.set_attr("accept", accept);
+                            }
 
-                        if let Some(accept) = &self.accept {
-                            input.set_attr("accept", accept);
-                        }
-                        input
-                    })
-                    .append_child({
-                        HStack::new(Alignment::Center)
-                            .padding(vec![scale(3)])
-                            .padding_left(16)
-                            .gap(vec![scale(3)])
-                            .append_child({
-                                Text::new("Sélectionner un fichier", TextStyle::Body)
-                                    .add_class("file-input__file-name")
-                                    .flex_grow(1)
-                            })
-                            .append_child({
-                                Button::icon_only(Lucide::Upload, ButtonStyle::Outlined)
-                                    .add_class("file-input__button")
-                            })
-                    })
-
-                    });
+                            if self.multiple {
+                                input.set_attr("multiple", "multiple");
+                            }
+                            input
+                        })
+                        .append_child({
+                            HStack::new(Alignment::Center)
+                                .padding(vec![scale(3)])
+                                .padding_left(16)
+                                .gap(vec![scale(3)])
+                                .append_child({
+                                    Text::new("Sélectionner un fichier", TextStyle::Body)
+                                        .add_class("file-input__file-name")
+                                        .flex_grow(1)
+                                })
+                                .append_child({
+                                    Button::icon_only(Lucide::Upload, ButtonStyle::Outlined)
+                                        .add_class("file-input__button")
+                                })
+                        })
+                });
                 if let Some(error_message) = &self.error_text {
                     simple_file_input.add_class("file-input--error");
                     simple_file_input.append_child({
@@ -179,7 +188,7 @@ impl Renderable for FileInput {
                             .add_class("file-input__helper-text")
                     });
                 }
-                    simple_file_input.render()
+                simple_file_input.render()
             }
             FileInputType::Image => {
                 let mut image_file_input = View::new()
@@ -195,8 +204,7 @@ impl Renderable for FileInput {
                 }
                 if self.required {
                     image_file_input.append_child({
-                        Text::new("Requis", TextStyle::Caption)
-                            .add_class("file-input__required")
+                        Text::new("Requis", TextStyle::Caption).add_class("file-input__required")
                     });
                 }
                 image_file_input.append_child({
@@ -217,6 +225,9 @@ impl Renderable for FileInput {
                             }
                             if let Some(accept) = &self.accept {
                                 input.set_attr("accept", accept);
+                            }
+                            if self.multiple {
+                                input.set_attr("multiple", "multiple");
                             }
                             input
                         })

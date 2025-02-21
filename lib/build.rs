@@ -1,24 +1,23 @@
+extern crate cmd_lib;
+extern crate download_git;
 extern crate heck;
 extern crate quote;
 extern crate scraper;
 extern crate serde;
-extern crate download_git;
-extern crate cmd_lib;
 
 use cmd_lib::run_cmd;
+use figment::{
+    providers::{Env, Format, Toml},
+    Figment,
+};
+use heck::{ToKebabCase, ToPascalCase, ToUpperCamelCase};
+use quote::format_ident;
+use quote::quote;
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 use std::env;
 use std::env::temp_dir;
 use std::path::{Path, PathBuf};
-use std::thread::sleep;
-use std::time::Duration;
-use figment::Figment;
-use figment::providers::{Env, Format, Toml};
-use serde::{Serialize, Deserialize};
-use heck::{ToKebabCase, ToUpperCamelCase};
-use heck::ToPascalCase;
-use quote::format_ident;
-use quote::quote;
 use uuid::Uuid;
 
 #[derive(Deserialize, Serialize, Debug)]
@@ -27,12 +26,12 @@ pub struct IconPack {
     pub path: Option<String>,
     pub branch: Option<String>,
     pub prefix: Option<String>,
-    pub stroked: Option<bool>
+    pub stroked: Option<bool>,
 }
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Config {
-    pub icons: HashMap<String, IconPack>
+    pub icons: HashMap<String, IconPack>,
 }
 
 impl Default for Config {
@@ -155,7 +154,12 @@ pub fn generate_icon_pack(
 
 fn main() {
     println!("cargo:rerun-if-env-changed=FORCE_REBUILD");
-    let path = env::var("OUT_DIR").unwrap_or_default().split("/target").map(|part_str| part_str.to_string()).collect::<Vec<String>>()[0].clone();
+    let path = env::var("OUT_DIR")
+        .unwrap_or_default()
+        .split("/target")
+        .map(|part_str| part_str.to_string())
+        .collect::<Vec<String>>()[0]
+        .clone();
     let viewy_builded_project = Path::new(&path);
 
     let config = Figment::new()
@@ -184,24 +188,34 @@ fn main() {
             let temp_folder = temp_dir();
             let twd = temp_folder.join(Uuid::new_v4().to_string());
             let in_repo_path = twd.join(pack.path.unwrap_or_default());
-            println!("{:?}",  twd);
-            let git_result = run_cmd!{
+            println!("{:?}", twd);
+            let git_result = run_cmd! {
                 mkdir -p $twd;
                 git clone --verbose -b $branch_name $git_url $twd 2>&1;
             };
             println!("GIT RESULT {:?}", git_result);
 
-            let move_result  = run_cmd!{
+            let move_result = run_cmd! {
                 ls -a $twd 2>&1;
                 mkdir -p $icons_path;
                 cp -R $in_repo_path/. $icons_path 2>&1;
             };
             println!("MOVE RESULT {:?}", move_result);
-            code += &generate_icon_pack(&icon_pack_name.to_upper_camel_case(), pack.stroked.unwrap_or(true), &icons_path, pack.prefix);
+            code += &generate_icon_pack(
+                &icon_pack_name.to_upper_camel_case(),
+                pack.stroked.unwrap_or(true),
+                &icons_path,
+                pack.prefix,
+            );
         } else {
             let local_icon_pack_path = viewy_builded_project.join(pack.path.unwrap_or_default());
             println!("local_icon_pack_path {:?}", local_icon_pack_path);
-            code += &generate_icon_pack(&icon_pack_name.to_upper_camel_case(), pack.stroked.unwrap_or(true), &local_icon_pack_path, pack.prefix);
+            code += &generate_icon_pack(
+                &icon_pack_name.to_upper_camel_case(),
+                pack.stroked.unwrap_or(true),
+                &local_icon_pack_path,
+                pack.prefix,
+            );
         }
     }
 
@@ -210,7 +224,7 @@ fn main() {
             .join("icons.rs"),
         code,
     )
-        .expect("Failed writing generated.rs");
+    .expect("Failed writing generated.rs");
 
     println!("cargo:rustc-cfg=has_generated_feature")
 }
