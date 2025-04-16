@@ -130,12 +130,13 @@ impl Renderable for ColorPicker {
                 })
             }
             ColorPickerStyle::Free(color) => {
+                let color_hex_code = format!("#{}", color.unwrap_or(Color::from_hex("#ffffff")).to_string());
                 picker.node.children.push({
                     let mut option_list = View::new()
                         .tag("input")
                         .set_attr("name", self.name.as_str())
                         .set_attr("value", {
-                            &format!("#{}", color.unwrap_or(Color::from_hex("#ffffff")).to_string())
+                            &color_hex_code
                         })
                         .set_attr("type", "color")
                         .add_class(&format!("{}--input", &base_class));

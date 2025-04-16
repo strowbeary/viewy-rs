@@ -1,10 +1,10 @@
 [package]
 name = "viewy"
-version = "1.13.14"
-authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
+version.workspace = true
+authors.workspace = true
 description = "A web UI toolkit that combine the advantages of a design system and an ui library."
 keywords = ["web", "user-interface", "declarative"]
-edition = "2021"
+edition.workspace = true
 readme = "../README.md"
 repository = "https://github.com/strowbeary/viewy-rs"
 license = "MIT"

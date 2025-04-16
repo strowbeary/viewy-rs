@@ -1,10 +1,10 @@
 [package]
 name = "viewy-codegen"
-version = "1.13.14"
-authors = ["Rémi Caillot <dev@remicaillot.fr>"]
+version.workspace = true
+authors.workspace = true
 description = "Procedural macros for Viewy web ui library."
 keywords = ["viewy", "web", "ui", "code", "generation"]
-edition = "2021"
+edition.workspace = true
 readme = "../README.md"
 repository = "https://github.com/strowbeary/viewy-rs"
 license = "MIT"
