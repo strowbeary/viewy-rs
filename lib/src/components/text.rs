@@ -1,6 +1,6 @@
 use std::borrow::BorrowMut;
 
-use html_escape::encode_text;
+use html_escape::{encode_text};
 
 use crate::{DefaultModifiers, Renderable};
 use crate::node::{Node, NodeContainer};

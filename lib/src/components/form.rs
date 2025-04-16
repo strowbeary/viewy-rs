@@ -44,6 +44,11 @@ impl Form {
     pub fn inject_into_dynamic_content(&mut self, dynamic_content_name: &str) -> Self {
         self.set_attr("data-dynamic-content-name", dynamic_content_name)
     }
+
+    pub fn multipart(mut self) -> Self {
+        self.set_attr("enctype", "multipart/form-data");
+        self
+    }
 }
 
 impl ChildContainer for Form {
