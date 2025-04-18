@@ -1,7 +1,8 @@
 #[macro_use]
 extern crate rocket;
+#[macro_use]
 extern crate viewy;
-
+use rayon::prelude::*;
 use rocket::form::validate::with;
 use std::env;
 use std::time::Duration;
@@ -28,63 +29,44 @@ fn get_scripts() -> RawJavaScript<String> {
     RawJavaScript(viewy::prelude::get_scripts())
 }
 
+fn create_button_group(style: ButtonStyle) -> VStack {
+    let mut stack = VStack::new(Alignment::Start);
+    stack.gap(vec![scale(4)])
+        .append_child(Button::new("Action", style.clone()))
+        .append_child(Button::new("Disabled action", style.clone()).disabled())
+        .append_child(Button::new("Destructive action", style.clone()).destructive())
+        .append_child(Button::new("Disabled destructive action", style).disabled().destructive());
+    stack
+}
 #[get("/")]
 async fn home() -> Page<'static> {
     Page::with_title("Viewy showcase – Home").with_content({
-        VStack::new(Alignment::Stretch)
-            .gap(vec![scale(5)])
-            .append_child({
-                VStack::new(Alignment::Start).gap(vec![scale(4)])
-                    .append_child(Button::new("Action", ButtonStyle::Filled))
-                    .append_child(Button::new("Disabled action", ButtonStyle::Filled).disabled())
-                    .append_child(Button::new("Destructive action", ButtonStyle::Filled).destructive())
-                    .append_child(Button::new("Disabled destructive action", ButtonStyle::Filled).disabled().destructive())
+        let mut main_stack = VStack::new(Alignment::Stretch);
+        main_stack.gap(vec![scale(5)])
+            .append_child(create_button_group(ButtonStyle::Filled))
+            .append_child(create_button_group(ButtonStyle::Outlined))
+            .append_child(create_button_group(ButtonStyle::Flat))
+            .append_child(create_button_group(ButtonStyle::Link));
 
-            })
-            .append_child({
-                VStack::new(Alignment::Start).gap(vec![scale(4)])
-                    .append_child(Button::new("Action", ButtonStyle::Outlined))
-                    .append_child(Button::new("Disabled action", ButtonStyle::Outlined).disabled())
-                    .append_child(Button::new("Destructive action", ButtonStyle::Outlined).destructive())
-                    .append_child(Button::new("Disabled destructive action", ButtonStyle::Outlined).disabled().destructive())
 
-            })
-            .append_child({
-                VStack::new(Alignment::Start).gap(vec![scale(4)])
-                    .append_child(Button::new("Action", ButtonStyle::Flat))
-                    .append_child(Button::new("Disabled action", ButtonStyle::Flat).disabled())
-                    .append_child(Button::new("Destructive action", ButtonStyle::Flat).destructive())
-                    .append_child(Button::new("Disabled destructive action", ButtonStyle::Flat).disabled().destructive())
-            })
-            .append_child({
-                VStack::new(Alignment::Start).gap(vec![scale(4)])
-                    .append_child(Button::new("Action", ButtonStyle::Link))
-                    .append_child(Button::new("Disabled action", ButtonStyle::Link).disabled())
-                    .append_child(Button::new("Destructive action", ButtonStyle::Link).destructive())
-                    .append_child(Button::new("Disabled destructive action", ButtonStyle::Link).disabled().destructive())
-            })
-            .append_child({
-                let mut color_list = VStack::new(Alignment::Stretch);
-                color_list.gap(vec![scale(3)]);
-                for color in Color::iter() {
-                    color_list.append_child({
-                        HStack::new(Alignment::Center)
-                            .gap(vec![scale(3)])
-                            .append_child({
-                                let mut view = View::new();
-                                view.width("50px").height("50px").background_color(color);
-                                view
-                            })
-                            .append_child({
-                                let mut view = View::new();
-                                view.text = Some(color.as_str().to_string());
-                                view
-                            })
+        let mut color_list = VStack::new(Alignment::Stretch);
+        color_list.gap(vec![scale(3)]);
+        for color in Color::iter() {
+            let mut stack = HStack::new(Alignment::Center);
+            stack.gap(vec![scale(3)]);
 
-                    });
-                }
-                color_list
-            })
+            let mut view = View::new();
+            view.width("50px").height("50px").background_color(color);
+            stack.append_child(view);
+
+            let mut view = View::new();
+            view.text = Some(color.as_str().to_string());
+            stack.append_child(view);
+
+            color_list.append_child(stack);
+        }
+        main_stack.append_child(color_list);
+        main_stack
     })
 }
 
@@ -93,9 +75,20 @@ fn benchmark() -> Page<'static> {
     Page::with_title("Benchmark viewy").with_content({
         let mut stack = VStack::new(Alignment::Center);
         stack.gap(vec![scale(3)]);
-        for i in 0..50000 {
-            stack.append_child({ Button::new(&format!("Button {i}"), ButtonStyle::Filled) });
-        }
+        let buttons: Vec<Node> = (0..50000)
+            .into_par_iter()
+            .map(|i| {
+                let mut btn = Button::new(&format!("Button {i}"), ButtonStyle::Filled);
+                    btn.popup(Popup::new().append_child({
+                    let mut view = View::new();
+                    view.text = Some("Hello".to_string());
+                    view
+                }));
+                btn
+            }.into())
+            .collect();
+
+        stack.children = buttons;
         stack
     })
 }
@@ -123,12 +116,44 @@ fn hello(n: usize) -> RawHtml<TextStream![String]> {
     })
 }
 
+#[derive(Component, Clone)]
+struct MyPage {
+    pub btn_nbs: usize,
+    pub btn_label: String
+}
+
+ impl Component for MyPage {
+
+     fn render(self) -> Node {
+         let mut view = View::new();
+         for _ in 0..self.btn_nbs {
+             view.append_child({
+                 Button::new(&self.btn_label, ButtonStyle::Filled)
+             });
+         }
+             view.into()
+    }
+}
+
+#[get("/component")]
+ fn component() -> Page<'static> {
+ Page::with_title("Test")
+     .with_content({
+         MyPage {
+             btn_nbs: 10,
+             btn_label: "Hello".to_string()
+       }
+   })
+ }
+
+
+
 #[launch]
 fn rocket() -> _ {
     rocket::build()
         .mount(
             "/",
-            routes![get_stylesheet, get_scripts, home, benchmark, hello],
+            routes![get_stylesheet, get_scripts, home, benchmark, hello, component],
         )
         .mount("/assets", FileServer::from(relative!("assets")))
 }

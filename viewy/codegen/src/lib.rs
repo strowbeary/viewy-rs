@@ -42,7 +42,7 @@ pub fn widget_derive(input: TokenStream) -> TokenStream {
     let script_str = script_value
         .map(|path| quote!(include_str!(#path)))
         .unwrap_or(quote!(""));
-    let gen = quote! {
+    let generated_code = quote! {
         use std::ops::{Deref, DerefMut};
 
 
@@ -83,7 +83,7 @@ pub fn widget_derive(input: TokenStream) -> TokenStream {
 
         }
     };
-    gen.into()
+    generated_code.into()
 }
 
 #[proc_macro_derive(Component)]
@@ -98,14 +98,14 @@ pub fn component_derive(input: TokenStream) -> TokenStream {
 
 fn impl_component_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let gen = quote! {
+    let generated_code = quote! {
        impl Into<Node> for #name {
             fn into(self) -> Node {
                 self.render()
             }
         }
     };
-    gen.into()
+    generated_code.into()
 }
 
 #[proc_macro_derive(Appendable)]
@@ -120,10 +120,10 @@ pub fn appendable_derive(input: TokenStream) -> TokenStream {
 
 fn impl_appendable_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let gen = quote! {
+    let generated_code = quote! {
         impl Appendable for #name {}
     };
-    gen.into()
+    generated_code.into()
 }
 
 #[proc_macro_derive(Attributable)]
@@ -138,10 +138,10 @@ pub fn attributable_derive(input: TokenStream) -> TokenStream {
 
 fn impl_attributable_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let gen = quote! {
+    let generated_code = quote! {
         impl Attributable for #name {}
     };
-    gen.into()
+    generated_code.into()
 }
 
 #[proc_macro_derive(Classable)]
@@ -156,10 +156,10 @@ pub fn classable_derive(input: TokenStream) -> TokenStream {
 
 fn impl_classable_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let gen = quote! {
+    let generated_code = quote! {
         impl Classable for #name {}
     };
-    gen.into()
+    generated_code.into()
 }
 #[proc_macro_derive(Colorable)]
 pub fn colorable_derive(input: TokenStream) -> TokenStream {
@@ -173,10 +173,10 @@ pub fn colorable_derive(input: TokenStream) -> TokenStream {
 
 fn impl_colorable_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let gen = quote! {
+    let generated_code = quote! {
         impl Colorable for #name {}
     };
-    gen.into()
+    generated_code.into()
 }
 
 #[proc_macro_derive(Dimensionable)]
@@ -191,8 +191,8 @@ pub fn dimensionable_derive(input: TokenStream) -> TokenStream {
 
 fn impl_dimensionable_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
-    let gen = quote! {
+    let generated_code = quote! {
         impl Dimensionable for #name {}
     };
-    gen.into()
+    generated_code.into()
 }

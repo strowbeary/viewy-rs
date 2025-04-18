@@ -5,5 +5,5 @@ members = ["viewy/lib", "viewy/codegen", "site"]
 [workspace.package]
 authors = ["Rémi Caillot <dev@remicaillot.fr>"]
 version = "2.0.0"
-rust-version = "1.87.0"
+rust-version = "1.86.0"
 edition = "2024"

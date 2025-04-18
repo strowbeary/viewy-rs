@@ -25,8 +25,6 @@ pub trait Component: Into<Node> {
         ""
     }
     
-    /// Define component's layout
-    fn layout(self, layout: dyn Layout) -> Self;
 
     /// You can write the template of your component with viewy basic widgets or other components
     fn render(self) -> Node;

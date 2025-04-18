@@ -11,3 +11,4 @@ publish = false
 [dependencies]
 viewy = { path = "../viewy/lib", features = ["rocket"] }
 rocket = { version = "0.5.1", features = ["json", "secrets", "http2", "uuid"] }
+rayon = "1.10.0"

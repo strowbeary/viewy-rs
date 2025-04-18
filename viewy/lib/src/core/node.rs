@@ -107,7 +107,6 @@ pub struct HtmlCssJs {
 
 impl Into<HtmlCssJs> for Node {
     fn into(mut self) -> HtmlCssJs {
-        let style = self.get_node_style().unwrap();
         let css_style = if let Some((node_class_name, node_style)) = self.get_node_style() {
             self.class_list.insert(node_class_name);
             node_style

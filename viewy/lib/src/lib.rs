@@ -40,6 +40,7 @@
 //!         MyPage {
 //!             btn_label: "Hello".to_string()
 //!         }
+//!             .into()
 //!     })
 //!     .compile(RenderMode::Complete);
 //! }
@@ -61,13 +62,14 @@
 extern crate viewy_codegen;
 extern crate figment;
 extern crate serde;
-
 #[doc(inline)]
 pub use crate::core::component::*;
 pub use crate::core::modifiers;
 pub use crate::core::node;
 use crate::core::widget::Widget;
 use lazy_static::lazy_static;
+#[doc(inline)]
+pub use viewy_codegen::*;
 
 pub use strum;
 
@@ -142,7 +144,9 @@ mod tests {
     fn can_append_child() {
         let html = Page::with_title("Test")
             .with_content({
-                View::new().append_child({ Button::new("Hello", ButtonStyle::Filled) })
+                let mut view = View::new();
+                view.append_child({ Button::new("Hello", ButtonStyle::Filled) });
+                view
             })
             .compile(RenderMode::Complete);
 
