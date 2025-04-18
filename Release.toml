@@ -1,0 +1,29 @@
+allow-branch = [
+    "release/*",
+    "main",
+]
+sign-commit = false
+sign-tag = true
+push-remote = "origin"
+release = true
+publish = true
+verify = true
+owners = ["Remi Caillot"]
+push = true
+push-options = []
+consolidate-commits = true
+pre-release-commit-message = "Viewy-rs release v{{version}} 🎉"
+pre-release-replacements = []
+pre-release-hook = ["git", "cliff", "-o", "CHANGELOG.md", "--tag", "{{version}}" ]
+tag-message = "Viewy-rs release v{{version}} 🎉"
+tag-name = "v{{version}}"
+tag = true
+enable-features = []
+enable-all-features = false
+dependent-version = "upgrade"
+metadata = "optional"
+certs-source = "webpki"
+
+[rate-limit]
+new-packages = 5
+existing-packages = 30

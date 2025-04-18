@@ -1,6 +1,6 @@
-use rocket::{Request, Response};
 use rocket::http::ContentType;
 use rocket::response::Responder;
+use rocket::{Request, Response};
 
 use crate::router::{Page, RenderMode};
 

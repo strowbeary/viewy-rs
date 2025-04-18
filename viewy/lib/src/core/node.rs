@@ -1,10 +1,10 @@
+use rayon::prelude::*;
+use short_uuid::ShortUuid;
+use std::default::Default;
 use std::{
     collections::{HashMap, HashSet},
     hash::{Hash, Hasher},
 };
-use std::default::Default;
-use short_uuid::ShortUuid;
-use rayon::prelude::*;
 use uuid::Uuid;
 
 #[derive(Clone, Debug)]
@@ -14,6 +14,8 @@ pub enum NodeType {
     Comment(&'static str),
 }
 
+/// Represent HTML DOM node that will be generated on render
+/// Every components will configure one or many nodes.
 #[derive(Clone, Debug)]
 pub struct Node {
     pub identifier: Uuid,
@@ -25,7 +27,9 @@ pub struct Node {
     pub attributes: HashMap<String, String>,
     pub root_nodes: HashSet<Node>,
 }
+
 impl Eq for Node {}
+
 impl PartialEq for Node {
     fn eq(&self, other: &Self) -> bool {
         self.identifier.eq(&other.identifier)
@@ -71,18 +75,26 @@ impl Node {
     pub fn get_node_style(&self) -> Option<(String, String)> {
         if !self.node_style.is_empty() {
             let short_identifier = ShortUuid::from_uuid(&self.identifier).to_string();
-            let concat_property = self.node_style.iter().map(|(prop_name, prop_value)| format!("    {prop_name}: {prop_value};")).collect::<Vec<String>>().join("\n");
-            Some((short_identifier.clone(), format!("\
+            let concat_property = self
+                .node_style
+                .iter()
+                .map(|(prop_name, prop_value)| format!("    {prop_name}: {prop_value};"))
+                .collect::<Vec<String>>()
+                .join("\n");
+            Some((
+                short_identifier.clone(),
+                format!(
+                    "\
 .{short_identifier} {{
 {concat_property}
-}}\n")))
+}}\n"
+                ),
+            ))
         } else {
             None
         }
-
     }
 }
-
 
 /// HtmlCssJs type describe the 3 components for a dynamic page :
 /// HTML code, CSS code, JavaScript code
@@ -94,8 +106,8 @@ pub struct HtmlCssJs {
 }
 
 impl Into<HtmlCssJs> for Node {
-
     fn into(mut self) -> HtmlCssJs {
+        let style = self.get_node_style().unwrap();
         let css_style = if let Some((node_class_name, node_style)) = self.get_node_style() {
             self.class_list.insert(node_class_name);
             node_style
@@ -103,13 +115,13 @@ impl Into<HtmlCssJs> for Node {
             String::new()
         };
         let mut attributes = self.attributes;
+
         if !self.class_list.is_empty() {
             attributes.insert(
                 "class".to_string(),
                 Vec::from_iter(self.class_list).join(" "),
             );
         }
-
 
         if !self.node_style.is_empty() {
             attributes.insert(
@@ -138,7 +150,11 @@ impl Into<HtmlCssJs> for Node {
                 "<{tag_name} {attributes}>{children}</{tag_name}>",
                 attributes = attributes.join(" "),
                 children = match self.text.clone() {
-                    None => content.into_iter().map(|HtmlCssJs{html, ..}| html).collect::<Vec<String>>().join(""),
+                    None => content
+                        .into_iter()
+                        .map(|HtmlCssJs { html, .. }| html)
+                        .collect::<Vec<String>>()
+                        .join(""),
                     Some(text) => text,
                 }
             ),
@@ -151,7 +167,7 @@ impl Into<HtmlCssJs> for Node {
         HtmlCssJs {
             html,
             css: css_style,
-            js: String::new()
+            js: String::new(),
         }
     }
 }

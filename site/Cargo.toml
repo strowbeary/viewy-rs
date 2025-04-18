@@ -1,8 +1,9 @@
 [package]
 name = "viewy-site"
-version = "1.7.2"
-authors = ["Rémi Caillot <remicaillot5@gmail.com>"]
-edition = "2021"
+version.workspace = true
+edition.workspace = true
+authors.workspace = true
+rust-version.workspace = true
 publish = false
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
@@ -10,4 +11,3 @@ publish = false
 [dependencies]
 viewy = { path = "../viewy/lib", features = ["rocket"] }
 rocket = { version = "0.5.1", features = ["json", "secrets", "http2", "uuid"] }
-chrono = { version = "0.4", features = ["serde"] }

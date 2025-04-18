@@ -1,7 +1,6 @@
 #![doc(html_favicon_url = "https://viewy.rs/logos/favicon.svg")]
 #![doc(html_logo_url = "https://viewy.rs/logos/logo-light.svg")]
 #![warn(missing_docs)]
-#![deny(unwrap, expect)]
 
 //! # Viewy Rust Documentation
 //!
