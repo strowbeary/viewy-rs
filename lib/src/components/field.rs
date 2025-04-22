@@ -74,6 +74,7 @@ pub struct Field {
     pub disabled: bool,
     pub multiple: Option<Vec<String>>,
     pub form: Option<String>,
+    pub pattern: Option<String>,
 }
 
 impl NodeContainer for Field {
@@ -106,6 +107,7 @@ impl Field {
             disabled: false,
             multiple: None,
             form: None,
+            pattern: None,
         }
     }
 
@@ -179,6 +181,12 @@ impl Field {
     pub fn async_datalist(&mut self, url: &str) -> Self {
         self.datalist = true;
         self.set_attr("data-async-datalist", url)
+    }
+
+    /// Défini l'attribut standard HTML pattern sur l'<input>
+    pub fn pattern(&mut self, pattern: &str) -> Self {
+        self.pattern = Some(pattern.to_string());
+        self.clone()
     }
 
     pub fn required(&mut self, is_required: bool) -> Self {
@@ -427,6 +435,9 @@ impl Renderable for Field {
 
                     if let Some(form) = &self.form {
                         input.set_attr("form", form);
+                    }
+                    if let Some(pattern) = &self.pattern {
+                        input.set_attr("pattern", pattern);
                     }
 
                     if self.required {

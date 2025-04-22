@@ -1,7 +1,4 @@
 use std::borrow::BorrowMut;
-
-use html_escape::{encode_text};
-
 use crate::{DefaultModifiers, Renderable};
 use crate::node::{Node, NodeContainer};
 
@@ -95,7 +92,7 @@ impl Renderable for Text {
             .add_class("text")
             .add_class(format!("text--{:?}", self.style).to_lowercase().as_str());
         if self.encode_text {
-            text.node.text = Some(encode_text(&self.content).to_string());
+            text.node.text = Some(ammonia::clean(&self.content));
         } else {
             text.node.text = Some(self.content.to_string());
         }

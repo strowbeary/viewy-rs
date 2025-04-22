@@ -197,7 +197,7 @@ impl Renderable for Picker {
                 })
             }
             PickerStyle::Dropdown => {
-                let dropdown_id = format!("picker-dropdown-{}", self.name.as_str());
+                let dropdown_id = format!("picker-dropdown-{}", picker_id);
 
                 picker.node.children.push({
                     View::new()
