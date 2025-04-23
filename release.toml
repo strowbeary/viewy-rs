@@ -3,4 +3,4 @@ pre-release-commit-message="Viewy.rs release v{{version}} 🍾"
 shared-version = true
 consolidate-commits = true
 allow-branch = ["main", "release/*"]
-pre-release-hook = ["git", "cliff", "-o", "CHANGELOG.md", "--tag", "{{version}}" ]
+pre-release-hook = ["git", "cliff", "-r", "../", "-o", "../CHANGELOG.md", "--tag", "{{version}}" ]
