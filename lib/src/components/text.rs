@@ -2,6 +2,18 @@ use std::borrow::BorrowMut;
 use crate::{DefaultModifiers, Renderable};
 use crate::node::{Node, NodeContainer};
 
+#[derive(Debug, Clone)]
+pub enum SanitizationLevel {
+    /// No sanitization is performed.
+    None,
+    /// Only basic HTML tags are allowed.
+    /// Use this level if you need to render content issued from RichTextArea
+    Basic,
+    /// Default level.
+    /// No HTML tags allowed, only text
+    Strict,
+}
+
 /// Used to set the typographic style of a Text view.
 #[derive(Debug, Clone)]
 pub enum TextStyle {
@@ -28,7 +40,7 @@ pub struct Text {
     pub content: String,
     pub style: TextStyle,
     pub no_wrap: bool,
-    pub encode_text: bool,
+    pub sanitization_level: SanitizationLevel,
 }
 
 impl Text {
@@ -38,7 +50,7 @@ impl Text {
             content: content.to_string(),
             style,
             no_wrap: false,
-            encode_text: true,
+            sanitization_level: SanitizationLevel::Strict,
         }
     }
     pub fn bold(&mut self, is_bold: bool) -> Self {
@@ -64,7 +76,13 @@ impl Text {
         self.clone()
     }
     pub fn disable_purification(&mut self) -> Self {
-        self.encode_text = false;
+        self.sanitization_level = SanitizationLevel::Basic;
+        self.clone()
+    }
+
+    /// Define sanitization level
+    pub fn sanitization_level(&mut self, level: SanitizationLevel) -> Self {
+        self.sanitization_level = level;
         self.clone()
     }
 
@@ -91,11 +109,21 @@ impl Renderable for Text {
         let mut text = self.clone()
             .add_class("text")
             .add_class(format!("text--{:?}", self.style).to_lowercase().as_str());
-        if self.encode_text {
-            text.node.text = Some(ammonia::clean(&self.content));
-        } else {
-            text.node.text = Some(self.content.to_string());
+
+        match self.sanitization_level {
+            SanitizationLevel::None => {
+                text.node.text = Some(self.content.to_string())
+            }
+            SanitizationLevel::Basic => {
+                let mut ammonia_basic_level = ammonia::Builder::new();
+                ammonia_basic_level.add_tags(&["p", "b", "strong", "i", "code", "span", "div", "h1", "h2", "h3", "h4", "h5", "h6"]);
+                text.node.text = Some(ammonia_basic_level.clean(&self.content.to_string()).to_string())
+            }
+            SanitizationLevel::Strict => {
+                text.node.text = Some(ammonia::clean(&self.content))
+            }
         }
+
         if self.no_wrap {
             text.add_class("text--nowrap");
         }
