@@ -12,6 +12,10 @@ All notable changes to this project will be documented in this file.
 
 - Add IntelliJ IDEA project configuration`
 
+### `docs
+
+- Update for version 1.13.17 with new features and breaking changes`
+
 ## [1.13.16] - 2025-04-23
 
 ### Features
