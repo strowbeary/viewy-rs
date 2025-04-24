@@ -10,7 +10,7 @@ All notable changes to this project will be documented in this file.
 - Introduce `SanitizationLevel` enum and methods for configurable text sanitization
 - Allow releases from "release/*" branches and add pre-release hook
 
-### `chore
+### chore
 
 - Add default git-cliff configuration`
 

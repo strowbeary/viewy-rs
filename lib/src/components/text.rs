@@ -75,6 +75,8 @@ impl Text {
         self.no_wrap = is_no_wrap;
         self.clone()
     }
+    
+    #[deprecated(since = "0.13.16", note = "Use sanitization_level instead")]
     pub fn disable_purification(&mut self) -> Self {
         self.sanitization_level = SanitizationLevel::Basic;
         self.clone()
@@ -115,12 +117,12 @@ impl Renderable for Text {
                 text.node.text = Some(self.content.to_string())
             }
             SanitizationLevel::Basic => {
-                let mut ammonia_basic_level = ammonia::Builder::new();
-                ammonia_basic_level.add_tags(&["p", "b", "strong", "i", "code", "span", "div", "h1", "h2", "h3", "h4", "h5", "h6"]);
-                text.node.text = Some(ammonia_basic_level.clean(&self.content.to_string()).to_string())
+                text.node.text = Some(ammonia::clean(&self.content))
             }
             SanitizationLevel::Strict => {
-                text.node.text = Some(ammonia::clean(&self.content))
+                text.node.text = Some(ammonia::Builder::empty()
+                    .clean(&self.content)
+                    .to_string())
             }
         }
 
