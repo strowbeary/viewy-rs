@@ -3,6 +3,7 @@ use crate::core::widget::Widget;
 use crate::widgets::popup::Popup;
 use uuid::Uuid;
 
+pub mod actionnable;
 pub mod box_stylable;
 
 use crate::core::theme::Color;

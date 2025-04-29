@@ -44,14 +44,12 @@ impl Hash for Node {
 
 impl Default for Node {
     fn default() -> Self {
-        let mut class_list = HashSet::new();
-        class_list.insert("view".to_string());
         Node {
             identifier: Uuid::new_v4(),
             node_type: NodeType::Normal("div"),
             text: None,
             children: vec![],
-            class_list,
+            class_list: HashSet::new(),
             node_style: vec![],
             attributes: HashMap::default(),
             root_nodes: HashSet::default(),

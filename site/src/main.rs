@@ -3,15 +3,13 @@ extern crate rocket;
 #[macro_use]
 extern crate viewy;
 use rayon::prelude::*;
-use rocket::form::validate::with;
+use rocket::tokio::time::interval;
 use std::env;
 use std::time::Duration;
 
-use rocket::fs::{relative, FileServer};
+use rocket::fs::{FileServer, relative};
 use rocket::response::content::{RawCss, RawHtml, RawJavaScript};
 use rocket::response::stream::TextStream;
-use rocket::serde::uuid::Uuid;
-use rocket::tokio::time::{interval, Interval};
 
 use viewy::prelude::*;
 use viewy::strum::IntoEnumIterator;
@@ -31,23 +29,34 @@ fn get_scripts() -> RawJavaScript<String> {
 
 fn create_button_group(style: ButtonStyle) -> VStack {
     let mut stack = VStack::new(Alignment::Start);
-    stack.gap(vec![scale(4)])
+    stack
+        .gap(vec![scale(4)])
         .append_child(Button::new("Action", style.clone()))
         .append_child(Button::new("Disabled action", style.clone()).disabled())
         .append_child(Button::new("Destructive action", style.clone()).destructive())
-        .append_child(Button::new("Disabled destructive action", style).disabled().destructive());
+        .append_child(
+            Button::new("Disabled destructive action", style)
+                .disabled()
+                .destructive(),
+        );
     stack
 }
 #[get("/")]
 async fn home() -> Page<'static> {
     Page::with_title("Viewy showcase – Home").with_content({
         let mut main_stack = VStack::new(Alignment::Stretch);
-        main_stack.gap(vec![scale(5)])
+
+        main_stack.append_child(
+            Button::new("Open popup", ButtonStyle::Filled)
+                .popup(Popup::new().append_child(create_button_group(ButtonStyle::Filled))),
+        );
+
+        main_stack
+            .gap(vec![scale(5)])
             .append_child(create_button_group(ButtonStyle::Filled))
             .append_child(create_button_group(ButtonStyle::Outlined))
             .append_child(create_button_group(ButtonStyle::Flat))
             .append_child(create_button_group(ButtonStyle::Link));
-
 
         let mut color_list = VStack::new(Alignment::Stretch);
         color_list.gap(vec![scale(3)]);
@@ -78,14 +87,17 @@ fn benchmark() -> Page<'static> {
         let buttons: Vec<Node> = (0..50000)
             .into_par_iter()
             .map(|i| {
-                let mut btn = Button::new(&format!("Button {i}"), ButtonStyle::Filled);
+                {
+                    let mut btn = Button::new(&format!("Button {i}"), ButtonStyle::Filled);
                     btn.popup(Popup::new().append_child({
-                    let mut view = View::new();
-                    view.text = Some("Hello".to_string());
-                    view
-                }));
-                btn
-            }.into())
+                        let mut view = View::new();
+                        view.text = Some("Hello".to_string());
+                        view
+                    }));
+                    btn
+                }
+                .into()
+            })
             .collect();
 
         stack.children = buttons;
@@ -100,7 +112,7 @@ fn layout(content: Node) -> Node {
 }
 #[get("/infinite-hellos?<n>")]
 fn hello(n: usize) -> RawHtml<TextStream![String]> {
-     let mut interval = interval(Duration::from_millis(10));
+    let mut interval = interval(Duration::from_millis(10));
     RawHtml(TextStream! {
         let page_content = Page::with_title("Streaming")
         .with_layout(&layout).compile(RenderMode::LayoutOnly);
@@ -119,41 +131,46 @@ fn hello(n: usize) -> RawHtml<TextStream![String]> {
 #[derive(Component, Clone)]
 struct MyPage {
     pub btn_nbs: usize,
-    pub btn_label: String
+    pub btn_label: String,
 }
 
- impl Component for MyPage {
+impl Component for MyPage {
+    fn render(self) -> Node {
+        let mut view = View::new();
+        for _ in 0..self.btn_nbs {
+            view.append_child(Button::new(&self.btn_label, ButtonStyle::Filled));
+        }
+        view.into()
+    }
 
-     fn render(self) -> Node {
-         let mut view = View::new();
-         for _ in 0..self.btn_nbs {
-             view.append_child({
-                 Button::new(&self.btn_label, ButtonStyle::Filled)
-             });
-         }
-             view.into()
+    fn from_request(req: rocket::Request) -> Self {
+        todo!()
     }
 }
 
 #[get("/component")]
- fn component() -> Page<'static> {
- Page::with_title("Test")
-     .with_content({
-         MyPage {
-             btn_nbs: 10,
-             btn_label: "Hello".to_string()
-       }
-   })
- }
-
-
+fn component() -> Page<'static> {
+    Page::with_title("Test").with_content({
+        MyPage {
+            btn_nbs: 10,
+            btn_label: "Hello".to_string(),
+        }
+    })
+}
 
 #[launch]
 fn rocket() -> _ {
     rocket::build()
         .mount(
             "/",
-            routes![get_stylesheet, get_scripts, home, benchmark, hello, component],
+            routes![
+                get_stylesheet,
+                get_scripts,
+                home,
+                benchmark,
+                hello,
+                component
+            ],
         )
         .mount("/assets", FileServer::from(relative!("assets")))
 }

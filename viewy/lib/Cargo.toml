@@ -4,21 +4,27 @@ version.workspace = true
 edition.workspace = true
 authors.workspace = true
 rust-version.workspace = true
+keywords.workspace = true
+description.workspace = true
+readme = "../README.md"
+repository.workspace = true
+license.workspace = true
+documentation.workspace = true
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-viewy-codegen = { path = "../codegen"}
-uuid = {  version = "1.6", features = ["v4"]}
+viewy-codegen = { path = "../codegen" }
+uuid = { version = "1.6", features = ["v4"] }
 rocket = { version = "0.5.0", optional = true }
-figment = { version = "0.10", features = ["toml", "env"]}
+figment = { version = "0.10", features = ["toml", "env"] }
 grass = "0.13"
 minifier = "0.3"
 html-escape = "0.2"
 serde = { version = "1.0", features = ["serde_derive"] }
 palette = "0.7"
 hex = "0.4"
-strum = { version = "0.25.0", features = ["derive"]}
+strum = { version = "0.25.0", features = ["derive"] }
 lazy_static = { version = "1.4.0", features = [] }
 rayon = "1.8.1"
 short-uuid = "0.1.2"
@@ -26,7 +32,7 @@ short-uuid = "0.1.2"
 [build-dependencies]
 heck = "0.4"
 quote = "1.0"
-figment = { version = "0.10", features = ["toml", "env"]}
+figment = { version = "0.10", features = ["toml", "env"] }
 
 [features]
 rich-text-area = []

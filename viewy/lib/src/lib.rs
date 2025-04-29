@@ -1,6 +1,5 @@
 #![doc(html_favicon_url = "https://viewy.rs/logos/favicon.svg")]
 #![doc(html_logo_url = "https://viewy.rs/logos/logo-light.svg")]
-#![warn(missing_docs)]
 
 //! # Viewy Rust Documentation
 //!
@@ -75,13 +74,6 @@ pub use strum;
 
 mod core;
 
-/// This module contains all http framework specific implementations on viewy objects.
-///
-/// Supported frameworks :
-///
-/// | Supported frameworks | Feature tag |
-/// | :--------------------|:-----------:|
-/// | Rocket-rs            | `rocket`    |
 pub mod bindings;
 pub mod router;
 pub mod widgets;

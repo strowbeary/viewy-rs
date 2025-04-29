@@ -1,4 +1,3 @@
-use crate::core::layout::Layout;
 use crate::core::node::Node;
 
 /// Define a struct as a `Component` to use it in `append_child` method of widgets
@@ -24,7 +23,6 @@ pub trait Component: Into<Node> {
     fn script() -> &'static str {
         ""
     }
-    
 
     /// You can write the template of your component with viewy basic widgets or other components
     fn render(self) -> Node;
