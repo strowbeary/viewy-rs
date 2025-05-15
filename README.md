@@ -1,3 +1,4 @@
+![Viewy logo](https://viewy.rs/logos/logo-light.svg)
 
 # Viewy Rust Documentation
 
