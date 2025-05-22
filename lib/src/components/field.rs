@@ -4,11 +4,11 @@ use chrono::{Duration, NaiveDateTime, TimeZone, Utc};
 use html_escape::encode_double_quoted_attribute;
 use uuid::Uuid;
 
+use crate::Renderable;
 use crate::components::icons::Lucide;
 use crate::components::*;
 use crate::node::{Node, NodeContainer};
-use crate::Renderable;
-use crate::{scale, sp, DefaultModifiers, Overflow};
+use crate::{DefaultModifiers, Overflow, scale, sp};
 
 fn multi_value_row(
     field_name: &str,
@@ -75,6 +75,7 @@ pub struct Field {
     pub disabled: bool,
     pub multiple: Option<Vec<String>>,
     pub form: Option<String>,
+    pub pattern: Option<String>,
 }
 
 impl NodeContainer for Field {
@@ -107,6 +108,7 @@ impl Field {
             disabled: false,
             multiple: None,
             form: None,
+            pattern: None,
         }
     }
 
@@ -116,7 +118,7 @@ impl Field {
     }
 
     pub fn value(&mut self, value: &str) -> Self {
-        self.value = Some(value.to_string());
+        self.value = Some(ammonia::clean(value));
         self.clone()
     }
 
@@ -140,7 +142,38 @@ impl Field {
         self.clone()
     }
 
-    /// Activable only on non textarea fields
+    /// Enable user to input multiple values in a form for the same field.
+    /// Will be serialized in the POST request as URL Encoded form data or multipart form data.
+    /// For a field defined as following
+    /// ```
+    /// Field::new("name", FieldType::Text)
+    ///                .multiple_value(vec![
+    ///                     String::from("value1"), 
+    ///                     String::from("value2")
+    ///                 ])
+    /// ```
+    /// The form data will look like this
+    /// ```x-www-form-urlencoded
+    /// name=value1&name=value2
+    /// ```
+    ///
+    /// # Example
+    /// To add multiple existing values
+    /// ```rust
+    /// use viewy::components::{Field, FieldType};
+    /// let field = Field::new("name", FieldType::Text)
+    ///                .multiple_value(vec![
+    ///                     String::from("value1"), 
+    ///                     String::from("value2")
+    ///                 ]);
+    /// ```
+    ///
+    /// To display an empty multiple value field
+    /// ```rust
+    /// use viewy::components::{Field, FieldType};
+    /// let field = Field::new("name", FieldType::Text)
+    ///                 .multiple_value(vec![]);
+    /// ```
     pub fn multiple_value(&mut self, values: Vec<String>) -> Self {
         self.multiple = Some(values);
         self.clone()
@@ -180,6 +213,12 @@ impl Field {
     pub fn async_datalist(&mut self, url: &str) -> Self {
         self.datalist = true;
         self.set_attr("data-async-datalist", url)
+    }
+
+    /// Défini l'attribut standard HTML pattern sur l'<input>
+    pub fn pattern(&mut self, pattern: &str) -> Self {
+        self.pattern = Some(pattern.to_string());
+        self.clone()
     }
 
     pub fn required(&mut self, is_required: bool) -> Self {
@@ -429,6 +468,9 @@ impl Renderable for Field {
 
                     if let Some(form) = &self.form {
                         input.set_attr("form", form);
+                    }
+                    if let Some(pattern) = &self.pattern {
+                        input.set_attr("pattern", pattern);
                     }
 
                     if self.required {

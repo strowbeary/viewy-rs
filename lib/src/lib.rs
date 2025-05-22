@@ -2,7 +2,6 @@ extern crate minifier;
 extern crate grass;
 extern crate serde;
 extern crate serde_json;
-extern crate html_escape;
 extern crate uuid;
 extern crate dyn_clone;
 extern crate toml;
