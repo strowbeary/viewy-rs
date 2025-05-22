@@ -1,5 +1,5 @@
 use std::borrow::BorrowMut;
-
+use std::cmp::PartialEq;
 use chrono::{Duration, NaiveDateTime, TimeZone, Utc};
 use html_escape::encode_double_quoted_attribute;
 use uuid::Uuid;
@@ -32,7 +32,7 @@ fn multi_value_row(
         .append_child({ Button::icon_only(Lucide::Trash2, ButtonStyle::Flat).destructive() })
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, Eq, PartialEq)]
 pub enum FieldType {
     Text,
     Password,
@@ -45,6 +45,7 @@ pub enum FieldType {
     Duration(Vec<Duration>),
     Month,
     Search,
+    MainSearchBar,
     Time,
     Url,
     Week,
@@ -194,6 +195,7 @@ impl Field {
         self.clone()
     }
 }
+
 
 impl Renderable for Field {
     fn render(&self) -> Node {
@@ -450,10 +452,15 @@ impl Renderable for Field {
                                 "type",
                                 &match &field.field_type {
                                     FieldType::DateTimeLocal => "datetime-local".to_string(),
+                                    FieldType::MainSearchBar => "search".to_string(),
                                     field_type => format!("{:?}", field_type).to_lowercase(),
                                 },
                             );
                         }
+                    }
+
+                    if field.field_type ==  FieldType::MainSearchBar {
+                        input.add_class("field__input--main-search-bar");
                     }
                     if self.datalist && !matches!(field.field_type, FieldType::TextArea) {
                         let id = Uuid::new_v4().to_string();

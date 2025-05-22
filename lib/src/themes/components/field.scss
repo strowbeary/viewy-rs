@@ -56,6 +56,21 @@
     &:-moz-ui-invalid {
       box-shadow: none;
     }
+
+    &--main-search-bar {
+      padding: sp(13) sp(26);
+      border-radius: sp(24);
+      font-size: sp(18);
+      background-color: var(--surface);
+      border: none;
+
+      &:focus {
+        padding: sp(12) sp(25);
+        background-color: var(--background);
+        border: sp(1) solid var(--color-border);
+      }
+
+    }
   }
 
   textarea {
@@ -88,13 +103,16 @@
       }
     }
   }
+
   &--multi-value {
     &__multi-value-container {
       grid-area: input;
+
       .field input {
         background: var(--background);
       }
     }
+
     &__add-value-button {
       width: 100%;
       flex-grow: 1;

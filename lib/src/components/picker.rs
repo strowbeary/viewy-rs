@@ -51,7 +51,8 @@ pub struct Picker {
     pub options: Vec<PickerOption>,
     is_disabled: bool,
     auto_submit: bool,
-    required: bool
+    required: bool,
+    pub form: Option<String>,
 }
 
 impl Picker {
@@ -67,6 +68,7 @@ impl Picker {
             is_disabled: false,
             auto_submit: false,
             required: false,
+            form: None,
         }
     }
 
@@ -100,7 +102,8 @@ impl Picker {
     ///        })
     /// ```
     pub fn attach_to_form(&mut self, form_name: &str) -> Self {
-        self.set_attr("form", form_name)
+        self.form = Some(form_name.to_string());
+        self.clone()
     }
 
     pub fn disabled(&mut self, is_disabled: bool) -> Self {
@@ -159,6 +162,10 @@ impl Renderable for Picker {
                                 .set_attr("value", option.value.as_str())
                                 .set_attr("id", radio_id.as_str())
                                 .add_class("picker--segmented__option-list__radio");
+                            if let Some(form_id) = &self.form{
+                                radio.set_attr("form", form_id.as_str());
+                            }
+
                             if picker.value.eq(option.value.as_str()) {
                                 radio.set_attr("checked", "checked");
                             }
@@ -207,6 +214,9 @@ impl Renderable for Picker {
                             let mut input = Field::new(self.name.as_str(), FieldType::Hidden)
                                 .add_class("picker--dropdown__input__field")
                                 .value(&picker.value);
+                            if let Some(form_id) = &self.form{
+                                input.set_attr("form", form_id.as_str());
+                            }
                             if self.auto_submit {
                                 input.set_attr("data-auto-submit", "data-auto-submit");
                             }
@@ -292,6 +302,10 @@ impl Renderable for Picker {
                             .set_attr("name", self.name.as_str())
                             .set_attr("id", radio_id.as_str())
                             .set_attr("value", option.value.as_str());
+
+                        if let Some(form_id) = &self.form{
+                            radio_button.set_attr("form", form_id.as_str());
+                        }
                         if picker.is_disabled {
                             radio_button.set_attr("disabled", "disabled");
                         }

@@ -11,4 +11,3 @@ authors.workspace = true
 viewy = { path = "../lib" }
 rocket = { version = "0.5.0", features = ["json", "secrets", "http2"]  }
 chrono = { version = "0.4", features = ["serde"] }
-

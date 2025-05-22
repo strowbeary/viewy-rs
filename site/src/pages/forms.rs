@@ -5,10 +5,17 @@ use viewy::{scale, DefaultModifiers};
 
 use crate::components::showcase_section;
 
+
+
 pub fn forms() -> VStack {
     VStack::new(Alignment::Stretch)
         .padding(vec![scale(4)])
         .gap(vec![scale(4)])
+        .append_child({
+            showcase_section("Main search bar", {
+                Field::new("q", FieldType::MainSearchBar)
+            })
+        })
         .append_child({
             showcase_section("Input for durations", {
                 Field::new("duration", FieldType::Duration(vec![

@@ -21,24 +21,23 @@ grass = "0.13"
 minifier = "0.3"
 serde = { version = "1.0", features = ["serde_derive"] }
 serde_json = "1.0"
-markdown = "0.3"
+markdown = "1.0"
 html-escape = "0.2"
 palette = "0.7"
 uuid = { version = "1", features = ["v4"] }
 dyn-clone = "1.0"
 toml = "0.8"
 hex = "0.4"
-base64 = "0.21"
+base64 = "0.22"
 chrono = { version = "0.4", features = ["serde"] }
-chrono-tz = { version = "0.8", features = ["serde"] }
 figment = { version = "0.10", features = ["toml", "env"]}
 timeago = "0.4.2"
-css-minify = "0.3.1"
+css-minify = "0.5"
 
 [build-dependencies]
-heck = "0.4"
+heck = "0.5"
 quote = "1.0"
-scraper = "0.18"
+scraper = "0.23"
 figment = { version = "0.10", features = ["toml", "env"]}
 serde = { version = "1.0", features = ["serde_derive"] }
 download_git = "0.0.2"
@@ -46,4 +45,7 @@ cmd_lib = "1.9"
 uuid = { version = "1", features = ["v4"] }
 
 [dev-dependencies]
-heck = "0.4"
+heck = "0.5"
+
+[features]
+auto-csrf-token = []

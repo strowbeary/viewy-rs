@@ -42,6 +42,7 @@ impl SortableStack {
         self.clone()
     }
 
+    /// Define url of the post request to send order changes requests
     pub fn action(&mut self, action: &str) -> Self {
         self.set_attr("data-action", action)
     }

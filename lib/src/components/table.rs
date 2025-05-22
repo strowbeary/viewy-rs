@@ -143,6 +143,7 @@ pub struct Table {
     rows: Vec<Row>,
     node: Node,
     selectable: bool,
+    select_all: bool
 }
 
 
@@ -155,11 +156,17 @@ impl Table {
             rows: vec![],
             node: Default::default(),
             selectable: false,
+            select_all: false,
         }
     }
 
     pub fn selectable(&mut self, is_selectable: bool) -> Self {
         self.selectable = is_selectable;
+        self.clone()
+    }
+    
+    pub fn display_select_all_checkbox(&mut self) -> Self {
+        self.select_all = true;
         self.clone()
     }
 
@@ -219,8 +226,17 @@ impl Renderable for Table {
                             .tag("tr");
                         if self.selectable {
                             tr.prepend_child({
-                                View::new()
-                                    .tag("th")
+                                let mut checkbox_th = View::new()
+                                    .tag("th");
+                                
+                                if self.select_all {
+                                    checkbox_th.append_child({
+                                        Checkbox::new(&self.name, "", CheckboxStyle::Checkbox)
+                                            .attach_to_form("dummy")
+                                            .add_class("select-all")
+                                    });   
+                                }
+                                checkbox_th
                             });
                         }
                         self.clone().columns.into_iter()
