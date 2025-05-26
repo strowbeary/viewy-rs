@@ -64,7 +64,7 @@ pub use table::*;
 pub use table_of_content::{TableOfContentItemType, TableOfContents, TableOfContentsItem};
 pub use tabs::{TabView, TabViewItem};
 pub use tag::*;
-pub use text::{Text, TextStyle};
+pub use text::{Text, TextStyle, SanitizationLevel};
 pub use titlebar::TitleBar;
 pub use view::View;
 pub use vstack::{Alignment, VStack};
