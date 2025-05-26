@@ -1,80 +1,76 @@
-mod view;
-mod titlebar;
-mod text;
-mod grid;
-mod card;
+mod avatar;
+mod badge;
 mod button;
-mod vstack;
-mod hstack;
+mod card;
+mod checkbox;
+mod color_picker;
+mod complex_text;
+mod disclosure;
+mod divider;
+mod dynamic_content;
 mod field;
-mod picker;
+mod file_input;
+mod form;
+mod gauge;
+mod grid;
+mod hstack;
 mod icon;
 mod image;
-mod complex_text;
-mod popover;
-mod form;
-mod divider;
 mod menu;
-mod table;
-mod checkbox;
-mod avatar;
-mod tag;
-mod popup;
-mod file_input;
-mod color_picker;
-mod snackbar;
-mod tabs;
-mod badge;
-mod dynamic_content;
-mod sortable_stack;
-mod gauge;
-mod stepper;
-mod disclosure;
-mod table_of_content;
 mod multiple_file_input;
+mod picker;
+mod popover;
+mod popup;
 mod progress_bar;
+mod snackbar;
+mod sortable_stack;
+mod stepper;
+mod table;
+mod table_of_content;
+mod tabs;
+mod tag;
+mod text;
+mod titlebar;
+mod view;
+mod vstack;
 
-pub use badge::{BadgeModifiers, Badge, BadgeType};
+pub use avatar::*;
+pub use badge::{Badge, BadgeModifiers, BadgeType};
 pub use button::{Button, ButtonStyle};
-pub use disclosure::{Disclosure};
 pub use card::{Card, CardStyle};
-pub use vstack::{VStack, Alignment};
+pub use checkbox::*;
+pub use color_picker::*;
 pub use complex_text::ComplexText;
-pub use titlebar::TitleBar;
-pub use grid::Grid;
-pub use view::View;
+pub use disclosure::Disclosure;
+pub use divider::Divider;
+pub use dynamic_content::DynamicContent;
 pub use field::{Field, FieldType};
-pub use picker::{Picker, PickerStyle, PickerOption};
+pub use file_input::*;
+pub use form::{Form, FormMethod};
+pub use gauge::{Gauge, GaugeStyle};
+pub use grid::Grid;
+pub use hstack::HStack;
 pub use icon::{Icon, icons};
 pub use image::{Image, ObjectFit};
-pub use popover::{Popover, Placement};
-pub use hstack::HStack;
-pub use text::{Text, TextStyle};
-pub use form::Form;
-pub use divider::Divider;
 pub use menu::*;
-pub use table::*;
-pub use checkbox::*;
-pub use avatar::*;
-pub use tag::*;
-pub use popup::*;
-pub use file_input::*;
 pub use multiple_file_input::*;
-pub use color_picker::*;
-pub use gauge::{Gauge, GaugeStyle};
+pub use picker::{Picker, PickerOption, PickerStyle};
+pub use popover::{Placement, Popover};
+pub use popup::*;
 pub use progress_bar::ProgressBar;
 pub use snackbar::{Snackbar, SnackbarType};
-pub use dynamic_content::{DynamicContent};
-pub use stepper::{};
-pub use tabs::{
-    TabView,
-    TabViewItem
-};
 pub use sortable_stack::SortableStack;
-pub use table_of_content::{TableOfContents, TableOfContentsItem, TableOfContentItemType};
+pub use table::*;
+pub use table_of_content::{TableOfContentItemType, TableOfContents, TableOfContentsItem};
+pub use tabs::{TabView, TabViewItem};
+pub use tag::*;
+pub use text::{Text, TextStyle};
+pub use titlebar::TitleBar;
+pub use view::View;
+pub use vstack::{Alignment, VStack};
 
-use crate::node::Node;
 use crate::Renderable;
+use crate::node::Node;
 
 /// Trait that make the children property accessible for Appendable trait
 pub trait ChildContainer {
@@ -83,7 +79,6 @@ pub trait ChildContainer {
 
 /// Trait that make a component capable of receiving children
 pub trait Appendable: ChildContainer + Clone {
-
     /// Adds a node to the end of the list of children of a specified parent node.
     /// ```rust
     /// View::new()
@@ -92,8 +87,8 @@ pub trait Appendable: ChildContainer + Clone {
     ///     })
     /// ```
     fn append_child<C>(&mut self, child: C) -> Self
-        where
-            C: 'static + Renderable,
+    where
+        C: 'static + Renderable,
     {
         self.get_children().push(Box::new(child));
         self.clone()
@@ -107,8 +102,8 @@ pub trait Appendable: ChildContainer + Clone {
     ///     })
     /// ```
     fn prepend_child<C>(&mut self, child: C) -> Self
-        where
-            C: 'static + Renderable,
+    where
+        C: 'static + Renderable,
     {
         self.get_children().insert(0, Box::new(child));
         self.clone()

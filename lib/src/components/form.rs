@@ -1,10 +1,14 @@
-use crate::{Renderable};
+use crate::DefaultModifiers;
+use crate::Renderable;
+use crate::components::{Appendable, ChildContainer};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
-use crate::{DefaultModifiers};
-use crate::components::{Appendable, ChildContainer};
 
-
+#[derive(Debug, Clone)]
+pub enum FormMethod {
+    Post,
+    Get,
+}
 
 #[derive(Debug, Clone)]
 pub struct Form {
@@ -12,7 +16,8 @@ pub struct Form {
     node: Node,
     pub name: String,
     pub action: String,
-    pub is_async: bool
+    pub is_async: bool,
+    pub form_method: FormMethod,
 }
 
 impl NodeContainer for Form {
@@ -30,12 +35,16 @@ impl Form {
             node: Node::default(),
             name: name.to_string(),
             action: action.to_string(),
-            is_async: false
+            is_async: false,
+            form_method: FormMethod::Post,
         }
-            .set_attr("id", name)
-            .set_attr("method", "POST")
-    }
+        .set_attr("id", name)
 
+    }
+    pub fn method(mut self, method: FormMethod) -> Self {
+        self.form_method = method;
+        self.clone()
+    }
     pub fn async_form(&mut self) -> Self {
         self.is_async = true;
         self.clone()
@@ -53,18 +62,26 @@ impl Form {
 
 impl ChildContainer for Form {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
+        self.children.borrow_mut()
     }
 }
 impl Appendable for Form {}
 
 impl Renderable for Form {
     fn render(&self) -> Node {
-
-        let mut form = self.clone()
+        let mut form = self
+            .clone()
             .add_class("form")
             .set_attr("action", &self.action)
-            .tag("form");
+            .tag("form")
+            .set_attr(
+                "method",
+                match self.form_method {
+                    FormMethod::Post => "POST",
+                    FormMethod::Get => "GET",
+                },
+            );
+
 
         if self.is_async {
             form.set_attr("data-async", "data-async");
@@ -72,9 +89,9 @@ impl Renderable for Form {
 
         let mut node = form.node;
 
-        self.children.iter()
-            .for_each(|child|
-                node.children.push(child.render()));
+        self.children
+            .iter()
+            .for_each(|child| node.children.push(child.render()));
         node
     }
 }
