@@ -36,7 +36,7 @@ impl Form {
             name: name.to_string(),
             action: action.to_string(),
             is_async: false,
-            form_method: FormMethod::Get,
+            form_method: FormMethod::Post,
         }
         .set_attr("id", name)
 
