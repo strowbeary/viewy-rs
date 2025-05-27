@@ -19,10 +19,7 @@ use crate::core::node::Node;
 ///     }
 /// }
 pub trait Component: Into<Node> {
-    /// Will include the string returned as a script in Javascript in the page
-    fn script() -> &'static str {
-        ""
-    }
+    fn name() -> &'static str;
 
     /// You can write the template of your component with viewy basic widgets or other components
     fn render(self) -> Node;

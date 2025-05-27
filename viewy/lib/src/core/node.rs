@@ -1,6 +1,6 @@
-use rayon::prelude::*;
 use short_uuid::ShortUuid;
 use std::default::Default;
+use std::fmt::Write;
 use std::{
     collections::{HashMap, HashSet},
     hash::{Hash, Hasher},
@@ -92,34 +92,9 @@ impl Node {
             None
         }
     }
-}
 
-/// HtmlCssJs type describe the 3 components for a dynamic page :
-/// HTML code, CSS code, JavaScript code
-#[derive(Default, Clone, Debug)]
-pub struct HtmlCssJs {
-    pub html: String,
-    pub css: String,
-    pub js: String,
-}
-
-impl Into<HtmlCssJs> for Node {
-    fn into(mut self) -> HtmlCssJs {
-        let css_style = if let Some((node_class_name, node_style)) = self.get_node_style() {
-            self.class_list.insert(node_class_name);
-            node_style
-        } else {
-            String::new()
-        };
+    pub fn render(self, html_buffer: &mut String) {
         let mut attributes = self.attributes;
-
-        if !self.class_list.is_empty() {
-            attributes.insert(
-                "class".to_string(),
-                Vec::from_iter(self.class_list).join(" "),
-            );
-        }
-
         if !self.node_style.is_empty() {
             attributes.insert(
                 "style".to_string(),
@@ -130,62 +105,37 @@ impl Into<HtmlCssJs> for Node {
                     .join(""),
             );
         }
-
-        let attributes: Vec<String> = attributes
-            .iter()
-            .map(|(name, value)| format!("{}=\"{}\"", name, value))
-            .collect();
-
-        let content: Vec<HtmlCssJs> = self
-            .children
-            .into_par_iter()
-            .map(|node| node.into())
-            .collect();
-
-        let html = match self.node_type.clone() {
-            NodeType::Normal(tag_name) => format!(
-                "<{tag_name} {attributes}>{children}</{tag_name}>",
-                attributes = attributes.join(" "),
-                children = match self.text.clone() {
-                    None => content
-                        .into_iter()
-                        .map(|HtmlCssJs { html, .. }| html)
-                        .collect::<Vec<String>>()
-                        .join(""),
-                    Some(text) => text,
+        if !self.class_list.is_empty() {
+            attributes.insert(
+                "class".to_string(),
+                Vec::from_iter(self.class_list).join(" "),
+            );
+        }
+        match &self.node_type {
+            NodeType::Normal(tag) => {
+                write!(html_buffer, "<{}", tag).unwrap();
+                for (k, v) in attributes {
+                    write!(html_buffer, r#" {}="{}""#, k, v).unwrap();
                 }
-            ),
-            NodeType::SelfClosing(tag_name) => format!(
-                "<{tag_name} {attributes}/>",
-                attributes = attributes.join(" "),
-            ),
-            NodeType::Comment(comment) => format!("<!--{comment}-->"),
-        };
-        HtmlCssJs {
-            html,
-            css: css_style,
-            js: String::new(),
+                html_buffer.push('>');
+                if let Some(text_content) = self.text {
+                    html_buffer.write_str(text_content.as_str()).unwrap();
+                }
+                for child in self.children {
+                    child.render(html_buffer);
+                }
+                write!(html_buffer, "</{}>", tag).unwrap();
+            }
+            NodeType::SelfClosing(tag) => {
+                write!(html_buffer, "<{}", tag).unwrap();
+                for (k, v) in attributes {
+                    write!(html_buffer, r#" {}="{}""#, k, v).unwrap();
+                }
+                write!(html_buffer, "/>").unwrap();
+            }
+            NodeType::Comment(comment) => {
+                write!(html_buffer, "<!--{comment}-->").unwrap();
+            }
         }
-    }
-}
-
-impl FromIterator<Node> for Vec<HtmlCssJs> {
-    fn from_iter<T: IntoIterator<Item = Node>>(iter: T) -> Self {
-        let mut collection = Self::new();
-        for node in iter {
-            collection.push(node.into());
-        }
-        collection
-    }
-}
-
-impl From<Vec<HtmlCssJs>> for HtmlCssJs {
-    fn from(value: Vec<HtmlCssJs>) -> Self {
-        value.into_iter().fold(HtmlCssJs::default(), |mut a, b| {
-            a.html.push_str(&b.html);
-            a.css.push_str(&b.css);
-            a.js.push_str(&b.js);
-            return a;
-        })
     }
 }

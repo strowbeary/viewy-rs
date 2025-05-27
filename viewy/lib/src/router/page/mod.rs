@@ -4,10 +4,10 @@ use std::thread;
 use uuid::Uuid;
 
 use crate::core::config::Config;
-use crate::router::page::html_page::get_full_html_page;
 use crate::core::theme::Theme;
 use crate::node;
-use crate::node::{HtmlCssJs, Node, NodeType};
+use crate::node::{Node, NodeType};
+use crate::router::page::html_page::get_full_html_page;
 
 mod html_page;
 
@@ -20,7 +20,6 @@ pub enum RenderMode {
     /// Not used for the moment
     LayoutOnly,
 }
-
 
 /// `Layout` is a type alias for a function that takes a `Node` and returns a `Node`.
 /// This function will be used to transform the content of a Page.
@@ -71,7 +70,9 @@ impl<'a> Page<'a> {
         self
     }
     pub fn with_content<C>(mut self, content: C) -> Self
-        where C: Into<Node> {
+    where
+        C: Into<Node>,
+    {
         self.content = content.into();
         self
     }
@@ -83,33 +84,38 @@ impl<'a> Page<'a> {
 
     pub fn compile(self, render_mode: RenderMode) -> String {
         let theme_variant = self.theme.as_str();
-
+        let mut html_buffer = String::new();
         match render_mode {
-            RenderMode::Complete => {
-                get_full_html_page(&self.config, self.title, {
+            RenderMode::Complete => get_full_html_page(
+                &self.config,
+                self.title,
+                {
                     let content = (self.layout)(self.content);
-                    let root_nodes=  content.get_root_nodes();
+                    let root_nodes = content.get_root_nodes();
 
-                    let content_thread_handle = thread::spawn(move || {
-                        content.into()
-                    });
-                    let root_nodes_str = root_nodes.into_iter()
-                        .collect::<Vec<HtmlCssJs>>()
-                        .iter().map(|HtmlCssJs{html, ..}| html.to_string())
-                        .collect::<Vec<String>>()
-                        .join("");
-                    let mut content_str: HtmlCssJs = content_thread_handle.join().unwrap();
-                    content_str.html.push_str(&root_nodes_str);
-                    content_str.html
-                }, theme_variant.to_string(), false)
-            }
+                    content.render(&mut html_buffer);
+                    for node in root_nodes {
+                        node.render(&mut html_buffer);
+                    }
+                    html_buffer
+                },
+                theme_variant.to_string(),
+                false,
+            ),
             RenderMode::ContentOnly => {
-                let mut content = self.content;
-                content.children.append(&mut content.get_root_nodes());
-                <node::Node as Into<HtmlCssJs>>::into(content).html
+                let content = (self.layout)(self.content);
+                let root_nodes = content.get_root_nodes();
+
+                content.render(&mut html_buffer);
+                for node in root_nodes {
+                    node.render(&mut html_buffer);
+                }
+                html_buffer
             }
-            RenderMode::LayoutOnly => {
-                get_full_html_page(&self.config, self.title, {
+            RenderMode::LayoutOnly => get_full_html_page(
+                &self.config,
+                self.title,
+                {
                     let mut content = (self.layout)(Node {
                         identifier: Uuid::NAMESPACE_OID,
                         node_type: NodeType::Comment("VIEWY_CONTENT"),
@@ -121,9 +127,13 @@ impl<'a> Page<'a> {
                         root_nodes: HashSet::new(),
                     });
                     content.children.append(&mut content.get_root_nodes());
-                    <node::Node as Into<HtmlCssJs>>::into(content).html
-                }, theme_variant.to_string(), false)
-            }
+
+                    content.render(&mut html_buffer);
+                    html_buffer
+                },
+                theme_variant.to_string(),
+                false,
+            ),
         }
     }
 }
