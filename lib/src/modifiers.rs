@@ -17,28 +17,28 @@ pub enum Position {
     Fixed,
 }
 
-pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
-    fn id(&mut self, id: &str) -> Self {
+pub trait DefaultModifiers: NodeContainer + Clone {
+    fn id(&mut self, id: &str)-> &mut Self {
         self.get_node().attributes.insert("id".to_string(), id.to_string());
-        self.clone()
+        self
     }
-    fn color(&mut self, color: &str) -> Self {
+    fn color(&mut self, color: &str)-> &mut Self {
         self.get_node().node_style.push(("color".to_string(), color.to_string()));
-        self.clone()
+        self
     }
-    fn opacity(&mut self, opacity: f32) -> Self {
+    fn opacity(&mut self, opacity: f32)-> &mut Self {
         self.get_node().node_style.push(("opacity".to_string(), opacity.to_string()));
-        self.clone()
+        self
     }
-    fn add_class(&mut self, class_name: &str) -> Self {
+    fn add_class(&mut self, class_name: &str)-> &mut Self {
         self.get_node().class_list.insert(class_name.to_string());
-        self.clone()
+        self
     }
-    fn remove_class(&mut self, class_name: &str) -> Self {
+    fn remove_class(&mut self, class_name: &str)-> &mut Self {
         self.get_node().class_list.remove(class_name);
-        self.clone()
+        self
     }
-    fn position(&mut self, position: Position) -> Self {
+    fn position(&mut self, position: Position)-> &mut Self {
 
         self.get_node().node_style.push(("position".to_string(), match position {
             Position::Static => "static",
@@ -46,136 +46,136 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
             Position::Absolute => "absolute",
             Position::Fixed => "fixed"
         }.to_string()));
-        self.clone()
+        self
     }
-    fn padding(&mut self, padding: Vec<i32>) -> Self {
+    fn padding(&mut self, padding: Vec<i32>)-> &mut Self {
         let params: Vec<String> = padding.iter().map(|size| sp(size.clone())).collect();
         self.get_node().node_style.push(("padding".to_string(), params.join(" ")));
-        self.clone()
+        self
     }
-    fn padding_top(&mut self, value: i32) -> Self {
+    fn padding_top(&mut self, value: i32)-> &mut Self {
         self.get_node().node_style.push(("padding-top".to_string(), sp(value)));
-        self.clone()
+        self
     }
-    fn padding_bottom(&mut self, value: i32) -> Self {
+    fn padding_bottom(&mut self, value: i32)-> &mut Self {
         self.get_node().node_style.push(("padding-bottom".to_string(), sp(value)));
-        self.clone()
+        self
     }
-    fn padding_left(&mut self, value: i32) -> Self {
+    fn padding_left(&mut self, value: i32)-> &mut Self {
         self.get_node().node_style.push(("padding-left".to_string(), sp(value)));
-        self.clone()
+        self
     }
-    fn padding_right(&mut self, value: i32) -> Self {
+    fn padding_right(&mut self, value: i32)-> &mut Self {
         self.get_node().node_style.push(("padding-right".to_string(), sp(value)));
-        self.clone()
+        self
     }
-    fn margin(&mut self, margin: Vec<i32>) -> Self {
+    fn margin(&mut self, margin: Vec<i32>)-> &mut Self {
         let params: Vec<String> = margin.iter().map(|size| sp(size.clone())).collect();
         self.get_node().node_style.push(("margin".to_string(), params.join(" ")));
-        self.clone()
+        self
     }
-    fn margin_top(&mut self, value: i32) -> Self {
+    fn margin_top(&mut self, value: i32)-> &mut Self {
         self.get_node().node_style.push(("margin-top".to_string(), sp(value)));
-        self.clone()
+        self
     }
-    fn margin_bottom(&mut self, value: i32) -> Self {
+    fn margin_bottom(&mut self, value: i32)-> &mut Self {
         self.get_node().node_style.push(("margin-bottom".to_string(), sp(value)));
-        self.clone()
+        self
     }
-    fn margin_left(&mut self, value: i32) -> Self {
+    fn margin_left(&mut self, value: i32)-> &mut Self {
         self.get_node().node_style.push(("margin-left".to_string(), sp(value)));
-        self.clone()
+        self
     }
-    fn margin_right(&mut self, value: i32) -> Self {
+    fn margin_right(&mut self, value: i32)-> &mut Self {
         self.get_node().node_style.push(("margin-right".to_string(), sp(value)));
-        self.clone()
+        self
     }
-    fn width(&mut self, value: &str) -> Self {
+    fn width(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("width".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn height(&mut self, value: &str) -> Self {
+    fn height(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("height".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn min_width(&mut self, value: &str) -> Self {
+    fn min_width(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("min-width".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn min_height(&mut self, value: &str) -> Self {
+    fn min_height(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("min-height".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn max_width(&mut self, value: &str) -> Self {
+    fn max_width(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("max-width".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn max_height(&mut self, value: &str) -> Self {
+    fn max_height(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("max-height".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn sticky_to_top(&mut self, top: i32) -> Self {
+    fn sticky_to_top(&mut self, top: i32)-> &mut Self {
         self.get_node().node_style.push(("position".to_string(), "sticky".to_string(), ));
         self.get_node().node_style.push(("top".to_string(), sp(top)));
-        self.clone()
+        self
     }
-    fn sticky_to_bottom(&mut self, bottom: i32) -> Self {
+    fn sticky_to_bottom(&mut self, bottom: i32)-> &mut Self {
         self.get_node().node_style.push(("position".to_string(), "sticky".to_string(), ));
         self.get_node().node_style.push(("bottom".to_string(), sp(bottom)));
-        self.clone()
+        self
     }
-    fn align_self(&mut self, value: &str) -> Self {
+    fn align_self(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("align-self".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn justify_self(&mut self, value: &str) -> Self {
+    fn justify_self(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("justify-self".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn background_color(&mut self, color: &str) -> Self {
+    fn background_color(&mut self, color: &str)-> &mut Self {
         self.get_node().node_style.push(("background-color".to_string(), color.to_string()));
-        self.clone()
+        self
     }
-    fn display(&mut self, display: &str) -> Self {
+    fn display(&mut self, display: &str)-> &mut Self {
         self.get_node().node_style.push(("display".to_string(), display.to_string()));
-        self.clone()
+        self
     }
 
-    fn background_image(&mut self, url: &str) -> Self {
+    fn background_image(&mut self, url: &str)-> &mut Self {
         self.get_node().node_style.push(("background".to_string(), format!("url({}) center / cover", url)));
-        self.clone()
+        self
     }
 
-    fn background(&mut self, value: &str) -> Self {
+    fn background(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("background".to_string(), value.to_string()));
-        self.clone()
+        self
     }
 
-    fn border(&mut self, value: &str) -> Self {
+    fn border(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("border".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn border_left(&mut self, value: &str) -> Self {
+    fn border_left(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("border-left".to_string(), value.to_string()));
-        self.clone()
+        self
     }
 
-    fn border_right(&mut self, value: &str) -> Self {
+    fn border_right(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("border-right".to_string(), value.to_string()));
-        self.clone()
+        self
     }
 
-    fn border_bottom(&mut self, value: &str) -> Self {
+    fn border_bottom(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("border-bottom".to_string(), value.to_string()));
-        self.clone()
+        self
     }
 
-    fn border_top(&mut self, value: &str) -> Self {
+    fn border_top(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("border-top".to_string(), value.to_string()));
-        self.clone()
+        self
     }
 
-    fn tag(&mut self, tag_name: &str) -> Self {
+    fn tag(&mut self, tag_name: &str)-> &mut Self {
         let self_closing_tags = vec![
             "area",
             "base",
@@ -198,78 +198,76 @@ pub trait DefaultModifiers<T = Self>: NodeContainer + Clone {
         else {
             self.get_node().node_type = NodeType::Normal(tag_name.to_string());
         }
-        self.clone()
+        self
     }
-    fn set_attr(&mut self, name: &str, value: &str) -> Self {
+    fn set_attr(&mut self, name: &str, value: &str)-> &mut Self {
         self.get_node().attributes.insert(name.to_string(), value.to_string());
-        self.clone()
+        self
     }
 
-    fn unset_attr(&mut self, name: &str) -> Self {
+    fn unset_attr(&mut self, name: &str)-> &mut Self {
         self.get_node().attributes.remove(name);
-        self.clone()
+        self
     }
 
-    fn grid_area(&mut self, name: &str) -> Self {
+    fn grid_area(&mut self, name: &str)-> &mut Self {
         self.get_node().node_style.push(("grid-area".to_string(), name.to_string()));
-        self.clone()
+        self
     }
-    fn grid_column(&mut self, column: &str) -> Self {
+    fn grid_column(&mut self, column: &str)-> &mut Self {
         self.get_node().node_style.push(("grid-column".to_string(), column.to_string()));
-        self.clone()
+        self
     }
-    fn grid_row(&mut self, row: &str) -> Self {
+    fn grid_row(&mut self, row: &str)-> &mut Self {
         self.get_node().node_style.push(("grid-row".to_string(), row.to_string()));
-        self.clone()
+        self
     }
-    fn flex_grow(&mut self, value: i32) -> Self {
+    fn flex_grow(&mut self, value: i32)-> &mut Self {
         self.get_node().node_style.push(("flex-grow".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn line_height(&mut self, value: &str) -> Self {
+    fn line_height(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("line-height".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn box_sizing(&mut self, value: &str) -> Self {
+    fn box_sizing(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("box-sizing".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn border_radius(&mut self, value: &str) -> Self {
+    fn border_radius(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("border-radius".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn text_align(&mut self, value: &str) -> Self {
+    fn text_align(&mut self, value: &str)-> &mut Self {
         self.get_node().node_style.push(("text-align".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    fn overflow(&mut self, overflow: Overflow) -> Self {
+    fn overflow(&mut self, overflow: Overflow)-> &mut Self {
         self.get_node().node_style
             .push(("overflow".to_string(), format!("{:?}", overflow).to_lowercase()));
-        self.clone()
+        self
     }
-    fn aspect_ratio(&mut self, ratio: &str) -> Self {
+    fn aspect_ratio(&mut self, ratio: &str)-> &mut Self {
         self.get_node().node_style
             .push(("aspect-ratio".to_string(), ratio.to_string()));
 
-        self.clone()
+        self
     }
-    fn popover(&mut self, popover: Popover) -> Self {
+    fn popover(&mut self, mut popover: Popover)-> &mut Self {
         let id = Uuid::new_v4().to_string();
         self.add_class("popover--opener");
         self.set_attr("id", id.as_str());
-        self.get_node().root_nodes.insert(Box::new(
-            popover.clone().attach_to(id.as_str())
-        ));
-        self.clone()
+        popover.attach_to(id.as_str());
+        self.get_node().root_nodes.insert(Box::new(popover));
+        self
     }
 
-    fn popup(&mut self, popup: Popup) -> Self {
+    fn popup(&mut self, mut popup: Popup)-> &mut Self {
         let id = Uuid::new_v4().to_string();
         self.add_class("popup--opener");
         self.set_attr("id", id.as_str());
-        self.get_node().root_nodes.insert(Box::new(
-            popup.clone().attach_to(id.as_str())
-        ));
-        self.clone()
+        popup.attach_to(id.as_str());
+        self.get_node().root_nodes.insert(Box::new(popup));
+        self
     }
 }

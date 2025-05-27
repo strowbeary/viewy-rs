@@ -1,10 +1,9 @@
 use rocket::response::content::RawHtml;
-use rocket::{Catcher, Request};
+use rocket::Catcher;
 use viewy::components::*;
 use viewy::*;
 use crate::layouts;
 use rocket::http::Status;
-use rocket::response::Responder;
 use viewy::components::icons::Lucide;
 
 fn default_catch_page(status: Status) -> RawHtml<String>{

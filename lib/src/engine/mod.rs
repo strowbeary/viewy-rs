@@ -5,4 +5,3 @@ mod responsive;
 
 pub use assets::*;
 pub use renderable::*;
-pub use rendering::*;

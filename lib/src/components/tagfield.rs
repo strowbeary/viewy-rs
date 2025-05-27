@@ -26,7 +26,7 @@ impl NodeContainer for TagField {
     }
 }
 
-impl DefaultModifiers<TagField> for TagField {}
+impl DefaultModifiers for TagField {}
 
 impl TagField {
     pub fn new(name: &str, field_type: FieldType) -> Self {
@@ -82,7 +82,7 @@ impl TagField {
 }
 
 impl Renderable for TagField {
-    fn render(&self) -> Node {
+    fn render(mut self) -> Node {
         let mut field = self.clone()
             .add_class("tagfield");
 
@@ -102,8 +102,8 @@ impl Renderable for TagField {
         }
 
         if let Some(label) = field.label {
-            let text = Text::new(label.as_str(), TextStyle::Label)
-                .add_class("tagfield__label")
+            let mut text = Text::new(label.as_str(), TextStyle::Label);
+            text.add_class("tagfield__label")
                 .set_attr("for", self.name.as_str())
                 .tag("label");
             field.node.children.push(text.render());

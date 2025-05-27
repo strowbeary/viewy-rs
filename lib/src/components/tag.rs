@@ -1,11 +1,10 @@
 use std::borrow::BorrowMut;
-use std::fmt::{Debug, Formatter};
+use std::fmt::Debug;
 
-use dyn_clone::DynClone;
 
 use crate::components::badge::{Badge, BadgeModifiers, BadgeSupport};
 use crate::components::icons::IconPack;
-use crate::components::{Alignment, Appendable, HStack, Icon, Text, TextStyle};
+use crate::components::{Icon, Text, TextStyle};
 use crate::node::{Node, NodeContainer};
 use crate::{DefaultModifiers, Renderable};
 
@@ -49,7 +48,7 @@ impl Tag {
     }
 }
 
-impl DefaultModifiers<Tag> for Tag {}
+impl DefaultModifiers for Tag {}
 
 impl BadgeSupport for Tag {
     fn add_badge(&mut self, badge: Badge) {
@@ -66,23 +65,22 @@ impl NodeContainer for Tag {
 }
 
 impl Renderable for Tag {
-    fn render(&self) -> Node {
-        let mut tag = self.clone();
-        tag.get_node().class_list.insert("tag".to_string());
+    fn render(mut self) -> Node {
+        self.add_class("tag");
 
-        if let Some(icon) = tag.icon {
-            let mut icon = Icon::new(icon).size(16).stroke_width(2);
-            tag.node.children.push(icon.render());
+        if let Some(icon) = self.icon {
+            let mut icon = Icon::new(icon);icon.size(16).stroke_width(2);
+            self.node.children.push(icon.render());
         }
 
-        tag.node
+        self.node
             .children
             .push({ Text::new(&self.label, TextStyle::Overline) }.render());
 
-        if let Some(badge) = tag.badge {
-            tag.node.children.push(badge.render());
+        if let Some(badge) = self.badge {
+            self.node.children.push(badge.render());
         }
 
-        tag.node
+        self.node
     }
 }

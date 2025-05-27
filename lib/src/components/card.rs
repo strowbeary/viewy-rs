@@ -30,30 +30,24 @@ impl Card {
         }
     }
 
-    pub fn action(&mut self, url: &str) -> Self {
-        self.tag("a");
-        self.set_attr("href", url);
-        self.add_class("clickable");
-        self.clone()
+    pub fn action(&mut self, url: &str) -> &mut Self {
+        self.tag("a").set_attr("href", url).add_class("clickable")
     }
 
-    pub fn highlighted(&mut self, is_highlighted: bool) -> Self {
+    pub fn highlighted(&mut self, is_highlighted: bool) -> &mut Self {
         if is_highlighted {
-            self.add_class("card--highlighted");
+            self.add_class("card--highlighted")
         } else {
-            self.remove_class("card--highlighted");
+            self.remove_class("card--highlighted")
         }
-        self.clone()
     }
 
-    pub fn remove_highlight_on_submit(&mut self, form_name: &str) -> Self {
+    pub fn remove_highlight_on_submit(&mut self, form_name: &str) -> &mut Self {
         self.set_attr("data-remove-highlight-on-submit", form_name)
-            .clone()
     }
 
-    pub fn highlight_on_submit(&mut self, form_name: &str) -> Self {
+    pub fn highlight_on_submit(&mut self, form_name: &str) -> &mut Self {
         self.set_attr("data-highlight-on-submit", form_name)
-            .clone()
     }
 
 
@@ -69,9 +63,9 @@ impl Card {
     ///            .attach_to_form("formName")
     ///        })
     /// ```
-    pub fn attach_to_form(&mut self, form_name: &str) -> Self {
-        self.add_class("clickable");
-        self.set_attr("data-submit-form", form_name)
+    pub fn attach_to_form(&mut self, form_name: &str) -> &mut Self {
+        self.add_class("clickable")
+            .set_attr("data-submit-form", form_name)
     }
 }
 
@@ -82,7 +76,7 @@ impl NodeContainer for Card {
     }
 }
 
-impl DefaultModifiers<Card> for Card {}
+impl DefaultModifiers for Card {}
 
 impl ChildContainer for Card {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
@@ -93,14 +87,14 @@ impl ChildContainer for Card {
 impl Appendable for Card {}
 
 impl Renderable for Card {
-    fn render(&self) -> Node {
-        let mut view = self.clone()
+    fn render(mut self) -> Node {
+        let card_style = format!("card--{:?}", self.style).to_lowercase();
+        self
             .add_class("card")
-            .add_class(format!("card--{:?}", self.style).to_lowercase().as_str())
-            .node;
-        self.children.iter()
-            .for_each(|child|
-                view.children.push(child.render()));
-        view
+            .add_class(&card_style);
+        let child_nodes= self.children.into_iter()
+            .map(|child| child.render()).collect();
+        self.node.children = child_nodes;
+        self.node
     }
 }

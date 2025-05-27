@@ -1,8 +1,7 @@
-use std::fmt::{Debug, Formatter};
-use dyn_clone::DynClone;
+use std::fmt::Debug;
 use crate::node::{Node, NodeContainer};
 use crate::{DefaultModifiers, Renderable};
-use crate::components::{Appendable, ChildContainer, HStack};
+use crate::components::{Appendable, ChildContainer};
 
 #[derive(Debug, Clone)]
 pub struct DynamicContent {
@@ -35,17 +34,17 @@ impl NodeContainer for DynamicContent {
 	}
 }
 
-impl DefaultModifiers<DynamicContent> for DynamicContent {}
+impl DefaultModifiers for DynamicContent {}
 
 impl Renderable for DynamicContent {
-	fn render(&self) -> Node {
-		let mut dynamic_content = self.clone()
+	fn render(mut self) -> Node {
+		let name = self.name.to_string();
+		self
 			.add_class("dynamic-content")
-			.set_attr("data-dynamic-content-name", &self.name)
-			.node;
-		self.children.iter()
+			.set_attr("data-dynamic-content-name", &name);
+		self.children.into_iter()
 			.for_each(|child|
-				dynamic_content.children.push(child.render()));
-		dynamic_content
+				self.node.children.push(child.render()));
+		self.node
 	}
 }

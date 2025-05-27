@@ -8,7 +8,7 @@ use crate::Renderable;
 use crate::components::icons::Lucide;
 use crate::components::*;
 use crate::node::{Node, NodeContainer};
-use crate::{DefaultModifiers, Overflow, scale, sp};
+use crate::{DefaultModifiers, scale};
 
 fn multi_value_row(
     field_name: &str,
@@ -16,20 +16,25 @@ fn multi_value_row(
     value: &str,
     form: &Option<String>,
 ) -> HStack {
-    HStack::new(Alignment::Center)
-        .flex_grow(1)
+    let mut stack = HStack::new(Alignment::Center);
+    stack.flex_grow(1)
         .add_class("field--multi-value__value-list__value")
         .gap(vec![scale(2)])
         .append_child({
-            let mut input = Field::new(field_name, field_type.clone())
-                .flex_grow(1)
+            let mut input = Field::new(field_name, field_type.clone());
+            input.flex_grow(1)
                 .value(value);
             if let Some(form) = form {
                 input.set_attr("form", form);
             }
             input
         })
-        .append_child({ Button::icon_only(Lucide::Trash2, ButtonStyle::Flat).destructive() })
+        .append_child({
+            let mut btn = Button::icon_only(Lucide::Trash2, ButtonStyle::Flat);
+            btn.destructive();
+            btn
+        });
+    stack
 }
 
 #[derive(Debug, Clone, Eq, PartialEq)]
@@ -84,7 +89,7 @@ impl NodeContainer for Field {
     }
 }
 
-impl DefaultModifiers<Field> for Field {}
+impl DefaultModifiers for Field {}
 
 impl Field {
     pub fn new(name: &str, field_type: FieldType) -> Self {
@@ -112,40 +117,41 @@ impl Field {
         }
     }
 
-    pub fn label(&mut self, label: &str) -> Self {
+    pub fn label(&mut self, label: &str) -> &mut Self{
         self.label = Some(label.to_string());
-        self.clone()
+        self
     }
 
-    pub fn value(&mut self, value: &str) -> Self {
+    pub fn value(&mut self, value: &str) -> &mut Self{
         self.value = Some(ammonia::clean(value));
-        self.clone()
+        self
     }
 
-    pub fn min(&mut self, value: &str) -> Self {
+    pub fn min(&mut self, value: &str) -> &mut Self{
         self.min = Some(value.to_string());
-        self.clone()
+        self
     }
 
-    pub fn max(&mut self, value: &str) -> Self {
+    pub fn max(&mut self, value: &str) -> &mut Self{
         self.max = Some(value.to_string());
-        self.clone()
+        self
     }
 
-    pub fn step(&mut self, value: &str) -> Self {
+    pub fn step(&mut self, value: &str) -> &mut Self{
         self.step = Some(value.to_string());
-        self.clone()
+        self
     }
 
-    pub fn read_only(&mut self, is_read_only: bool) -> Self {
+    pub fn read_only(&mut self, is_read_only: bool) -> &mut Self{
         self.read_only = is_read_only;
-        self.clone()
+        self
     }
 
     /// Enable user to input multiple values in a form for the same field.
     /// Will be serialized in the POST request as URL Encoded form data or multipart form data.
     /// For a field defined as following
     /// ```
+    /// use viewy::components::{Field, FieldType};
     /// Field::new("name", FieldType::Text)
     ///                .multiple_value(vec![
     ///                     String::from("value1"), 
@@ -174,92 +180,92 @@ impl Field {
     /// let field = Field::new("name", FieldType::Text)
     ///                 .multiple_value(vec![]);
     /// ```
-    pub fn multiple_value(&mut self, values: Vec<String>) -> Self {
+    pub fn multiple_value(&mut self, values: Vec<String>) -> &mut Self{
         self.multiple = Some(values);
-        self.clone()
+        self
     }
 
-    pub fn attach_to_form(&mut self, form_name: &str) -> Self {
+    pub fn attach_to_form(&mut self, form_name: &str) -> &mut Self{
         self.form = Some(form_name.to_string());
-        self.clone()
+        self
     }
 
-    pub fn helper_text(&mut self, helper_text: &str) -> Self {
+    pub fn helper_text(&mut self, helper_text: &str) -> &mut Self{
         self.helper_text = Some(helper_text.to_string());
-        self.clone()
+        self
     }
 
-    pub fn error_message(&mut self, helper_text: &str) -> Self {
+    pub fn error_message(&mut self, helper_text: &str) -> &mut Self{
         self.add_class("field--error");
         self.helper_text = Some(helper_text.to_string());
-        self.clone()
+        self
     }
 
-    pub fn placeholder(&mut self, placeholder: &str) -> Self {
+    pub fn placeholder(&mut self, placeholder: &str) -> &mut Self{
         self.placeholder = Some(placeholder.to_string());
-        self.clone()
+        self
     }
 
-    pub fn trailing_icon(&mut self, name: &str) -> Self {
+    pub fn trailing_icon(&mut self, name: &str) -> &mut Self{
         self.trailing_icon = Some(name.to_string());
-        self.clone()
+        self
     }
 
-    pub fn leading_icon(&mut self, name: &str) -> Self {
+    pub fn leading_icon(&mut self, name: &str) -> &mut Self{
         self.leading_icon = Some(name.to_string());
-        self.clone()
+        self
     }
 
-    pub fn async_datalist(&mut self, url: &str) -> Self {
+    pub fn async_datalist(&mut self, url: &str) -> &mut Self{
         self.datalist = true;
         self.set_attr("data-async-datalist", url)
     }
 
     /// Défini l'attribut standard HTML pattern sur l'<input>
-    pub fn pattern(&mut self, pattern: &str) -> Self {
+    pub fn pattern(&mut self, pattern: &str) -> &mut Self{
         self.pattern = Some(pattern.to_string());
-        self.clone()
+        self
     }
 
-    pub fn required(&mut self, is_required: bool) -> Self {
+    pub fn required(&mut self, is_required: bool) -> &mut Self{
         self.required = is_required;
-        self.clone()
+        self
     }
 
-    pub fn submit_on_keypress(&mut self) -> Self {
+    pub fn submit_on_keypress(&mut self) -> &mut Self{
         self.set_attr("data-submit-on-keypress", "true")
     }
-    pub fn disabled(&mut self) -> Self {
+    pub fn disabled(&mut self) -> &mut Self{
         self.disabled = true;
-        self.clone()
+        self
     }
 }
 
 
 impl Renderable for Field {
-    fn render(&self) -> Node {
-        let mut field = self.clone().add_class("field");
+    fn render(mut self) -> Node {
+        self.add_class("field");
         match &self.field_type {
             FieldType::Hidden => {
-                let mut input = field
+                self
                     .add_class("field__input")
                     .tag("input")
                     .set_attr("id", self.name.as_str())
                     .set_attr("name", self.name.as_str())
                     .set_attr("type", "hidden");
                 if let Some(form) = &self.form {
-                    input.set_attr("form", form);
+                    self.set_attr("form", form);
                 }
 
-                if let Some(value) = field.value {
-                    input.set_attr("value", &value);
+                if let Some(value) = &self.value {
+                    self.set_attr("value", value);
                 }
-                input.node
+                self.node
             }
             FieldType::RichTextArea => {
-                field.add_class("field__rich-text-area");
-                let mut input = View::new()
-                    .tag("input")
+                self.add_class("field__rich-text-area");
+                let mut input = View::new();
+                    input.tag("input")
                     .add_class("field__input")
                     .set_attr("type", "text")
                     .display("none")
@@ -267,16 +273,16 @@ impl Renderable for Field {
                     .set_attr("name", self.name.as_str())
                     .set_attr(
                         "value",
-                        &encode_double_quoted_attribute(&field.value.unwrap_or_default()),
+                        &encode_double_quoted_attribute(&self.value.clone().unwrap_or_default()),
                     );
 
                 if self.required {
                     input.set_attr("required", "required");
-                    field.node.children.push({
-                        Text::new("Requis", TextStyle::Caption)
-                            .color("var(--color-text-secondary)")
-                            .grid_area("required")
-                            .render()
+                    self.node.children.push({
+                        let mut text = Text::new("Requis", TextStyle::Caption);
+                        text.color("var(--color-text-secondary)")
+                            .grid_area("required");
+                        text.render()
                     });
                 }
                 if self.read_only {
@@ -285,42 +291,43 @@ impl Renderable for Field {
 
                 let id = Uuid::new_v4().to_string();
                 let editor_id = &format!("editor-{}", id);
-                field.node.children.push(
+                self.node.children.push(
                     {
-                        Card::new(CardStyle::Outlined)
-                            .add_class("field__card")
+                        let mut card = Card::new(CardStyle::Outlined);
+                        card.add_class("field__card")
                             .grid_area("input")
                             .append_child(input)
                             .append_child({
-                                let mut editor = View::new()
-                                    .add_class("field__editor")
+                                let mut editor = View::new();
+                                editor.add_class("field__editor")
                                     .padding(vec![scale(3)])
                                     .set_attr("id", editor_id);
                                 editor.node.text = self.value.clone();
                                 editor
-                            })
+                            });
+                        card
                     }
                     .render(),
                 );
 
-                if let Some(label) = field.label {
-                    let text = Text::new(label.as_str(), TextStyle::Label)
-                        .add_class("field__label")
-                        .set_attr("for", self.name.as_str())
+                if let Some(label) = &self.label {
+                    let mut text = Text::new(label, TextStyle::Label);
+                    text.add_class("field__label")
+                        .set_attr("for", &self.name)
                         .tag("label");
-                    field.node.children.push(text.render());
+                    self.node.children.push(text.render());
                 }
 
-                if let Some(helper_text) = field.helper_text {
-                    let text = ComplexText::new(helper_text.as_str(), TextStyle::Caption)
-                        .add_class("field__helper-text");
-                    field.node.children.push(text.render());
+                if let Some(helper_text) = &self.helper_text {
+                    let mut text = ComplexText::new(helper_text, TextStyle::Caption);
+                    text.add_class("field__helper-text");
+                    self.node.children.push(text.render());
                 }
 
-                field.node
+                self.node
             }
             FieldType::Duration(values) => {
-                let default_start_date = field
+                let default_start_date = self
                     .value
                     .clone()
                     .and_then(|value| {
@@ -329,25 +336,27 @@ impl Renderable for Field {
                             .ok()
                     })
                     .unwrap_or(Utc::now());
-                field.add_class("field--duration");
+                self.add_class("field--duration");
 
-                field.node.children.push(
+                self.node.children.push(
                     {
-                        VStack::new(Alignment::Stretch)
-                            .gap(vec![scale(3)])
+                        let mut stack = VStack::new(Alignment::Stretch);
+                        stack.gap(vec![scale(3)])
                             .append_child({
-                                Field::new(
+                                let mut field = Field::new(
                                     &format!("{}_start_datetime", self.name),
                                     FieldType::DateTimeLocal,
-                                )
-                                .required(self.required)
+                                );
+                                field.required(self.required)
                                 .label("Date de début")
                                 .value(&default_start_date.format("%FT%R").to_string())
                                 .set_attr("id", &format!("{}_start_datetime", self.name))
-                                .set_attr("name", &format!("{}_start_datetime", self.name))
+                                .set_attr("name", &format!("{}_start_datetime", self.name));
+                                field
                             })
                             .append_child({
-                                let mut tags = HStack::new(Alignment::Center).gap(vec![scale(2)]);
+                                let mut tags = HStack::new(Alignment::Center);
+                                tags.gap(vec![scale(2)]);
 
                                 let mut f = timeago::Formatter::with_language(
                                     timeago::languages::french::French,
@@ -355,56 +364,59 @@ impl Renderable for Field {
                                 f.ago("");
                                 for duration in values {
                                     tags.append_child({
-                                        Tag::new(&format!(
+                                        let mut tag = Tag::new(&format!(
                                             "+ {}",
                                             f.convert(std::time::Duration::from_millis(
                                                 duration.num_milliseconds() as u64
                                             ))
-                                        ))
-                                        .add_class("clickable")
+                                        ));
+                                        tag.add_class("clickable")
                                         .set_attr(
                                             "data-duration",
                                             &duration.num_minutes().to_string(),
-                                        )
+                                        );
+                                        tag
                                     });
                                 }
                                 tags
                             })
                             .append_child({
-                                Field::new(
+                                let mut field = Field::new(
                                     &format!("{}_end_datetime", self.name),
                                     FieldType::DateTimeLocal,
-                                )
-                                .required(self.required)
+                                );
+                                field.required(self.required)
                                 .label("Date de fin")
                                 .set_attr("id", &format!("{}_end_datetime", self.name))
-                                .set_attr("name", &format!("{}_end_datetime", self.name))
-                            })
+                                .set_attr("name", &format!("{}_end_datetime", self.name));
+                                field
+                            });
+                        stack
                     }
                     .render(),
                 );
 
-                field.node
+                self.node
             }
             _ => {
                 if let Some(values) = &self.multiple {
-                    field.add_class("field--multi-value");
+                    self.add_class("field--multi-value");
 
-                    field.node.children.push(
+                    self.node.children.push(
                         {
-                            Card::new(CardStyle::Filled)
-                                .add_class("field--multi-value__multi-value-container")
+                            let mut card = Card::new(CardStyle::Filled);
+                            card.add_class("field--multi-value__multi-value-container")
                                 .padding(vec![scale(3)])
                                 .append_child({
-                                    let mut field_input = VStack::new(Alignment::Stretch)
-                                        .gap(vec![scale(3)])
+                                    let mut field_input = VStack::new(Alignment::Stretch);
+                                    field_input.gap(vec![scale(3)])
                                         .append_child({
-                                            let mut value_list = VStack::new(Alignment::Stretch)
-                                                .add_class("field--multi-value__value-list")
+                                            let mut value_list = VStack::new(Alignment::Stretch);
+                                            value_list.add_class("field--multi-value__value-list")
                                                 .gap(vec![scale(3)])
                                                 .append_child({
-                                                    View::new()
-                                                        .tag("template")
+                                                    let mut view = View::new();
+                                                    view.tag("template")
                                                         .id("value-template")
                                                         .append_child({
                                                             multi_value_row(
@@ -413,7 +425,8 @@ impl Renderable for Field {
                                                                 "",
                                                                 &self.form,
                                                             )
-                                                        })
+                                                        });
+                                                    view
                                                 });
                                             for value in values.iter() {
                                                 value_list.append_child(multi_value_row(
@@ -429,29 +442,31 @@ impl Renderable for Field {
 
                                     if !self.disabled && !self.read_only {
                                         field_input.append_child({
-                                            Button::icon_only(Lucide::Plus, ButtonStyle::Outlined)
-                                                .add_class("field--multi-value__add-value-button")
+                                            let mut btn = Button::icon_only(Lucide::Plus, ButtonStyle::Outlined);
+                                            btn.add_class("field--multi-value__add-value-button");
+                                            btn
                                         });
                                     }
                                     field_input
-                                })
+                                });
+                            card
                         }
                         .render(),
                     );
 
-                    if let Some(label) = &field.label {
-                        let text = Text::new(label, TextStyle::Label)
-                            .add_class("field__label")
+                    if let Some(label) = &self.label {
+                        let text = Text::new(label, TextStyle::Label);
+                        text.add_class("field__label")
                             .set_attr("for", self.name.as_str())
                             .tag("label");
-                        field.add_class("not-empty");
-                        field.node.children.push(text.render());
+                        self.add_class("not-empty");
+                        self.node.children.push(text.render());
                     }
 
-                    field.node
+                    self.node
                 } else {
-                    let mut input = View::new()
-                        .tag(&match &self.field_type {
+                    let mut input = View::new();
+                    input.tag(&match &self.field_type {
                             FieldType::TextArea => "textarea",
                             _ => "input",
                         })
@@ -475,12 +490,12 @@ impl Renderable for Field {
 
                     if self.required {
                         input.set_attr("required", "required");
-                        field.add_class("not-empty");
-                        field.node.children.push({
-                            Text::new("Requis", TextStyle::Caption)
-                                .color("var(--color-text-secondary)")
-                                .grid_area("required")
-                                .render()
+                        self.add_class("not-empty");
+                        self.node.children.push({
+                            let mut text = Text::new("Requis", TextStyle::Caption);
+                            text.color("var(--color-text-secondary)")
+                                .grid_area("required");
+                            text.render()
                         });
                     }
                     if let Some(placeholder) = &self.placeholder {
@@ -492,7 +507,7 @@ impl Renderable for Field {
                         _ => {
                             input.set_attr(
                                 "type",
-                                &match &field.field_type {
+                                &match &self.field_type {
                                     FieldType::DateTimeLocal => "datetime-local".to_string(),
                                     FieldType::MainSearchBar => "search".to_string(),
                                     field_type => format!("{:?}", field_type).to_lowercase(),
@@ -501,15 +516,15 @@ impl Renderable for Field {
                         }
                     }
 
-                    if field.field_type ==  FieldType::MainSearchBar {
+                    if self.field_type ==  FieldType::MainSearchBar {
                         input.add_class("field__input--main-search-bar");
                     }
-                    if self.datalist && !matches!(field.field_type, FieldType::TextArea) {
+                    if self.datalist && !matches!(self.field_type, FieldType::TextArea) {
                         let id = Uuid::new_v4().to_string();
                         input.set_attr("list", id.as_str());
                     }
 
-                    if let Some(value) = &field.value {
+                    if let Some(value) = &self.value {
                         match &self.field_type {
                             FieldType::TextArea => {
                                 input.node.text = Some(value.clone());
@@ -519,39 +534,39 @@ impl Renderable for Field {
                             }
                         }
                     }
-                    if let Some(value) = &field.min {
+                    if let Some(value) = &self.min {
                         input.set_attr("min", value);
                     }
-                    if let Some(value) = &field.max {
+                    if let Some(value) = &self.max {
                         input.set_attr("max", value);
                     }
-                    if let Some(value) = &field.step {
+                    if let Some(value) = &self.step {
                         input.set_attr("step", value);
                     }
 
-                    field.node.children.push(input.render());
 
-                    if let Some(placeholder) = &field.placeholder {
+                    if let Some(placeholder) = &self.placeholder {
                         input.set_attr("placeholder", placeholder);
                     }
+                    self.node.children.push(input.render());
 
-                    if let Some(label) = &field.label {
+                    if let Some(label) = &self.label {
                         let text = Text::new(label, TextStyle::Label)
                             .add_class("field__label")
                             .set_attr("for", self.name.as_str())
                             .tag("label");
-                        field.add_class("not-empty");
-                        field.node.children.push(text.render());
+                        self.add_class("not-empty");
+                        self.node.children.push(text.render());
                     }
 
-                    if let Some(helper_text) = &field.helper_text {
-                        let text = ComplexText::new(helper_text, TextStyle::Caption)
-                            .add_class("field__helper-text");
-                        field.add_class("not-empty");
-                        field.node.children.push(text.render());
+                    if let Some(helper_text) = &self.helper_text {
+                        let mut text = ComplexText::new(helper_text, TextStyle::Caption);
+                        text.add_class("field__helper-text");
+                        self.add_class("not-empty");
+                        self.node.children.push(text.render());
                     }
 
-                    field.node
+                    self.node
                 }
             }
         }

@@ -10,7 +10,6 @@ use rocket::{Request, Response, State};
 use rocket::fairing::{Fairing, Info, Kind};
 
 use viewy::engine::Assets;
-use rocket::serde::{Serialize, Deserialize};
 use rocket::form::Form;
 use rocket::http::{Header, Status};
 use viewy::{DefaultModifiers, Page, RenderMode, scale};

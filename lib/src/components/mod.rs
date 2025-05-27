@@ -70,7 +70,6 @@ pub use view::View;
 pub use vstack::{Alignment, VStack};
 
 use crate::Renderable;
-use crate::node::Node;
 
 /// Trait that make the children property accessible for Appendable trait
 pub trait ChildContainer {
@@ -86,12 +85,12 @@ pub trait Appendable: ChildContainer + Clone {
     ///         View::new()
     ///     })
     /// ```
-    fn append_child<C>(&mut self, child: C) -> Self
+    fn append_child<C>(&mut self, child: C) -> &mut Self
     where
         C: 'static + Renderable,
     {
         self.get_children().push(Box::new(child));
-        self.clone()
+        self
     }
 
     /// Adds a node before the first child of the list of children of a specified parent node.
@@ -101,11 +100,11 @@ pub trait Appendable: ChildContainer + Clone {
     ///         View::new()
     ///     })
     /// ```
-    fn prepend_child<C>(&mut self, child: C) -> Self
+    fn prepend_child<C>(&mut self, child: C) -> &mut Self
     where
         C: 'static + Renderable,
     {
         self.get_children().insert(0, Box::new(child));
-        self.clone()
+        self
     }
 }

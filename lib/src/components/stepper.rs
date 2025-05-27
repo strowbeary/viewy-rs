@@ -37,7 +37,7 @@ impl NodeContainer for Step {
     }
 }
 
-impl DefaultModifiers<Step> for Step {}
+impl DefaultModifiers for Step {}
 
 impl ChildContainer for Step {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
@@ -48,14 +48,13 @@ impl ChildContainer for Step {
 impl Appendable for Step {}
 
 impl Renderable for Step {
-    fn render(&self) -> Node {
-        let mut view = self.clone()
-            .add_class("card")
-            .node;
-        self.children.iter()
+    fn render(mut self) -> Node {
+        self
+            .add_class("card");
+        self.children.into_iter()
             .for_each(|child|
-                view.children.push(child.render()));
-        view
+                self.node.children.push(child.render()));
+        self.node
     }
 }
 
@@ -86,14 +85,14 @@ impl Stepper {
         }
     }
 
-    pub fn append_child(&mut self, child: Step) -> Self {
+    pub fn append_child(&mut self, child: Step) -> &mut Self {
         self.steps.push(child);
-        self.clone()
+        self
     }
 
-    pub fn selected(&mut self, index: usize) -> Self {
+    pub fn selected(&mut self, index: usize) -> &mut Self {
         self.selected_step = index;
-        self.clone()
+        self
     }
 }
 
@@ -104,17 +103,16 @@ impl NodeContainer for Stepper {
     }
 }
 
-impl DefaultModifiers<Stepper> for Stepper {}
+impl DefaultModifiers for Stepper {}
 
 
 impl Renderable for Stepper {
-    fn render(&self) -> Node {
-        let mut view = self.clone()
-            .add_class("card")
-            .node;
-        self.children.iter()
+    fn render(mut self) -> Node {
+        self
+            .add_class("card");
+        self.children.into_iter()
             .for_each(|child|
-                view.children.push(child.render()));
-        view
+                self.node.children.push(child.render()));
+        self.node
     }
 }

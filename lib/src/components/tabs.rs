@@ -1,7 +1,7 @@
 use std::borrow::BorrowMut;
 use uuid::Uuid;
 
-use crate::{DefaultModifiers, Renderable, scale, sp};
+use crate::{DefaultModifiers, Renderable, scale};
 use crate::components::{Alignment, Appendable, ChildContainer, HStack, Icon, Text, TextStyle, View};
 use crate::components::icons::IconPack;
 use crate::node::{Node, NodeContainer};
@@ -20,13 +20,13 @@ impl TabView {
         }
     }
 
-    pub fn append_child(&mut self, child: TabViewItem) -> Self {
+    pub fn append_child(&mut self, child: TabViewItem) -> &mut Self {
         self.children.push(child);
-        self.clone()
+        self
     }
 }
 
-impl DefaultModifiers<TabView> for TabView {}
+impl DefaultModifiers for TabView {}
 
 impl NodeContainer for TabView {
     fn get_node(&mut self) -> &mut Node {
@@ -35,19 +35,17 @@ impl NodeContainer for TabView {
 }
 
 impl Renderable for TabView {
-    fn render(&self) -> Node {
-        let mut tab_view = self
-            .clone()
-            .add_class("tab-view");
+    fn render(mut self) -> Node {
+        self.add_class("tab-view");
 
-        tab_view.node.children.push({
-            let mut tab_bar = HStack::new(Alignment::Stretch)
-                .add_class("tab-view__tab-container");
+        self.node.children.push({
+            let mut tab_bar = HStack::new(Alignment::Stretch);
+            tab_bar.add_class("tab-view__tab-container");
             self.children.iter()
                 .for_each(|child| {
                     tab_bar.append_child({
-                        let mut tab = HStack::new(Alignment::Center)
-                            .gap(vec![scale(3)])
+                        let mut tab = HStack::new(Alignment::Center);
+                        tab.gap(vec![scale(3)])
                             .set_attr("data-tabId", &child.id.to_string())
                             .add_class("tab-view__tab-container__tab")
                             .append_child({
@@ -70,17 +68,17 @@ impl Renderable for TabView {
             tab_bar
         }.render());
 
-        tab_view.node.children.push({
-            let mut tabs_contents = View::new()
-                .add_class("tab-view__content-container");
-            self.children.iter()
+        self.node.children.push({
+            let mut tabs_contents = View::new();
+            tabs_contents.add_class("tab-view__content-container");
+            self.children.into_iter()
                 .for_each(|child| {
                     tabs_contents.append_child({
-                        let mut tab_content = View::new()
-                            .add_class("")
+                        let mut tab_content = View::new();
+                        tab_content
                             .set_attr("data-tabId", &child.id.to_string())
                             .add_class("tab-view__content-container__content");
-                        child.children.clone().into_iter().for_each(|child| {
+                        child.children.into_iter().for_each(|child| {
                             tab_content.append_child(child);
                         });
                         tab_content
@@ -90,7 +88,7 @@ impl Renderable for TabView {
         }.render());
 
 
-        tab_view.get_node().clone()
+        self.node
     }
 }
 
@@ -117,21 +115,21 @@ impl TabViewItem {
     }
 
     /// If set to true, this tab will be opened by default
-    pub fn open(&mut self, is_open: bool) -> Self {
+    pub fn open(&mut self, is_open: bool) -> &mut Self {
         self.open = is_open;
-        self.clone()
+        self
     }
 
     /// Define the icon displayed on the left of the tab
-    pub fn icon<T>(&mut self, icon: T) -> Self
+    pub fn icon<T>(&mut self, icon: T) -> &mut Self
         where
             T: 'static + IconPack {
         self.icon = Some(Box::new(icon));
-        self.clone()
+        self
     }
 }
 
-impl DefaultModifiers<TabViewItem> for TabViewItem {}
+impl DefaultModifiers for TabViewItem {}
 
 impl Appendable for TabViewItem {}
 
@@ -148,11 +146,9 @@ impl NodeContainer for TabViewItem {
 }
 
 impl Renderable for TabViewItem {
-    fn render(&self) -> Node {
-        let mut tab_view_item = self
-            .clone()
-            .add_class("tab-view-item");
+    fn render(mut self) -> Node {
+        self.add_class("tab-view-item");
 
-        tab_view_item.get_node().clone()
+        self.node
     }
 }

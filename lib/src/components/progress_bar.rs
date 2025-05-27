@@ -28,14 +28,14 @@ impl ProgressBar {
         }
     }
 
-    pub fn value(&mut self, value: f32) -> Self {
+    pub fn value(&mut self, value: f32) -> &mut Self {
         self.value = Some(value);
-        self.clone()
+        self
     }
 
-    pub fn max(&mut self, max: f32) -> Self {
+    pub fn max(&mut self, max: f32) -> &mut Self {
         self.max = Some(max);
-        self.clone()
+        self
     }
 }
 
@@ -46,16 +46,15 @@ impl NodeContainer for ProgressBar {
     }
 }
 
-impl DefaultModifiers<ProgressBar> for ProgressBar {}
+impl DefaultModifiers for ProgressBar {}
 
 
 impl Renderable for ProgressBar {
-    fn render(&self) -> Node {
-        let mut gauge = self.clone()
-            .add_class("progress-bar");
+    fn render(mut self) -> Node {
+        self.add_class("progress-bar");
 
-        let mut progress_element = View::new()
-            .tag("progress")
+        let mut progress_element = View::new();
+            progress_element.tag("progress")
             .add_class("progress-bar__progress-element");
 
         if let Some(value) = &self.value {
@@ -67,10 +66,10 @@ impl Renderable for ProgressBar {
             progress_element.set_attr("max", &max.to_string());
         }
 
-        progress_element.node.text = Some(format!("{}/{}", gauge.value.unwrap_or(0.0), gauge.max.unwrap_or(1.0)));
+        progress_element.node.text = Some(format!("{}/{}", self.value.unwrap_or(0.0), self.max.unwrap_or(1.0)));
 
-        gauge.node.children.push(progress_element.render());
+        self.node.children.push(progress_element.render());
 
-        gauge.node
+        self.node
     }
 }

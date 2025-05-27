@@ -1,5 +1,5 @@
 use crate::{Renderable};
-use crate::node::{Node, NodeContainer, NodeType};
+use crate::node::{Node, NodeContainer};
 use crate::DefaultModifiers;
 use std::borrow::BorrowMut;
 use crate::components::*;
@@ -36,7 +36,7 @@ impl NodeContainer for Popover {
     }
 }
 
-impl DefaultModifiers<Popover> for Popover {}
+impl DefaultModifiers for Popover {}
 
 impl Popover {
     pub fn new() -> Self {
@@ -49,19 +49,19 @@ impl Popover {
         }
     }
 
-    pub fn hide_arrow(&mut self) -> Self {
+    pub fn hide_arrow(&mut self) -> &mut Self {
         self.hide_arrow = true;
-        self.clone()
+        self
     }
 
-    pub fn attach_to(&mut self, el: &str) -> Self {
+    pub fn attach_to(&mut self, el: &str) -> &mut Self {
         self.el_to_attach_to = el.to_string();
-        self.clone()
+        self
     }
 
-    pub fn placement(&mut self, placement: Placement) -> Self {
+    pub fn placement(&mut self, placement: Placement) -> &mut Self {
         self.placement = placement;
-        self.clone()
+        self
     }
 }
 
@@ -77,39 +77,40 @@ impl Renderable for Popover {
     fn component_name(&self) -> &str {
         "Popover"
     }
-    fn render(&self) -> Node {
-        let mut popover = self.clone()
+    fn render(mut self) -> Node {
+        let placement = match self.placement {
+            Placement::Auto => "auto",
+            Placement::TopStart => "top-start",
+            Placement::Top => "top",
+            Placement::TopEnd => "top-end",
+            Placement::RightStart => "right-start",
+            Placement::Right => "right",
+            Placement::RightEnd => "right-end",
+            Placement::BottomStart => "bottom-start",
+            Placement::Bottom => "bottom",
+            Placement::BottomEnd => "bottom-end",
+            Placement::LeftStart => "left-start",
+            Placement::Left => "left",
+            Placement::LeftEnd => "left-end",
+        };
+        self
             .add_class("popover")
             .set_attr("data-attach-to", self.el_to_attach_to.as_str())
-            .set_attr("data-placement", match self.placement {
-                Placement::Auto => "auto",
-                Placement::TopStart => "top-start",
-                Placement::Top => "top",
-                Placement::TopEnd => "top-end",
-                Placement::RightStart => "right-start",
-                Placement::Right => "right",
-                Placement::RightEnd => "right-end",
-                Placement::BottomStart => "bottom-start",
-                Placement::Bottom => "bottom",
-                Placement::BottomEnd => "bottom-end",
-                Placement::LeftStart => "left-start",
-                Placement::Left => "left",
-                Placement::LeftEnd => "left-end",
-            });
+            .set_attr("data-placement", placement);
 
-        self.children.iter()
+        self.children.into_iter()
             .for_each(|child| {
-                popover.node.children.push(child.render())
+                self.node.children.push(child.render())
             });
         if !self.hide_arrow {
-            popover.node.children.push({
-                View::new()
-                    .add_class("arrow")
-                    .set_attr("data-popper-arrow", "true")
-                    .render()
+            self.node.children.push({
+                let mut view = View::new();
+                view.add_class("arrow")
+                    .set_attr("data-popper-arrow", "true");
+                view.render()
             });
         }
 
-        popover.node
+        self.node
     }
 }

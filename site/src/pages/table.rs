@@ -1,4 +1,4 @@
-use viewy::{DefaultModifiers, scale, sp};
+use viewy::{DefaultModifiers, scale};
 use viewy::components::*;
 
 pub fn table() -> VStack {

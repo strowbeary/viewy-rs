@@ -24,7 +24,7 @@ impl NodeContainer for Image {
     }
 }
 
-impl DefaultModifiers<Image> for Image {}
+impl DefaultModifiers for Image {}
 
 impl Image {
     pub fn new(src: &str) -> Self {
@@ -33,7 +33,7 @@ impl Image {
             src: src.to_string(),
         }
     }
-    pub fn object_fit(&mut self, fit: ObjectFit) -> Self {
+    pub fn object_fit(&mut self, fit: ObjectFit) -> &mut Self {
         self.get_node().node_style.push((
             "object-fit".to_string(),
             {
@@ -48,23 +48,24 @@ impl Image {
             .to_string(),
         ));
 
-        self.clone()
+        self
     }
-    pub fn aspect_ratio(&mut self, ratio: &str) -> Self {
+    pub fn aspect_ratio(&mut self, ratio: &str) -> &mut Self {
         self.get_node()
             .node_style
             .push(("aspect-ratio".to_string(), ratio.to_string()));
 
-        self.clone()
+        self
     }
 }
 
 impl Renderable for Image {
-    fn render(&self) -> Node {
-        self.clone()
+    fn render(mut self) -> Node {
+        let src = self.src.to_string();
+        self
             .add_class("image")
-            .set_attr("src", self.src.as_str())
-            .tag("img")
-            .node
+            .set_attr("src", &src)
+            .tag("img");
+        self.node
     }
 }

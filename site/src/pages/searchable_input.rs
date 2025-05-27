@@ -1,4 +1,3 @@
-use viewy::*;
 use viewy::components::*;
 
 pub fn searchable_input_page() -> VStack {

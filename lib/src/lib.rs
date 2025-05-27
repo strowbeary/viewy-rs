@@ -29,7 +29,7 @@ mod config;
 mod tests {
     use std::time::Instant;
     use crate::components::{Appendable, Button, ButtonStyle, View};
-    use crate::{Page, Renderable, RenderMode};
+    use crate::{Page, RenderMode};
 
     #[test]
     fn benchmark() {

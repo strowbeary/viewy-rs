@@ -53,48 +53,48 @@ impl Text {
             sanitization_level: SanitizationLevel::Strict,
         }
     }
-    pub fn bold(&mut self, is_bold: bool) -> Self {
+    pub fn bold(&mut self, is_bold: bool) -> &mut Self {
         if is_bold {
             self.get_node().node_style.push(("font-weight".to_string(), "bold".to_string()));
         } else {
             self.get_node().node_style.push(("font-weight".to_string(), "normal".to_string()));
         }
-        self.clone()
+        self
     }
-    pub fn uppercase(&mut self, is_uppercase: bool) -> Self {
+    pub fn uppercase(&mut self, is_uppercase: bool) -> &mut Self {
         if is_uppercase {
             self.get_node().node_style.push(("text-transform".to_string(), "uppercase".to_string()));
         } else {
             self.get_node().node_style.push(("text-transform".to_string(), "none".to_string()));
         }
-        self.clone()
+        self
     }
 
 
-    pub fn no_wrap(&mut self, is_no_wrap: bool) -> Self {
+    pub fn no_wrap(&mut self, is_no_wrap: bool) -> &mut Self {
         self.no_wrap = is_no_wrap;
-        self.clone()
+        self
     }
     
     #[deprecated(since = "0.13.16", note = "Use sanitization_level instead")]
-    pub fn disable_purification(&mut self) -> Self {
+    pub fn disable_purification(&mut self) -> &mut Self {
         self.sanitization_level = SanitizationLevel::Basic;
-        self.clone()
+        self
     }
 
     /// Define sanitization level
-    pub fn sanitization_level(&mut self, level: SanitizationLevel) -> Self {
+    pub fn sanitization_level(&mut self, level: SanitizationLevel) -> &mut Self {
         self.sanitization_level = level;
-        self.clone()
+        self
     }
 
-    pub fn text_overflow(&mut self) -> Self {
+    pub fn text_overflow(&mut self) -> &mut Self {
         self.get_node().node_style.push(("text-overflow".to_string(), "ellipsis".to_string()));
-        self.clone()
+        self
     }
-    pub fn text_shadow(&mut self, rule: &str) -> Self {
+    pub fn text_shadow(&mut self, rule: &str) -> &mut Self {
         self.get_node().node_style.push(("text-shadow".to_string(), rule.to_string()));
-        self.clone()
+        self
     }
 }
 
@@ -104,31 +104,31 @@ impl NodeContainer for Text {
     }
 }
 
-impl DefaultModifiers<Text> for Text {}
+impl DefaultModifiers for Text {}
 
 impl Renderable for Text {
-    fn render(&self) -> Node {
-        let mut text = self.clone()
-            .add_class("text")
-            .add_class(format!("text--{:?}", self.style).to_lowercase().as_str());
+    fn render(mut self) -> Node {
+        let text_style = format!("text--{:?}", self.style).to_lowercase();
+        self.add_class("text")
+            .add_class(text_style.as_str());
 
         match self.sanitization_level {
             SanitizationLevel::None => {
-                text.node.text = Some(self.content.to_string())
+                self.node.text = Some(self.content.to_string())
             }
             SanitizationLevel::Basic => {
-                text.node.text = Some(ammonia::clean(&self.content))
+                self.node.text = Some(ammonia::clean(&self.content))
             }
             SanitizationLevel::Strict => {
-                text.node.text = Some(ammonia::Builder::empty()
+                self.node.text = Some(ammonia::Builder::empty()
                     .clean(&self.content)
                     .to_string())
             }
         }
 
         if self.no_wrap {
-            text.add_class("text--nowrap");
+            self.add_class("text--nowrap");
         }
-        text.node
+        self.node
     }
 }

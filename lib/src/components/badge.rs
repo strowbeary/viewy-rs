@@ -1,5 +1,5 @@
 use std::borrow::BorrowMut;
-use std::fmt::{Debug, Formatter};
+use std::fmt::Debug;
 use crate::node::{Node, NodeContainer};
 use crate::{DefaultModifiers, Renderable};
 
@@ -45,22 +45,21 @@ impl NodeContainer for Badge {
     }
 }
 
-impl DefaultModifiers<Badge> for Badge {}
+impl DefaultModifiers for Badge {}
 
 impl Renderable for Badge {
-    fn render(&self) -> Node {
-        let mut badge = self.clone()
-            .add_class("badge");
+    fn render(mut self) -> Node {
+        self.add_class("badge");
         match &self.value {
-            None => badge.add_class("badge--textless"),
-            Some(_) => badge.add_class("badge--with-text"),
+            None => self.add_class("badge--textless"),
+            Some(_) => self.add_class("badge--with-text"),
         };
         match &self.badge_type {
-            BadgeType::Important => badge.add_class("badge--important"),
-            BadgeType::Normal => badge.add_class("badge--normal")
+            BadgeType::Important => self.add_class("badge--important"),
+            BadgeType::Normal => self.add_class("badge--normal")
         };
-        badge.node.text = self.value.clone();
-        badge.node
+        self.node.text = self.value.clone();
+        self.node
     }
 }
 

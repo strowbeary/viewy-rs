@@ -26,7 +26,7 @@ impl NodeContainer for VStack {
     }
 }
 
-impl DefaultModifiers<VStack> for VStack {}
+impl DefaultModifiers for VStack {}
 
 impl VStack {
     pub fn new(alignment: Alignment) -> Self {
@@ -36,44 +36,43 @@ impl VStack {
             alignment,
         }
     }
-    pub fn gap(&mut self, gaps: Vec<i32>) -> Self {
+    pub fn gap(&mut self, gaps: Vec<i32>) -> &mut Self {
         let params: Vec<String> = gaps.iter().map(|size| sp(size.clone())).collect();
         self.node.node_style.push(("grid-gap".to_string(), params.join(" ")));
-        self.clone()
+        self
     }
-    pub fn justify_content(&mut self, value: &str) -> Self {
+    pub fn justify_content(&mut self, value: &str) -> &mut Self {
         self.node.node_style.push(("justify-content".to_string(), value.to_string()));
-        self.clone()
+        self
     }
-    pub fn flex_wrap(&mut self) -> Self {
+    pub fn flex_wrap(&mut self) -> &mut Self {
         self.node.node_style.push(("flex-wrap".to_string(), "wrap".to_string()));
-        self.clone()
+        self
     }
 
 }
 impl ChildContainer for VStack {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
+        self.children.borrow_mut()
     }
 }
 impl Appendable for VStack {}
 impl Renderable for VStack {
-    fn render(&self) -> Node {
-        let mut stack = self
-            .clone()
-            .add_class("stack")
+    fn render(mut self) -> Node {
+        let alignment = match self.alignment {
+            Alignment::Center => {"center"}
+            Alignment::Start => {"start"}
+            Alignment::End => {"end"}
+            Alignment::Stretch => {"stretch"}
+        };
+        self.add_class("stack")
             .add_class("stack--vertical")
             .add_class(
-                &format!("stack--align-{}", match self.alignment {
-                    Alignment::Center => {"center"}
-                    Alignment::Start => {"start"}
-                    Alignment::End => {"end"}
-                    Alignment::Stretch => {"stretch"}
-                })
+                &format!("stack--align-{alignment}", )
             );
-        self.children.iter()
+        self.children.into_iter()
             .for_each(|child|
-                stack.node.children.push(child.render()));
-        stack.node
+                self.node.children.push(child.render()));
+        self.node
     }
 }

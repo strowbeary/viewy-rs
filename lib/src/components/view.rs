@@ -2,7 +2,6 @@ use crate::engine::{Renderable};
 use crate::node::{Node, NodeContainer};
 use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use std::process::Child;
 use crate::components::{Appendable, ChildContainer};
 
 /// This is a simple configurable node
@@ -28,7 +27,7 @@ impl NodeContainer for View {
     }
 }
 
-impl DefaultModifiers<View> for View {}
+impl DefaultModifiers for View {}
 
 impl ChildContainer for View {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
@@ -39,13 +38,10 @@ impl ChildContainer for View {
 impl Appendable for View {}
 
 impl Renderable for View {
-    fn render(&self) -> Node {
+    fn render(mut self) -> Node {
+        let child_nodes = self.children.into_iter().map(|child| child.render()).collect();
+        self.node.children = child_nodes;
 
-        let mut node = self.clone().node;
-
-        self.children.iter()
-            .for_each(|child|
-                node.children.push(child.render()));
-        node
+        self.node
     }
 }

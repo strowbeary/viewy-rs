@@ -1,4 +1,4 @@
-use viewy::components::{Alignment, Appendable, HStack, TableOfContentItemType, TableOfContents, TableOfContentsItem, Text, TextStyle, VStack};
+use viewy::components::{Alignment, Appendable, HStack, SanitizationLevel, TableOfContentItemType, TableOfContents, TableOfContentsItem, Text, TextStyle, VStack};
 use viewy::{DefaultModifiers, Overflow, scale};
 
 pub fn table_of_content() -> HStack {
@@ -34,7 +34,7 @@ pub fn table_of_content() -> HStack {
                     .append_child({
                         let txt_content = include_str!("toc_content.txt").to_string();
                         Text::new(&txt_content.replace("\n", "<br>"), TextStyle::Body)
-                            .disable_purification()
+                            .sanitization_level(SanitizationLevel::Basic)
                     })
             });
         }

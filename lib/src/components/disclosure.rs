@@ -20,7 +20,7 @@ impl NodeContainer for Disclosure {
     }
 }
 
-impl DefaultModifiers<Disclosure> for Disclosure {}
+impl DefaultModifiers for Disclosure {}
 
 impl ChildContainer for Disclosure {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
@@ -39,32 +39,32 @@ impl Disclosure {
             open: false,
         }
     }
-    pub fn opener_item<T>(&mut self, item: T) -> Self
+    pub fn opener_item<T>(&mut self, item: T) -> &mut Self
         where
             T: 'static + Renderable,
     {
         self.opener_item = Some(Box::new(item));
-        self.clone()
+        self
     }
 
 
-    pub fn open(&mut self, is_open: bool) -> Self {
+    pub fn open(&mut self, is_open: bool) -> &mut Self {
         self.open = is_open;
-        self.clone()
+        self
     }
 }
 
 impl Renderable for Disclosure {
-    fn render(&self) -> Node {
-        let mut view = self.clone()
+    fn render(mut self) -> Node {
+        self
             .tag("details")
             .add_class("disclosure");
         if self.open {
-            view.set_attr("open", "open");
+            self.set_attr("open", "open");
         }
 
-        if let Some(opener_item) = self.opener_item.clone() {
-            view.node.children.push(HStack::new(Alignment::Center)
+        if let Some(opener_item) = self.opener_item {
+            self.node.children.push(HStack::new(Alignment::Center)
                 .gap(vec![scale(3)])
                 .tag("summary")
                 .add_class("clickable")
@@ -74,9 +74,10 @@ impl Renderable for Disclosure {
                 })
                 .render());
         }
-        self.children.iter()
+
+        self.children.into_iter()
             .for_each(|child|
-                view.node.children.push(child.render()));
-        view.node
+                self.node.children.push(child.render()));
+        self.node
     }
 }

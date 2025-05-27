@@ -1,5 +1,4 @@
 use std::collections::{HashSet, HashMap};
-use crate::components::{Popover, Popup};
 use crate::engine::Renderable;
 
 #[derive(Debug, Clone)]
@@ -37,7 +36,7 @@ impl Default for Node {
 }
 
 impl Node {
-    pub fn get_root_nodes(&self) -> Vec<Box<dyn Renderable>> {
+    pub(crate) fn get_root_nodes(&self) -> Vec<Box<dyn Renderable>> {
         let mut all_root_nodes: Vec<Box<dyn Renderable>> = Vec::from_iter(self.root_nodes.clone());
 
         self.children.iter()
@@ -48,7 +47,7 @@ impl Node {
     }
 
 
-    pub fn get_html(&self) -> String {
+    pub(crate) fn get_html(&self) -> String {
         let classes: Vec<String> = self.class_list.iter()
             .map(|class_name| format!("{}", class_name))
             .collect();
@@ -85,6 +84,17 @@ impl Node {
                 comment = comment
             )
         }
+    }
+
+    pub(crate) fn to_html(self) -> String {
+        let root_nodes_html: Vec<String> = self.get_root_nodes().into_iter()
+            .map(|root_node| root_node.render().to_html())
+            .collect();
+        format!(
+            "{view} {root_nodes}",
+            view = self.get_html(),
+            root_nodes = root_nodes_html.join(""),
+        )
     }
 }
 

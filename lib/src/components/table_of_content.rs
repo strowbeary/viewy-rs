@@ -61,18 +61,16 @@ impl NodeContainer for TableOfContents {
     }
 }
 
-impl DefaultModifiers<TableOfContents> for TableOfContents {}
+impl DefaultModifiers for TableOfContents {}
 
 impl Renderable for TableOfContents {
-    fn render(&self) -> Node {
-        let mut toc = self
-            .clone()
-            .set_attr("data-root", &self.root_id)
+    fn render(mut self) -> Node {
+        self.set_attr("data-root", &self.root_id.to_string())
             .add_class("table-of-contents");
 
-        for child in &toc.children {
-            toc.node.children.push({
-                match child.item_type {
+        for child in self.children {
+            self.node.children.push({
+                let mut text = match child.item_type {
                     TableOfContentItemType::H1 => {
                         Text::new(&child.label, TextStyle::H2)
                     }
@@ -82,14 +80,14 @@ impl Renderable for TableOfContents {
                     TableOfContentItemType::H3 => {
                         Text::new(&child.label, TextStyle::Subtitle3)
                     }
-                }
-                    .add_class("table-of-contents__item")
+                };
+                text.add_class("table-of-contents__item")
                     .tag("a")
-                    .set_attr("href", &child.referrer_id)
-                    .render()
+                    .set_attr("href", &child.referrer_id);
+                text.render()
             });
         }
 
-        toc.get_node().clone()
+        self.node
     }
 }

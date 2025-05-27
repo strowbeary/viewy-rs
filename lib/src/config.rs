@@ -1,7 +1,6 @@
 use figment::providers::{Env, Format, Toml};
 use figment::Figment;
 use serde::{Deserialize, Serialize};
-use std::collections::HashMap;
 
 #[derive(Deserialize, Serialize, Debug)]
 pub struct AppSettings {

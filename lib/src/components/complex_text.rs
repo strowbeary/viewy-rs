@@ -17,7 +17,7 @@ impl NodeContainer for ComplexText {
     }
 }
 
-impl DefaultModifiers<ComplexText> for ComplexText {}
+impl DefaultModifiers for ComplexText {}
 
 impl ComplexText {
     pub fn new(content: &str, style: TextStyle) -> Self {
@@ -32,11 +32,12 @@ impl ComplexText {
 }
 
 impl Renderable for ComplexText {
-    fn render(&self) -> Node {
-        let text = self.clone()
+    fn render(mut self) -> Node {
+        let text_style = format!("text--{:?}", self.style).to_lowercase();
+        self
             .add_class("text")
             .add_class("complex-text")
-            .add_class(format!("text--{:?}", self.style).to_lowercase().as_str());
-        text.node
+            .add_class(&text_style);
+        self.node
     }
 }

@@ -15,7 +15,7 @@ impl NodeContainer for Divider {
     }
 }
 
-impl DefaultModifiers<Divider> for Divider {}
+impl DefaultModifiers for Divider {}
 
 
 
@@ -28,11 +28,9 @@ impl Divider {
 }
 
 impl Renderable for Divider {
-    fn render(&self) -> Node {
-
-        let mut view = self.clone()
-            .add_class("divider")
-            .node;
-        view
+    fn render(mut self) -> Node {
+        self
+            .add_class("divider");
+        self.node
     }
 }

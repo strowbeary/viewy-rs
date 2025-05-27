@@ -81,7 +81,7 @@ impl NodeContainer for Checkbox {
     }
 }
 
-impl DefaultModifiers<Checkbox> for Checkbox {}
+impl DefaultModifiers for Checkbox {}
 
 impl ChildContainer for Checkbox {
     fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
@@ -92,9 +92,9 @@ impl ChildContainer for Checkbox {
 impl Appendable for Checkbox {}
 
 impl Renderable for Checkbox {
-    fn render(&self) -> Node {
-        let mut checkbox = View::new()
-            .tag("input")
+    fn render(mut self) -> Node {
+        let mut checkbox = View::new();
+        checkbox.tag("input")
             .set_attr("type", "checkbox")
             .set_attr("name", &self.name)
             .set_attr("value", &self.value)
@@ -110,25 +110,26 @@ impl Renderable for Checkbox {
         if self.auto_submit {
             checkbox.set_attr("data-auto-submit", &self.auto_submit.to_string());
         }
-
-        let mut container = self.clone()
+        let checkbox_style = match &self.style {
+            CheckboxStyle::Checkbox => "checkbox--checkbox",
+            CheckboxStyle::Switch => "checkbox--switch"
+        };
+        self
             .add_class("checkbox")
-            .add_class(match self.style {
-                CheckboxStyle::Checkbox => "checkbox--checkbox",
-                CheckboxStyle::Switch => "checkbox--switch"
-            })
+            .add_class(checkbox_style)
             .append_child(checkbox);
-        if let Some(label) = self.clone().label {
-            container.append_child({
-                Text::new(label.as_str(), TextStyle::Body)
-                    .set_attr("for", &self.id.to_string())
+        if let Some(label) = &self.label {
+            self.append_child({
+                let mut text = Text::new(label, TextStyle::Body);
+                text.set_attr("for", &self.id.to_string())
                     .tag("label")
-                    .margin_left(4)
+                    .margin_left(4);
+                text
             });
         }
-        container.clone().children.iter()
-            .for_each(|child|
-                container.node.children.push(child.render()));
-        container.node
+        let child_nodes = self.children.into_iter().map(|child| child.render()).collect();
+
+        self.node.children = child_nodes;
+        self.node
     }
 }

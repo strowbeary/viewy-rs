@@ -1,10 +1,8 @@
-use crate::components::*;
 use crate::node::*;
 use std::collections::HashSet;
 use std::{fmt, env};
 use crate::Renderable;
 use std::collections::HashMap;
-use std::fmt::format;
 use crate::config::Config;
 
 fn get_full_html_page(title: String, content: String, theme_variant: String, insert_base_element: bool) -> String {
@@ -86,7 +84,7 @@ pub enum RenderMode {
 struct ContentComment;
 
 impl Renderable for ContentComment {
-    fn render(&self) -> Node {
+    fn render(self) -> Node {
         Node {
             node_type: NodeType::Comment("VIEWY_CONTENT".to_string()),
             text: None,
@@ -105,7 +103,8 @@ impl Renderable for ContentComment {
 ///
 /// **Example to get the full page**
 /// ```rust
-/// use viewy::RenderMode;
+/// use viewy::{Page, RenderMode};
+/// use viewy::components::View;
 /// Page::new("Page name", layout::Default, {
 ///     View::new()
 /// })
@@ -142,15 +141,15 @@ impl<'a> Page<'a> {
         match render_mode {
             RenderMode::Complete => {
                 get_full_html_page(self.name, {
-                    (self.layout)(self.content).to_html()
+                    (self.layout)(self.content).render().to_html()
                 }, theme_variant, self.base_url)
             }
             RenderMode::ContentOnly => {
-                self.content.to_html()
+                self.content.render().to_html()
             }
             RenderMode::LayoutOnly => {
                 get_full_html_page(self.name, {
-                    (self.layout)(Box::new(ContentComment)).to_html()
+                    (self.layout)(Box::new(ContentComment)).render().to_html()
                 }, theme_variant, self.base_url)
             }
         }

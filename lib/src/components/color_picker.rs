@@ -73,9 +73,9 @@ impl ColorPicker {
             children: vec![],
         }
     }
-    pub fn label(&mut self, label: &str) -> Self {
+    pub fn label(&mut self, label: &str) -> &mut Self {
         self.label = Some(label.to_string());
-        self.clone()
+        self
     }
 
 
@@ -87,43 +87,45 @@ impl NodeContainer for ColorPicker {
     }
 }
 
-impl DefaultModifiers<ColorPicker> for ColorPicker {}
+impl DefaultModifiers for ColorPicker {}
 
 impl Renderable for ColorPicker {
-    fn render(&self) -> Node {
+    fn render(mut self) -> Node {
         let base_class = format!("color-picker--{}", self.style.get_style_name());
-        let mut picker = self.clone()
+        self
             .add_class("color-picker")
             .add_class(&base_class);
-        if let Some(label) = picker.label {
-            picker.node.children.push({
-                Text::new(label.as_str(), TextStyle::Label)
+        if let Some(label) = &self.label {
+            self.node.children.push({
+                Text::new(label, TextStyle::Label)
             }.render());
         }
         let picker_id = Uuid::new_v4().to_string();
         match &self.style {
             ColorPickerStyle::Palette(color_palette) => {
-                picker.node.children.push({
-                    let mut option_list = HStack::new(Alignment::Center)
-                        .add_class(&format!("{}--option-list", &base_class));
+                self.node.children.push({
+                    let mut option_list = HStack::new(Alignment::Center);
+                    option_list.add_class(&format!("{}--option-list", &base_class));
                     for color in color_palette {
                         let radio_id = format!("color-picker-{}-{}", picker_id, color.to_string());
                         option_list
                             .append_child({
-                                View::new()
-                                    .tag("input")
+                                let mut input = View::new();
+                                input.tag("input")
                                     .set_attr("type", "radio")
                                     .set_attr("name", self.name.as_str())
                                     .set_attr("value", &format!("#{}", color.to_string()))
                                     .set_attr("id", radio_id.as_str())
-                                    .add_class(&format!("{}--option-list--radio", &base_class))
+                                    .add_class(&format!("{}--option-list--radio", &base_class));
+                                input
                             });
                         option_list.append_child({
-                            View::new()
-                                .tag("label")
+                            let mut label = View::new();
+                            label.tag("label")
                                 .set_attr("for", radio_id.as_str())
                                 .color(&color.to_css_value())
-                                .add_class(&format!("{}--option-list--swatch", &base_class))
+                                .add_class(&format!("{}--option-list--swatch", &base_class));
+                            label
                         });
                     }
                     option_list.render()
@@ -131,9 +133,9 @@ impl Renderable for ColorPicker {
             }
             ColorPickerStyle::Free(color) => {
                 let color_hex_code = format!("#{}", color.unwrap_or(Color::from_hex("#ffffff")).to_string());
-                picker.node.children.push({
-                    let mut option_list = View::new()
-                        .tag("input")
+                self.node.children.push({
+                    let mut option_list = View::new();
+                    option_list.tag("input")
                         .set_attr("name", self.name.as_str())
                         .set_attr("value", {
                             &color_hex_code
@@ -145,6 +147,6 @@ impl Renderable for ColorPicker {
                 })
             }
         }
-        picker.node
+        self.node
     }
 }

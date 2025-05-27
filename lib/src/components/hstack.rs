@@ -29,7 +29,7 @@ impl NodeContainer for HStack {
     }
 }
 
-impl DefaultModifiers<HStack> for HStack {}
+impl DefaultModifiers for HStack {}
 
 impl HStack {
     pub fn new(alignment: Alignment) -> Self {
@@ -39,19 +39,19 @@ impl HStack {
             alignment,
         }
     }
-    pub fn justify_content(&mut self, justification: &str) -> Self {
+    pub fn justify_content(&mut self, justification: &str) -> &mut Self {
         self.node.node_style.push(("justify-content".to_string(), justification.to_string()));
-        self.clone()
+        self
     }
 
-    pub fn gap(&mut self, gaps: Vec<i32>) -> Self {
+    pub fn gap(&mut self, gaps: Vec<i32>) -> &mut Self {
         let params: Vec<String> = gaps.iter().map(|size| sp(size.clone())).collect();
         self.node.node_style.push(("grid-gap".to_string(), params.join(" ")));
-        self.clone()
+        self
     }
-    pub fn flex_wrap(&mut self) -> Self {
+    pub fn flex_wrap(&mut self) -> &mut Self {
         self.node.node_style.push(("flex-wrap".to_string(), "wrap".to_string()));
-        self.clone()
+        self
     }
 }
 impl ChildContainer for HStack {
@@ -62,20 +62,18 @@ impl ChildContainer for HStack {
 impl Appendable for HStack {}
 
 impl Renderable for HStack {
-    fn render(&self) -> Node {
-        let mut view = self
-            .clone()
+    fn render(mut self) -> Node {
+        let alignment =  format!("stack--align-{:?}", self.alignment)
+            .to_lowercase();
+        self
             .add_class("stack")
             .add_class("stack--horizontal")
             .add_class(
-                format!("stack--align-{:?}", self.alignment)
-                    .to_lowercase()
-                    .as_str()
-            )
-            .node;
-        self.children.iter()
+                &alignment
+            );
+        self.children.into_iter()
             .for_each(|child|
-                view.children.push(child.render()));
-        view
+                self.node.children.push(child.render()));
+        self.node
     }
 }

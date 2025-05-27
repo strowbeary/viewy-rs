@@ -7,7 +7,7 @@ extern crate serde;
 
 use cmd_lib::run_cmd;
 use figment::{
-    providers::{Env, Format, Toml},
+    providers::{Format, Toml},
     Figment,
 };
 use heck::{ToKebabCase, ToPascalCase, ToUpperCamelCase};

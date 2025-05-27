@@ -26,7 +26,7 @@ impl NodeContainer for Form {
     }
 }
 
-impl DefaultModifiers<Form> for Form {}
+impl DefaultModifiers for Form {}
 
 impl Form {
     pub fn new(name: &str, action: &str) -> Self {
@@ -38,25 +38,23 @@ impl Form {
             is_async: false,
             form_method: FormMethod::Post,
         }
-        .set_attr("id", name)
 
     }
-    pub fn method(mut self, method: FormMethod) -> Self {
+    pub fn method(&mut self, method: FormMethod) -> &mut Self {
         self.form_method = method;
-        self.clone()
+        self
     }
-    pub fn async_form(&mut self) -> Self {
+    pub fn async_form(&mut self) -> &mut Self {
         self.is_async = true;
-        self.clone()
+        self
     }
 
-    pub fn inject_into_dynamic_content(&mut self, dynamic_content_name: &str) -> Self {
+    pub fn inject_into_dynamic_content(&mut self, dynamic_content_name: &str) -> &mut Self {
         self.set_attr("data-dynamic-content-name", dynamic_content_name)
     }
 
-    pub fn multipart(mut self) -> Self {
-        self.set_attr("enctype", "multipart/form-data");
-        self
+    pub fn multipart(&mut self) -> &mut Self {
+        self.set_attr("enctype", "multipart/form-data")
     }
 }
 
@@ -68,30 +66,33 @@ impl ChildContainer for Form {
 impl Appendable for Form {}
 
 impl Renderable for Form {
-    fn render(&self) -> Node {
-        let mut form = self
-            .clone()
+    fn render(mut self) -> Node {
+        let method = match self.form_method {
+            FormMethod::Post => "POST",
+            FormMethod::Get => "GET",
+        };
+        let name = self.name.to_string();
+        let action = self.action.to_string();
+        self
+            .set_attr("id", &name)
             .add_class("form")
-            .set_attr("action", &self.action)
+            .set_attr("action", &action)
             .tag("form")
             .set_attr(
                 "method",
-                match self.form_method {
-                    FormMethod::Post => "POST",
-                    FormMethod::Get => "GET",
-                },
+                method
             );
 
 
         if self.is_async {
-            form.set_attr("data-async", "data-async");
+            self.set_attr("data-async", "data-async");
         }
 
-        let mut node = form.node;
+
 
         self.children
-            .iter()
-            .for_each(|child| node.children.push(child.render()));
-        node
+            .into_iter()
+            .for_each(|child| self.node.children.push(child.render()));
+        self.node
     }
 }

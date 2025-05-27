@@ -1,4 +1,3 @@
-use rocket::http::ext::IntoCollection;
 use viewy::components::{Alignment, Appendable, TabView, TabViewItem, Text, TextStyle, VStack};
 
 pub fn tabs() -> VStack {

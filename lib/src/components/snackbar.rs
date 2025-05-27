@@ -1,4 +1,4 @@
-use std::borrow::{Borrow, BorrowMut};
+use std::borrow::BorrowMut;
 
 use uuid::Uuid;
 
@@ -32,23 +32,24 @@ impl Snackbar {
         }
     }
 
-    pub fn closable(&mut self) -> Self {
+    pub fn closable(&mut self) -> &mut Self {
         let id = Uuid::new_v4();
         self.set_attr("data-snackbar-id", &id.to_string());
         self.action = Some({
-            Button::icon_only(Lucide::X, ButtonStyle::Flat)
-                .set_attr("data-snackbar-closing-button", &id.to_string())
+            let mut btn = Button::icon_only(Lucide::X, ButtonStyle::Flat);
+            btn.set_attr("data-snackbar-closing-button", &id.to_string());
+            btn
         });
-        self.clone()
+        self
     }
 
-    pub fn set_action_button(&mut self, button: Button) -> Self {
+    pub fn set_action_button(&mut self, button: Button) -> &mut Self {
         if matches!(button.style, ButtonStyle::Link) {
             self.action = Some(button);
         } else {
             println!("[viewy-rs] (error) You can only use a button with ButtonStyle::Link style as snackbar action");
         }
-        self.clone()
+        self
     }
 }
 
@@ -58,38 +59,32 @@ impl NodeContainer for Snackbar {
     }
 }
 
-impl DefaultModifiers<Snackbar> for Snackbar {}
+impl DefaultModifiers for Snackbar {}
 
 impl Renderable for Snackbar {
-    fn render(&self) -> Node {
-        let mut snackbar = self.clone()
-            .add_class("snackbar");
+    fn render(mut self) -> Node {
+        self.add_class("snackbar");
 
-        match snackbar.snackbar_type {
-            SnackbarType::Error => {
-                snackbar.add_class("snackbar--error");
-            }
-            SnackbarType::Success => {
-                snackbar.add_class("snackbar--success");
-            }
-            SnackbarType::Neutral => {
-                snackbar.add_class("snackbar--neutral");
-            }
-        }
+        let snackbar_type = match self.snackbar_type {
+            SnackbarType::Error => "snackbar--error",
+            SnackbarType::Success => "snackbar--success",
+            SnackbarType::Neutral => "snackbar--neutral",
+        };
+        self.add_class(snackbar_type);
 
-        snackbar.node.children.push({
-            let mut content = HStack::new(Alignment::Center)
-                .gap(vec![scale(3)])
+        self.node.children.push({
+            let mut content = HStack::new(Alignment::Center);
+            content.gap(vec![scale(3)])
                 .append_child({
                     Text::new(&self.content, TextStyle::Body)
                 });
-            if let Some(action) = self.action.clone() {
+            if let Some(action) = self.action {
                 content.append_child(action);
             }
             content
         }.render());
 
 
-        snackbar.node
+        self.node
     }
 }

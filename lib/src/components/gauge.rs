@@ -1,7 +1,6 @@
 use std::borrow::BorrowMut;
-use std::fmt::format;
 
-use crate::components::{Appendable, ChildContainer, View};
+use crate::components::View;
 use crate::DefaultModifiers;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
@@ -57,34 +56,34 @@ impl Gauge {
         }
     }
 
-    pub fn min(&mut self, min: f32) -> Self {
+    pub fn min(&mut self, min: f32) -> &mut Self {
         self.min = Some(min);
-        self.clone()
+        self
     }
 
-    pub fn max(&mut self, max: f32) -> Self {
+    pub fn max(&mut self, max: f32) -> &mut Self {
         self.max = Some(max);
-        self.clone()
+        self
     }
 
-    pub fn low(&mut self, low: f32) -> Self {
+    pub fn low(&mut self, low: f32) -> &mut Self {
         self.low = Some(low);
-        self.clone()
+        self
     }
 
-    pub fn high(&mut self, high: f32) -> Self {
+    pub fn high(&mut self, high: f32) -> &mut Self {
         self.high = Some(high);
-        self.clone()
+        self
     }
 
-    pub fn optimum(&mut self, optimum: f32) -> Self {
+    pub fn optimum(&mut self, optimum: f32) -> &mut Self {
         self.optimum = Some(optimum);
-        self.clone()
+        self
     }
 
-    pub fn display_optimum_indicator(&mut self) -> Self {
+    pub fn display_optimum_indicator(&mut self) -> &mut Self {
         self.display_optimum_indicator = true;
-        self.clone()
+        self
     }
 }
 
@@ -95,21 +94,22 @@ impl NodeContainer for Gauge {
     }
 }
 
-impl DefaultModifiers<Gauge> for Gauge {}
+impl DefaultModifiers for Gauge {}
 
 
 impl Renderable for Gauge {
-    fn render(&self) -> Node {
-        let mut gauge = self.clone()
+    fn render(mut self) -> Node {
+        let gauge_style = format!("gauge--{:?}", self.style).to_lowercase();
+        self
             .add_class("gauge")
-            .add_class(format!("gauge--{:?}", self.style).to_lowercase().as_str());
+            .add_class(&gauge_style);
 
         if self.display_optimum_indicator {
-            gauge.add_class("gauge__optimum-indicator");
+            self.add_class("gauge__optimum-indicator");
         }
 
-        let mut meter_element = View::new()
-            .tag("meter")
+        let mut meter_element = View::new();
+        meter_element.tag("meter")
             .add_class("gauge__meter-bar")
             .set_attr("value", &self.value.to_string());
 
@@ -130,10 +130,10 @@ impl Renderable for Gauge {
             meter_element.set_attr("optimum", &optimum.to_string());
         }
 
-        meter_element.node.text = Some(format!("{}/{}", gauge.value, gauge.max.unwrap_or(1.0)));
+        meter_element.node.text = Some(format!("{}/{}", self.value, self.max.unwrap_or(1.0)));
 
-        gauge.node.children.push(meter_element.render());
+        self.node.children.push(meter_element.render());
 
-        gauge.node
+        self.node
     }
 }

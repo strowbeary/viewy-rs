@@ -1,6 +1,5 @@
-use std::collections::HashMap;
 
-use crate::{DefaultModifiers, sp};
+use crate::DefaultModifiers;
 use crate::node::{Node, NodeContainer};
 use crate::Renderable;
 
@@ -29,9 +28,9 @@ impl Avatar {
         }
     }
 
-    pub fn size(&mut self, size: Size) -> Self {
+    pub fn size(&mut self, size: Size) -> &mut Self {
         self.size = size;
-        self.clone()
+        self
     }
 }
 
@@ -41,22 +40,21 @@ impl NodeContainer for Avatar {
     }
 }
 
-impl DefaultModifiers<Avatar> for Avatar {}
+impl DefaultModifiers for Avatar {}
 
 impl Renderable for Avatar {
-    fn render(&self) -> Node {
-        let mut avatar = self.clone()
-            .add_class("avatar")
-            .add_class(&format!("avatar--{}", match self.size {
-                Size::Normal => "normal",
-                Size::Large => "large",
-                Size::XLarge => "x-large",
-            }));
-        if let Some(profile_img) = self.profil_img.clone() {
-            avatar = avatar.background_image(&profile_img);
+    fn render(mut self) -> Node {
+        let size = match &self.size {
+            Size::Normal => "normal",
+            Size::Large => "large",
+            Size::XLarge => "x-large",
+        };
+        self.add_class("avatar")
+            .add_class(&format!("avatar--{size}"));
+        if let Some(img_profile) = self.profil_img.clone(){
+            self.background_image(&img_profile);
         } else {
             let initials: Vec<char> = self.name
-                .clone()
                 .split(" ")
                 .filter(|word| {
                     !vec!["le", "de", "des", "la", "les"].contains(&word.to_lowercase().as_str())
@@ -68,9 +66,9 @@ impl Renderable for Avatar {
                     initials.iter().collect()
                 })
                 .unwrap_or(self.name.get(0..2).unwrap_or_default().to_string());
-            avatar.get_node().text = Some(text_content.to_uppercase());
+            self.get_node().text = Some(text_content.to_uppercase());
         }
-        avatar.get_node().clone()
+        self.node
     }
 }
 
@@ -88,7 +86,7 @@ mod tests {
             "remicaillot5@gmail.com"
         ];
         for name in names {
-            let avatar = Avatar::new(name, &None);
+            let avatar = Avatar::new(name, &None).render();
             println!("{} => {}", name, avatar.to_html())
         }
     }

@@ -22,7 +22,7 @@ impl NodeContainer for Popup {
     }
 }
 
-impl DefaultModifiers<Popup> for Popup {}
+impl DefaultModifiers for Popup {}
 
 impl Popup {
     pub fn new() -> Self {
@@ -37,28 +37,28 @@ impl Popup {
         }
     }
 
-    pub fn attach_to(&mut self, el: &str) -> Self {
+    pub fn attach_to(&mut self, el: &str) -> &mut Self {
         self.el_to_attach_to = el.to_string();
-        self.clone()
+        self
     }
-    pub fn open(&mut self, is_open: bool) -> Self {
+    pub fn open(&mut self, is_open: bool) -> &mut Self {
         self.open = is_open;
-        self.clone()
+        self
     }
 
-    pub fn hide_window_controls(&mut self) -> Self {
+    pub fn hide_window_controls(&mut self) -> &mut Self {
         self.window_controls = false;
-        self.clone()
+        self
     }
 
-    pub fn on_open_submit_form(&mut self, form_name: &str) -> Self {
+    pub fn on_open_submit_form(&mut self, form_name: &str) -> &mut Self {
         self.form_to_submit_on_open = Some(form_name.to_string());
-        self.clone()
+        self
     }
 
-    pub fn on_close_submit_form(&mut self, form_name: &str) -> Self {
+    pub fn on_close_submit_form(&mut self, form_name: &str) -> &mut Self {
         self.form_to_submit_on_close = Some(form_name.to_string());
-        self.clone()
+        self
     }
 }
 
@@ -75,9 +75,9 @@ impl Renderable for Popup {
     fn component_name(&self) -> &str {
         "Popup"
     }
-    fn render(&self) -> Node {
-        let mut popup = View::new()
-            .add_class("popup")
+    fn render(mut self) -> Node {
+        let mut popup = View::new();
+        popup.add_class("popup")
             .set_attr("data-attach-to", self.el_to_attach_to.as_str());
         if let Some(form_name) = &self.form_to_submit_on_open {
             popup.set_attr("data-form-to-submit-on-open", form_name);
@@ -91,23 +91,23 @@ impl Renderable for Popup {
         } else {
             popup.remove_class("visible");
         }
-        let mut window = self.clone()
-            .add_class("popup__window");
+        self.add_class("popup__window");
 
         if self.window_controls {
-            window.node.children.push({
-                View::new()
-                    .add_class("popup__window-bar")
+            self.node.children.push({
+                let mut view = View::new();
+                view.add_class("popup__window-bar")
                     .append_child({
                         Button::icon_only(Lucide::X, ButtonStyle::Link)
                             .add_class("popup__window-controls")
-                    })
+                    });
+                view
             }.render());
         }
 
-        window.node.children.push({
-            let mut content = View::new()
-                .add_class("popup__window-content");
+        self.node.children.push({
+            let mut content = View::new();
+            content.add_class("popup__window-content");
             self.children.iter()
                 .for_each(|child| {
                     content.append_child(child.clone());
@@ -117,7 +117,7 @@ impl Renderable for Popup {
 
 
         popup.node.children.push({
-            window.node
+            self.node
         });
 
         popup.node
