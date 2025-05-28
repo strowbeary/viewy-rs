@@ -1,6 +1,7 @@
 use crate::DefaultModifiers;
 use crate::Renderable;
 use crate::components::*;
+use crate::engine::IntoPopover;
 use crate::node::Node;
 
 #[derive(Debug, Clone)]
@@ -45,11 +46,6 @@ impl Popover {
         self
     }
 
-    pub fn attach_to(&mut self, el: &str) -> &mut Self {
-        self.el_to_attach_to = el.to_string();
-        self
-    }
-
     pub fn placement(&mut self, placement: Placement) -> &mut Self {
         self.placement = placement;
         self
@@ -68,6 +64,18 @@ impl std::ops::DerefMut for Popover {
         &mut self.node
     }
 }
+
+impl IntoPopover for Popover {
+    fn render(self) -> Node {
+        Renderable::render(self)
+    }
+
+    fn attach_to(&mut self, el: &str) -> &mut Self {
+        self.el_to_attach_to = el.to_string();
+        self
+    }
+}
+
 impl Appendable for Popover {}
 
 impl Renderable for Popover {

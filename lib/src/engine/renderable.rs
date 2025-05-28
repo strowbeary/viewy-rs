@@ -34,3 +34,91 @@ where
         self.render()
     }
 }
+
+pub trait IntoPopup {
+    fn render(self) -> Node;
+    fn attach_to(&mut self, el: &str) -> &mut Self;
+}
+
+impl<R> IntoPopup for &R
+where
+    R: IntoPopup + Clone,
+{
+    fn render(self) -> Node {
+        self.clone().render()
+    }
+
+    fn attach_to(&mut self, el: &str) -> &mut Self {
+        self.attach_to(el)
+    }
+}
+
+impl<R> IntoPopup for &mut R
+where
+    R: IntoPopup + Clone,
+{
+    fn render(self) -> Node {
+        self.clone().render()
+    }
+
+    fn attach_to(&mut self, el: &str) -> &mut Self {
+        self.attach_to(el)
+    }
+}
+
+impl<R> IntoPopup for Box<R>
+where
+    R: IntoPopup + Clone,
+{
+    fn render(self) -> Node {
+        self.render()
+    }
+
+    fn attach_to(&mut self, el: &str) -> &mut Self {
+        self.attach_to(el)
+    }
+}
+
+pub trait IntoPopover {
+    fn render(self) -> Node;
+    fn attach_to(&mut self, el: &str) -> &mut Self;
+}
+
+impl<R> IntoPopover for &R
+where
+    R: IntoPopover + Clone,
+{
+    fn render(self) -> Node {
+        self.clone().render()
+    }
+
+    fn attach_to(&mut self, el: &str) -> &mut Self {
+        self.attach_to(el)
+    }
+}
+
+impl<R> IntoPopover for &mut R
+where
+    R: IntoPopover + Clone,
+{
+    fn render(self) -> Node {
+        self.clone().render()
+    }
+
+    fn attach_to(&mut self, el: &str) -> &mut Self {
+        self.attach_to(el)
+    }
+}
+
+impl<R> IntoPopover for Box<R>
+where
+    R: IntoPopover + Clone,
+{
+    fn render(self) -> Node {
+        self.render()
+    }
+
+    fn attach_to(&mut self, el: &str) -> &mut Self {
+        self.attach_to(el)
+    }
+}

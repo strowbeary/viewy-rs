@@ -1,5 +1,6 @@
 use crate::components::icons::Lucide;
 use crate::components::{Appendable, Button, ButtonStyle, View};
+use crate::engine::IntoPopup;
 use crate::node::Node;
 use crate::{DefaultModifiers, Renderable};
 
@@ -27,10 +28,6 @@ impl Popup {
         }
     }
 
-    pub fn attach_to(&mut self, el: &str) -> &mut Self {
-        self.el_to_attach_to = el.to_string();
-        self
-    }
     pub fn open(&mut self, is_open: bool) -> &mut Self {
         self.open = is_open;
         self
@@ -67,6 +64,17 @@ impl std::ops::DerefMut for Popup {
 }
 
 impl Appendable for Popup {}
+
+impl IntoPopup for Popup {
+    fn render(self) -> Node {
+        Renderable::render(self)
+    }
+
+    fn attach_to(&mut self, el: &str) -> &mut Self {
+        self.el_to_attach_to = el.to_string();
+        self
+    }
+}
 
 impl Renderable for Popup {
     fn component_name(&self) -> &str {

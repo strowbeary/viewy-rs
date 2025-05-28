@@ -1,6 +1,7 @@
 use std::ops::{Deref, DerefMut};
 
 use crate::components::{Popover, Popup};
+use crate::engine::{IntoPopover, IntoPopup};
 use crate::node::{Node, NodeType};
 use crate::{Renderable, sp};
 use uuid::Uuid;
@@ -335,7 +336,10 @@ pub trait DefaultModifiers: Deref<Target = Node> + DerefMut {
 
         self
     }
-    fn popover(&mut self, mut popover: Popover) -> &mut Self {
+    fn popover<P>(&mut self, mut popover: P) -> &mut Self
+    where
+        P: IntoPopover,
+    {
         let id = Uuid::new_v4().to_string();
         self.add_class("popover--opener");
         self.set_attr("id", id.as_str());
@@ -344,7 +348,10 @@ pub trait DefaultModifiers: Deref<Target = Node> + DerefMut {
         self
     }
 
-    fn popup(&mut self, mut popup: Popup) -> &mut Self {
+    fn popup<P>(&mut self, mut popup: P) -> &mut Self
+    where
+        P: IntoPopup,
+    {
         let id = Uuid::new_v4().to_string();
         self.add_class("popup--opener");
         self.set_attr("id", id.as_str());
