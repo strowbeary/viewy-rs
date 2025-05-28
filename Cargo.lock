@@ -2684,6 +2684,10 @@ dependencies = [
 [[package]]
 name = "viewy-codegen"
 version = "1.13.22"
+dependencies = [
+ "quote",
+ "syn 2.0.75",
+]
 
 [[package]]
 name = "viewy-site"

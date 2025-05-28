@@ -6,7 +6,7 @@ use crate::components::{
     Alignment, Appendable, Button, ButtonStyle, Card, CardStyle, HStack, Image, Text, TextStyle,
     VStack, View,
 };
-use crate::node::{Node, NodeContainer};
+use crate::node::Node;
 use crate::{DefaultModifiers, Overflow, scale};
 
 #[derive(Debug, Clone, PartialEq)]
@@ -21,7 +21,6 @@ pub enum FileInputType {
 
 #[derive(Debug, Clone)]
 pub struct FileInput {
-    children: Vec<Box<dyn Renderable>>,
     node: Node,
     auto_submit: bool,
     required: bool,
@@ -34,18 +33,11 @@ pub struct FileInput {
     multiple: bool,
 }
 
-impl NodeContainer for FileInput {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
-}
-
 impl DefaultModifiers for FileInput {}
 
 impl FileInput {
     pub fn new(name: &str, file_input_type: FileInputType) -> Self {
         FileInput {
-            children: vec![],
             node: Node::default(),
             auto_submit: false,
             required: false,
@@ -94,26 +86,41 @@ impl FileInput {
     }
 }
 
+impl std::ops::Deref for FileInput {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for FileInput {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
+
 impl Renderable for FileInput {
     fn render(mut self) -> Node {
-        match self.input_type {
+        let self_values = self.clone();
+        match &self.input_type {
             FileInputType::Hidden => {
                 self.add_class("file-input")
                     .add_class("file-input--hidden")
                     .set_attr("type", "file")
                     .tag("input")
-                    .set_attr("name", &self.name);
+                    .set_attr("name", &self_values.name);
                 if !self.node.attributes.contains_key("id") {
-                    self.set_attr("id", &format!("file-input-{}", self.name));
+                    self.set_attr("id", &format!("file-input-{}", self_values.name));
                 }
                 if self.required {
                     self.set_attr("required", "required");
                 }
-                if let Some(accept) = &self.accept {
+                if let Some(accept) = &self_values.accept {
                     self.set_attr("accept", accept);
                 }
                 if self.auto_submit {
-                    self.set_attr("data-auto-submit", &self.auto_submit.to_string());
+                    self.set_attr("data-auto-submit", &self_values.auto_submit.to_string());
                 }
                 if self.multiple {
                     self.set_attr("multiple", "multiple");
@@ -125,11 +132,11 @@ impl Renderable for FileInput {
                 simple_file_input
                     .add_class("file-input")
                     .add_class("file-input--simple");
-                if let Some(label) = &self.label {
+                if let Some(label) = &self_values.label {
                     simple_file_input.append_child({
                         let mut text = Text::new(label.as_str(), TextStyle::Label);
                         text.add_class("file-input__label")
-                            .set_attr("for", &format!("file-input-{}", self.name))
+                            .set_attr("for", &format!("file-input-{}", self_values.name))
                             .tag("label");
                         text
                     });
@@ -142,8 +149,8 @@ impl Renderable for FileInput {
                     });
                 }
                 simple_file_input.append_child({
-                    Card::new(CardStyle::Outlined)
-                        .add_class("file-input__input")
+                    let mut card = Card::new(CardStyle::Outlined);
+                    card.add_class("file-input__input")
                         .append_child({
                             let mut input = View::new();
                             input
@@ -168,7 +175,8 @@ impl Renderable for FileInput {
                             input
                         })
                         .append_child({
-                            HStack::new(Alignment::Center)
+                            let mut stack = HStack::new(Alignment::Center);
+                            stack
                                 .padding(vec![scale(3)])
                                 .padding_left(16)
                                 .gap(vec![scale(3)])
@@ -179,10 +187,14 @@ impl Renderable for FileInput {
                                     text
                                 })
                                 .append_child({
-                                    Button::icon_only(Lucide::Upload, ButtonStyle::Outlined)
-                                        .add_class("file-input__button")
-                                })
-                        })
+                                    let mut btn =
+                                        Button::icon_only(Lucide::Upload, ButtonStyle::Outlined);
+                                    btn.add_class("file-input__button");
+                                    btn
+                                });
+                            stack
+                        });
+                    card
                 });
                 if let Some(error_message) = &self.error_text {
                     simple_file_input.add_class("file-input--error");
@@ -196,7 +208,8 @@ impl Renderable for FileInput {
             }
             FileInputType::Image => {
                 let mut image_file_input = View::new();
-                image_file_input.add_class("file-input")
+                image_file_input
+                    .add_class("file-input")
                     .add_class("file-input--image");
                 if let Some(label) = &self.label {
                     image_file_input.append_child({
@@ -215,8 +228,8 @@ impl Renderable for FileInput {
                     });
                 }
                 image_file_input.append_child({
-                    Card::new(CardStyle::Outlined)
-                        .add_class("file-input__input")
+                    let mut card = Card::new(CardStyle::Outlined);
+                    card.add_class("file-input__input")
                         .overflow(Overflow::Hidden)
                         .append_child({
                             let mut input = View::new();
@@ -239,16 +252,16 @@ impl Renderable for FileInput {
                             }
                             input
                         })
-                        .append_child({
+                        .append_child(
                             VStack::new(Alignment::Stretch)
                                 .append_child({
                                     let mut img =
-                                        Image::new(&self.clone().image_preview.unwrap_or_default());
+                                        Image::new(&self_values.image_preview.unwrap_or_default());
                                     img.set_attr("alt", "preview of the selected file")
                                         .add_class("file-input__image-preview");
                                     img
                                 })
-                                .append_child({
+                                .append_child(
                                     HStack::new(Alignment::Center)
                                         .flex_grow(1)
                                         .padding(vec![scale(3)])
@@ -261,12 +274,16 @@ impl Renderable for FileInput {
                                             text.add_class("file-input__file-name").flex_grow(1);
                                             text
                                         })
-                                        .append_child({
-                                            Button::icon_only(Lucide::Upload, ButtonStyle::Outlined)
-                                                .add_class("file-input__button")
-                                        })
-                                })
-                        })
+                                        .append_child(
+                                            Button::icon_only(
+                                                Lucide::Upload,
+                                                ButtonStyle::Outlined,
+                                            )
+                                            .add_class("file-input__button"),
+                                        ),
+                                ),
+                        );
+                    card
                 });
 
                 if let Some(error_message) = &self.error_text {

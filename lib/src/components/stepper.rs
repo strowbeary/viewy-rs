@@ -1,15 +1,14 @@
 use std::borrow::BorrowMut;
 
-use crate::components::{Appendable, ChildContainer};
-use crate::components::icons::IconPack;
 use crate::DefaultModifiers;
-use crate::node::{Node, NodeContainer};
 use crate::Renderable;
+use crate::components::Appendable;
+use crate::components::icons::IconPack;
+use crate::node::Node;
 
 /// An outlined view to emphasize a content.
 #[derive(Debug, Clone)]
 pub struct Step {
-    children: Vec<Box<dyn Renderable>>,
     node: Node,
     name: String,
     icon: Option<Box<dyn IconPack>>,
@@ -18,7 +17,6 @@ pub struct Step {
 impl Step {
     pub fn new(name: &str) -> Self {
         Self {
-            children: vec![],
             node: Default::default(),
             name: name.to_string(),
             icon: None,
@@ -31,33 +29,30 @@ impl Step {
     }
 }
 
-impl NodeContainer for Step {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+impl std::ops::Deref for Step {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for Step {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
     }
 }
 
 impl DefaultModifiers for Step {}
 
-impl ChildContainer for Step {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
-    }
-}
-
 impl Appendable for Step {}
 
 impl Renderable for Step {
     fn render(mut self) -> Node {
-        self
-            .add_class("card");
-        self.children.into_iter()
-            .for_each(|child|
-                self.node.children.push(child.render()));
+        self.add_class("card");
         self.node
     }
 }
-
 
 /// Use a `Stepper` when you need to display progress state of something
 /// ```rust
@@ -69,7 +64,6 @@ impl Renderable for Step {
 /// ```
 #[derive(Debug, Clone)]
 pub struct Stepper {
-    children: Vec<Box<dyn Renderable>>,
     steps: Vec<Step>,
     selected_step: usize,
     node: Node,
@@ -78,7 +72,6 @@ pub struct Stepper {
 impl Stepper {
     pub fn new() -> Self {
         Stepper {
-            children: vec![],
             steps: vec![],
             selected_step: 0,
             node: Node::default(),
@@ -96,23 +89,25 @@ impl Stepper {
     }
 }
 
+impl std::ops::Deref for Stepper {
+    type Target = Node;
 
-impl NodeContainer for Stepper {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for Stepper {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
     }
 }
 
 impl DefaultModifiers for Stepper {}
 
-
 impl Renderable for Stepper {
     fn render(mut self) -> Node {
-        self
-            .add_class("card");
-        self.children.into_iter()
-            .for_each(|child|
-                self.node.children.push(child.render()));
+        self.add_class("card");
         self.node
     }
 }

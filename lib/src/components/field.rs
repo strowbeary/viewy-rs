@@ -1,13 +1,13 @@
-use std::borrow::BorrowMut;
-use std::cmp::PartialEq;
 use chrono::{Duration, NaiveDateTime, TimeZone, Utc};
 use html_escape::encode_double_quoted_attribute;
+use std::borrow::BorrowMut;
+use std::cmp::PartialEq;
 use uuid::Uuid;
 
 use crate::Renderable;
 use crate::components::icons::Lucide;
 use crate::components::*;
-use crate::node::{Node, NodeContainer};
+use crate::node::Node;
 use crate::{DefaultModifiers, scale};
 
 fn multi_value_row(
@@ -17,13 +17,13 @@ fn multi_value_row(
     form: &Option<String>,
 ) -> HStack {
     let mut stack = HStack::new(Alignment::Center);
-    stack.flex_grow(1)
+    stack
+        .flex_grow(1)
         .add_class("field--multi-value__value-list__value")
         .gap(vec![scale(2)])
         .append_child({
             let mut input = Field::new(field_name, field_type.clone());
-            input.flex_grow(1)
-                .value(value);
+            input.flex_grow(1).value(value);
             if let Some(form) = form {
                 input.set_attr("form", form);
             }
@@ -83,12 +83,6 @@ pub struct Field {
     pub pattern: Option<String>,
 }
 
-impl NodeContainer for Field {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
-}
-
 impl DefaultModifiers for Field {}
 
 impl Field {
@@ -117,32 +111,32 @@ impl Field {
         }
     }
 
-    pub fn label(&mut self, label: &str) -> &mut Self{
+    pub fn label(&mut self, label: &str) -> &mut Self {
         self.label = Some(label.to_string());
         self
     }
 
-    pub fn value(&mut self, value: &str) -> &mut Self{
+    pub fn value(&mut self, value: &str) -> &mut Self {
         self.value = Some(ammonia::clean(value));
         self
     }
 
-    pub fn min(&mut self, value: &str) -> &mut Self{
+    pub fn min(&mut self, value: &str) -> &mut Self {
         self.min = Some(value.to_string());
         self
     }
 
-    pub fn max(&mut self, value: &str) -> &mut Self{
+    pub fn max(&mut self, value: &str) -> &mut Self {
         self.max = Some(value.to_string());
         self
     }
 
-    pub fn step(&mut self, value: &str) -> &mut Self{
+    pub fn step(&mut self, value: &str) -> &mut Self {
         self.step = Some(value.to_string());
         self
     }
 
-    pub fn read_only(&mut self, is_read_only: bool) -> &mut Self{
+    pub fn read_only(&mut self, is_read_only: bool) -> &mut Self {
         self.read_only = is_read_only;
         self
     }
@@ -154,7 +148,7 @@ impl Field {
     /// use viewy::components::{Field, FieldType};
     /// Field::new("name", FieldType::Text)
     ///                .multiple_value(vec![
-    ///                     String::from("value1"), 
+    ///                     String::from("value1"),
     ///                     String::from("value2")
     ///                 ])
     /// ```
@@ -169,7 +163,7 @@ impl Field {
     /// use viewy::components::{Field, FieldType};
     /// let field = Field::new("name", FieldType::Text)
     ///                .multiple_value(vec![
-    ///                     String::from("value1"), 
+    ///                     String::from("value1"),
     ///                     String::from("value2")
     ///                 ]);
     /// ```
@@ -180,101 +174,115 @@ impl Field {
     /// let field = Field::new("name", FieldType::Text)
     ///                 .multiple_value(vec![]);
     /// ```
-    pub fn multiple_value(&mut self, values: Vec<String>) -> &mut Self{
+    pub fn multiple_value(&mut self, values: Vec<String>) -> &mut Self {
         self.multiple = Some(values);
         self
     }
 
-    pub fn attach_to_form(&mut self, form_name: &str) -> &mut Self{
+    pub fn attach_to_form(&mut self, form_name: &str) -> &mut Self {
         self.form = Some(form_name.to_string());
         self
     }
 
-    pub fn helper_text(&mut self, helper_text: &str) -> &mut Self{
+    pub fn helper_text(&mut self, helper_text: &str) -> &mut Self {
         self.helper_text = Some(helper_text.to_string());
         self
     }
 
-    pub fn error_message(&mut self, helper_text: &str) -> &mut Self{
+    pub fn error_message(&mut self, helper_text: &str) -> &mut Self {
         self.add_class("field--error");
         self.helper_text = Some(helper_text.to_string());
         self
     }
 
-    pub fn placeholder(&mut self, placeholder: &str) -> &mut Self{
+    pub fn placeholder(&mut self, placeholder: &str) -> &mut Self {
         self.placeholder = Some(placeholder.to_string());
         self
     }
 
-    pub fn trailing_icon(&mut self, name: &str) -> &mut Self{
+    pub fn trailing_icon(&mut self, name: &str) -> &mut Self {
         self.trailing_icon = Some(name.to_string());
         self
     }
 
-    pub fn leading_icon(&mut self, name: &str) -> &mut Self{
+    pub fn leading_icon(&mut self, name: &str) -> &mut Self {
         self.leading_icon = Some(name.to_string());
         self
     }
 
-    pub fn async_datalist(&mut self, url: &str) -> &mut Self{
+    pub fn async_datalist(&mut self, url: &str) -> &mut Self {
         self.datalist = true;
         self.set_attr("data-async-datalist", url)
     }
 
     /// Défini l'attribut standard HTML pattern sur l'<input>
-    pub fn pattern(&mut self, pattern: &str) -> &mut Self{
+    pub fn pattern(&mut self, pattern: &str) -> &mut Self {
         self.pattern = Some(pattern.to_string());
         self
     }
 
-    pub fn required(&mut self, is_required: bool) -> &mut Self{
+    pub fn required(&mut self, is_required: bool) -> &mut Self {
         self.required = is_required;
         self
     }
 
-    pub fn submit_on_keypress(&mut self) -> &mut Self{
+    pub fn submit_on_keypress(&mut self) -> &mut Self {
         self.set_attr("data-submit-on-keypress", "true")
     }
-    pub fn disabled(&mut self) -> &mut Self{
+    pub fn disabled(&mut self) -> &mut Self {
         self.disabled = true;
         self
     }
 }
 
+impl std::ops::Deref for Field {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for Field {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 
 impl Renderable for Field {
     fn render(mut self) -> Node {
+        let self_values = self.clone();
         self.add_class("field");
-        match &self.field_type {
+
+        match self_values.field_type {
             FieldType::Hidden => {
-                self
-                    .add_class("field__input")
+                self.add_class("field__input")
                     .tag("input")
-                    .set_attr("id", self.name.as_str())
-                    .set_attr("name", self.name.as_str())
+                    .set_attr("id", &self_values.name)
+                    .set_attr("name", &self_values.name)
                     .set_attr("type", "hidden");
-                if let Some(form) = &self.form {
+                if let Some(form) = &self_values.form {
                     self.set_attr("form", form);
                 }
-
-                if let Some(value) = &self.value {
-                    self.set_attr("value", value);
+                if let Some(value) = &self_values.value {
+                    self.set_attr("value", &encode_double_quoted_attribute(value));
                 }
+
                 self.node
             }
             FieldType::RichTextArea => {
                 self.add_class("field__rich-text-area");
                 let mut input = View::new();
-                    input.tag("input")
+                input
+                    .tag("input")
                     .add_class("field__input")
                     .set_attr("type", "text")
                     .display("none")
-                    .set_attr("id", self.name.as_str())
-                    .set_attr("name", self.name.as_str())
-                    .set_attr(
-                        "value",
-                        &encode_double_quoted_attribute(&self.value.clone().unwrap_or_default()),
-                    );
+                    .set_attr("id", self_values.name.as_str())
+                    .set_attr("name", self_values.name.as_str());
+                if let Some(value) = &self_values.value {
+                    self.set_attr("value", &encode_double_quoted_attribute(value));
+                }
 
                 if self.required {
                     input.set_attr("required", "required");
@@ -299,7 +307,8 @@ impl Renderable for Field {
                             .append_child(input)
                             .append_child({
                                 let mut editor = View::new();
-                                editor.add_class("field__editor")
+                                editor
+                                    .add_class("field__editor")
                                     .padding(vec![scale(3)])
                                     .set_attr("id", editor_id);
                                 editor.node.text = self.value.clone();
@@ -327,9 +336,8 @@ impl Renderable for Field {
                 self.node
             }
             FieldType::Duration(values) => {
-                let default_start_date = self
+                let default_start_date = self_values
                     .value
-                    .clone()
                     .and_then(|value| {
                         NaiveDateTime::parse_from_str(&value, "%Y-%m-%dT%R")
                             .map(|naive_datetime| Utc.from_utc_datetime(&naive_datetime))
@@ -341,17 +349,19 @@ impl Renderable for Field {
                 self.node.children.push(
                     {
                         let mut stack = VStack::new(Alignment::Stretch);
-                        stack.gap(vec![scale(3)])
+                        stack
+                            .gap(vec![scale(3)])
                             .append_child({
                                 let mut field = Field::new(
                                     &format!("{}_start_datetime", self.name),
                                     FieldType::DateTimeLocal,
                                 );
-                                field.required(self.required)
-                                .label("Date de début")
-                                .value(&default_start_date.format("%FT%R").to_string())
-                                .set_attr("id", &format!("{}_start_datetime", self.name))
-                                .set_attr("name", &format!("{}_start_datetime", self.name));
+                                field
+                                    .required(self.required)
+                                    .label("Date de début")
+                                    .value(&default_start_date.format("%FT%R").to_string())
+                                    .set_attr("id", &format!("{}_start_datetime", self.name))
+                                    .set_attr("name", &format!("{}_start_datetime", self.name));
                                 field
                             })
                             .append_child({
@@ -370,8 +380,7 @@ impl Renderable for Field {
                                                 duration.num_milliseconds() as u64
                                             ))
                                         ));
-                                        tag.add_class("clickable")
-                                        .set_attr(
+                                        tag.add_class("clickable").set_attr(
                                             "data-duration",
                                             &duration.num_minutes().to_string(),
                                         );
@@ -385,10 +394,11 @@ impl Renderable for Field {
                                     &format!("{}_end_datetime", self.name),
                                     FieldType::DateTimeLocal,
                                 );
-                                field.required(self.required)
-                                .label("Date de fin")
-                                .set_attr("id", &format!("{}_end_datetime", self.name))
-                                .set_attr("name", &format!("{}_end_datetime", self.name));
+                                field
+                                    .required(self.required)
+                                    .label("Date de fin")
+                                    .set_attr("id", &format!("{}_end_datetime", self.name))
+                                    .set_attr("name", &format!("{}_end_datetime", self.name));
                                 field
                             });
                         stack
@@ -399,7 +409,7 @@ impl Renderable for Field {
                 self.node
             }
             _ => {
-                if let Some(values) = &self.multiple {
+                if let Some(values) = &self_values.multiple {
                     self.add_class("field--multi-value");
 
                     self.node.children.push(
@@ -409,40 +419,43 @@ impl Renderable for Field {
                                 .padding(vec![scale(3)])
                                 .append_child({
                                     let mut field_input = VStack::new(Alignment::Stretch);
-                                    field_input.gap(vec![scale(3)])
-                                        .append_child({
-                                            let mut value_list = VStack::new(Alignment::Stretch);
-                                            value_list.add_class("field--multi-value__value-list")
-                                                .gap(vec![scale(3)])
-                                                .append_child({
-                                                    let mut view = View::new();
-                                                    view.tag("template")
-                                                        .id("value-template")
-                                                        .append_child({
-                                                            multi_value_row(
-                                                                &self.name,
-                                                                &self.field_type,
-                                                                "",
-                                                                &self.form,
-                                                            )
-                                                        });
-                                                    view
-                                                });
-                                            for value in values.iter() {
-                                                value_list.append_child(multi_value_row(
-                                                    &self.name,
-                                                    &self.field_type,
-                                                    value,
-                                                    &self.form,
-                                                ));
-                                            }
+                                    field_input.gap(vec![scale(3)]).append_child({
+                                        let mut value_list = VStack::new(Alignment::Stretch);
+                                        value_list
+                                            .add_class("field--multi-value__value-list")
+                                            .gap(vec![scale(3)])
+                                            .append_child({
+                                                let mut view = View::new();
+                                                view.tag("template")
+                                                    .id("value-template")
+                                                    .append_child({
+                                                        multi_value_row(
+                                                            &self.name,
+                                                            &self.field_type,
+                                                            "",
+                                                            &self.form,
+                                                        )
+                                                    });
+                                                view
+                                            });
+                                        for value in values.iter() {
+                                            value_list.append_child(multi_value_row(
+                                                &self.name,
+                                                &self.field_type,
+                                                value,
+                                                &self.form,
+                                            ));
+                                        }
 
-                                            value_list
-                                        });
+                                        value_list
+                                    });
 
                                     if !self.disabled && !self.read_only {
                                         field_input.append_child({
-                                            let mut btn = Button::icon_only(Lucide::Plus, ButtonStyle::Outlined);
+                                            let mut btn = Button::icon_only(
+                                                Lucide::Plus,
+                                                ButtonStyle::Outlined,
+                                            );
                                             btn.add_class("field--multi-value__add-value-button");
                                             btn
                                         });
@@ -455,7 +468,7 @@ impl Renderable for Field {
                     );
 
                     if let Some(label) = &self.label {
-                        let text = Text::new(label, TextStyle::Label);
+                        let mut text = Text::new(label, TextStyle::Label);
                         text.add_class("field__label")
                             .set_attr("for", self.name.as_str())
                             .tag("label");
@@ -466,7 +479,8 @@ impl Renderable for Field {
                     self.node
                 } else {
                     let mut input = View::new();
-                    input.tag(&match &self.field_type {
+                    input
+                        .tag(&match &self.field_type {
                             FieldType::TextArea => "textarea",
                             _ => "input",
                         })
@@ -516,7 +530,7 @@ impl Renderable for Field {
                         }
                     }
 
-                    if self.field_type ==  FieldType::MainSearchBar {
+                    if self.field_type == FieldType::MainSearchBar {
                         input.add_class("field__input--main-search-bar");
                     }
                     if self.datalist && !matches!(self.field_type, FieldType::TextArea) {
@@ -544,15 +558,14 @@ impl Renderable for Field {
                         input.set_attr("step", value);
                     }
 
-
                     if let Some(placeholder) = &self.placeholder {
                         input.set_attr("placeholder", placeholder);
                     }
                     self.node.children.push(input.render());
 
                     if let Some(label) = &self.label {
-                        let text = Text::new(label, TextStyle::Label)
-                            .add_class("field__label")
+                        let mut text = Text::new(label, TextStyle::Label);
+                        text.add_class("field__label")
                             .set_attr("for", self.name.as_str())
                             .tag("label");
                         self.add_class("not-empty");

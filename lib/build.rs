@@ -7,8 +7,8 @@ extern crate serde;
 
 use cmd_lib::run_cmd;
 use figment::{
-    providers::{Format, Toml},
     Figment,
+    providers::{Format, Toml},
 };
 use heck::{ToKebabCase, ToPascalCase, ToUpperCamelCase};
 use quote::format_ident;
@@ -119,13 +119,15 @@ pub fn generate_icon_pack(
         quote! {
             icon
                 .set_attr("fill", "none")
-                .set_attr("stroke", "currentColor")
+                .set_attr("stroke", "currentColor");
+            icon
         }
     } else {
         quote! {
             icon
                 .set_attr("fill", "currentColor")
-                .set_attr("stroke", "none")
+                .set_attr("stroke", "none");
+            icon
         }
     };
 

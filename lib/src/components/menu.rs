@@ -1,10 +1,9 @@
-use std::borrow::BorrowMut;
-use crate::components::*;
+use crate::DefaultModifiers;
+use crate::Renderable;
 use crate::components::badge::{Badge, BadgeSupport};
 use crate::components::icons::IconPack;
-use crate::DefaultModifiers;
-use crate::node::{Node, NodeContainer};
-use crate::Renderable;
+use crate::components::*;
+use crate::node::Node;
 
 #[derive(Debug, Clone)]
 pub enum MenuStyle {
@@ -30,21 +29,28 @@ impl MenuSection {
     }
 }
 
+impl DefaultModifiers for MenuSection {}
 
-impl NodeContainer for MenuSection {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+impl std::ops::Deref for MenuSection {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
-impl DefaultModifiers for MenuSection {}
+impl std::ops::DerefMut for MenuSection {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 
 impl Renderable for MenuSection {
     fn render(mut self) -> Node {
         self.add_class("menu-section");
-        self.node.children.push({
-            Text::new(&self.label, TextStyle::Overline).render()
-        });
+        self.node
+            .children
+            .push(Text::new(&self.label, TextStyle::Overline).render());
         self.node
     }
 }
@@ -76,8 +82,9 @@ impl MenuItem {
     }
     /// Set menu's icon
     pub fn icon<T>(&mut self, icon: T) -> &mut Self
-        where
-            T: 'static + IconPack {
+    where
+        T: 'static + IconPack,
+    {
         self.icon = Some(Box::new(icon));
         self
     }
@@ -98,32 +105,21 @@ impl MenuItem {
     }
 
     pub fn action(&mut self, url: &str) -> &mut Self {
-        self
-            .set_attr("href", url)
-            .tag("a")
+        self.set_attr("href", url).tag("a")
     }
     pub fn attach_to_file_input(&mut self, input_id: &str) -> &mut Self {
-        self
-            .set_attr("data-input-file", &format!("file-input-{}", input_id))
+        self.set_attr("data-input-file", &format!("file-input-{}", input_id))
     }
 
     /// Make the `MenuItem` submit specified form
     pub fn attach_to_form(&mut self, form_name: &str) -> &mut Self {
-        self
-            .set_attr("form", form_name)
+        self.set_attr("form", form_name)
             .set_attr("type", "submit")
             .tag("button")
     }
 }
 
-impl NodeContainer for MenuItem {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
-}
-
 impl DefaultModifiers for MenuItem {}
-
 
 impl BadgeSupport for MenuItem {
     fn add_badge(&mut self, badge: Badge) {
@@ -133,33 +129,43 @@ impl BadgeSupport for MenuItem {
 
 impl BadgeModifiers for MenuItem {}
 
+impl std::ops::Deref for MenuItem {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for MenuItem {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
+
 impl Renderable for MenuItem {
     fn render(mut self) -> Node {
         let destructive_class = match self.is_destructive {
-            true => { "menu-item--destructive" }
-            false => { "menu-item--normal" }
+            true => "menu-item--destructive",
+            false => "menu-item--normal",
         };
-        self
-            .add_class("menu-item")
-            .add_class(destructive_class);
+        self.add_class("menu-item").add_class(destructive_class);
         if self.is_selected {
             self.add_class("menu-item--selected");
         }
         if let Some(icon) = self.icon {
-            self.node.children.append(&mut vec![{
-                let mut icon = Icon::new(icon)
-                    .size(16);
+            self.node.children.push({
+                let mut icon = Icon::new(icon).size(16);
                 if let Some(icon_color) = &self.icon_color {
                     icon.color(icon_color);
                 }
                 icon.render()
-            }]);
+            });
         }
 
-        self.node.children.append(&mut vec![
-                Text::new(self.label.as_str(), TextStyle::Label).render()
-            ]);
-
+        self.node
+            .children
+            .push(Text::new(self.label.as_str(), TextStyle::Label).render());
 
         if let Some(badge) = self.badge {
             self.node.children.push(badge.render());
@@ -172,7 +178,6 @@ impl Renderable for MenuItem {
 pub struct Menu {
     node: Node,
     pub style: MenuStyle,
-    children: Vec<Box<dyn Renderable>>,
 }
 
 impl Menu {
@@ -180,48 +185,37 @@ impl Menu {
         Self {
             node: Default::default(),
             style,
-            children: vec![],
         }
     }
 }
 
+impl std::ops::Deref for Menu {
+    type Target = Node;
 
-impl ChildContainer for Menu {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for Menu {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl Appendable for Menu {}
-
-impl NodeContainer for Menu {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
-}
 
 impl DefaultModifiers for Menu {}
 
-
 impl Renderable for Menu {
     fn render(mut self) -> Node {
-        self
-            .add_class("menu");
-        
+        self.add_class("menu");
+
         let style = match &self.style {
-            MenuStyle::Vertical => {
-               "menu--vertical"
-            }
-            MenuStyle::HorizontalTab => {"menu--horizontal-tab"
-            }
-            MenuStyle::HorizontalNav => {"menu--horizontal-nav"
-            }
+            MenuStyle::Vertical => "menu--vertical",
+            MenuStyle::HorizontalTab => "menu--horizontal-tab",
+            MenuStyle::HorizontalNav => "menu--horizontal-nav",
         };
         self.add_class(style);
-        self.children.into_iter()
-            .for_each(|child|
-                self.node.children.push(child.render()));
-
 
         self.node
     }

@@ -1,8 +1,7 @@
-use crate::{Renderable};
-use crate::node::{Node, NodeContainer};
 use crate::DefaultModifiers;
-use std::borrow::BorrowMut;
+use crate::Renderable;
 use crate::components::*;
+use crate::node::Node;
 
 #[derive(Debug, Clone)]
 pub enum Placement {
@@ -18,22 +17,15 @@ pub enum Placement {
     BottomEnd,
     LeftStart,
     Left,
-    LeftEnd
+    LeftEnd,
 }
 
 #[derive(Debug, Clone)]
 pub struct Popover {
-    children: Vec<Box<dyn Renderable>>,
     node: Node,
     hide_arrow: bool,
     pub el_to_attach_to: String,
-    pub placement: Placement
-}
-
-impl NodeContainer for Popover {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
+    pub placement: Placement,
 }
 
 impl DefaultModifiers for Popover {}
@@ -41,11 +33,10 @@ impl DefaultModifiers for Popover {}
 impl Popover {
     pub fn new() -> Self {
         Popover {
-            children: vec![],
             node: Default::default(),
             hide_arrow: false,
             el_to_attach_to: "".to_string(),
-            placement: Placement::Auto
+            placement: Placement::Auto,
         }
     }
 
@@ -64,20 +55,27 @@ impl Popover {
         self
     }
 }
+impl std::ops::Deref for Popover {
+    type Target = Node;
 
-impl ChildContainer for Popover {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for Popover {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
     }
 }
 impl Appendable for Popover {}
-
 
 impl Renderable for Popover {
     fn component_name(&self) -> &str {
         "Popover"
     }
     fn render(mut self) -> Node {
+        let self_values = self.clone();
         let placement = match self.placement {
             Placement::Auto => "auto",
             Placement::TopStart => "top-start",
@@ -93,15 +91,10 @@ impl Renderable for Popover {
             Placement::Left => "left",
             Placement::LeftEnd => "left-end",
         };
-        self
-            .add_class("popover")
-            .set_attr("data-attach-to", self.el_to_attach_to.as_str())
+        self.add_class("popover")
+            .set_attr("data-attach-to", self_values.el_to_attach_to.as_str())
             .set_attr("data-placement", placement);
 
-        self.children.into_iter()
-            .for_each(|child| {
-                self.node.children.push(child.render())
-            });
         if !self.hide_arrow {
             self.node.children.push({
                 let mut view = View::new();

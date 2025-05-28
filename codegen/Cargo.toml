@@ -14,3 +14,5 @@ documentation = "https://docs.rs/viewy"
 proc-macro = true
 
 [dependencies]
+quote = "1.0.32"
+syn = "2.0.28"

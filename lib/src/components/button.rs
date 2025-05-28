@@ -1,11 +1,12 @@
 use std::borrow::BorrowMut;
+use std::ops::DerefMut;
 
+use crate::DefaultModifiers;
+use crate::Renderable;
 use crate::components::badge::{Badge, BadgeSupport};
 use crate::components::icons::IconPack;
 use crate::components::{BadgeModifiers, Icon, Text, TextStyle};
-use crate::node::{Node, NodeContainer};
-use crate::Renderable;
-use crate::DefaultModifiers;
+use crate::node::Node;
 
 /// Used to set a button's importance level.
 #[derive(Debug, Clone)]
@@ -25,7 +26,6 @@ pub enum ButtonStyle {
 /// ```
 #[derive(Debug, Clone)]
 pub struct Button {
-    children: Vec<Box<dyn Renderable>>,
     node: Node,
     badge: Option<Badge>,
     pub label: Option<String>,
@@ -37,19 +37,15 @@ impl Button {
     /// Create new button
     pub fn new(label: &str, style: ButtonStyle) -> Self {
         let mut button = Button {
-            children: vec![],
             node: Node::default(),
             badge: None,
             label: Some(label.to_string()),
             style,
             icon: None,
         };
-        button.tag("button")
-            .set_attr("type", "button");
+        button.tag("button").set_attr("type", "button");
         button
-
     }
-
 
     /// Create new icon only button
     pub fn icon_only<T>(icon: T, style: ButtonStyle) -> Self
@@ -57,28 +53,34 @@ impl Button {
         T: 'static + IconPack,
     {
         let mut button = Button {
-            children: vec![],
             node: Node::default(),
             badge: None,
             label: None,
             style,
             icon: Some(Box::new(icon)),
         };
-        button.tag("button")
-            .set_attr("type", "button");
+        button.tag("button").set_attr("type", "button");
         button
     }
 
     /// Change button style to destructive (red)
     pub fn destructive(&mut self) -> &mut Self {
-        self.add_class(format!("button--{:?}--destructive", self.style).to_lowercase().as_str())
+        self.add_class(
+            format!("button--{:?}--destructive", self.style)
+                .to_lowercase()
+                .as_str(),
+        )
     }
 
     /// Disable interaction on the button
     pub fn disabled(&mut self, is_disabled: bool) -> &mut Self {
         if is_disabled {
-            self.add_class(format!("button--{:?}--disabled", self.style).to_lowercase().as_str())
-                .set_attr("disabled", "disabled")
+            self.add_class(
+                format!("button--{:?}--disabled", self.style)
+                    .to_lowercase()
+                    .as_str(),
+            )
+            .set_attr("disabled", "disabled")
         } else {
             self
         }
@@ -105,13 +107,11 @@ impl Button {
     ///        })
     /// ```
     pub fn attach_to_form(&mut self, form_name: &str) -> &mut Self {
-        self.set_attr("form", form_name)
-            .set_attr("type", "submit")
+        self.set_attr("form", form_name).set_attr("type", "submit")
     }
 
     pub fn attach_to_file_input(&mut self, input_id: &str) -> &mut Self {
-        self
-            .set_attr("data-input-file", &format!("file-input-{}", input_id))
+        self.set_attr("data-input-file", &format!("file-input-{}", input_id))
     }
 
     pub fn close_popup(&mut self) -> &mut Self {
@@ -120,8 +120,7 @@ impl Button {
 
     /// Set url to navigate to.
     pub fn action(&mut self, url: &str) -> &mut Self {
-        self.set_attr("href", url)
-            .tag("a")
+        self.set_attr("href", url).tag("a")
     }
 
     /// Set button's icon
@@ -132,21 +131,21 @@ impl Button {
         self.icon = Some(Box::new(icon));
         self
     }
+}
 
-    fn append_child<T>(&mut self, child: T)
-    where
-        T: 'static + Renderable,
-    {
-        self.children.push(Box::new(child));
+impl std::ops::Deref for Button {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
-impl NodeContainer for Button {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+impl std::ops::DerefMut for Button {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
     }
 }
-
 impl DefaultModifiers for Button {}
 
 impl BadgeSupport for Button {
@@ -169,15 +168,14 @@ impl Renderable for Button {
         }
 
         if let Some(icon) = self.icon {
-            let mut icon = Icon::new(icon)
-                .size(match self.style {
-                    ButtonStyle::SmallLink => 14,
-                    _ => 16
-                });
+            let mut icon = Icon::new(icon).size(match self.style {
+                ButtonStyle::SmallLink => 14,
+                _ => 16,
+            });
             if self.label.is_none() {
                 icon.size(match self.style {
                     ButtonStyle::SmallLink => 16,
-                    _ => 24
+                    _ => 24,
                 });
                 icon.stroke_width(2);
             }
@@ -185,10 +183,14 @@ impl Renderable for Button {
         }
 
         if let Some(label) = self.label {
-            let text = Text::new(label.as_str(), match self.style {
-                ButtonStyle::SmallLink => TextStyle::Caption,
-                _ => TextStyle::Button
-            }).render();
+            let text = Text::new(
+                label.as_str(),
+                match self.style {
+                    ButtonStyle::SmallLink => TextStyle::Caption,
+                    _ => TextStyle::Button,
+                },
+            )
+            .render();
 
             self.node.children.push(text);
         }

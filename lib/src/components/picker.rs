@@ -1,12 +1,10 @@
-use std::borrow::BorrowMut;
-
 use uuid::Uuid;
 
+use crate::Renderable;
 use crate::components::icons::{IconPack, Lucide};
 use crate::components::*;
-use crate::node::{Node, NodeContainer};
-use crate::Renderable;
-use crate::{scale, DefaultModifiers};
+use crate::node::Node;
+use crate::{DefaultModifiers, scale};
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
@@ -24,12 +22,12 @@ impl PickerOption {
         }
     }
     /// Set picker's icon
-    pub fn icon<T>(&mut self, icon: T) -> Self
+    pub fn icon<T>(&mut self, icon: T) -> &mut Self
     where
         T: 'static + IconPack,
     {
         self.icon = Some(Box::new(icon));
-        self.clone()
+        self
     }
 }
 
@@ -43,7 +41,7 @@ pub enum PickerStyle {
 #[derive(Debug, Clone)]
 pub struct Picker {
     node: Node,
-    children: Vec<Box<dyn Renderable>>,
+
     style: PickerStyle,
     label: Option<String>,
     name: String,
@@ -63,7 +61,6 @@ impl Picker {
             label: None,
             name: name.to_string(),
             value: value.to_string(),
-            children: vec![],
             options: vec![],
             is_disabled: false,
             auto_submit: false,
@@ -72,22 +69,22 @@ impl Picker {
         }
     }
 
-    pub fn label(&mut self, label: &str) -> Self {
+    pub fn label(&mut self, label: &str) -> &mut Self {
         self.label = Some(label.to_string());
-        self.clone()
+        self
     }
-    pub fn required(&mut self) -> Self {
+    pub fn required(&mut self) -> &mut Self {
         self.required = true;
-        self.clone()
+        self
     }
 
-    pub fn submit_on_change(&mut self, submit_on_change: bool) -> Self {
+    pub fn submit_on_change(&mut self, submit_on_change: bool) -> &mut Self {
         self.auto_submit = submit_on_change;
-        self.clone()
+        self
     }
 
-    pub fn multiple(&mut self) -> Self {
-        self.clone()
+    pub fn multiple(&mut self) -> &mut Self {
+        self
     }
 
     /// Make the button submit specified form
@@ -101,14 +98,14 @@ impl Picker {
     ///            .attach_to_form("formName")
     ///        })
     /// ```
-    pub fn attach_to_form(&mut self, form_name: &str) -> Self {
+    pub fn attach_to_form(&mut self, form_name: &str) -> &mut Self {
         self.form = Some(form_name.to_string());
-        self.clone()
+        self
     }
 
-    pub fn disabled(&mut self, is_disabled: bool) -> Self {
+    pub fn disabled(&mut self, is_disabled: bool) -> &mut Self {
         self.is_disabled = is_disabled;
-        self.clone()
+        self
     }
 
     pub fn append_child(&mut self, child: PickerOption) -> &mut Self {
@@ -117,28 +114,31 @@ impl Picker {
     }
 }
 
-impl NodeContainer for Picker {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+impl std::ops::Deref for Picker {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for Picker {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
     }
 }
 
 impl DefaultModifiers for Picker {}
 
-impl ChildContainer for Picker {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
-    }
-}
-
 impl Renderable for Picker {
     fn render(mut self) -> Node {
         let picker_style = format!("picker--{:?}", self.style).to_lowercase();
-        self.add_class("picker")
-            .add_class(&picker_style);
+        self.add_class("picker").add_class(&picker_style);
 
         if let Some(label) = &self.label {
-            self.node.children.push(Text::new(label.as_str(), TextStyle::Label).render());
+            self.node
+                .children
+                .push(Text::new(label.as_str(), TextStyle::Label).render());
         }
 
         let picker_id = Uuid::new_v4().to_string();
@@ -148,19 +148,20 @@ impl Renderable for Picker {
                     self.add_class("picker--segmented--disabled");
                 }
                 self.node.children.push({
-                    let mut option_list =
-                        HStack::new(Alignment::Stretch);option_list.add_class("picker--segmented__option-list");
+                    let mut option_list = HStack::new(Alignment::Stretch);
+                    option_list.add_class("picker--segmented__option-list");
                     for option in self.options {
                         let radio_id = format!("picker-segmented-{}-{}", picker_id, option.label);
                         option_list.append_child({
                             let mut radio = View::new();
-                            radio.tag("input")
+                            radio
+                                .tag("input")
                                 .set_attr("type", "radio")
                                 .set_attr("name", self.name.as_str())
                                 .set_attr("value", option.value.as_str())
                                 .set_attr("id", radio_id.as_str())
                                 .add_class("picker--segmented__option-list__radio");
-                            if let Some(form_id) = &self.form{
+                            if let Some(form_id) = &self.form {
                                 radio.set_attr("form", form_id);
                             }
 
@@ -237,7 +238,7 @@ impl Renderable for Picker {
                             popover.placement(Placement::BottomStart)
                                 .add_class("picker--dropdown__dropdown")
                                 .hide_arrow()
-                                .append_child({
+                                .append_child(
                                     VStack::new(Alignment::Stretch)
                                         .gap(vec![scale(3)])
                                         .append_child({
@@ -247,12 +248,12 @@ impl Renderable for Picker {
                                             field
                                         })
                                         .append_child({
-                                            let mut option_list = VStack::new(Alignment::Stretch)
-                                                .add_class("picker--dropdown__dropdown__option-list");
+                                            let mut option_list = VStack::new(Alignment::Stretch);
+                                            option_list .add_class("picker--dropdown__dropdown__option-list");
                                             for option in self.options {
                                                 let radio_id = format!("{}-{}", dropdown_id, option.value);
 
-                                                option_list.append_child({
+                                                option_list.append_child(
                                                     HStack::new(Alignment::Center)
                                                         .gap(vec![scale(3)])
                                                         .add_class("text--label")
@@ -282,11 +283,11 @@ impl Renderable for Picker {
                                                             icon.size(scale(4));
                                                             icon
                                                         })
-                                                });
+                                                );
                                             }
                                             option_list
                                         })
-                                });
+                                );
                             popover
                         });
                     view
@@ -295,21 +296,24 @@ impl Renderable for Picker {
             }
             PickerStyle::RadioGroup => self.node.children.push({
                 let mut option_list = VStack::new(Alignment::Stretch);
-                option_list.add_class("picker__option-list")
+                option_list
+                    .add_class("picker__option-list")
                     .gap(vec![scale(3)]);
                 for option in self.options {
                     option_list.append_child({
-                        let mut radio_row = HStack::new(Alignment::Center).gap(vec![scale(2)]);
+                        let mut radio_row = HStack::new(Alignment::Center);
+                        radio_row.gap(vec![scale(2)]);
                         let radio_id =
                             format!("picker-radio-{}-{}", self.name.as_str(), option.value);
                         let mut radio_button = View::new();
-                        radio_button.tag("input")
+                        radio_button
+                            .tag("input")
                             .set_attr("type", "radio")
                             .set_attr("name", self.name.as_str())
                             .set_attr("id", radio_id.as_str())
                             .set_attr("value", option.value.as_str());
 
-                        if let Some(form_id) = &self.form{
+                        if let Some(form_id) = &self.form {
                             radio_button.set_attr("form", form_id.as_str());
                         }
                         if self.is_disabled {
@@ -318,7 +322,6 @@ impl Renderable for Picker {
                         if self.value.eq(option.value.as_str()) {
                             radio_button.set_attr("checked", "checked");
                         }
-
 
                         if self.required {
                             radio_button.set_attr("required", "required");
@@ -330,8 +333,7 @@ impl Renderable for Picker {
                         radio_row.append_child(radio_button);
                         radio_row.append_child({
                             let mut text = Text::new(option.label.as_str(), TextStyle::Body);
-                            text.set_attr("for", radio_id.as_str())
-                                .tag("label");
+                            text.set_attr("for", radio_id.as_str()).tag("label");
                             text
                         });
 

@@ -1,11 +1,13 @@
-use std::borrow::BorrowMut;
 use uuid::Uuid;
 
-use crate::components::icons::Lucide;
-use crate::components::{Alignment, Appendable, Button, ButtonStyle, FileInputType, HStack, Icon, Text, TextStyle, VStack, View, ProgressBar, progress_bar};
-use crate::node::{Node, NodeContainer};
 use crate::Renderable;
-use crate::{scale, DefaultModifiers};
+use crate::components::icons::Lucide;
+use crate::components::{
+    Alignment, Appendable, Button, ButtonStyle, FileInputType, HStack, Icon, ProgressBar, Text,
+    TextStyle, VStack, View,
+};
+use crate::node::Node;
+use crate::{DefaultModifiers, scale};
 
 #[derive(Debug, Clone)]
 pub struct MultipleFileInput {
@@ -18,12 +20,6 @@ pub struct MultipleFileInput {
     error_text: Option<String>,
     accept: Option<String>,
     redirect_uri: Option<String>,
-}
-
-impl NodeContainer for MultipleFileInput {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
 }
 
 impl DefaultModifiers for MultipleFileInput {}
@@ -39,7 +35,7 @@ impl MultipleFileInput {
             label: None,
             error_text: None,
             accept: None,
-            redirect_uri: None
+            redirect_uri: None,
         }
     }
 
@@ -73,97 +69,97 @@ impl MultipleFileInput {
     }
 }
 
+impl std::ops::Deref for MultipleFileInput {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for MultipleFileInput {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
+
 impl Renderable for MultipleFileInput {
     fn component_name(&self) -> &str {
         "MultipleFileInput"
     }
     fn render(mut self) -> Node {
+        let self_values = self.clone();
         let instance_id = Uuid::new_v4();
         let mut file_list = VStack::new(Alignment::Stretch);
-        file_list .add_class("multiple-file-input__file-list")
+        file_list
+            .add_class("multiple-file-input__file-list")
             .id(&instance_id.to_string())
             .append_child({
-                let mut control_bar = HStack::new(Alignment::Center)
+                let mut control_bar = HStack::new(Alignment::Center);
+                control_bar
                     .add_class("multiple-file-input__file-list__control-bar")
-                    .append_child({
-                        Button::icon_only(Lucide::X, ButtonStyle::Link)
-                            .add_class("multiple-file-input--hidden__file-list__control-bar__close-button")
-                    });
+                    .append_child(Button::icon_only(Lucide::X, ButtonStyle::Link).add_class(
+                        "multiple-file-input--hidden__file-list__control-bar__close-button",
+                    ));
                 if self.input_type == FileInputType::Hidden {
-                    control_bar
-                        .add_class("multiple-file-input--hidden__file-list__control-bar");
+                    control_bar.add_class("multiple-file-input--hidden__file-list__control-bar");
                 }
                 control_bar
             })
-            .append_child({
+            .append_child(
                 VStack::new(Alignment::Stretch)
                     .add_class("multiple-file-input__file-list__content")
-                    .append_child({
+                    .append_child(
                         VStack::new(Alignment::Center)
                             .flex_grow(1)
                             .justify_content("center")
                             .gap(vec![scale(2)])
-                            .append_child({
+                            .append_child(
                                 Icon::new(Lucide::CloudUpload)
                                     .size(64)
                                     .stroke_width(1)
-                                    .color("var(--color-accent)")
-                            })
-                            .append_child({
-                                Text::new("Téléverser vos fichiers", TextStyle::H1)
-                            })
-                    })
-                    .append_child({
-                        View::new()
-                            .tag("template")
-                            .append_child({
-                                HStack::new(Alignment::Center)
-                                    .gap(vec![scale(3)])
-                                    .add_class("multiple-file-input__file-list__item")
-                                    .append_child({
-                                        Icon::new(Lucide::File)
-                                            .stroke_width(1)
-                                            .size(37)
-                                    })
-                                    .append_child({
-                                        let mut stack = VStack::new(Alignment::Stretch);
-                                        stack.flex_grow(1)
-                                            .gap(vec![scale(2)])
-                                            .append_child({
-                                                let mut text = Text::new("Filename", TextStyle::Headline);
-                                                text.add_class("t-file-name");
-                                                text
-                                            })
-                                            .append_child({
-                                                let mut progress_bar = ProgressBar::new();
-                                                progress_bar.add_class("t-progress")
-                                                    .flex_grow(1);
-                                                progress_bar
-                                            });
-                                        stack
-                                    })
-                            })
-                    })
-            })
-          ;
+                                    .color("var(--color-accent)"),
+                            )
+                            .append_child(Text::new("Téléverser vos fichiers", TextStyle::H1)),
+                    )
+                    .append_child(
+                        View::new().tag("template").append_child(
+                            HStack::new(Alignment::Center)
+                                .gap(vec![scale(3)])
+                                .add_class("multiple-file-input__file-list__item")
+                                .append_child(Icon::new(Lucide::File).stroke_width(1).size(37))
+                                .append_child(
+                                    VStack::new(Alignment::Stretch)
+                                        .flex_grow(1)
+                                        .gap(vec![scale(2)])
+                                        .append_child(
+                                            Text::new("Filename", TextStyle::Headline)
+                                                .add_class("t-file-name"),
+                                        )
+                                        .append_child(
+                                            ProgressBar::new().add_class("t-progress").flex_grow(1),
+                                        ),
+                                ),
+                        ),
+                    ),
+            );
 
         match self.input_type {
             FileInputType::Hidden => {
                 // Affiche une petite fenêtre pour suivre l'envoie des fichiers.
-                self
-                    .set_attr("data-file-list", &instance_id.to_string())
+                self.set_attr("data-file-list", &instance_id.to_string())
                     .add_class("multiple-file-input")
                     .add_class("multiple-file-input--hidden")
                     .add_class("multiple-file-input__input")
                     .set_attr("type", "file")
                     .set_attr("multiple", "multiple")
                     .tag("input")
-                    .set_attr("name", &self.name);
-                if let Some(redirect_uri) = &self.redirect_uri {
+                    .set_attr("name", &self_values.name);
+                if let Some(redirect_uri) = &self_values.redirect_uri {
                     self.set_attr("data-redirect-uri", redirect_uri);
                 }
                 file_list.add_class("multiple-file-input--hidden__file-list");
-                self.node.root_nodes.insert(Box::new(file_list));
+                self.node.root_nodes.push(file_list.render());
                 if !self.node.attributes.contains_key("id") {
                     self.set_attr("id", &format!("file-input-{}", self.name));
                 }
@@ -177,15 +173,16 @@ impl Renderable for MultipleFileInput {
             }
             FileInputType::Simple | FileInputType::Image => {
                 // Affiche un bloc complet avec le suivi de l'envoi des fichiers
-                let mut container = self
-                    .clone();
-                container.set_attr("data-file-list", &instance_id.to_string())
+                let mut container = self.clone();
+                container
+                    .set_attr("data-file-list", &instance_id.to_string())
                     .add_class("multiple-file-input")
                     .add_class("multiple-file-input--simple");
 
                 container.node.children.push({
                     let mut field = self.clone();
-                    field.add_class("multiple-file-input__input")
+                    field
+                        .add_class("multiple-file-input__input")
                         .set_attr("type", "file")
                         .set_attr("multiple", "multiple")
                         .tag("input")
@@ -204,12 +201,16 @@ impl Renderable for MultipleFileInput {
                     }
                     field.node
                 });
-                container.node.children.push(file_list.add_class("multiple-file-input--simple__file-list").render());
+                container.node.children.push(
+                    file_list
+                        .add_class("multiple-file-input--simple__file-list")
+                        .render(),
+                );
                 container.node.children.push({
-                    let mut button = Button::new("Selectionner des fichiers", ButtonStyle::Outlined);
-                    button.icon(Lucide::Files)
-                        .add_class("multiple-file-input__button");
-                    button.render()
+                    Button::new("Selectionner des fichiers", ButtonStyle::Outlined)
+                        .icon(Lucide::Files)
+                        .add_class("multiple-file-input__button")
+                        .render()
                 });
 
                 container.node

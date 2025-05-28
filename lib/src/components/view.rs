@@ -1,47 +1,41 @@
-use crate::engine::{Renderable};
-use crate::node::{Node, NodeContainer};
-use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::components::{Appendable, ChildContainer};
+use crate::components::Appendable;
+use crate::engine::Renderable;
+use crate::node::Node;
+use std::borrow::BorrowMut;
 
 /// This is a simple configurable node
 #[derive(Debug, Clone)]
 pub struct View {
-    children: Vec<Box<dyn Renderable>>,
     pub node: Node,
 }
 
 impl View {
     pub fn new() -> Self {
         View {
-            children: vec![],
             node: Default::default(),
         }
     }
-
 }
+impl std::ops::Deref for View {
+    type Target = Node;
 
-impl NodeContainer for View {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for View {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl DefaultModifiers for View {}
-
-impl ChildContainer for View {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
-    }
-}
 
 impl Appendable for View {}
 
 impl Renderable for View {
     fn render(mut self) -> Node {
-        let child_nodes = self.children.into_iter().map(|child| child.render()).collect();
-        self.node.children = child_nodes;
-
         self.node
     }
 }

@@ -2,10 +2,10 @@ use std::borrow::BorrowMut;
 
 use uuid::Uuid;
 
-use crate::components::*;
 use crate::DefaultModifiers;
-use crate::node::{Node, NodeContainer};
 use crate::Renderable;
+use crate::components::*;
+use crate::node::Node;
 
 #[derive(Debug, Clone)]
 pub enum CheckboxStyle {
@@ -24,7 +24,7 @@ pub struct Checkbox {
     checked: bool,
     auto_submit: bool,
     id: Uuid,
-    children: Vec<Box<dyn Renderable>>,
+
     form: Option<String>,
 }
 
@@ -40,7 +40,6 @@ impl Checkbox {
             checked: false,
             auto_submit: false,
             id: Uuid::new_v4(),
-            children: vec![],
             form: None,
         }
     }
@@ -74,27 +73,28 @@ impl Checkbox {
         self.clone()
     }
 }
+impl std::ops::Deref for Checkbox {
+    type Target = Node;
 
-impl NodeContainer for Checkbox {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for Checkbox {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl DefaultModifiers for Checkbox {}
-
-impl ChildContainer for Checkbox {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
-    }
-}
 
 impl Appendable for Checkbox {}
 
 impl Renderable for Checkbox {
     fn render(mut self) -> Node {
         let mut checkbox = View::new();
-        checkbox.tag("input")
+        checkbox
+            .tag("input")
             .set_attr("type", "checkbox")
             .set_attr("name", &self.name)
             .set_attr("value", &self.value)
@@ -112,10 +112,9 @@ impl Renderable for Checkbox {
         }
         let checkbox_style = match &self.style {
             CheckboxStyle::Checkbox => "checkbox--checkbox",
-            CheckboxStyle::Switch => "checkbox--switch"
+            CheckboxStyle::Switch => "checkbox--switch",
         };
-        self
-            .add_class("checkbox")
+        self.add_class("checkbox")
             .add_class(checkbox_style)
             .append_child(checkbox);
         if let Some(label) = &self.label {
@@ -127,9 +126,7 @@ impl Renderable for Checkbox {
                 text
             });
         }
-        let child_nodes = self.children.into_iter().map(|child| child.render()).collect();
 
-        self.node.children = child_nodes;
         self.node
     }
 }

@@ -1,9 +1,9 @@
 use std::borrow::BorrowMut;
 
-use crate::components::{Appendable, ChildContainer};
 use crate::DefaultModifiers;
-use crate::node::{Node, NodeContainer};
 use crate::Renderable;
+use crate::components::Appendable;
+use crate::node::Node;
 
 /// Used to set card style.
 #[derive(Debug, Clone)]
@@ -16,7 +16,6 @@ pub enum CardStyle {
 /// An outlined view to emphasize a content.
 #[derive(Debug, Clone)]
 pub struct Card {
-    children: Vec<Box<dyn Renderable>>,
     node: Node,
     pub style: CardStyle,
 }
@@ -24,7 +23,6 @@ pub struct Card {
 impl Card {
     pub fn new(style: CardStyle) -> Self {
         Card {
-            children: vec![],
             node: Node::default(),
             style: style.clone(),
         }
@@ -50,7 +48,6 @@ impl Card {
         self.set_attr("data-highlight-on-submit", form_name)
     }
 
-
     /// Make the card submit specified form when clicked
     /// ```rust
     ///use viewy::components::CardStyle;
@@ -68,33 +65,29 @@ impl Card {
             .set_attr("data-submit-form", form_name)
     }
 }
+impl std::ops::Deref for Card {
+    type Target = Node;
 
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
 
-impl NodeContainer for Card {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+impl std::ops::DerefMut for Card {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
     }
 }
 
 impl DefaultModifiers for Card {}
-
-impl ChildContainer for Card {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
-    }
-}
 
 impl Appendable for Card {}
 
 impl Renderable for Card {
     fn render(mut self) -> Node {
         let card_style = format!("card--{:?}", self.style).to_lowercase();
-        self
-            .add_class("card")
-            .add_class(&card_style);
-        let child_nodes= self.children.into_iter()
-            .map(|child| child.render()).collect();
-        self.node.children = child_nodes;
+        self.add_class("card").add_class(&card_style);
+
         self.node
     }
 }

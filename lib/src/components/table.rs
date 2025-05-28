@@ -1,22 +1,26 @@
-use std::borrow::BorrowMut;
-
-use crate::{DefaultModifiers, sp};
-use crate::components::*;
-use crate::node::{Node, NodeContainer};
 use crate::Renderable;
+use crate::components::*;
+use crate::node::Node;
+use crate::{DefaultModifiers, sp};
 
 #[derive(Debug, Clone)]
 pub struct Column {
     pub node: Node,
     pub title: Option<String>,
 }
+impl std::ops::Deref for Column {
+    type Target = Node;
 
-impl NodeContainer for Column {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for Column {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl DefaultModifiers for Column {}
 
 impl Column {
@@ -27,9 +31,8 @@ impl Column {
         }
     }
 
-    pub fn span(&mut self, col_nbs: i32) -> Self {
-        self.set_attr("span", col_nbs.to_string().as_str());
-        self.clone()
+    pub fn span(&mut self, col_nbs: i32) -> &mut Self {
+        self.set_attr("span", col_nbs.to_string().as_str())
     }
 }
 
@@ -42,34 +45,32 @@ impl Renderable for Column {
 
 #[derive(Debug, Clone)]
 pub struct Row {
-    children: Vec<Box<dyn Renderable>>,
     node: Node,
     pub name: String,
     pub action: Option<String>,
     pub action_target: Option<String>,
     pub download: Option<String>,
 }
+impl std::ops::Deref for Row {
+    type Target = Node;
 
-impl NodeContainer for Row {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for Row {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl DefaultModifiers for Row {}
-
-impl ChildContainer for Row {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
-    }
-}
 
 impl Appendable for Row {}
 
 impl Row {
     pub fn new(name: &str) -> Self {
         Self {
-            children: vec![],
             node: Default::default(),
             name: name.to_string(),
             action: None,
@@ -78,21 +79,20 @@ impl Row {
         }
     }
 
-
-    pub fn action(&mut self, url: &str) -> Self {
+    pub fn action(&mut self, url: &str) -> &mut Self {
         self.action = Some(url.to_string());
-        self.clone()
+        self
     }
 
-    pub fn action_target(&mut self, target: &str) -> Self {
+    pub fn action_target(&mut self, target: &str) -> &mut Self {
         self.action_target = Some(target.to_string());
-        self.clone()
+        self
     }
 
-    pub fn download_action(&mut self, url: &str, file_name: &str) -> Self {
+    pub fn download_action(&mut self, url: &str, file_name: &str) -> &mut Self {
         self.action = Some(url.to_string());
         self.download = Some(file_name.to_string());
-        self.clone()
+        self
     }
 }
 
@@ -102,18 +102,19 @@ impl Renderable for Row {
         if self.action.is_some() {
             self.add_class("clickable");
         }
-        self.children.into_iter()
-            .for_each(|child| {
+        self.node.children = self
+            .node
+            .children
+            .into_iter()
+            .map(|child| {
                 let mut td = View::new();
                 td.tag("td");
 
                 if let Some(url) = &self.action {
                     td.append_child({
                         let mut link = View::new();
-                        link.add_class("link-row")
-                            .tag("a")
-                            .set_attr("href", url)
-                            .append_child(child.clone());
+                        link.add_class("link-row").tag("a").set_attr("href", url);
+                        link.node.children.push(child);
                         if let Some(target) = &self.action_target {
                             link.set_attr("target", target);
                         }
@@ -123,10 +124,11 @@ impl Renderable for Row {
                         link
                     });
                 } else {
-                    td.append_child(child);
+                    td.node.children.push(child);
                 }
-                self.node.children.push(td.render())
-            });
+                td.render()
+            })
+            .collect();
         self.node
     }
 }
@@ -134,20 +136,18 @@ impl Renderable for Row {
 #[derive(Debug, Clone)]
 pub struct Table {
     name: String,
-    children: Vec<Box<dyn Renderable>>,
+
     columns: Vec<Column>,
     rows: Vec<Row>,
     node: Node,
     selectable: bool,
-    select_all: bool
+    select_all: bool,
 }
-
 
 impl Table {
     pub fn new(name: &str, columns: Vec<Column>) -> Self {
         Self {
             name: name.to_string(),
-            children: vec![],
             columns,
             rows: vec![],
             node: Default::default(),
@@ -160,7 +160,7 @@ impl Table {
         self.selectable = is_selectable;
         self
     }
-    
+
     pub fn display_select_all_checkbox(&mut self) -> &mut Self {
         self.select_all = true;
         self
@@ -170,109 +170,113 @@ impl Table {
         self.add_class("alternate-row-color")
     }
 
-    pub fn append_child(&mut self, row: Row) -> &mut Self
-    {
+    pub fn append_child(&mut self, row: Row) -> &mut Self {
         self.rows.push(row);
         self
     }
 }
 
-impl NodeContainer for Table {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+impl std::ops::Deref for Table {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for Table {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl DefaultModifiers for Table {}
-
-impl ChildContainer for Table {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
-    }
-}
 
 impl Renderable for Table {
     fn render(mut self) -> Node {
         let table_has_header = self.columns.iter().any(|col| col.title.is_some());
-        self
-            .tag("table")
-            .add_class("table");
+        self.tag("table").add_class("table");
 
         if table_has_header {
-
-            self.node.children.push({
-                let mut thead = View::new();
-                thead.tag("thead")
-                    .append_child({
+            self.node.children.push(
+                {
+                    let mut thead = View::new();
+                    thead.tag("thead").append_child({
                         let mut tr = View::new();
-                        tr .tag("tr");
+                        tr.tag("tr");
                         if self.selectable {
                             tr.prepend_child({
                                 let mut checkbox_th = View::new();
                                 checkbox_th.tag("th");
-                                
+
                                 if self.select_all {
                                     checkbox_th.append_child({
-                                        let mut checkbox = Checkbox::new(&self.name, "", CheckboxStyle::Checkbox);
-                                        checkbox.attach_to_form("dummy")
-                                            .add_class("select-all");
+                                        let mut checkbox =
+                                            Checkbox::new(&self.name, "", CheckboxStyle::Checkbox);
+                                        checkbox.attach_to_form("dummy").add_class("select-all");
                                         checkbox
-                                    });   
+                                    });
                                 }
                                 checkbox_th
                             });
                         }
-                        self.columns.iter()
-                            .for_each(|col| {
-                                if let Some(title) = &col.title {
-                                    tr.append_child({
-                                        let mut th = Text::new(title, TextStyle::Label);
-                                        th.tag("th");
-                                        th
-                                    });
-                                } else {
-                                    tr.append_child({
-                                        let mut th = View::new();
-                                        th.tag("th");
-                                        th
-                                    });
-                                }
-                            });
+                        self.columns.iter().for_each(|col| {
+                            if let Some(title) = &col.title {
+                                tr.append_child({
+                                    let mut th = Text::new(title, TextStyle::Label);
+                                    th.tag("th");
+                                    th
+                                });
+                            } else {
+                                tr.append_child({
+                                    let mut th = View::new();
+                                    th.tag("th");
+                                    th
+                                });
+                            }
+                        });
                         tr
                     });
-                thead
-            }.render());
+                    thead
+                }
+                .render(),
+            );
         }
-        self.node.children.insert(0, {
-            let mut colgroup = View::new();
-            colgroup.tag("colgroup");
-            if self.selectable {
-                colgroup.append_child({
-                    let mut col = Column::new(None);
-                    col.width(&sp(30));
-                    col
-                });
-            }
-            self.columns.into_iter()
-                .for_each(|col| {
-                    colgroup.append_child(col);
-                });
-            colgroup
-        }.render());
-
-        self.node.children.push({
-            let mut tbody = View::new();
-            tbody.tag("tbody");
-            for mut row in self.rows {
+        self.node.children.insert(
+            0,
+            {
+                let mut colgroup = View::new();
+                colgroup.tag("colgroup");
                 if self.selectable {
-                    row.prepend_child({
-                        Checkbox::new(&self.name, &row.name, CheckboxStyle::Checkbox)
+                    colgroup.append_child({
+                        let mut col = Column::new(None);
+                        col.width(&sp(30));
+                        col
                     });
                 }
-                tbody.append_child(row);
+                self.columns.into_iter().for_each(|col| {
+                    colgroup.append_child(col);
+                });
+                colgroup
             }
-            tbody
-        }.render());
+            .render(),
+        );
+
+        self.node.children.push(
+            {
+                let mut tbody = View::new();
+                tbody.tag("tbody");
+                for mut row in self.rows {
+                    if self.selectable {
+                        row.prepend_child({
+                            Checkbox::new(&self.name, &row.name, CheckboxStyle::Checkbox)
+                        });
+                    }
+                    tbody.append_child(row);
+                }
+                tbody
+            }
+            .render(),
+        );
 
         self.node
     }

@@ -1,10 +1,8 @@
-use crate::node::{Node, NodeContainer};
-use std::borrow::BorrowMut;
 use crate::DefaultModifiers;
-use crate::{Renderable};
-use crate::components::{View, TextStyle, Text};
-
-
+use crate::Renderable;
+use crate::components::{Text, TextStyle, View};
+use crate::node::Node;
+use std::borrow::BorrowMut;
 
 #[derive(Debug, Clone)]
 pub struct TagField {
@@ -18,12 +16,6 @@ pub struct TagField {
     pub field_type: FieldType,
     pub name: String,
     pub auto_sizing: bool,
-}
-
-impl NodeContainer for TagField {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
 }
 
 impl DefaultModifiers for TagField {}
@@ -40,7 +32,7 @@ impl TagField {
             trailing_icon: None,
             field_type,
             name: name.to_string(),
-            auto_sizing: false
+            auto_sizing: false,
         }
     }
 
@@ -83,13 +75,15 @@ impl TagField {
 
 impl Renderable for TagField {
     fn render(mut self) -> Node {
-        let mut field = self.clone()
-            .add_class("tagfield");
+        let mut field = self.clone().add_class("tagfield");
 
         let mut input = View::new()
             .tag("input")
             .add_class("tagfield__input")
-            .set_attr("type", format!("{:?}", field.field_type).to_lowercase().as_str())
+            .set_attr(
+                "type",
+                format!("{:?}", field.field_type).to_lowercase().as_str(),
+            )
             .set_attr("id", self.name.as_str())
             .set_attr("name", self.name.as_str());
 

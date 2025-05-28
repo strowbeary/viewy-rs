@@ -1,11 +1,10 @@
 use std::borrow::BorrowMut;
 use std::fmt::Debug;
 
-
 use crate::components::badge::{Badge, BadgeModifiers, BadgeSupport};
 use crate::components::icons::IconPack;
 use crate::components::{Icon, Text, TextStyle};
-use crate::node::{Node, NodeContainer};
+use crate::node::Node;
 use crate::{DefaultModifiers, Renderable};
 
 #[derive(Debug, Clone)]
@@ -27,24 +26,38 @@ impl Tag {
     }
 
     /// Set tag's icon
-    pub fn icon<T>(&mut self, icon: T) -> Self
+    pub fn icon<T>(&mut self, icon: T) -> &mut Self
     where
         T: 'static + IconPack,
     {
         self.icon = Some(Box::new(icon));
-        self.clone()
+        self
     }
 
-    pub fn warning(&mut self) -> Self {
+    pub fn warning(&mut self) -> &mut Self {
         self.add_class("tag--warning")
     }
 
-    pub fn destructive(&mut self) -> Self {
+    pub fn destructive(&mut self) -> &mut Self {
         self.add_class("tag--destructive")
     }
 
-    pub fn success(&mut self) -> Self {
+    pub fn success(&mut self) -> &mut Self {
         self.add_class("tag--success")
+    }
+}
+
+impl std::ops::Deref for Tag {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for Tag {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
     }
 }
 
@@ -58,18 +71,13 @@ impl BadgeSupport for Tag {
 
 impl BadgeModifiers for Tag {}
 
-impl NodeContainer for Tag {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
-}
-
 impl Renderable for Tag {
     fn render(mut self) -> Node {
         self.add_class("tag");
 
         if let Some(icon) = self.icon {
-            let mut icon = Icon::new(icon);icon.size(16).stroke_width(2);
+            let mut icon = Icon::new(icon);
+            icon.size(16).stroke_width(2);
             self.node.children.push(icon.render());
         }
 

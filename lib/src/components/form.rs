@@ -1,7 +1,7 @@
 use crate::DefaultModifiers;
 use crate::Renderable;
-use crate::components::{Appendable, ChildContainer};
-use crate::node::{Node, NodeContainer};
+use crate::components::Appendable;
+use crate::node::Node;
 use std::borrow::BorrowMut;
 
 #[derive(Debug, Clone)]
@@ -12,7 +12,6 @@ pub enum FormMethod {
 
 #[derive(Debug, Clone)]
 pub struct Form {
-    children: Vec<Box<dyn Renderable>>,
     node: Node,
     pub name: String,
     pub action: String,
@@ -20,25 +19,17 @@ pub struct Form {
     pub form_method: FormMethod,
 }
 
-impl NodeContainer for Form {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
-}
-
 impl DefaultModifiers for Form {}
 
 impl Form {
     pub fn new(name: &str, action: &str) -> Self {
         Form {
-            children: vec![],
             node: Node::default(),
             name: name.to_string(),
             action: action.to_string(),
             is_async: false,
             form_method: FormMethod::Post,
         }
-
     }
     pub fn method(&mut self, method: FormMethod) -> &mut Self {
         self.form_method = method;
@@ -57,10 +48,17 @@ impl Form {
         self.set_attr("enctype", "multipart/form-data")
     }
 }
+impl std::ops::Deref for Form {
+    type Target = Node;
 
-impl ChildContainer for Form {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        self.children.borrow_mut()
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for Form {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
     }
 }
 impl Appendable for Form {}
@@ -73,26 +71,16 @@ impl Renderable for Form {
         };
         let name = self.name.to_string();
         let action = self.action.to_string();
-        self
-            .set_attr("id", &name)
+        self.set_attr("id", &name)
             .add_class("form")
             .set_attr("action", &action)
             .tag("form")
-            .set_attr(
-                "method",
-                method
-            );
-
+            .set_attr("method", method);
 
         if self.is_async {
             self.set_attr("data-async", "data-async");
         }
 
-
-
-        self.children
-            .into_iter()
-            .for_each(|child| self.node.children.push(child.render()));
         self.node
     }
 }

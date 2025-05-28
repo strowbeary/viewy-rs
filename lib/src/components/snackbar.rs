@@ -2,10 +2,10 @@ use std::borrow::BorrowMut;
 
 use uuid::Uuid;
 
-use crate::{DefaultModifiers, Renderable, scale};
-use crate::components::{Alignment, Appendable, Button, ButtonStyle, HStack, Text, TextStyle};
 use crate::components::icons::Lucide;
-use crate::node::{Node, NodeContainer};
+use crate::components::{Alignment, Appendable, Button, ButtonStyle, HStack, Text, TextStyle};
+use crate::node::Node;
+use crate::{DefaultModifiers, Renderable, scale};
 
 #[derive(Debug, Clone)]
 pub enum SnackbarType {
@@ -47,18 +47,26 @@ impl Snackbar {
         if matches!(button.style, ButtonStyle::Link) {
             self.action = Some(button);
         } else {
-            println!("[viewy-rs] (error) You can only use a button with ButtonStyle::Link style as snackbar action");
+            println!(
+                "[viewy-rs] (error) You can only use a button with ButtonStyle::Link style as snackbar action"
+            );
         }
         self
     }
 }
+impl std::ops::Deref for Snackbar {
+    type Target = Node;
 
-impl NodeContainer for Snackbar {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for Snackbar {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl DefaultModifiers for Snackbar {}
 
 impl Renderable for Snackbar {
@@ -72,18 +80,19 @@ impl Renderable for Snackbar {
         };
         self.add_class(snackbar_type);
 
-        self.node.children.push({
-            let mut content = HStack::new(Alignment::Center);
-            content.gap(vec![scale(3)])
-                .append_child({
-                    Text::new(&self.content, TextStyle::Body)
-                });
-            if let Some(action) = self.action {
-                content.append_child(action);
+        self.node.children.push(
+            {
+                let mut content = HStack::new(Alignment::Center);
+                content
+                    .gap(vec![scale(3)])
+                    .append_child({ Text::new(&self.content, TextStyle::Body) });
+                if let Some(action) = self.action {
+                    content.append_child(action);
+                }
+                content
             }
-            content
-        }.render());
-
+            .render(),
+        );
 
         self.node
     }

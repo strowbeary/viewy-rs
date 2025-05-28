@@ -1,11 +1,11 @@
-use std::collections::{HashSet, HashMap};
 use crate::engine::Renderable;
+use std::collections::{HashMap, HashSet};
 
 #[derive(Debug, Clone)]
 pub enum NodeType {
     Normal(String),
     SelfClosing(String),
-    Comment(String)
+    Comment(String),
 }
 
 #[derive(Debug, Clone)]
@@ -16,7 +16,7 @@ pub struct Node {
     pub class_list: HashSet<String>,
     pub node_style: Vec<(String, String)>,
     pub attributes: HashMap<String, String>,
-    pub root_nodes: HashSet<Box<dyn Renderable>>,
+    pub root_nodes: Vec<Node>,
 }
 
 impl Default for Node {
@@ -30,36 +30,36 @@ impl Default for Node {
             class_list,
             node_style: vec![],
             attributes: HashMap::new(),
-            root_nodes: HashSet::new()
+            root_nodes: vec![],
         }
     }
 }
 
 impl Node {
-    pub(crate) fn get_root_nodes(&self) -> Vec<Box<dyn Renderable>> {
-        let mut all_root_nodes: Vec<Box<dyn Renderable>> = Vec::from_iter(self.root_nodes.clone());
-
-        self.children.iter()
-            .for_each(|child| {
-                all_root_nodes.append(&mut child.get_root_nodes())
-            });
-        all_root_nodes
+    pub(crate) fn get_root_nodes(&mut self, all_root_nodes: &mut Vec<Node>) {
+        all_root_nodes.append(&mut self.root_nodes);
+        self.children
+            .iter_mut()
+            .for_each(|child| child.get_root_nodes(all_root_nodes));
     }
 
-
     pub(crate) fn get_html(&self) -> String {
-        let classes: Vec<String> = self.class_list.iter()
+        let classes: Vec<String> = self
+            .class_list
+            .iter()
             .map(|class_name| format!("{}", class_name))
             .collect();
-        let attributes: Vec<String> = self.attributes.iter()
+        let attributes: Vec<String> = self
+            .attributes
+            .iter()
             .map(|(name, value)| format!("{}=\"{}\"", name, value))
             .collect();
-        let style: Vec<String> = self.node_style.iter()
+        let style: Vec<String> = self
+            .node_style
+            .iter()
             .map(|(name, value)| format!("{}: {};", name, value))
             .collect();
-        let content: Vec<String> = self.children.iter()
-            .map(|child| child.get_html())
-            .collect();
+        let content: Vec<String> = self.children.iter().map(|child| child.get_html()).collect();
         match self.node_type.clone() {
             NodeType::Normal(tag_name) => format!(
                 "<{tag} class=\"{class_list}\" {attributes} style=\"{view_style}\">{children}</{tag}>",
@@ -69,7 +69,7 @@ impl Node {
                 view_style = style.join(""),
                 children = match self.text.clone() {
                     None => content.join(""),
-                    Some(text) => text
+                    Some(text) => text,
                 }
             ),
             NodeType::SelfClosing(tag_name) => format!(
@@ -79,16 +79,16 @@ impl Node {
                 attributes = attributes.join(" "),
                 view_style = style.join("")
             ),
-            NodeType::Comment(comment) => format!(
-                "<!--{comment}-->",
-                comment = comment
-            )
+            NodeType::Comment(comment) => format!("<!--{comment}-->", comment = comment),
         }
     }
 
-    pub(crate) fn to_html(self) -> String {
-        let root_nodes_html: Vec<String> = self.get_root_nodes().into_iter()
-            .map(|root_node| root_node.render().to_html())
+    pub(crate) fn to_html(mut self) -> String {
+        let mut all_root_nodes = vec![];
+        self.get_root_nodes(&mut all_root_nodes);
+        let root_nodes_html: Vec<String> = all_root_nodes
+            .into_iter()
+            .map(|root_node| root_node.to_html())
             .collect();
         format!(
             "{view} {root_nodes}",
@@ -97,9 +97,3 @@ impl Node {
         )
     }
 }
-
-pub trait NodeContainer {
-    fn get_node(&mut self) -> &mut Node;
-}
-
-

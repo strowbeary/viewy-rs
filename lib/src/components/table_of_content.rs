@@ -1,8 +1,6 @@
-use std::borrow::BorrowMut;
-
-use crate::{DefaultModifiers, Renderable};
 use crate::components::{Text, TextStyle};
-use crate::node::{Node, NodeContainer};
+use crate::node::Node;
+use crate::{DefaultModifiers, Renderable};
 
 #[derive(Debug, Clone)]
 pub enum TableOfContentItemType {
@@ -54,13 +52,19 @@ impl TableOfContents {
         self.clone()
     }
 }
+impl std::ops::Deref for TableOfContents {
+    type Target = Node;
 
-impl NodeContainer for TableOfContents {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for TableOfContents {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl DefaultModifiers for TableOfContents {}
 
 impl Renderable for TableOfContents {
@@ -71,15 +75,9 @@ impl Renderable for TableOfContents {
         for child in self.children {
             self.node.children.push({
                 let mut text = match child.item_type {
-                    TableOfContentItemType::H1 => {
-                        Text::new(&child.label, TextStyle::H2)
-                    }
-                    TableOfContentItemType::H2 => {
-                        Text::new(&child.label, TextStyle::Subtitle2)
-                    }
-                    TableOfContentItemType::H3 => {
-                        Text::new(&child.label, TextStyle::Subtitle3)
-                    }
+                    TableOfContentItemType::H1 => Text::new(&child.label, TextStyle::H2),
+                    TableOfContentItemType::H2 => Text::new(&child.label, TextStyle::Subtitle2),
+                    TableOfContentItemType::H3 => Text::new(&child.label, TextStyle::Subtitle3),
                 };
                 text.add_class("table-of-contents__item")
                     .tag("a")

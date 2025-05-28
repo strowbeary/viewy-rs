@@ -1,6 +1,6 @@
-use std::borrow::BorrowMut;
+use crate::node::Node;
 use crate::{DefaultModifiers, Renderable};
-use crate::node::{Node, NodeContainer};
+use std::borrow::BorrowMut;
 
 #[derive(Debug, Clone)]
 pub enum SanitizationLevel {
@@ -55,27 +55,34 @@ impl Text {
     }
     pub fn bold(&mut self, is_bold: bool) -> &mut Self {
         if is_bold {
-            self.get_node().node_style.push(("font-weight".to_string(), "bold".to_string()));
+            self.node
+                .node_style
+                .push(("font-weight".to_string(), "bold".to_string()));
         } else {
-            self.get_node().node_style.push(("font-weight".to_string(), "normal".to_string()));
+            self.node
+                .node_style
+                .push(("font-weight".to_string(), "normal".to_string()));
         }
         self
     }
     pub fn uppercase(&mut self, is_uppercase: bool) -> &mut Self {
         if is_uppercase {
-            self.get_node().node_style.push(("text-transform".to_string(), "uppercase".to_string()));
+            self.node
+                .node_style
+                .push(("text-transform".to_string(), "uppercase".to_string()));
         } else {
-            self.get_node().node_style.push(("text-transform".to_string(), "none".to_string()));
+            self.node
+                .node_style
+                .push(("text-transform".to_string(), "none".to_string()));
         }
         self
     }
-
 
     pub fn no_wrap(&mut self, is_no_wrap: bool) -> &mut Self {
         self.no_wrap = is_no_wrap;
         self
     }
-    
+
     #[deprecated(since = "0.13.16", note = "Use sanitization_level instead")]
     pub fn disable_purification(&mut self) -> &mut Self {
         self.sanitization_level = SanitizationLevel::Basic;
@@ -89,18 +96,30 @@ impl Text {
     }
 
     pub fn text_overflow(&mut self) -> &mut Self {
-        self.get_node().node_style.push(("text-overflow".to_string(), "ellipsis".to_string()));
+        self.node
+            .node_style
+            .push(("text-overflow".to_string(), "ellipsis".to_string()));
         self
     }
     pub fn text_shadow(&mut self, rule: &str) -> &mut Self {
-        self.get_node().node_style.push(("text-shadow".to_string(), rule.to_string()));
+        self.node
+            .node_style
+            .push(("text-shadow".to_string(), rule.to_string()));
         self
     }
 }
 
-impl NodeContainer for Text {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+impl std::ops::Deref for Text {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for Text {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
     }
 }
 
@@ -109,20 +128,13 @@ impl DefaultModifiers for Text {}
 impl Renderable for Text {
     fn render(mut self) -> Node {
         let text_style = format!("text--{:?}", self.style).to_lowercase();
-        self.add_class("text")
-            .add_class(text_style.as_str());
+        self.add_class("text").add_class(text_style.as_str());
 
         match self.sanitization_level {
-            SanitizationLevel::None => {
-                self.node.text = Some(self.content.to_string())
-            }
-            SanitizationLevel::Basic => {
-                self.node.text = Some(ammonia::clean(&self.content))
-            }
+            SanitizationLevel::None => self.node.text = Some(self.content.to_string()),
+            SanitizationLevel::Basic => self.node.text = Some(ammonia::clean(&self.content)),
             SanitizationLevel::Strict => {
-                self.node.text = Some(ammonia::Builder::empty()
-                    .clean(&self.content)
-                    .to_string())
+                self.node.text = Some(ammonia::Builder::empty().clean(&self.content).to_string())
             }
         }
 

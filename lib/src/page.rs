@@ -1,14 +1,19 @@
-use crate::node::*;
-use std::collections::HashSet;
-use std::{fmt, env};
 use crate::Renderable;
-use std::collections::HashMap;
 use crate::config::Config;
+use crate::node::*;
+use std::collections::HashMap;
+use std::collections::HashSet;
+use std::{env, fmt};
 
-fn get_full_html_page(title: String, content: String, theme_variant: String, insert_base_element: bool) -> String {
+fn get_full_html_page(
+    title: String,
+    content: String,
+    theme_variant: String,
+    insert_base_element: bool,
+) -> String {
     let base_url = match env::var("BASE_URL") {
         Ok(url) => url,
-        Err(_) => "".to_string()
+        Err(_) => "".to_string(),
     };
     let base_elem = {
         if insert_base_element {
@@ -18,15 +23,22 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, ins
         }
     };
     let config = Config::load();
-    let favicons = config.app.favicons.iter()
-        .map(|favicon| format!("<link rel=\"{rel}\" href=\"{base_url}{href}\">",
-                               rel = favicon.rel,
-                               base_url = base_url,
-                               href = favicon.href
-        ))
+    let favicons = config
+        .app
+        .favicons
+        .iter()
+        .map(|favicon| {
+            format!(
+                "<link rel=\"{rel}\" href=\"{base_url}{href}\">",
+                rel = favicon.rel,
+                base_url = base_url,
+                href = favicon.href
+            )
+        })
         .collect::<Vec<String>>()
         .join("");
-    format!(r"
+    format!(
+        r"
         <!doctype html>
         <html>
             <head>
@@ -51,12 +63,12 @@ fn get_full_html_page(title: String, content: String, theme_variant: String, ins
             </body>
         </html>
     ",
-            title = title,
-            content = content,
-            theme_variant = theme_variant,
-            base_elem = base_elem,
-            favicons = favicons,
-            base_url = base_url
+        title = title,
+        content = content,
+        theme_variant = theme_variant,
+        base_elem = base_elem,
+        favicons = favicons,
+        base_url = base_url
     )
 }
 
@@ -92,10 +104,11 @@ impl Renderable for ContentComment {
             class_list: Default::default(),
             node_style: vec![],
             attributes: HashMap::new(),
-            root_nodes: HashSet::new(),
+            root_nodes: vec![],
         }
     }
 }
+pub type Layout<'a> = &'a dyn Fn(Node) -> Node;
 
 /// Represent a page and embed all the logic required by the service worker.
 ///
@@ -113,18 +126,17 @@ impl Renderable for ContentComment {
 #[derive(Clone)]
 pub struct Page<'a> {
     name: String,
-    content: Box<dyn Renderable>,
-    layout: &'a dyn Fn(Box<dyn Renderable>) -> Box<dyn Renderable>,
+    content: Node,
+    layout: Layout<'a>,
     theme: Theme,
     base_url: bool,
 }
 
 impl<'a> Page<'a> {
-    pub fn new<C: 'static + Renderable>(name: &str, layout: &'a dyn Fn(Box<dyn Renderable>) -> Box<dyn Renderable>, content: C) -> Self
-    {
+    pub fn new<C: 'static + Renderable>(name: &str, layout: Layout<'a>, content: C) -> Self {
         Self {
             name: name.to_string(),
-            content: Box::new(content),
+            content: content.render(),
             layout,
             theme: Theme::Auto,
             base_url: false,
@@ -135,23 +147,22 @@ impl<'a> Page<'a> {
         self.clone()
     }
     pub fn compile(self, render_mode: RenderMode) -> String {
-
         let theme_variant = self.theme.to_string().to_lowercase();
 
         match render_mode {
-            RenderMode::Complete => {
-                get_full_html_page(self.name, {
-                    (self.layout)(self.content).render().to_html()
-                }, theme_variant, self.base_url)
-            }
-            RenderMode::ContentOnly => {
-                self.content.render().to_html()
-            }
-            RenderMode::LayoutOnly => {
-                get_full_html_page(self.name, {
-                    (self.layout)(Box::new(ContentComment)).render().to_html()
-                }, theme_variant, self.base_url)
-            }
+            RenderMode::Complete => get_full_html_page(
+                self.name,
+                (self.layout)(self.content).to_html(),
+                theme_variant,
+                self.base_url,
+            ),
+            RenderMode::ContentOnly => self.content.to_html(),
+            RenderMode::LayoutOnly => get_full_html_page(
+                self.name,
+                { (self.layout)(ContentComment.render()).to_html() },
+                theme_variant,
+                self.base_url,
+            ),
         }
     }
 }

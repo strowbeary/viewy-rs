@@ -1,9 +1,9 @@
 use std::borrow::BorrowMut;
 
-use crate::components::{Alignment, Appendable, Text, TextStyle, VStack};
 use crate::DefaultModifiers;
-use crate::node::{Node, NodeContainer};
 use crate::Renderable;
+use crate::components::{Alignment, Appendable, Text, TextStyle, VStack};
+use crate::node::Node;
 
 #[derive(Debug, Clone)]
 pub struct TitleBar {
@@ -11,17 +11,23 @@ pub struct TitleBar {
     pub title: String,
     pub subtitle: Option<String>,
     pub is_sticky: bool,
-    pub left_item: Option<Box<dyn Renderable>>,
-    pub right_item: Option<Box<dyn Renderable>>,
-    pub bottom_item: Option<Box<dyn Renderable>>,
+    pub left_item: Option<Node>,
+    pub right_item: Option<Node>,
+    pub bottom_item: Option<Node>,
 }
+impl std::ops::Deref for TitleBar {
+    type Target = Node;
 
-impl NodeContainer for TitleBar {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for TitleBar {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl DefaultModifiers for TitleBar {}
 
 impl TitleBar {
@@ -42,7 +48,9 @@ impl TitleBar {
         self
     }
     fn grid_areas(&mut self, schema: &str) -> &mut Self {
-        self.node.node_style.push(("grid-template-areas".to_string(), schema.to_string()));
+        self.node
+            .node_style
+            .push(("grid-template-areas".to_string(), schema.to_string()));
         self
     }
 
@@ -51,25 +59,25 @@ impl TitleBar {
         self
     }
 
-    pub fn left_item<'a, T>(&'a mut self, item: T) -> &mut Self
-        where
-            T: 'static + Renderable,
+    pub fn left_item<T>(&mut self, item: T) -> &mut Self
+    where
+        T: Renderable,
     {
-        self.left_item = Some(Box::new(item));
+        self.left_item = Some(item.render());
         self
     }
-    pub fn right_item<'a, T>(&'a mut self, item: T) -> &mut Self
-        where
-            T: 'static + Renderable,
+    pub fn right_item<T>(&mut self, item: T) -> &mut Self
+    where
+        T: Renderable,
     {
-        self.right_item = Some(Box::new(item));
+        self.right_item = Some(item.render());
         self
     }
-    pub fn bottom_item<'a, T>(&'a mut self, item: T) -> &mut Self
-        where
-            T: 'static + Renderable,
+    pub fn bottom_item<T>(&mut self, item: T) -> &mut Self
+    where
+        T: Renderable,
     {
-        self.bottom_item = Some(Box::new(item));
+        self.bottom_item = Some(item.render());
         self
     }
 }
@@ -85,8 +93,7 @@ impl Renderable for TitleBar {
         if self.bottom_item.is_some() {
             areas.push_str("'bottom_item bottom_item bottom_item'");
         }
-        self.add_class("titlebar")
-            .grid_areas(areas.as_str());
+        self.add_class("titlebar").grid_areas(areas.as_str());
 
         if self.is_sticky {
             self.sticky_to_top(0);
@@ -95,13 +102,10 @@ impl Renderable for TitleBar {
         self.node.children.push({
             if let Some(subtitle) = &self.subtitle {
                 let mut stack = VStack::new(Alignment::Stretch);
-                stack.grid_area("title")
-                    .append_child({
-                        Text::new(self.title.as_str(), TextStyle::LargeTitle)
-                    })
-                    .append_child({
-                        Text::new(subtitle, TextStyle::H3)
-                    });
+                stack
+                    .grid_area("title")
+                    .append_child({ Text::new(self.title.as_str(), TextStyle::LargeTitle) })
+                    .append_child({ Text::new(subtitle, TextStyle::H3) });
                 stack.render()
             } else {
                 let mut text = Text::new(self.title.as_str(), TextStyle::LargeTitle);
@@ -109,20 +113,23 @@ impl Renderable for TitleBar {
                 text.render()
             }
         });
-        if let Some(left_item) = self.left_item {
-            let mut item = left_item.render();
-            item.node_style.push(("grid-area".to_string(), "left_item".to_string()));
-            self.node.children.push(item);
+        if let Some(mut left_item) = self.left_item {
+            left_item
+                .node_style
+                .push(("grid-area".to_string(), "left_item".to_string()));
+            self.node.children.push(left_item);
         }
-        if let Some(right_item) = self.right_item {
-            let mut item = right_item.render();
-            item.node_style.push(("grid-area".to_string(), "right_item".to_string()));
-            self.node.children.push(item);
+        if let Some(mut right_item) = self.right_item {
+            right_item
+                .node_style
+                .push(("grid-area".to_string(), "right_item".to_string()));
+            self.node.children.push(right_item);
         }
-        if let Some(bottom_item) = self.bottom_item {
-            let mut item = bottom_item.render();
-            item.node_style.push(("grid-area".to_string(), "bottom_item".to_string()));
-            self.node.children.push(item);
+        if let Some(mut bottom_item) = self.bottom_item {
+            bottom_item
+                .node_style
+                .push(("grid-area".to_string(), "bottom_item".to_string()));
+            self.node.children.push(bottom_item);
         }
         self.node
     }

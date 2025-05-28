@@ -34,6 +34,8 @@ mod titlebar;
 mod view;
 mod vstack;
 
+use std::ops::{Deref, DerefMut};
+
 pub use avatar::*;
 pub use badge::{Badge, BadgeModifiers, BadgeType};
 pub use button::{Button, ButtonStyle};
@@ -64,20 +66,15 @@ pub use table::*;
 pub use table_of_content::{TableOfContentItemType, TableOfContents, TableOfContentsItem};
 pub use tabs::{TabView, TabViewItem};
 pub use tag::*;
-pub use text::{Text, TextStyle, SanitizationLevel};
+pub use text::{SanitizationLevel, Text, TextStyle};
 pub use titlebar::TitleBar;
 pub use view::View;
 pub use vstack::{Alignment, VStack};
 
-use crate::Renderable;
-
-/// Trait that make the children property accessible for Appendable trait
-pub trait ChildContainer {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>>;
-}
+use crate::{Renderable, node::Node};
 
 /// Trait that make a component capable of receiving children
-pub trait Appendable: ChildContainer + Clone {
+pub trait Appendable: Renderable + Deref<Target = Node> + DerefMut {
     /// Adds a node to the end of the list of children of a specified parent node.
     /// ```rust
     /// View::new()
@@ -87,9 +84,10 @@ pub trait Appendable: ChildContainer + Clone {
     /// ```
     fn append_child<C>(&mut self, child: C) -> &mut Self
     where
-        C: 'static + Renderable,
+        C: Renderable,
     {
-        self.get_children().push(Box::new(child));
+        let node: &mut Node = self.deref_mut();
+        node.children.push(child.render());
         self
     }
 
@@ -102,9 +100,10 @@ pub trait Appendable: ChildContainer + Clone {
     /// ```
     fn prepend_child<C>(&mut self, child: C) -> &mut Self
     where
-        C: 'static + Renderable,
+        C: Renderable,
     {
-        self.get_children().insert(0, Box::new(child));
+        let node: &mut Node = self.deref_mut();
+        node.children.insert(0, child.render());
         self
     }
 }

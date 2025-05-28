@@ -1,9 +1,7 @@
-use std::borrow::BorrowMut;
-
-use crate::components::View;
 use crate::DefaultModifiers;
-use crate::node::{Node, NodeContainer};
 use crate::Renderable;
+use crate::components::View;
+use crate::node::Node;
 
 /// Use this component to display the progress of a task
 #[derive(Debug, Clone)]
@@ -16,7 +14,6 @@ pub struct ProgressBar {
 
     /// The upper numeric bound of the measured range. This must be greater than the minimum value (min attribute), if specified. If unspecified, the maximum value is 1.0
     pub max: Option<f32>,
-
 }
 
 impl ProgressBar {
@@ -38,35 +35,43 @@ impl ProgressBar {
         self
     }
 }
+impl std::ops::Deref for ProgressBar {
+    type Target = Node;
 
-
-impl NodeContainer for ProgressBar {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for ProgressBar {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl DefaultModifiers for ProgressBar {}
-
 
 impl Renderable for ProgressBar {
     fn render(mut self) -> Node {
         self.add_class("progress-bar");
 
         let mut progress_element = View::new();
-            progress_element.tag("progress")
+        progress_element
+            .tag("progress")
             .add_class("progress-bar__progress-element");
 
         if let Some(value) = &self.value {
-            progress_element
-                .set_attr("value", &value.to_string());
+            progress_element.set_attr("value", &value.to_string());
         }
 
         if let Some(max) = self.max {
             progress_element.set_attr("max", &max.to_string());
         }
 
-        progress_element.node.text = Some(format!("{}/{}", self.value.unwrap_or(0.0), self.max.unwrap_or(1.0)));
+        progress_element.node.text = Some(format!(
+            "{}/{}",
+            self.value.unwrap_or(0.0),
+            self.max.unwrap_or(1.0)
+        ));
 
         self.node.children.push(progress_element.render());
 

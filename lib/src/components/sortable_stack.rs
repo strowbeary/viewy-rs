@@ -1,31 +1,36 @@
 use std::borrow::BorrowMut;
+use std::ops::DerefMut;
 
 use crate::components::icons::Lucide;
-use crate::components::{Alignment, Appendable, ChildContainer, HStack, Icon};
-use crate::node::{Node, NodeContainer};
+use crate::components::{Alignment, Appendable, HStack, Icon};
+use crate::node::Node;
 use crate::{DefaultModifiers, sp};
 use crate::{Renderable, scale};
 
 #[derive(Debug, Clone)]
 pub struct SortableStack {
-    children: Vec<Box<dyn Renderable>>,
     node: Node,
     wrapper_tag: String,
     is_disabled: bool,
 }
+impl std::ops::Deref for SortableStack {
+    type Target = Node;
 
-impl NodeContainer for SortableStack {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for SortableStack {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl DefaultModifiers for SortableStack {}
 
 impl SortableStack {
     pub fn new() -> Self {
         SortableStack {
-            children: vec![],
             node: Default::default(),
             wrapper_tag: "div".to_string(),
             is_disabled: false,
@@ -56,12 +61,6 @@ impl SortableStack {
     }
 }
 
-impl ChildContainer for SortableStack {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
-    }
-}
-
 impl Appendable for SortableStack {}
 
 impl Renderable for SortableStack {
@@ -73,23 +72,25 @@ impl Renderable for SortableStack {
         if self.is_disabled {
             self.add_class("sortable-stack--disabled");
         }
-        self.children.into_iter().for_each(|child| {
-            if !self.is_disabled {
-                self.node.children.push({
-                    let mut child_node = child.render();
+        self.node.children = self
+            .node
+            .children
+            .into_iter()
+            .map(|mut child| {
+                if !self.is_disabled {
                     let mut container = HStack::new(Alignment::Center);
                     container
                         .tag(&self.wrapper_tag)
                         .add_class("sortable-stack__item")
                         .gap(vec![scale(3)])
-                        .append_child({
+                        .append_child(
                             Icon::new(Lucide::GripVertical)
                                 .stroke_width(2)
                                 .add_class("sortable-stack__item__handle")
-                                .min_width(&sp(24))
-                        });
+                                .min_width(&sp(24)),
+                        );
 
-                    child_node.node_style.iter().for_each(|(property, value)| {
+                    child.node_style.iter().for_each(|(property, value)| {
                         if property.eq("margin")
                             || property.eq("margin-top")
                             || property.eq("margin-right")
@@ -97,13 +98,13 @@ impl Renderable for SortableStack {
                             || property.eq("margin-bottom")
                         {
                             container
-                                .get_node()
+                                .deref_mut()
                                 .node_style
                                 .push((property.clone(), value.clone()))
                         }
                     });
 
-                    child_node.node_style = child_node
+                    child.node_style = child
                         .node_style
                         .into_iter()
                         .filter(|(property, _)| {
@@ -114,21 +115,19 @@ impl Renderable for SortableStack {
                                 || property.eq("margin-bottom"))
                         })
                         .collect();
-                    container.get_node().children.push(child_node);
+                    container.deref_mut().children.push(child);
                     container.render()
-                })
-            } else {
-                self.node.children.push({
+                } else {
                     let mut stack = HStack::new(Alignment::Center);
                     stack
                         .tag(&self.wrapper_tag)
                         .add_class("sortable-stack__item")
-                        .add_class("sortable-stack__item--disabled")
-                        .append_child(child);
+                        .add_class("sortable-stack__item--disabled");
+                    stack.deref_mut().children.push(child);
                     stack.render()
-                })
-            }
-        });
+                }
+            })
+            .collect();
 
         self.node
     }

@@ -1,13 +1,10 @@
-use std::borrow::BorrowMut;
-
-use crate::{DefaultModifiers, Renderable};
-use crate::components::{Appendable, Button, ButtonStyle, ChildContainer, View};
 use crate::components::icons::Lucide;
-use crate::node::{Node, NodeContainer};
+use crate::components::{Appendable, Button, ButtonStyle, View};
+use crate::node::Node;
+use crate::{DefaultModifiers, Renderable};
 
 #[derive(Debug, Clone)]
 pub struct Popup {
-    children: Vec<Box<dyn Renderable>>,
     pub node: Node,
     pub el_to_attach_to: String,
     form_to_submit_on_open: Option<String>,
@@ -16,18 +13,11 @@ pub struct Popup {
     pub open: bool,
 }
 
-impl NodeContainer for Popup {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
-    }
-}
-
 impl DefaultModifiers for Popup {}
 
 impl Popup {
     pub fn new() -> Self {
         Popup {
-            children: vec![],
             node: Default::default(),
             el_to_attach_to: "".to_string(),
             form_to_submit_on_open: None,
@@ -62,14 +52,21 @@ impl Popup {
     }
 }
 
-impl ChildContainer for Popup {
-    fn get_children(&mut self) -> &mut Vec<Box<dyn Renderable>> {
-        return self.children.borrow_mut();
+impl std::ops::Deref for Popup {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl std::ops::DerefMut for Popup {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
     }
 }
 
 impl Appendable for Popup {}
-
 
 impl Renderable for Popup {
     fn component_name(&self) -> &str {
@@ -77,7 +74,8 @@ impl Renderable for Popup {
     }
     fn render(mut self) -> Node {
         let mut popup = View::new();
-        popup.add_class("popup")
+        popup
+            .add_class("popup")
             .set_attr("data-attach-to", self.el_to_attach_to.as_str());
         if let Some(form_name) = &self.form_to_submit_on_open {
             popup.set_attr("data-form-to-submit-on-open", form_name);
@@ -91,34 +89,28 @@ impl Renderable for Popup {
         } else {
             popup.remove_class("visible");
         }
-        self.add_class("popup__window");
+
+        let mut popup_window = View::new();
+        popup_window.add_class("popup__window");
 
         if self.window_controls {
-            self.node.children.push({
-                let mut view = View::new();
-                view.add_class("popup__window-bar")
-                    .append_child({
+            popup_window.node.children.push(
+                {
+                    let mut view = View::new();
+                    view.add_class("popup__window-bar").append_child(
                         Button::icon_only(Lucide::X, ButtonStyle::Link)
-                            .add_class("popup__window-controls")
-                    });
-                view
-            }.render());
+                            .add_class("popup__window-controls"),
+                    );
+                    view
+                }
+                .render(),
+            );
         }
+        self.add_class("popup__window-content");
 
-        self.node.children.push({
-            let mut content = View::new();
-            content.add_class("popup__window-content");
-            self.children.iter()
-                .for_each(|child| {
-                    content.append_child(child.clone());
-                });
-            content.render()
-        });
+        popup_window.node.children.push(self.node);
 
-
-        popup.node.children.push({
-            self.node
-        });
+        popup.node.children.push(popup_window.render());
 
         popup.node
     }

@@ -1,12 +1,12 @@
-use crate::{DefaultModifiers, Renderable};
 use crate::components::View;
-use crate::node::{Node, NodeContainer};
+use crate::node::Node;
+use crate::{DefaultModifiers, Renderable};
 
 #[derive(Debug, Clone)]
 pub struct AppLayout {
-    desktop_navigation_view: Option<Box<dyn Renderable>>,
-    mobile_navigation_view: Option<Box<dyn Renderable>>,
-    main_content: Option<Box<dyn Renderable>>,
+    desktop_navigation_view: Option<Node>,
+    mobile_navigation_view: Option<Node>,
+    main_content: Option<Node>,
 }
 
 impl AppLayout {
@@ -19,24 +19,26 @@ impl AppLayout {
     }
 
     pub fn desktop_navigation_view<T>(&mut self, item: T) -> Self
-        where
-            T: 'static + Renderable, {
-        self.desktop_navigation_view = Some(Box::new(item));
+    where
+        T: 'static + Renderable,
+    {
+        self.desktop_navigation_view = Some(item.render());
         self.clone()
     }
 
     pub fn mobile_navigation_view<T>(&mut self, item: T) -> Self
-        where
-            T: 'static + Renderable, {
-        self.mobile_navigation_view = Some(Box::new(item));
+    where
+        T: 'static + Renderable,
+    {
+        self.mobile_navigation_view = Some(item.render());
         self.clone()
     }
 
-
     pub fn main_content<T>(&mut self, item: T) -> Self
-        where
-            T: 'static + Renderable {
-        self.main_content = Some(Box::new(item));
+    where
+        T: Renderable,
+    {
+        self.main_content = Some(item.render());
         self.clone()
     }
 }
@@ -46,25 +48,31 @@ impl Renderable for AppLayout {
         let mut view = View::new();
         view.add_class("app-layout");
 
-
-        if let Some(desktop_navigation_view) = self.desktop_navigation_view {
-            let mut top_item_node = desktop_navigation_view.render();
-            top_item_node.class_list.insert("app-layout__navigation-view".to_string());
-            top_item_node.class_list.insert("app-layout__navigation-view--desktop".to_string());
-            view.get_node().children.push(top_item_node);
+        if let Some(mut desktop_navigation_view) = self.desktop_navigation_view {
+            desktop_navigation_view
+                .class_list
+                .insert("app-layout__navigation-view".to_string());
+            desktop_navigation_view
+                .class_list
+                .insert("app-layout__navigation-view--desktop".to_string());
+            view.node.children.push(desktop_navigation_view);
         }
 
-        if let Some(top_item) = self.mobile_navigation_view {
-            let mut top_item_node = top_item.render();
-            top_item_node.class_list.insert("app-layout__navigation-view".to_string());
-            top_item_node.class_list.insert("app-layout__navigation-view--mobile".to_string());
-            view.get_node().children.push(top_item_node);
+        if let Some(mut top_item) = self.mobile_navigation_view {
+            top_item
+                .class_list
+                .insert("app-layout__navigation-view".to_string());
+            top_item
+                .class_list
+                .insert("app-layout__navigation-view--mobile".to_string());
+            view.node.children.push(top_item);
         }
 
-        if let Some(main_content) = self.main_content {
-            let mut main_content_node = main_content.render();
-            main_content_node.class_list.insert("app-layout__main-content".to_string());
-            view.get_node().children.push(main_content_node);
+        if let Some(mut main_content) = self.main_content {
+            main_content
+                .class_list
+                .insert("app-layout__main-content".to_string());
+            view.node.children.push(main_content);
         }
         view.render()
     }

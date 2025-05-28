@@ -1,6 +1,6 @@
 use crate::Renderable;
 use crate::components::icons::IconPack;
-use crate::node::{Node, NodeContainer};
+use crate::node::Node;
 use crate::{DefaultModifiers, sp};
 
 pub mod icons;
@@ -36,30 +36,37 @@ impl Icon {
         self.clone()
     }
 }
+impl std::ops::Deref for Icon {
+    type Target = Node;
 
-impl NodeContainer for Icon {
-    fn get_node(&mut self) -> &mut Node {
-        &mut self.node
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
+impl std::ops::DerefMut for Icon {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 impl DefaultModifiers for Icon {}
 
 impl Renderable for Icon {
-    fn render(mut self) -> Node {
-        let mut icon = self.icon.configure(self);
+    fn render(self) -> Node {
+        let self_values = self.clone();
+        let mut icon = self_values.icon.configure(self);
         icon.add_class("icon")
             .set_attr("xmlns", "http://www.w3.org/2000/svg")
-            .set_attr("width", sp(icon.size).as_str())
-            .set_attr("height", sp(icon.size).as_str())
+            .set_attr("width", sp(self_values.size).as_str())
+            .set_attr("height", sp(self_values.size).as_str())
             .set_attr("viewBox", "0 0 24 24")
-            .set_attr("stroke-width", icon.stroke_width.as_str())
+            .set_attr("stroke-width", self_values.stroke_width.as_str())
             .set_attr("stroke-linecap", "round")
             .set_attr("stroke-linejoin", "round")
             .tag("svg");
-        icon.min_height(&sp(icon.size));
-        icon.min_width(&sp(icon.size));
-        icon.get_node().text = Some(icon.icon.path().to_string());
+        icon.min_height(&sp(self_values.size));
+        icon.min_width(&sp(self_values.size));
+        icon.node.text = Some(self_values.icon.path().to_string());
         icon.node
     }
 }

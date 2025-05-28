@@ -1,19 +1,20 @@
+use crate::node::Node;
+use crate::{DefaultModifiers, Renderable};
 use std::borrow::BorrowMut;
 use std::fmt::Debug;
-use crate::node::{Node, NodeContainer};
-use crate::{DefaultModifiers, Renderable};
+use std::ops::{Deref, DerefMut};
 
 #[derive(Clone, Debug)]
 pub enum BadgeType {
     Important,
-    Normal
+    Normal,
 }
 
 #[derive(Clone, Debug)]
 pub struct Badge {
     pub node: Node,
     pub value: Option<String>,
-    pub badge_type: BadgeType
+    pub badge_type: BadgeType,
 }
 
 impl Badge {
@@ -21,7 +22,7 @@ impl Badge {
         Badge {
             node: Default::default(),
             value: Some(value.to_string()),
-            badge_type
+            badge_type,
         }
     }
 
@@ -29,19 +30,26 @@ impl Badge {
         Badge {
             node: Default::default(),
             value: None,
-            badge_type
+            badge_type,
         }
     }
 
     pub fn remove_on_click(&mut self, id: &str) -> Self {
-        self.set_attr("data-remove-on-click", id)
-            .clone()
+        self.set_attr("data-remove-on-click", id).clone()
     }
 }
 
-impl NodeContainer for Badge {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+impl Deref for Badge {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
+    }
+}
+
+impl DerefMut for Badge {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
     }
 }
 
@@ -56,7 +64,7 @@ impl Renderable for Badge {
         };
         match &self.badge_type {
             BadgeType::Important => self.add_class("badge--important"),
-            BadgeType::Normal => self.add_class("badge--normal")
+            BadgeType::Normal => self.add_class("badge--normal"),
         };
         self.node.text = self.value.clone();
         self.node
@@ -72,7 +80,7 @@ pub trait BadgeModifiers: Sized + Clone + BadgeSupport {
         if count.gt(&99) {
             self.add_badge(Badge::new(BadgeType::Important, "99+"));
         } else {
-            self.add_badge(Badge::new(BadgeType::Important,&count.to_string()));
+            self.add_badge(Badge::new(BadgeType::Important, &count.to_string()));
         }
         self.clone()
     }

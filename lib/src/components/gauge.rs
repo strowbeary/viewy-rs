@@ -1,9 +1,9 @@
 use std::borrow::BorrowMut;
 
-use crate::components::View;
 use crate::DefaultModifiers;
-use crate::node::{Node, NodeContainer};
 use crate::Renderable;
+use crate::components::View;
+use crate::node::Node;
 
 /// Used to set card style.
 #[derive(Debug, Clone)]
@@ -87,32 +87,36 @@ impl Gauge {
     }
 }
 
+impl DefaultModifiers for Gauge {}
 
-impl NodeContainer for Gauge {
-    fn get_node(&mut self) -> &mut Node {
-        self.node.borrow_mut()
+impl std::ops::Deref for Gauge {
+    type Target = Node;
+
+    fn deref(&self) -> &Self::Target {
+        &self.node
     }
 }
 
-impl DefaultModifiers for Gauge {}
-
+impl std::ops::DerefMut for Gauge {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.node
+    }
+}
 
 impl Renderable for Gauge {
     fn render(mut self) -> Node {
         let gauge_style = format!("gauge--{:?}", self.style).to_lowercase();
-        self
-            .add_class("gauge")
-            .add_class(&gauge_style);
+        self.add_class("gauge").add_class(&gauge_style);
 
         if self.display_optimum_indicator {
             self.add_class("gauge__optimum-indicator");
         }
 
         let mut meter_element = View::new();
-        meter_element.tag("meter")
+        meter_element
+            .tag("meter")
             .add_class("gauge__meter-bar")
             .set_attr("value", &self.value.to_string());
-
 
         if let Some(min) = self.min {
             meter_element.set_attr("min", &min.to_string());
