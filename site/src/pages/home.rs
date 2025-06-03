@@ -15,7 +15,6 @@ pub fn home() -> VStack {
                 .popup(
                     Popup::new()
                         .append_child(
-                        //<iframe width="560" height="315" src="https://www.youtube.com/embed/G603PcNkl6k?si=smNq_FJcs19a_jTH" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
                         View::new()
                             .tag("iframe")
                             .set_attr("src", "https://www.youtube.com/embed/G603PcNkl6k?si=smNq_FJcs19a_jTH")

@@ -12,7 +12,7 @@ use viewy::*;
 use viewy::components::*;
 #[macro_use] extern crate rocket;
 
-pub fn default_layout() -> Box<dyn Fn(Box<dyn Renderable>) -> Box<dyn Renderable>> {
+pub fn layouts::default_layout()() -> Box<dyn Fn(Box<dyn Renderable>) -> Box<dyn Renderable>> {
     Box::new(move |content| Box::new({
         content
     }))
@@ -23,7 +23,7 @@ fn index() -> RawHtml<String> {
    RawHtml({
        Page::new(
            &format!("{} – Viewy", "Hello World"),
-           &default_layout(),
+           layouts::default_layout()(),
            {
                Text::new("Hello world", TextStyle::LargeTitle)
            }

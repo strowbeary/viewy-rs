@@ -36,7 +36,7 @@ fn get_scripts(assets: &State<Assets>) -> RawJavaScript<String> {
 #[get("/")]
 fn home() -> RawHtml<String> {
     RawHtml({
-        Page::new("Viewy showcase – Home", &layouts::default_layout, {
+        Page::new("Viewy showcase – Home", layouts::default_layout(), {
             let mut page = pages::home();
             page.append_child(
                 Snackbar::new(SnackbarType::Neutral, "Une erreur est survenue").closable(),
@@ -52,7 +52,7 @@ fn login() -> RawHtml<String> {
     RawHtml({
         Page::new(
             "Viewy showcase – Login",
-            &layouts::login_layout,
+            layouts::login_layout(),
             pages::login(),
         )
         .compile(RenderMode::Complete)
@@ -69,7 +69,7 @@ fn table() -> RawHtml<String> {
     RawHtml({
         Page::new(
             "Viewy showcase – Table",
-            &layouts::default_layout,
+            layouts::default_layout(),
             pages::table(),
         )
         .compile(RenderMode::Complete)
@@ -81,7 +81,7 @@ fn calendar() -> RawHtml<String> {
     RawHtml({
         Page::new(
             "Viewy showcase – Calendar",
-            &layouts::default_layout,
+            layouts::default_layout(),
             pages::calendar(),
         )
         .compile(RenderMode::Complete)
@@ -93,7 +93,7 @@ fn menus() -> RawHtml<String> {
     RawHtml({
         Page::new(
             "Viewy showcase – Navigation & menus",
-            &layouts::default_layout,
+            layouts::default_layout(),
             pages::navigation_and_menus(),
         )
         .compile(RenderMode::Complete)
@@ -105,7 +105,7 @@ fn tabs() -> RawHtml<String> {
     RawHtml({
         Page::new(
             "Viewy showcase – Tab view",
-            &layouts::default_layout,
+            layouts::default_layout(),
             pages::tabs(),
         )
         .compile(RenderMode::Complete)
@@ -117,7 +117,7 @@ fn search_page() -> RawHtml<String> {
     RawHtml({
         Page::new(
             "Viewy showcase – Dynamic content",
-            &layouts::default_layout,
+            layouts::default_layout(),
             pages::dynamic_content(),
         )
         .compile(RenderMode::Complete)
@@ -134,7 +134,7 @@ fn search_result(search_form: rocket::form::Form<SearchForm>) -> RawHtml<String>
     RawHtml({
         Page::new(
             "Viewy showcase – Dynamic content",
-            &layouts::default_layout,
+            layouts::default_layout(),
             {
                 let mut result_stack = VStack::new(Alignment::Stretch);
                 result_stack.gap(vec![scale(3)]);
@@ -167,7 +167,7 @@ fn forms() -> RawHtml<String> {
     RawHtml({
         Page::new(
             "Viewy showcase – Forms",
-            &layouts::default_layout,
+            layouts::default_layout(),
             pages::forms(),
         )
         .compile(RenderMode::Complete)
@@ -193,7 +193,7 @@ fn table_of_content() -> RawHtml<String> {
     RawHtml({
         Page::new(
             "Viewy showcase – Table of content",
-            &layouts::default_layout,
+            layouts::default_layout(),
             pages::table_of_content(),
         )
         .compile(RenderMode::Complete)

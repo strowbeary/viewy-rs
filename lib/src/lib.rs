@@ -11,7 +11,7 @@ pub use config::Config;
 pub use engine::Renderable;
 pub use helper_fn::*;
 pub use modifiers::{DefaultModifiers, Overflow, Position};
-pub use page::{Page, RenderMode};
+pub use page::{Layout, Page, RenderMode};
 
 mod helper_fn;
 mod modifiers;
@@ -41,12 +41,12 @@ mod tests {
         let render_start = Instant::now();
         let _ = Page::new(
             "Render test",
-            &|content| {
+            Box::new(|content| {
                 let mut view = View::new();
 
                 view.node.children.push(content);
                 view.render()
-            },
+            }),
             view,
         )
         .compile(RenderMode::Complete);

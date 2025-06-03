@@ -4,9 +4,9 @@ use crate::{DefaultModifiers, Renderable};
 
 #[derive(Debug, Clone)]
 pub struct AppLayout {
-    desktop_navigation_view: Option<Node>,
-    mobile_navigation_view: Option<Node>,
-    main_content: Option<Node>,
+    pub desktop_navigation_view: Option<Node>,
+    pub mobile_navigation_view: Option<Node>,
+    pub main_content: Option<Node>,
 }
 
 impl AppLayout {

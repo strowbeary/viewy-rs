@@ -108,7 +108,7 @@ impl Renderable for ContentComment {
         }
     }
 }
-pub type Layout<'a> = &'a dyn Fn(Node) -> Node;
+pub type Layout = Box<dyn Fn(Node) -> Node>;
 
 /// Represent a page and embed all the logic required by the service worker.
 ///
@@ -123,17 +123,16 @@ pub type Layout<'a> = &'a dyn Fn(Node) -> Node;
 /// })
 ///     .compile(RenderMode::Complete)
 /// ```
-#[derive(Clone)]
-pub struct Page<'a> {
+pub struct Page {
     name: String,
     content: Node,
-    layout: Layout<'a>,
+    layout: Layout,
     theme: Theme,
     base_url: bool,
 }
 
-impl<'a> Page<'a> {
-    pub fn new<C: 'static + Renderable>(name: &str, layout: Layout<'a>, content: C) -> Self {
+impl Page {
+    pub fn new<C: 'static + Renderable>(name: &str, layout: Layout, content: C) -> Self {
         Self {
             name: name.to_string(),
             content: content.render(),
@@ -142,9 +141,9 @@ impl<'a> Page<'a> {
             base_url: false,
         }
     }
-    pub fn insert_base_element(&mut self) -> Self {
+    pub fn insert_base_element(&mut self) -> &mut Self {
         self.base_url = true;
-        self.clone()
+        self
     }
     pub fn compile(self, render_mode: RenderMode) -> String {
         let theme_variant = self.theme.to_string().to_lowercase();
