@@ -7,8 +7,8 @@ extern crate serde;
 
 use cmd_lib::run_cmd;
 use figment::{
-    providers::{Env, Format, Toml},
     Figment,
+    providers::{Env, Format, Toml},
 };
 use heck::{ToKebabCase, ToPascalCase, ToUpperCamelCase};
 use quote::format_ident;
@@ -85,13 +85,13 @@ pub fn generate_icon_pack(
         let svg_content = path_from_icon(&path, kind);
         let svg_html = if only_stroked {
             format!(
-                "<svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>{}</svg>",
-                svg_content
+                "[{kind}](data:image/svg+xml;utf8,<svg width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'>{svg_content}</svg>)",
+
             )
         } else {
             format!(
-                "<svg width='24' height='24' viewBox='0 0 24 24'>{}</svg>",
-                svg_content
+                "[{kind}](data:image/svg+xml;utf8,<svg width='24' height='24' viewBox='0 0 24 24'>{svg_content}</svg>)",
+
             )
         };
         let kind = match &icon_name_prefix {
