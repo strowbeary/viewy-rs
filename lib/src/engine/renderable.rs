@@ -31,7 +31,7 @@ where
     R: Renderable + Clone,
 {
     fn render(self) -> Node {
-        self.render()
+        (*self).render()
     }
 }
 
@@ -62,7 +62,8 @@ where
     }
 
     fn attach_to(&mut self, el: &str) -> &mut Self {
-        self.attach_to(el)
+        (**self).attach_to(el);
+        self
     }
 }
 
@@ -71,11 +72,12 @@ where
     R: IntoPopup + Clone,
 {
     fn render(self) -> Node {
-        self.render()
+        (*self).render()
     }
 
     fn attach_to(&mut self, el: &str) -> &mut Self {
-        self.attach_to(el)
+        (*self).attach_to(el);
+        self
     }
 }
 
@@ -93,7 +95,8 @@ where
     }
 
     fn attach_to(&mut self, el: &str) -> &mut Self {
-        self.attach_to(el)
+        (*self).attach_to(el);
+        self
     }
 }
 
@@ -106,7 +109,8 @@ where
     }
 
     fn attach_to(&mut self, el: &str) -> &mut Self {
-        self.attach_to(el)
+        (*self).attach_to(el);
+        self
     }
 }
 
@@ -115,10 +119,11 @@ where
     R: IntoPopover + Clone,
 {
     fn render(self) -> Node {
-        self.render()
+        (*self).render()
     }
 
     fn attach_to(&mut self, el: &str) -> &mut Self {
-        self.attach_to(el)
+        (*self).attach_to(el);
+        self
     }
 }
