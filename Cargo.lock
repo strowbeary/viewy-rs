@@ -2655,7 +2655,7 @@ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 
 [[package]]
 name = "viewy"
-version = "1.14.0-beta.2"
+version = "1.14.0-beta.3"
 dependencies = [
  "ammonia",
  "base64",
@@ -2683,7 +2683,7 @@ dependencies = [
 
 [[package]]
 name = "viewy-codegen"
-version = "1.14.0-beta.2"
+version = "1.14.0-beta.3"
 dependencies = [
  "quote",
  "syn 2.0.75",
@@ -2691,7 +2691,7 @@ dependencies = [
 
 [[package]]
 name = "viewy-site"
-version = "1.14.0-beta.2"
+version = "1.14.0-beta.3"
 dependencies = [
  "chrono",
  "rocket",
