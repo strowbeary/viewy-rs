@@ -107,6 +107,13 @@ impl Text {
             .push(("text-shadow".to_string(), rule.to_string()));
         self
     }
+
+    pub fn text_decoration(&mut self, decoration: &str) -> &mut Self {
+        self.node
+            .node_style
+            .push(("text-decoration".to_string(), decoration.to_string()));
+        self
+    }
 }
 
 impl std::ops::Deref for Text {
