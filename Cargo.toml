@@ -8,6 +8,6 @@ members = [
 
 [workspace.package]
 authors = ["Rémi Caillot <dev@remicaillot.fr>"]
-version = "1.13.24"
+version = "1.13.25"
 rust-version = "1.87.0"
 edition = "2024"
