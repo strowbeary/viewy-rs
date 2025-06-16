@@ -31,25 +31,21 @@ mod page;
 mod config;
 pub mod engine;
 
-pub enum UploadResponse {
-    Success(&'static str),
-    Error(&'static str),
+pub enum UploadResponse<R> {
+    Success(&'static str, R),
+    Error(&'static str, R),
 }
-impl<'r> Responder<'r, 'static> for UploadResponse {
-    fn respond_to(self, _: &'r Request<'_>) -> rocket::response::Result<'static> {
-        let mut response = Response::build();
-
+impl<'r, R: Responder<'r, 'static>> Responder<'r, 'static> for UploadResponse<R> {
+    fn respond_to(self, req: &'r Request<'_>) -> rocket::response::Result<'static> {
         match self {
-            UploadResponse::Success(message) => {
-                response.status(Status::Ok);
-                response.header(Header::new("X-Viewy-Error-Message", message));
-            }
-            UploadResponse::Error(message) => {
-                response.status(Status::InternalServerError);
-                response.header(Header::new("X-Viewy-Error-Message", message));
-            }
+            UploadResponse::Success(message, inner) => Response::build_from(inner.respond_to(req)?)
+                .header(Header::new("X-Viewy-Message", urlencoding::encode(message)))
+                .ok(),
+            UploadResponse::Error(message, inner) => Response::build_from(inner.respond_to(req)?)
+                .status(Status::InternalServerError)
+                .header(Header::new("X-Viewy-Message", urlencoding::encode(message)))
+                .ok(),
         }
-        response.ok()
     }
 }
 
