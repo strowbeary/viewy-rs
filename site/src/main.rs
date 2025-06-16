@@ -173,7 +173,7 @@ fn forms() -> RawHtml<String> {
 }
 
 #[post("/upload-file", data = "<form>")]
-async fn upload_file(form: Form<TempFile<'_>>) -> UploadResponse {
+async fn upload_file(form: Form<TempFile<'_>>) -> UploadResponse<Status> {
     let mut file = form.into_inner();
     let filename = format!(
         "{}.{}",
@@ -182,8 +182,14 @@ async fn upload_file(form: Form<TempFile<'_>>) -> UploadResponse {
     );
 
     match file.persist_to(Path::new("./uploads").join(filename)).await {
-        Ok(_) => UploadResponse::Success("Fichier téléversé avec succès (message serveur)"),
-        Err(_) => UploadResponse::Error("Erreur lors de l'upload (message serveur)"),
+        Ok(_) => UploadResponse::Success(
+            "Fichier téléversé avec succès (message serveur)",
+            Status::Ok,
+        ),
+        Err(_) => UploadResponse::Error(
+            "Erreur lors de l'upload (message serveur)",
+            Status::InternalServerError,
+        ),
     }
 }
 
