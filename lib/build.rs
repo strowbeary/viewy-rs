@@ -24,6 +24,8 @@ use uuid::Uuid;
 pub struct IconPack {
     pub git: Option<String>,
     pub path: Option<String>,
+    pub tag: Option<String>,
+    pub rev: Option<String>,
     pub branch: Option<String>,
     pub prefix: Option<String>,
     pub stroked: Option<bool>,

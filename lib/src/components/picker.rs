@@ -2,11 +2,11 @@ use std::borrow::BorrowMut;
 
 use uuid::Uuid;
 
+use crate::Renderable;
 use crate::components::icons::{IconPack, Lucide};
 use crate::components::*;
 use crate::node::{Node, NodeContainer};
-use crate::Renderable;
-use crate::{scale, DefaultModifiers};
+use crate::{DefaultModifiers, scale};
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
@@ -52,6 +52,7 @@ pub struct Picker {
     is_disabled: bool,
     auto_submit: bool,
     required: bool,
+    multiple: bool,
     pub form: Option<String>,
 }
 
@@ -68,12 +69,17 @@ impl Picker {
             is_disabled: false,
             auto_submit: false,
             required: false,
+            multiple: false,
             form: None,
         }
     }
 
     pub fn label(&mut self, label: &str) -> Self {
         self.label = Some(label.to_string());
+        self.clone()
+    }
+    pub fn multiple(&mut self) -> Self {
+        self.multiple = true;
         self.clone()
     }
     pub fn required(&mut self) -> Self {
@@ -83,10 +89,6 @@ impl Picker {
 
     pub fn submit_on_change(&mut self, submit_on_change: bool) -> Self {
         self.auto_submit = submit_on_change;
-        self.clone()
-    }
-
-    pub fn multiple(&mut self) -> Self {
         self.clone()
     }
 
@@ -162,7 +164,7 @@ impl Renderable for Picker {
                                 .set_attr("value", option.value.as_str())
                                 .set_attr("id", radio_id.as_str())
                                 .add_class("picker--segmented__option-list__radio");
-                            if let Some(form_id) = &self.form{
+                            if let Some(form_id) = &self.form {
                                 radio.set_attr("form", form_id.as_str());
                             }
 
@@ -211,22 +213,6 @@ impl Renderable for Picker {
                         .add_class("picker--dropdown__input")
                         .set_attr("tabindex", "0")
                         .append_child({
-                            let mut input = Field::new(self.name.as_str(), FieldType::Hidden)
-                                .add_class("picker--dropdown__input__field")
-                                .value(&picker.value);
-                            if let Some(form_id) = &self.form{
-                                input.set_attr("form", form_id.as_str());
-                            }
-                            if self.auto_submit {
-                                input.set_attr("data-auto-submit", "data-auto-submit");
-                            }
-
-                            if self.required {
-                                input.set_attr("required", "required");
-                            }
-                            input
-                        })
-                        .append_child({
                             Text::new("", TextStyle::Body)
                                 .add_class("picker--dropdown__input__value-display")
                                 .flex_grow(1)
@@ -260,12 +246,27 @@ impl Renderable for Picker {
                                                         .append_child({
                                                             let mut radio = View::new()
                                                                 .tag("input")
-                                                                .set_attr("type", "radio")
+                                                                .set_attr("type", if self.multiple {
+                                                                    "checkbox"
+                                                                } else {
+                                                                    "radio"
+                                                                })
                                                                 .set_attr("name", self.name.as_str())
                                                                 .set_attr("value", option.value.as_str())
                                                                 .set_attr("id", radio_id.as_str());
                                                             if picker.value.eq(&option.value) {
                                                                 radio.set_attr("checked", "checked");
+                                                            }
+
+                                                            if let Some(form_id) = &self.form{
+                                                                radio.set_attr("form", form_id.as_str());
+                                                            }
+                                                            if self.auto_submit {
+                                                                radio.set_attr("data-auto-submit", "data-auto-submit");
+                                                            }
+
+                                                            if self.required {
+                                                                radio.set_attr("required", "required");
                                                             }
                                                             radio
                                                         })
@@ -303,7 +304,7 @@ impl Renderable for Picker {
                             .set_attr("id", radio_id.as_str())
                             .set_attr("value", option.value.as_str());
 
-                        if let Some(form_id) = &self.form{
+                        if let Some(form_id) = &self.form {
                             radio_button.set_attr("form", form_id.as_str());
                         }
                         if picker.is_disabled {
@@ -312,7 +313,6 @@ impl Renderable for Picker {
                         if picker.value.eq(option.value.as_str()) {
                             radio_button.set_attr("checked", "checked");
                         }
-
 
                         if self.required {
                             radio_button.set_attr("required", "required");

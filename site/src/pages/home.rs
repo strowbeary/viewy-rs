@@ -2,7 +2,7 @@ use chrono::Duration;
 
 use viewy::components::icons::Lucide;
 use viewy::components::*;
-use viewy::{scale, sp, DefaultModifiers};
+use viewy::{DefaultModifiers, scale, sp};
 
 use crate::components::showcase_section;
 
@@ -10,6 +10,82 @@ pub fn home() -> VStack {
     VStack::new(Alignment::Stretch)
         .padding(vec![scale(4)])
         .gap(vec![12])
+        .append_child({
+            showcase_section("Picker", {
+                VStack::new(Alignment::Stretch)
+                    .gap(vec![16])
+                    .append_child({
+                        let mut picker = Picker::new("test1", "2", PickerStyle::Segmented)
+                            .label("Segmented picker");
+                        picker.append_child({
+                                PickerOption::new("Test 1", "1").icon(Lucide::Users)
+                            });
+                        picker.append_child({
+                                PickerOption::new("Test 2", "2")
+                            });
+                        picker.append_child({
+                                PickerOption::new("Test 3", "3")
+                            });picker
+
+                    })
+                    .append_child({
+                        let mut picker = Picker::new("test2", "2", PickerStyle::RadioGroup)
+                            .label("Radio group picker");
+                        picker.append_child({
+                                PickerOption::new("Test 1 - ignored icon", "1")
+                                    .icon(Lucide::User)
+                            });
+                        picker.append_child({
+                                PickerOption::new("Test 2", "2")
+                            });
+                        picker.append_child({
+                                PickerOption::new("Test 3", "3")
+                            });
+                        picker
+                    })
+                    .append_child({
+                        let mut picker = Picker::new("test3", "2", PickerStyle::Dropdown)
+                            .label("Dropdown picker");
+                        picker.append_child({
+                                PickerOption::new("Test 1 - ignored icon", "1")
+                                    .icon(Lucide::User)
+                            });
+                        picker.append_child({
+                                PickerOption::new("Test 2", "2")
+                            });
+                        picker.append_child({
+                                PickerOption::new("Test 3", "3")
+                            });
+                        picker
+                    })
+                    .append_child({
+                        Form::new("multi-value-picker-form", "")
+                            .async_form()
+                            .append_child({
+                                let mut picker = Picker::new("multi-value-picker", "2", PickerStyle::Dropdown)
+                                    .attach_to_form("multi-value-picker-form")
+                                    .multiple()
+                                    .label("Dropdown multiple value picker");
+                                picker.append_child({
+                                        PickerOption::new("Test 1 - ignored icon", "1")
+                                            .icon(Lucide::User)
+                                    });
+                                picker.append_child({
+                                        PickerOption::new("Test 2", "2")
+                                    });
+                                picker.append_child({
+                                        PickerOption::new("Test 3", "3")
+                                    });
+                                picker
+                            })
+                            .append_child(
+                                Button::new("Envoyer", ButtonStyle::Filled)
+                                    .attach_to_form("multi-value-picker-form")
+                            )
+
+                    })
+            })
+        })
         .append_child({
             Button::new("Open Popup with vidéo", ButtonStyle::Filled)
                 .popup({
@@ -330,56 +406,7 @@ as opposed to using 'Content here, content here', making it look like readable E
                     })
             })
         })
-        .append_child({
-            showcase_section("Picker", {
-                VStack::new(Alignment::Stretch)
-                    .gap(vec![16])
-                    .append_child({
-                        let mut picker = Picker::new("test1", "2", PickerStyle::Segmented)
-                            .label("Segmented picker");
-                        picker.append_child({
-                                PickerOption::new("Test 1", "1").icon(Lucide::Users)
-                            });
-                        picker.append_child({
-                                PickerOption::new("Test 2", "2")
-                            });
-                        picker.append_child({
-                                PickerOption::new("Test 3", "3")
-                            });picker
 
-                    })
-                    .append_child({
-                        let mut picker = Picker::new("test2", "2", PickerStyle::RadioGroup)
-                            .label("Radio group picker");
-                        picker.append_child({
-                                PickerOption::new("Test 1 - ignored icon", "1")
-                                    .icon(Lucide::User)
-                            });
-                        picker.append_child({
-                                PickerOption::new("Test 2", "2")
-                            });
-                        picker.append_child({
-                                PickerOption::new("Test 3", "3")
-                            });
-                        picker
-                    })
-                    .append_child({
-                        let mut picker = Picker::new("test3", "2", PickerStyle::Dropdown)
-                            .label("Dropdown picker");
-                        picker.append_child({
-                                PickerOption::new("Test 1 - ignored icon", "1")
-                                    .icon(Lucide::User)
-                            });
-                        picker.append_child({
-                                PickerOption::new("Test 2", "2")
-                            });
-                        picker.append_child({
-                                PickerOption::new("Test 3", "3")
-                            });
-                        picker
-                    })
-            })
-        })
         .append_child({
             showcase_section("Checkbox", {
                 VStack::new(Alignment::Stretch)
