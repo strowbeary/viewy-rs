@@ -243,6 +243,7 @@ impl Renderable for Picker {
                                                         .add_class("picker--dropdown__dropdown__option-list__option")
                                                         .tag("label")
                                                         .set_attr("for", radio_id.as_str())
+                                                        .add_class("checkbox--checkbox")
                                                         .append_child({
                                                             let mut radio = View::new()
                                                                 .tag("input")

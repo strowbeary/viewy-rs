@@ -1,185 +1,187 @@
 .picker {
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  -moz-user-select: none;
-  -webkit-user-select: none;
-  -ms-user-select: none;
-  user-select: none;
-  -webkit-touch-action: none;
-  touch-action: none;
-  width: max-content;
-  gap: sp(4);
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-action: none;
+    touch-action: none;
+    width: max-content;
+    gap: sp(4);
 
-  &--segmented {
-    &__option-list {
-      &__radio {
-        display: none;
-      }
+    &--segmented {
+        &__option-list {
+            &__radio {
+                display: none;
+            }
 
-      &__option {
-        cursor: pointer;
-        flex-grow: 1;
-        text-align: center;
-        transition: background 150ms, border 150ms;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        padding: sp(8) sp(12);
-        border: sp(1) solid var(--color-border);
-        border-left: none;
-        border-right: none;
-        appearance: none;
+            &__option {
+                cursor: pointer;
+                flex-grow: 1;
+                text-align: center;
+                transition:
+                    background 150ms,
+                    border 150ms;
+                display: flex;
+                align-items: center;
+                justify-content: center;
+                padding: sp(8) sp(12);
+                border: sp(1) solid var(--color-border);
+                border-left: none;
+                border-right: none;
+                appearance: none;
 
-        .icon, .text {
-          transition: color 150ms;
-          color: var(--color-accent);
+                .icon,
+                .text {
+                    transition: color 150ms;
+                    color: var(--color-accent);
+                }
+
+                &:last-of-type {
+                    border-right: sp(1) solid var(--color-border);
+                    border-radius: 0 sp($border-radius * (3/4))
+                        sp($border-radius * (3/4)) 0;
+                }
+
+                &:first-of-type {
+                    border-left: sp(1) solid var(--color-border);
+                    border-radius: sp($border-radius * (3/4)) 0 0
+                        sp($border-radius * (3/4));
+                }
+
+                &:hover {
+                    border-color: var(--color-border-hover);
+                    background: var(--color-hover);
+                }
+
+                &:active {
+                    background: var(--color-active);
+                    border-color: var(--color-border-hover);
+                }
+            }
+
+            &__radio:checked + &__option {
+                border-color: var(--color-accent);
+                background: var(--color-accent);
+                color: var(--color-text-on-accent);
+
+                .icon,
+                .text {
+                    color: var(--color-text-on-accent);
+                }
+            }
         }
-
-        &:last-of-type {
-          border-right: sp(1) solid var(--color-border);
-          border-radius: 0 sp($border-radius * (3/4)) sp($border-radius * (3/4)) 0;
-        }
-
-        &:first-of-type {
-          border-left: sp(1) solid var(--color-border);
-          border-radius: sp($border-radius * (3/4)) 0 0 sp($border-radius * (3/4));
-        }
-
-        &:hover {
-          border-color: var(--color-border-hover);
-          background: var(--color-hover);
-        }
-
-        &:active {
-          background: var(--color-active);
-          border-color: var(--color-border-hover);
-        }
-      }
-
-      &__radio:checked + &__option {
-        border-color: var(--color-accent);
-        background: var(--color-accent);
-        color: var(--color-text-on-accent);
-
-        .icon, .text {
-          color: var(--color-text-on-accent);
-        }
-      }
-    }
-  }
-
-  &--radiogroup {
-    overflow: visible;
-
-    label {
-      cursor: pointer;
-    }
-
-    input[type="radio"] {
-      cursor: pointer;
-      margin: 0;
-      -moz-appearance: none;
-      appearance: none;
-      background: none;
-      width: sp(20);
-      height: sp(20);
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border: sp(2) solid var(--color-border);
-
-      &:hover {
-        border: sp(2) solid var(--color-border-hover);
-      }
-
-      &:focus {
-        box-shadow: 0 0 0 sp(2) var(--color-focus);
-      }
-
-      &:checked {
-        background: var(--color-accent);
-
-        &::after {
-          display: block;
-          content: "";
-          width: sp(6);
-          height: sp(6);
-          border-radius: sp(3);
-          background: white;
-        }
-      }
-    }
-  }
-
-  &--dropdown {
-    &__input {
-      position: relative;
-      color: var(--color-text);
-      width: 100%;
-      cursor: pointer;
-      list-style: none;
-      display: flex;
-      align-items: center;
-      border: sp(1) solid var(--color-border);
-      border-radius: sp($border-radius);
-      padding: sp(8) sp(12);
-      grid-gap: scale(3);
-      min-width: sp(200);
-
-
-      &::after {
-        content: "";
-        display: inline-block;
-        width: sp(16);
-        height: sp(16);
-        background-repeat: no-repeat;
-        background-position: center;
-        @media (prefers-color-scheme: light) {
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' stroke-linecap='round' fill='none' stroke-linejoin='round' stroke='black' stroke-width='3' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-        }
-        @media (prefers-color-scheme: dark) {
-          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' stroke-linecap='round' fill='none' stroke-linejoin='round' stroke='white' stroke-width='3' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
-        }
-      }
-
     }
 
-    &__dropdown {
-      .field {
-        gap: 0;
-      }
+    &--radiogroup {
+        overflow: visible;
 
-      &__option-list {
-        max-height: sp(400);
-        max-width: sp(400);
-        overflow: auto;
-        &__option {
-          cursor: pointer;
-          padding: sp(8) sp(12);
-          border-radius: sp($border-radius - 2);
-
-          input[type="radio"] {
-            display: none;
-          }
-
-          .icon {
-            visibility: hidden;
-          }
-
-          &.active .icon {
-            visibility: visible;
-          }
-
-          &:hover {
-            background: var(--color-accent);
-            color: var(--color-text-on-accent);
-          }
+        label {
+            cursor: pointer;
         }
-      }
+
+        input[type="radio"] {
+            cursor: pointer;
+            margin: 0;
+            -moz-appearance: none;
+            appearance: none;
+            background: none;
+            width: sp(20);
+            height: sp(20);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: sp(2) solid var(--color-border);
+
+            &:hover {
+                border: sp(2) solid var(--color-border-hover);
+            }
+
+            &:focus {
+                box-shadow: 0 0 0 sp(2) var(--color-focus);
+            }
+
+            &:checked {
+                background: var(--color-accent);
+
+                &::after {
+                    display: block;
+                    content: "";
+                    width: sp(6);
+                    height: sp(6);
+                    border-radius: sp(3);
+                    background: white;
+                }
+            }
+        }
     }
 
-  }
+    &--dropdown {
+        &__input {
+            position: relative;
+            color: var(--color-text);
+            width: 100%;
+            cursor: pointer;
+            list-style: none;
+            display: flex;
+            align-items: center;
+            border: sp(1) solid var(--color-border);
+            border-radius: sp($border-radius);
+            padding: sp(8) sp(12);
+            grid-gap: scale(3);
+            min-width: sp(200);
 
+            &::after {
+                content: "";
+                display: inline-block;
+                width: sp(16);
+                height: sp(16);
+                background-repeat: no-repeat;
+                background-position: center;
+                @media (prefers-color-scheme: light) {
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' stroke-linecap='round' fill='none' stroke-linejoin='round' stroke='black' stroke-width='3' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+                }
+                @media (prefers-color-scheme: dark) {
+                    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' stroke-linecap='round' fill='none' stroke-linejoin='round' stroke='white' stroke-width='3' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+                }
+            }
+        }
+
+        &__dropdown {
+            .field {
+                gap: 0;
+            }
+
+            &__option-list {
+                max-height: sp(400);
+                max-width: sp(400);
+                overflow: auto;
+                &__option {
+                    cursor: pointer;
+                    padding: sp(8) sp(12);
+                    border-radius: sp($border-radius - 2);
+
+                    input[type="radio"] {
+                        display: none;
+                    }
+
+                    .icon {
+                        visibility: hidden;
+                    }
+
+                    &:has(input[type="radio"]).active .icon {
+                        visibility: visible;
+                    }
+
+                    &:hover {
+                        background: var(--color-accent);
+                        color: var(--color-text-on-accent);
+                    }
+                }
+            }
+        }
+    }
 }
