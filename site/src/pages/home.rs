@@ -59,10 +59,11 @@ pub fn home() -> VStack {
                         picker
                     })
                     .append_child({
+
                         Form::new("multi-value-picker-form", "")
                             .async_form()
                             .append_child({
-                                let mut picker = Picker::new("multi-value-picker", "2", PickerStyle::Dropdown)
+                                let mut picker = Picker::new("multi_value_picker", "2", PickerStyle::Dropdown)
                                     .attach_to_form("multi-value-picker-form")
                                     .multiple()
                                     .label("Dropdown multiple value picker");
@@ -75,6 +76,7 @@ pub fn home() -> VStack {
                                     });
                                 picker.append_child({
                                         PickerOption::new("Test 3", "3")
+                                            .disabled()
                                     });
                                 picker
                             })

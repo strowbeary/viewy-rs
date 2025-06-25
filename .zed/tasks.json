@@ -2,7 +2,7 @@
   {
     "label": "Run viewy demo site",
     "command": "cargo run",
-    //"args": [],
+    "args": ["-p viewy-site"],
     // Env overrides for the command, will be appended to the terminal's environment from the settings.
     "env": {},
     // Current working directory to spawn the command into, defaults to current project root.

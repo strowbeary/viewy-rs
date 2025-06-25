@@ -1,10 +1,6 @@
 [workspace]
 resolver = "2"
-members = [
-    "codegen",
-    "lib",
-    "site"
-]
+members = ["cli", "codegen", "lib", "site"]
 
 [workspace.package]
 authors = ["Rémi Caillot <dev@remicaillot.fr>"]

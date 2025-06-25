@@ -13,6 +13,7 @@ pub struct PickerOption {
     pub icon: Option<Box<dyn IconPack>>,
     pub label: String,
     pub value: String,
+    pub disabled: bool,
 }
 
 impl PickerOption {
@@ -21,6 +22,7 @@ impl PickerOption {
             icon: None,
             label: label.to_string(),
             value: value.to_string(),
+            disabled: false,
         }
     }
     /// Set picker's icon
@@ -29,6 +31,10 @@ impl PickerOption {
         T: 'static + IconPack,
     {
         self.icon = Some(Box::new(icon));
+        self.clone()
+    }
+    pub fn disabled(&mut self) -> Self {
+        self.disabled = true;
         self.clone()
     }
 }
@@ -164,6 +170,10 @@ impl Renderable for Picker {
                                 .set_attr("value", option.value.as_str())
                                 .set_attr("id", radio_id.as_str())
                                 .add_class("picker--segmented__option-list__radio");
+
+                            if option.disabled {
+                                radio.set_attr("disabled", "disabled");
+                            }
                             if let Some(form_id) = &self.form {
                                 radio.set_attr("form", form_id.as_str());
                             }
@@ -255,6 +265,10 @@ impl Renderable for Picker {
                                                                 .set_attr("name", self.name.as_str())
                                                                 .set_attr("value", option.value.as_str())
                                                                 .set_attr("id", radio_id.as_str());
+
+                                                            if option.disabled {
+                                                                radio.set_attr("disabled", "disabled");
+                                                            }
                                                             if picker.value.eq(&option.value) {
                                                                 radio.set_attr("checked", "checked");
                                                             }
@@ -304,6 +318,10 @@ impl Renderable for Picker {
                             .set_attr("name", self.name.as_str())
                             .set_attr("id", radio_id.as_str())
                             .set_attr("value", option.value.as_str());
+
+                        if option.disabled {
+                            radio_button.set_attr("disabled", "disabled");
+                        }
 
                         if let Some(form_id) = &self.form {
                             radio_button.set_attr("form", form_id.as_str());
