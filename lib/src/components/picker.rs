@@ -10,10 +10,11 @@ use crate::{DefaultModifiers, scale};
 
 #[derive(Debug, Clone)]
 pub struct PickerOption {
-    pub icon: Option<Box<dyn IconPack>>,
-    pub label: String,
-    pub value: String,
-    pub disabled: bool,
+    icon: Option<Box<dyn IconPack>>,
+    label: String,
+    value: String,
+    disabled: bool,
+    selected: bool,
 }
 
 impl PickerOption {
@@ -23,6 +24,7 @@ impl PickerOption {
             label: label.to_string(),
             value: value.to_string(),
             disabled: false,
+            selected: false,
         }
     }
     /// Set picker's icon
@@ -35,6 +37,10 @@ impl PickerOption {
     }
     pub fn disabled(&mut self) -> Self {
         self.disabled = true;
+        self.clone()
+    }
+    pub fn selected(&mut self) -> Self {
+        self.selected = true;
         self.clone()
     }
 }
@@ -269,8 +275,16 @@ impl Renderable for Picker {
                                                             if option.disabled {
                                                                 radio.set_attr("disabled", "disabled");
                                                             }
-                                                            if picker.value.eq(&option.value) {
-                                                                radio.set_attr("checked", "checked");
+
+                                                            if picker.multiple {
+                                                                if option.selected {
+                                                                    radio.set_attr("checked", "checked");
+                                                                }
+                                                            } else {
+
+                                                                if picker.value.eq(&option.value) {
+                                                                    radio.set_attr("checked", "checked");
+                                                                }
                                                             }
 
                                                             if let Some(form_id) = &self.form{
