@@ -4,6 +4,6 @@ members = ["cli", "codegen", "lib", "site"]
 
 [workspace.package]
 authors = ["Rémi Caillot <dev@remicaillot.fr>"]
-version = "1.13.30"
+version = "1.13.31"
 rust-version = "1.87.0"
 edition = "2024"
