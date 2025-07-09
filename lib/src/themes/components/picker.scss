@@ -111,7 +111,9 @@
                     display: block;
                     content: "";
                     width: sp(6);
+                    min-width: sp(6);
                     height: sp(6);
+                    min-height: sp(6);
                     border-radius: sp(3);
                     background: white;
                 }
@@ -147,6 +149,13 @@
                 @media (prefers-color-scheme: dark) {
                     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' stroke-linecap='round' fill='none' stroke-linejoin='round' stroke='white' stroke-width='3' viewBox='0 0 24 24'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
                 }
+            }
+
+            &__value-display {
+                white-space: nowrap;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                max-width: 100%;
             }
         }
 
