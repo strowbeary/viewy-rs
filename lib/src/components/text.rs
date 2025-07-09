@@ -1,5 +1,6 @@
-use std::borrow::BorrowMut;
-use crate::{DefaultModifiers, Renderable};
+use std::borrow::{BorrowMut, Cow};
+use std::collections::HashSet;
+use crate::{attribute_filter, DefaultModifiers, Renderable};
 use crate::node::{Node, NodeContainer};
 
 #[derive(Debug, Clone)]
@@ -104,6 +105,8 @@ impl NodeContainer for Text {
     }
 }
 
+
+
 impl DefaultModifiers<Text> for Text {}
 
 impl Renderable for Text {
@@ -117,7 +120,14 @@ impl Renderable for Text {
                 text.node.text = Some(self.content.to_string())
             }
             SanitizationLevel::Basic => {
-                text.node.text = Some(ammonia::clean(&self.content))
+                let mut builder = ammonia::Builder::default();
+                builder
+                    .add_generic_attributes(&["src"])
+                    .attribute_filter(attribute_filter)
+                    .url_schemes(HashSet::from(["http", "https", "data"]));
+
+
+                text.node.text = Some(builder.clean(&self.content).to_string())
             }
             SanitizationLevel::Strict => {
                 text.node.text = Some(ammonia::Builder::empty()

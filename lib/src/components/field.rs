@@ -1,10 +1,11 @@
 use std::borrow::BorrowMut;
 use std::cmp::PartialEq;
+use std::collections::HashSet;
 use chrono::{Duration, NaiveDateTime, TimeZone, Utc};
 use html_escape::encode_double_quoted_attribute;
 use uuid::Uuid;
 
-use crate::Renderable;
+use crate::{attribute_filter, Renderable};
 use crate::components::icons::Lucide;
 use crate::components::*;
 use crate::node::{Node, NodeContainer};
@@ -118,7 +119,12 @@ impl Field {
     }
 
     pub fn value(&mut self, value: &str) -> Self {
-        self.value = Some(ammonia::clean(value));
+        let mut builder = ammonia::Builder::default();
+        builder
+            .add_generic_attributes(&["src"])
+            .attribute_filter(attribute_filter)
+            .url_schemes(HashSet::from(["http", "https", "data"]));
+        self.value = Some(builder.clean(value).to_string());
         self.clone()
     }
 

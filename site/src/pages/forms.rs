@@ -7,7 +7,7 @@ use crate::components::showcase_section;
 
 
 
-pub fn forms() -> VStack {
+pub fn forms(richtext: Option<String>) -> VStack {
     VStack::new(Alignment::Stretch)
         .padding(vec![scale(4)])
         .gap(vec![scale(4)])
@@ -174,7 +174,16 @@ pub fn forms() -> VStack {
                 .gap(vec![scale(2)])
                 .append_child({ Text::new("Rich text field", TextStyle::H1) })
                 .append_child({
+                    if let Some(content) = richtext {
+                        Text::new(&content, TextStyle::Body)
+                            .sanitization_level(SanitizationLevel::Basic)
+                    } else {
+                        Text::new("Soumettez le formulaire pour voir l'aperçu", TextStyle::Body)
+                    }
+                })
+                .append_child({
                     Form::new("richtext-form", "")
+                        .multipart()
                         .append_child({
                             Field::new("richtext", FieldType::RichTextArea)
                                 .label("Éditeur de texte riche")

@@ -6,5 +6,5 @@ temp_dir = "./uploads"
 
 [default.limits]
 file = "2000 MiB"
-form = "3 MiB"
+form = "40 MiB"
 data-form = "2000 MiB"

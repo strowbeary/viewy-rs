@@ -166,7 +166,18 @@ fn forms() -> RawHtml<String> {
         Page::new(
             "Viewy showcase – Forms",
             &layouts::default_layout,
-            pages::forms(),
+            pages::forms(None),
+        )
+        .compile(RenderMode::Complete)
+    })
+}
+#[post("/forms", data = "<content>")]
+fn forms_richtext(content: Form<Option<String>>) -> RawHtml<String> {
+    RawHtml({
+        Page::new(
+            "Viewy showcase – Forms",
+            &layouts::default_layout,
+            pages::forms(content.into_inner()),
         )
         .compile(RenderMode::Complete)
     })
@@ -244,7 +255,8 @@ fn rocket() -> _ {
                 forms,
                 upload_file,
                 tabs,
-                table_of_content
+                table_of_content,
+                forms_richtext
             ],
         )
         .mount("/assets", FileServer::from(relative!("assets")))

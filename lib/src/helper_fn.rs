@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use crate::components::Color;
 use palette::*;
 
@@ -51,4 +52,20 @@ pub fn harden_color(color_hex: &String) -> String {
         (new_color.green * 255.0) as u8,
         (new_color.blue * 255.0) as u8
     )
+}
+
+pub fn attribute_filter<'a>(tag: &str, attr: &str, value: &'a str) -> Option<Cow<'a, str>> {
+    if tag == "img" && attr == "src" {
+        // Autorise uniquement les src qui commencent par http(s) ou data:image/
+        if value.starts_with("http://")
+            || value.starts_with("https://")
+            || value.starts_with("data:image/")
+        {
+            Some(Cow::Borrowed(value))
+        } else {
+            None
+        }
+    } else {
+        Some(Cow::Borrowed(value)) // autres attributs laissés intacts
+    }
 }
