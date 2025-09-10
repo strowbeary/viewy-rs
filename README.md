@@ -15,14 +15,14 @@ Status: beta (2.0.0-beta.4). Rust 1.87.0, edition 2024.
 From crates.io:
 
 ```bash
-cargo add viewy@=2.0.0-beta.4
+cargo add viewy
 ```
 
 Or add to Cargo.toml:
 
 ```toml
 [dependencies]
-viewy = "2.0.0-beta.4"
+viewy = "2"
 ```
 
 Docs: https://docs.rs/viewy
