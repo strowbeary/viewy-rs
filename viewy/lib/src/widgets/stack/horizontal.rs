@@ -2,7 +2,7 @@
 use crate::modifiers::*;
 use crate::{ Widget};
 use crate::prelude::Node;
-use crate::widgets::stack::{Alignment, Stack};
+use crate::widgets::stack::{Alignment, Stack, VStack};
 
 #[derive(Widget, Appendable, Colorable, Classable)]
 #[widget(style = "./style.scss")]
@@ -22,3 +22,5 @@ impl Stack for HStack {
     }
 }
 
+
+impl Paddingable for HStack {}

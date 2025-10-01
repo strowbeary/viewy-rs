@@ -21,6 +21,6 @@ use crate::core::node::Node;
 pub trait Component: Into<Node> {
     fn name() -> &'static str;
 
-    /// You can write the template of your component with viewy basic widgets or other components
+    /// You can write the template of your component with viewy basic widgets or other widgets
     fn render(self) -> Node;
 }

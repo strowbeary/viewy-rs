@@ -22,3 +22,5 @@ impl Stack for VStack {
         stack
     }
 }
+
+impl Paddingable for VStack {}

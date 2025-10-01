@@ -6,6 +6,7 @@ use uuid::Uuid;
 pub mod actionnable;
 pub mod box_stylable;
 
+
 use crate::core::theme::Color;
 #[doc(inline)]
 pub use box_stylable::*;
@@ -16,7 +17,12 @@ pub trait Appendable: Widget {
         C: Into<Node>,
     {
         let node: &mut Node = self.deref_mut();
-        node.children.push(child.into());
+        let child_node = child.into();
+        if child_node.identifier.eq(&Popup::IDENTIFIER) {
+            node.root_nodes.insert(child_node);
+        } else {
+            node.children.push(child_node);
+        }
         self
     }
 

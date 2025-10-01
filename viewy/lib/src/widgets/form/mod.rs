@@ -1,5 +1,5 @@
-use rocket::http::uri::Reference;
-
+use rocket::http::uri::{Absolute, Reference};
+use rocket::uri;
 use crate::core::modifiers::{Appendable, Attributable, Classable};
 use crate::core::node::Node;
 use crate::core::widget::Widget;
@@ -9,6 +9,7 @@ pub enum FormMethod {
     Get,
     Post,
 }
+
 
 /// A control that performs an action when triggered.
 /// ```rust
@@ -25,7 +26,7 @@ pub struct Form {
 }
 
 impl Form {
-    pub fn new<U: TryInto<Reference<'static>>>(method: FormMethod, uri: U) -> Self {
+    pub fn new(method: FormMethod, uri: impl TryInto<Reference<'static>>) -> Self {
         Form {
             node: Node {
                 node_type: NodeType::Normal("form"),
@@ -51,5 +52,26 @@ impl Form {
                 None => String::new(),
             },
         );
+    }
+}
+
+pub trait FormComponent {
+    const METHOD: FormMethod;
+    const URI: Absolute<'static>;
+
+    fn handle() -> Result<(), ()>;
+
+}
+
+struct MyForm {
+
+}
+
+impl FormComponent for MyForm {
+    const METHOD: FormMethod = FormMethod::Get;
+    const URI: Absolute<'static> = uri!("https://google.com");
+
+    fn handle() -> Result<(), ()> {
+        todo!()
     }
 }

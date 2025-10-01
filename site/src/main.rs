@@ -5,12 +5,17 @@ extern crate viewy;
 use rayon::prelude::*;
 use rocket::tokio::time::interval;
 use std::env;
+use std::fmt::format;
 use std::time::Duration;
 
 use rocket::fs::{FileServer, relative};
 use rocket::response::content::{RawCss, RawHtml, RawJavaScript};
 use rocket::response::stream::TextStream;
-
+use rocket::serde::uuid::Uuid;
+use viewy::bindings::rocket::static_assets::viewy_static_assets_fairing;
+use viewy::modifiers::Paddingable;
+use viewy::modifiers::actionnable::OnClickActionnable;
+use viewy::prelude::actionnable::Action;
 use viewy::prelude::*;
 use viewy::strum::IntoEnumIterator;
 use viewy::widgets::stack::{Alignment, HStack, Stack, VStack};
@@ -31,7 +36,10 @@ fn create_button_group(style: ButtonStyle) -> VStack {
     let mut stack = VStack::new(Alignment::Start);
     stack
         .gap(vec![scale(4)])
-        .append_child(Button::new("Action", style.clone()))
+        .append_child(
+            Button::new("Action", style.clone())
+                .popup(Popup::new("mypopup").append_child(View::new())),
+        )
         .append_child(Button::new("Disabled action", style.clone()).disabled())
         .append_child(Button::new("Destructive action", style.clone()).destructive())
         .append_child(
@@ -47,8 +55,9 @@ async fn home() -> Page<'static> {
         let mut main_stack = VStack::new(Alignment::Stretch);
 
         main_stack.append_child(
-            Button::new("Open popup", ButtonStyle::Filled)
-                .popup(Popup::new().append_child(create_button_group(ButtonStyle::Filled))),
+            Button::new("Open popup", ButtonStyle::Filled).popup(
+                Popup::new("mypopup").append_child(create_button_group(ButtonStyle::Filled)),
+            ),
         );
 
         main_stack
@@ -79,25 +88,45 @@ async fn home() -> Page<'static> {
     })
 }
 
+#[get("/actions")]
+async fn actions() -> Page<'static> {
+    Page::with_title("Viewy showcase – Actions").with_content({
+        let mut main_stack = VStack::new(Alignment::Stretch);
+        let popup_id = Uuid::new_v4();
+
+        main_stack
+            .append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
+                Action::OpenPopup {
+                    popup_content_url: Some("/actions-popup-content"),
+                },
+            ));
+
+        main_stack
+    })
+}
+#[get("/actions-popup-content")]
+async fn actions_popup_content() -> Page<'static> {
+    Page::with_title("Viewy showcase – Actions").with_content({
+        let mut main_stack = VStack::new(Alignment::Stretch);
+        main_stack
+            .padding(vec![scale(5)])
+            .append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
+                Action::OpenPopup {
+                    popup_content_url: Some("/actions-popup-content"),
+                },
+            ));
+
+        main_stack
+    })
+}
+
 #[get("/benchmark")]
 fn benchmark() -> Page<'static> {
     Page::with_title("Benchmark viewy").with_content({
         let mut stack = VStack::new(Alignment::Center);
         stack.gap(vec![scale(3)]);
         let buttons: Vec<Node> = (0..50000)
-            .into_par_iter()
-            .map(|i| {
-                {
-                    let mut btn = Button::new(&format!("Button {i}"), ButtonStyle::Filled);
-                    btn.popup(Popup::new().append_child({
-                        let mut view = View::new();
-                        view.text = Some("Hello".to_string());
-                        view
-                    }));
-                    btn
-                }
-                .into()
-            })
+            .map(|i| Button::new(&format!("Button {i}"), ButtonStyle::Filled).into())
             .collect();
 
         stack.children = buttons;
@@ -171,8 +200,11 @@ fn rocket() -> _ {
                 home,
                 benchmark,
                 //hello,
-                component
+                component,
+                actions,
+                actions_popup_content
             ],
         )
         .mount("/assets", FileServer::from(relative!("assets")))
+        .attach(viewy_static_assets_fairing())
 }

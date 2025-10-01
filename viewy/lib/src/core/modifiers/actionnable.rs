@@ -1,20 +1,24 @@
+use short_uuid::short;
 use crate::{core::widget::Widget, node::NodeType};
 
 /// Describe the different actions that will be triggered
-pub enum Action {
+pub enum Action<'a> {
     Navigate {
-        url: &'static str,
+        url: &'a str,
     },
     OpenPopup {
-        popup_content_url: &'static str,
+        popup_content_url: Option<&'a str>,
     },
-    OpenPopover {},
-    LoadDynamicContent {
-        dynamic_content_id: &'static str,
-        url: &'static str,
+    OpenPopover {
+        popover_content_url: Option<&'a str>,
     },
+    SubmitForm {
+        form_name: &'a str,
+        inject_into: Option<&'a str>,
+    }
 }
-impl Action {
+
+impl Action<'_> {
     /// Apply necessary modification depending on the action so the javascript can act accordingly
     pub fn apply<T>(&self, event: &str, widget: &mut T)
     where
@@ -28,14 +32,20 @@ impl Action {
                     .insert("href".to_string(), url.to_string());
             }
             Action::OpenPopup { popup_content_url } => {
+                let popup_name = short!();
                 widget
                     .attributes
-                    .insert(format!("data-v-{event}"), "open_popup".to_string());
-                widget
-                    .attributes
-                    .insert("data-v-url".to_string(), popup_content_url.to_string());
+                    .insert(format!("data-v-on-{event}"), "open_popup".to_string());
+                widget.attributes.insert("data-v-target-popup".to_string(), popup_name.to_string());
+
+                if let Some(url) = popup_content_url {
+                    widget
+                        .attributes
+                        .insert("data-v-url".to_string(), url.to_string());
+                }
+
             }
-            Action::LoadDynamicContent {
+           /* Action::LoadDynamicContent {
                 dynamic_content_id,
                 url,
             } => {
@@ -50,29 +60,36 @@ impl Action {
                 widget
                     .attributes
                     .insert("data-v-url".to_string(), url.to_string());
+            }*/
+            Action::OpenPopover { .. } => todo!(),
+            Action::SubmitForm { form_name, .. } => {
+
             }
-            Action::OpenPopover {} => todo!(),
         }
     }
 }
 
 pub trait OnClickActionnable: Widget {
     fn on_click(&mut self, action: Action) -> &mut Self {
-        action.apply("on-click", self);
+        action.apply("click", self);
+        self
+    }
+    fn on_dblclick(&mut self, action: Action) -> &mut Self {
+        action.apply("dblclick", self);
         self
     }
 }
 
 pub trait KeyboardActionnable: Widget {
     fn on_keypress(&mut self, action: Action) -> &mut Self {
-        action.apply("on-keypress", self);
+        action.apply("keypress", self);
         self
     }
 }
 
 pub trait InputChangeActionnable: Widget {
     fn on_change(&mut self, action: Action) -> &mut Self {
-        action.apply("on-change", self);
+        action.apply("change", self);
         self
     }
 }

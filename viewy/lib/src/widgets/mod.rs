@@ -8,6 +8,8 @@ pub mod rich_text_area;
 pub mod stack;
 pub mod view;
 
+pub mod text;
+
 #[cfg(feature = "sortable-stack")]
 pub mod sortable_stack;
 

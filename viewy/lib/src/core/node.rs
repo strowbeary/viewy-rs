@@ -15,7 +15,7 @@ pub enum NodeType {
 }
 
 /// Represent HTML DOM node that will be generated on render
-/// Every components will configure one or many nodes.
+/// Every widgets will configure one or many nodes.
 #[derive(Clone, Debug)]
 pub struct Node {
     pub identifier: Uuid,
@@ -63,10 +63,14 @@ impl Node {
         let mut children_root_nodes = self
             .children
             .iter()
-            .map(|child| child.get_root_nodes())
-            .flatten()
+            .flat_map(|child| child.get_root_nodes())
             .collect::<Vec<Node>>();
+        let mut inner_root_nodes = root_nodes.iter()
+            .flat_map(|root_node| root_node.get_root_nodes())
+            .collect::<Vec<Node>>();
+
         root_nodes.append(&mut children_root_nodes);
+        root_nodes.append(&mut inner_root_nodes);
         root_nodes
     }
 

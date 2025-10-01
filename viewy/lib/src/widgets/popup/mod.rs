@@ -3,13 +3,14 @@ use crate::core::node::Node;
 use crate::modifiers::Classable;
 use crate::widgets::view::View;
 use crate::Widget;
-use uuid::uuid;
+use uuid::{uuid, Uuid};
 
 #[derive(Widget, Attributable)]
 #[widget(style = "./style.scss", script = "./script.js")]
 pub struct Popup {
     node: Node,
     window_content: Node,
+    name: String
 }
 
 impl Appendable for Popup {
@@ -30,15 +31,16 @@ impl Appendable for Popup {
 }
 
 impl Popup {
-    pub fn new() -> Self {
+    pub const IDENTIFIER: Uuid = uuid!("45bf3464-7ca3-4548-a647-b0e828b6922a");
+    pub fn new(name: &str) -> Self {
         Popup {
+            name: name.to_string(),
             node: Node {
-                identifier: uuid!("45bf3464-7ca3-4548-a647-b0e828b6922a"),
+                identifier: Self::IDENTIFIER,
                 ..Node::default()
             },
 
             window_content: Node {
-                identifier: uuid!("45bf3464-7ca3-4548-a647-b0e828b6922a"),
                 ..Node::default()
             },
         }
@@ -46,6 +48,7 @@ impl Popup {
 
     fn render(&mut self) {
         self.node.class_list.insert("popup".to_string());
+        self.node.attributes.insert("id".to_string(), format!("popup_{}", self.name));
         self.node.children.push({
             View::new()
                 .add_class("popup__window")

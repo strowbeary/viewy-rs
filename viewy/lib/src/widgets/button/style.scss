@@ -97,6 +97,9 @@ $border-radius: 8;
     border: none;
     background: var(--accentuated-surface-bright);
     color: var(--accent);
+    @media (prefers-color-scheme: dark) {
+      color: unquote("oklch(from var(--accent) calc(l + 0.2) c h)");
+    }
 
     &:hover {
       background: var(--accentuated-surface);
@@ -122,7 +125,9 @@ $border-radius: 8;
     &--destructive {
       color: var(--destructive);
       background: var(--destructive-surface-bright);
-
+      @media (prefers-color-scheme: dark) {
+        background: unquote("oklch(from var(--destructive-surface-bright) calc(l - 0.2) c h)");
+      }
       &:hover {
         background: var(--destructive-surface);
       }
@@ -149,6 +154,9 @@ $border-radius: 8;
     background: transparent;
     border: 1px solid var(--border);
     color: var(--accent);
+    @media (prefers-color-scheme: dark) {
+      color: unquote("oklch(from var(--accent) calc(l + 0.2) c h)");
+    }
 
     &:hover {
       background: var(--accentuated-surface-bright);
@@ -203,6 +211,10 @@ $border-radius: 8;
     background: var(--accent);
     border: none;
 
+    @media (prefers-color-scheme: dark) {
+      background: unquote("oklch(from var(--accent) calc(l - 0.2) c h)");
+    }
+
     .icon, .text {
       color: currentColor;
     }
@@ -228,6 +240,10 @@ $border-radius: 8;
       color: var(--on-destructive);
       background: var(--destructive);
       border: none;
+
+      @media (prefers-color-scheme: dark) {
+        background: unquote("oklch(from var(--destructive) calc(l - 0.2) c h)");
+      }
 
       .icon, .text {
         color: currentColor;

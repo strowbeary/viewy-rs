@@ -40,7 +40,7 @@ pub enum RenderMode {
 pub type Layout<'a> = &'a dyn Fn(Node) -> Node;
 
 pub struct Page<'a> {
-    content: Node,
+    pub content: Node,
     title: String,
     config: Config,
     theme: Theme,
@@ -103,7 +103,7 @@ impl<'a> Page<'a> {
                 false,
             ),
             RenderMode::ContentOnly => {
-                let content = (self.layout)(self.content);
+                let content = self.content;
                 let root_nodes = content.get_root_nodes();
 
                 content.render(&mut html_buffer);

@@ -7,11 +7,11 @@
 //!
 //! #### Why Choose Viewy?
 //!
-//! - **Simplicity**: Viewy has an intuitive and expressive API that makes it easy to generate UI components.
+//! - **Simplicity**: Viewy has an intuitive and expressive API that makes it easy to generate UI widgets.
 //!
-//! - **Customizability**: A unique feature of Viewy is its configurability through the `Viewy.toml` file. This provides developers the flexibility to fine-tune the appearance and behavior of components, without having to dig deep into the codebase.
+//! - **Customizability**: A unique feature of Viewy is its configurability through the `Viewy.toml` file. This provides developers the flexibility to fine-tune the appearance and behavior of widgets, without having to dig deep into the codebase.
 //!
-//! - **Rich Component Library**: From buttons and cards to navigation bars, Viewy offers a wide variety of components that cater to most web development needs.
+//! - **Rich Component Library**: From buttons and cards to navigation bars, Viewy offers a wide variety of widgets that cater to most web development needs.
 //!
 //! #### Quick Start
 //!
@@ -49,7 +49,7 @@
 //!
 //! #### Customizing with Viewy.toml
 //!
-//! Most of Viewy's components can be customized using the `Viewy.toml` configuration file. By specifying your design tokens in this file, you can achieve a consistent look and feel across your web application, without the repetitive code.
+//! Most of Viewy's widgets can be customized using the `Viewy.toml` configuration file. By specifying your design tokens in this file, you can achieve a consistent look and feel across your web application, without the repetitive code.
 //!
 //! For detailed guidelines on using the `Viewy.toml` file, refer to the documentation of the [`Config`](./prelude/struct.Config.html) struct.
 //!
@@ -89,7 +89,6 @@ lazy_static! {
 }
 
 pub mod prelude {
-
     pub use crate::core::component::Component;
     pub use crate::core::config::Config;
     pub use crate::core::modifiers::*;

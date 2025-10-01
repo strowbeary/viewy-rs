@@ -139,21 +139,21 @@ pub struct Shapes {
 ///
 /// #### [colors]
 ///
-/// Here, you can define the color schemes for various UI components. The properties are broken down into light and dark themes. Each color definition has two parts:
+/// Here, you can define the color schemes for various UI widgets. The properties are broken down into light and dark themes. Each color definition has two parts:
 ///
 /// - The main color (e.g., `accent`, `background`, `surface`, `destructive`, `success`).
 ///
 /// #### [shapes]
 ///
-/// This section defines the geometric properties of components:
+/// This section defines the geometric properties of widgets:
 ///
-/// - `border-radius`: Determines the curvature of edges for components like buttons, cards, etc. A value of 8 implies a subtle curve.
+/// - `border-radius`: Determines the curvature of edges for widgets like buttons, cards, etc. A value of 8 implies a subtle curve.
 ///
-/// - `spacing-factor`: Defines the factor by which spaces between UI components are multiplied. A factor of 4 can be used to derive consistent spacings like 4, 8, 12, 16, etc.
+/// - `spacing-factor`: Defines the factor by which spaces between UI widgets are multiplied. A factor of 4 can be used to derive consistent spacings like 4, 8, 12, 16, etc.
 ///
 /// ---
 ///
-/// Using the `Viewy.toml` file, developers can ensure that their applications maintain a consistent look and feel across different pages and components. It acts as a central place to modify and adapt the visual language of the application according to branding or aesthetic requirements.
+/// Using the `Viewy.toml` file, developers can ensure that their applications maintain a consistent look and feel across different pages and widgets. It acts as a central place to modify and adapt the visual language of the application according to branding or aesthetic requirements.
 #[derive(Deserialize, Serialize, Debug)]
 pub struct Config {
     pub app: AppSettings,

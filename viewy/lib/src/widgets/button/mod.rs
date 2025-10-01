@@ -43,19 +43,6 @@ impl Button {
     }
 
     /// Reverse the icon and text
-    #[deprecated(
-        since = "2.0.0",
-        note = "please use `reverse` instead. Will be removed in 2.1"
-    )]
-    pub fn reversed(&mut self, is_reversed: bool) -> &mut Self {
-        if is_reversed {
-            self.add_class("button--reversed")
-        } else {
-            self
-        }
-    }
-
-    /// Reverse the icon and text
     pub fn reverse(&mut self) -> &mut Self {
         self.add_class("button--reversed")
     }
@@ -82,6 +69,8 @@ impl Button {
         self.set_attr("disabled", "disabled")
     }
 
+
+
     /// Make the button close the popup it is in
     /// ```rust
     /// Popup::new()
@@ -94,36 +83,6 @@ impl Button {
         self.add_class("popup__window-controls")
     }
 
-    /// Make the button submit specified form
-    /// ```rust
-    ///View::new()
-    ///    .append_child({
-    ///        Form::new("formName", "/")
-    ///    })
-    ///    .append_child({
-    ///        Button::new("Submit", ButtonStyle::Filled)
-    ///            .attach_to_form("formName")
-    ///        })
-    /// ```
-    pub fn attach_to_form(&mut self, form_name: &str) -> &mut Self {
-        self.set_attr("form", form_name).set_attr("type", "submit")
-    }
-
-    /// Make the button submit specified form
-    /// ```rust
-    ///View::new()
-    ///    .append_child({
-    ///        FileInput::new("input-name", FileInputType::Hidden)
-    ///    })
-    ///    .append_child({
-    ///        Button::new("Submit", ButtonStyle::Filled)
-    ///            .attach_to_file_input("input-name")
-    ///     })
-    /// ```
-    pub fn attach_to_file_input(&mut self, input_id: &str) -> &mut Self {
-        self.set_attr("data-input-file", &format!("file-input-{}", input_id))
-    }
-
     fn render(&mut self) {
         let style = self.style.clone();
         self.add_class("button")
@@ -132,18 +91,12 @@ impl Button {
     }
 }
 
+
 impl OnClickActionnable for Button {
     fn on_click(&mut self, action: crate::prelude::actionnable::Action) -> &mut Self {
-        match &action {
-            crate::prelude::actionnable::Action::Navigate { url } => {
-                self.node.node_type = NodeType::Normal("a");
-                self.set_attr("href", url);
-            }
 
-            _ => {
-                action.apply("click", self);
-            }
-        }
+        action.apply("click", self);
+
         self
     }
 }
