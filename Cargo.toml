@@ -7,7 +7,7 @@ missing_docs = "forbid"
 
 [workspace.package]
 authors = ["Rémi Caillot <dev@remicaillot.fr>"]
-version = "2.0.0"
+version = "3.0.0-alpha.0"
 rust-version = "1.89.0"
 edition = "2024"
 keywords = ["web", "user-interface", "declarative"]
