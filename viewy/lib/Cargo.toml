@@ -11,6 +11,7 @@ repository.workspace = true
 license.workspace = true
 documentation.workspace = true
 
+build = "build.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
@@ -33,6 +34,11 @@ short-uuid = "0.1.2"
 heck = "0.4"
 quote = "1.0"
 figment = { version = "0.10", features = ["toml", "env"] }
+cmd_lib = "2.0.0"
+download_git = "0.0.2"
+scraper = "0.24.0"
+serde = { version = "1.0", features = ["serde_derive"] }
+uuid = { version = "1.6", features = ["v4"] }
 
 [features]
 rich-text-area = []

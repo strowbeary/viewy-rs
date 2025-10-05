@@ -6,7 +6,7 @@ use strum::IntoEnumIterator;
 pub use colors::Color;
 
 use crate::core::config::HexColor;
-use crate::widgets::{get_all_scripts, get_all_stylesheet};
+use crate::widgets::{get_all_stylesheet};
 
 mod colors;
 mod sizing;
@@ -92,10 +92,4 @@ pub fn get_stylesheet() -> String {
         &grass::Options::default().style(OutputStyle::Compressed),
     )
         .expect("Can't compile SCSS")
-}
-
-pub fn get_scripts() -> String {
-    get_all_scripts().join("")
-
-
 }

@@ -9,6 +9,7 @@ use std::fmt::format;
 use std::time::Duration;
 
 use rocket::fs::{FileServer, relative};
+use rocket::http::ext::IntoCollection;
 use rocket::response::content::{RawCss, RawHtml, RawJavaScript};
 use rocket::response::stream::TextStream;
 use rocket::serde::uuid::Uuid;
@@ -19,27 +20,15 @@ use viewy::prelude::actionnable::Action;
 use viewy::prelude::*;
 use viewy::strum::IntoEnumIterator;
 use viewy::widgets::stack::{Alignment, HStack, Stack, VStack};
+use viewy::widgets::text::{Text, TextStyle};
 
 mod dynroutetest;
-
-#[get("/app.css")]
-fn get_stylesheet() -> RawCss<String> {
-    RawCss(viewy::prelude::get_stylesheet())
-}
-
-#[get("/app.js")]
-fn get_scripts() -> RawJavaScript<String> {
-    RawJavaScript(viewy::prelude::get_scripts())
-}
 
 fn create_button_group(style: ButtonStyle) -> VStack {
     let mut stack = VStack::new(Alignment::Start);
     stack
         .gap(vec![scale(4)])
-        .append_child(
-            Button::new("Action", style.clone())
-                .popup(Popup::new("mypopup").append_child(View::new())),
-        )
+        .append_child(Button::new("Action", style.clone()))
         .append_child(Button::new("Disabled action", style.clone()).disabled())
         .append_child(Button::new("Destructive action", style.clone()).destructive())
         .append_child(
@@ -54,11 +43,7 @@ async fn home() -> Page<'static> {
     Page::with_title("Viewy showcase – Home").with_content({
         let mut main_stack = VStack::new(Alignment::Stretch);
 
-        main_stack.append_child(
-            Button::new("Open popup", ButtonStyle::Filled).popup(
-                Popup::new("mypopup").append_child(create_button_group(ButtonStyle::Filled)),
-            ),
-        );
+        main_stack.append_child(Button::new("Open popup", ButtonStyle::Filled));
 
         main_stack
             .gap(vec![scale(5)])
@@ -90,31 +75,60 @@ async fn home() -> Page<'static> {
 
 #[get("/actions")]
 async fn actions() -> Page<'static> {
-    Page::with_title("Viewy showcase – Actions").with_content({
+    Page::with_title("Viewy showcase – Actions")
+        .with_layout(&|content: Node| {
+            VStack::new(Alignment::Center)
+                .append_child(Text::new("Layout", TextStyle::Body))
+                .append_child(content)
+                .into()
+        }).with_content({
         let mut main_stack = VStack::new(Alignment::Stretch);
         let popup_id = Uuid::new_v4();
 
         main_stack
+            .gap(vec![scale(5)])
             .append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
                 Action::OpenPopup {
                     popup_content_url: Some("/actions-popup-content"),
+                },
+            ))
+            .append_child(Button::new("Benchmark", ButtonStyle::Filled).on_click(
+                Action::OpenPopup {
+                    popup_content_url: Some("/benchmark"),
+                },
+            ))
+            .append_child(Button::new("Open popover", ButtonStyle::Filled).on_click(
+                Action::OpenPopover {
+                    popover_content_url: Some("/popover-content"),
                 },
             ));
 
         main_stack
     })
 }
-#[get("/actions-popup-content")]
-async fn actions_popup_content() -> Page<'static> {
-    Page::with_title("Viewy showcase – Actions").with_content({
+#[get("/popover-content")]
+async fn popover_content() -> Page<'static> {
+    Page::with_title("Viewy showcase – Actions")
+        .with_content({
         let mut main_stack = VStack::new(Alignment::Stretch);
         main_stack
             .padding(vec![scale(5)])
-            .append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
-                Action::OpenPopup {
-                    popup_content_url: Some("/actions-popup-content"),
-                },
-            ));
+            .append_child(Text::new("Title", TextStyle::H1))
+            .append_child(Text::new("Text", TextStyle::Body))
+            .append_child(
+                HStack::new(Alignment::Center)
+                    .gap(vec![scale(4)])
+                    .append_child(Button::new("Cancel", ButtonStyle::Outlined).on_click(
+                        Action::Navigate {
+                            url: "/actions-popup-content",
+                        },
+                    ))
+                    .append_child(Button::new("Ok", ButtonStyle::Filled).on_click(
+                        Action::Navigate {
+                            url: "/actions-popup-content",
+                        },
+                    )),
+            );
 
         main_stack
     })
@@ -195,14 +209,12 @@ fn rocket() -> _ {
         .mount(
             "/",
             routes![
-                get_stylesheet,
-                get_scripts,
                 home,
                 benchmark,
                 //hello,
                 component,
                 actions,
-                actions_popup_content
+                popover_content
             ],
         )
         .mount("/assets", FileServer::from(relative!("assets")))

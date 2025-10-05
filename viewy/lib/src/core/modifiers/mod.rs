@@ -6,7 +6,6 @@ use uuid::Uuid;
 pub mod actionnable;
 pub mod box_stylable;
 
-
 use crate::core::theme::Color;
 #[doc(inline)]
 pub use box_stylable::*;
@@ -18,11 +17,9 @@ pub trait Appendable: Widget {
     {
         let node: &mut Node = self.deref_mut();
         let child_node = child.into();
-        if child_node.identifier.eq(&Popup::IDENTIFIER) {
-            node.root_nodes.insert(child_node);
-        } else {
-            node.children.push(child_node);
-        }
+
+        node.children.push(child_node);
+
         self
     }
 
@@ -59,20 +56,6 @@ pub trait Attributable: Widget {
     }
 }
 
-pub trait PopupReceiver: Widget + Classable + Attributable {
-    fn popup<P>(&mut self, mut popup: P) -> &mut Self
-    where
-        P: AsMut<Popup>,
-    {
-        let popup = popup.as_mut();
-        let id = Uuid::new_v4().to_string();
-        self.add_class("popup--opener");
-        self.set_attr("id", id.as_str());
-        let node: &mut Node = self.deref_mut();
-        node.root_nodes.insert(popup.attach_to(id.as_str()).into());
-        self
-    }
-}
 
 pub trait Colorable: Widget {
     fn color(&mut self, color: Color) -> &mut Self {

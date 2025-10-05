@@ -110,7 +110,7 @@ pub struct Shapes {
 /// [app]
 /// name = "Viewy showcase"
 /// favicons = [
-///     { rel = "shortcut icon", href="/assets/favicon.svg"}
+///     { rel = "shortcut icon", href="/static/favicon.svg"}
 /// ]
 ///
 /// [colors]

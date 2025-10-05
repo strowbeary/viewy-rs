@@ -75,7 +75,6 @@ pub use strum;
 mod core;
 
 pub mod bindings;
-pub mod router;
 pub mod widgets;
 
 mod helper_fn;
@@ -93,9 +92,10 @@ pub mod prelude {
     pub use crate::core::config::Config;
     pub use crate::core::modifiers::*;
     pub use crate::core::node::*;
+    pub use crate::core::page::*;
+    pub use crate::core::layout::*;
     pub use crate::core::theme::*;
     pub use crate::helper_fn::*;
-    pub use crate::router::*;
     pub use crate::widgets::button::*;
     pub use crate::widgets::popup::*;
     pub use crate::widgets::view::*;

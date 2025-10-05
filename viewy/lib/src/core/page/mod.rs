@@ -1,17 +1,16 @@
-use std::collections::{HashMap, HashSet};
-
-use std::thread;
+use std::collections::{HashMap};
 use uuid::Uuid;
 
 use crate::core::config::Config;
+use crate::core::layout::Layout;
 use crate::core::theme::Theme;
-use crate::node;
 use crate::node::{Node, NodeType};
-use crate::router::page::html_page::get_full_html_page;
+use crate::core::page::html_page::get_full_html_page;
 
 mod html_page;
 
 /// `RenderMode` enum is used to determine how to render a `Page`.
+#[derive(Debug)]
 pub enum RenderMode {
     /// This mode will result in a complete HTML page, with the page content wrapped within the page's `Layout`.
     Complete,
@@ -21,23 +20,7 @@ pub enum RenderMode {
     LayoutOnly,
 }
 
-/// `Layout` is a type alias for a function that takes a `Node` and returns a `Node`.
-/// This function will be used to transform the content of a Page.
-///
-/// # Example
-/// A layout function might be used to wrap page content within a common site layout.
-///
-/// ```rust
-/// use viewy::prelude::*;
-/// fn layout(content: Node) -> Node {
-///    // Components that compose the layout
-/// }
-///
-/// let page = Page::with_title("Page Title")
-///     .with_content(View::new())
-///     .with_layout(&layout);
-/// ```
-pub type Layout<'a> = &'a dyn Fn(Node) -> Node;
+
 
 pub struct Page<'a> {
     pub content: Node,
@@ -91,25 +74,15 @@ impl<'a> Page<'a> {
                 self.title,
                 {
                     let content = (self.layout)(self.content);
-                    let root_nodes = content.get_root_nodes();
 
                     content.render(&mut html_buffer);
-                    for node in root_nodes {
-                        node.render(&mut html_buffer);
-                    }
                     html_buffer
                 },
                 theme_variant.to_string(),
                 false,
             ),
             RenderMode::ContentOnly => {
-                let content = self.content;
-                let root_nodes = content.get_root_nodes();
-
-                content.render(&mut html_buffer);
-                for node in root_nodes {
-                    node.render(&mut html_buffer);
-                }
+                self.content.render(&mut html_buffer);
                 html_buffer
             }
             RenderMode::LayoutOnly => get_full_html_page(
@@ -124,9 +97,7 @@ impl<'a> Page<'a> {
                         class_list: Default::default(),
                         node_style: vec![],
                         attributes: HashMap::new(),
-                        root_nodes: HashSet::new(),
                     });
-                    content.children.append(&mut content.get_root_nodes());
 
                     content.render(&mut html_buffer);
                     html_buffer

@@ -8,6 +8,7 @@ pub enum Action<'a> {
     },
     OpenPopup {
         popup_content_url: Option<&'a str>,
+        // display_window_controls: bool //Idée pour plus tard
     },
     OpenPopover {
         popover_content_url: Option<&'a str>,
@@ -36,7 +37,7 @@ impl Action<'_> {
                 widget
                     .attributes
                     .insert(format!("data-v-on-{event}"), "open_popup".to_string());
-                widget.attributes.insert("data-v-target-popup".to_string(), popup_name.to_string());
+                widget.attributes.insert("data-v-target-popup".to_string(), format!("popup_{}",popup_name));
 
                 if let Some(url) = popup_content_url {
                     widget
@@ -61,7 +62,19 @@ impl Action<'_> {
                     .attributes
                     .insert("data-v-url".to_string(), url.to_string());
             }*/
-            Action::OpenPopover { .. } => todo!(),
+            Action::OpenPopover { popover_content_url } => {
+                let popover_name = short!();
+                widget
+                    .attributes
+                    .insert(format!("data-v-on-{event}"), "open_popover".to_string());
+                widget.attributes.insert("data-v-target-popover".to_string(), format!("popover_{}",popover_name));
+
+                if let Some(url) = popover_content_url {
+                    widget
+                        .attributes
+                        .insert("data-v-url".to_string(), url.to_string());
+                }
+            },
             Action::SubmitForm { form_name, .. } => {
 
             }

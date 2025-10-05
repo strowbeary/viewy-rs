@@ -25,7 +25,6 @@ pub struct Node {
     pub class_list: HashSet<String>,
     pub node_style: Vec<(String, String)>,
     pub attributes: HashMap<String, String>,
-    pub root_nodes: HashSet<Node>,
 }
 
 impl Eq for Node {}
@@ -52,28 +51,11 @@ impl Default for Node {
             class_list: HashSet::new(),
             node_style: vec![],
             attributes: HashMap::default(),
-            root_nodes: HashSet::default(),
         }
     }
 }
 
 impl Node {
-    pub fn get_root_nodes(&self) -> Vec<Node> {
-        let mut root_nodes: Vec<Node> = Vec::from_iter(self.root_nodes.iter().cloned());
-        let mut children_root_nodes = self
-            .children
-            .iter()
-            .flat_map(|child| child.get_root_nodes())
-            .collect::<Vec<Node>>();
-        let mut inner_root_nodes = root_nodes.iter()
-            .flat_map(|root_node| root_node.get_root_nodes())
-            .collect::<Vec<Node>>();
-
-        root_nodes.append(&mut children_root_nodes);
-        root_nodes.append(&mut inner_root_nodes);
-        root_nodes
-    }
-
     pub fn get_node_style(&self) -> Option<(String, String)> {
         if !self.node_style.is_empty() {
             let short_identifier = ShortUuid::from_uuid(&self.identifier).to_string();

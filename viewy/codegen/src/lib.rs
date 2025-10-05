@@ -38,10 +38,8 @@ pub fn widget_derive(input: TokenStream) -> TokenStream {
     }
 
     let style_str = style_value.expect("style is a mandatory attribute in widget macro");
-    // If script is not provided, use a default script file
-    let script_str = script_value
-        .map(|path| quote!(include_str!(#path)))
-        .unwrap_or(quote!(""));
+
+
     let generated_code = quote! {
         use std::ops::{Deref, DerefMut};
 
@@ -76,7 +74,6 @@ pub fn widget_derive(input: TokenStream) -> TokenStream {
 
         impl Widget for #name {
             const STYLE: &'static str = include_str!(#style_str);
-            const SCRIPT: &'static str = #script_str;
             fn widget_name() -> &'static str {
                 "#name"
             }

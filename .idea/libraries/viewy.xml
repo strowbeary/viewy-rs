@@ -7,7 +7,7 @@
       </sourceFilesUrls>
     </properties>
     <CLASSES>
-      <root url="file://$PROJECT_DIR$/viewy/lib/assets/js/module" />
+      <root url="file://$PROJECT_DIR$/viewy/lib/static/js/module" />
     </CLASSES>
     <JAVADOC />
     <SOURCES />

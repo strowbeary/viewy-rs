@@ -27,14 +27,15 @@ pub fn get_full_html_page(config: &Config, title: String, content: String, theme
             <head>
                 <meta charset='utf-8' />
                 <title>{title}</title>
-                <script type='text/javascript' src='{base_elem}/viewy-assets/js/importmap.js'></script>
+                <script type='text/javascript' src='{base_elem}/viewy-static/js/importmap.js'></script>
                 <link rel='preconnect' href='https://rsms.me/'>
                 <link rel='preconnect' href='{base_url}'>
                 {base_elem}
                 {favicons}
                 <link rel='stylesheet' href='https://rsms.me/inter/inter.css'>
-                <link href='{base_url}/app.css' rel='stylesheet'>
-                <script type='module' src='{base_url}/viewy-assets/js/app.js'></script>
+                <link href='{base_url}/viewy-static/app.css' rel='stylesheet'>
+                <link href='{base_url}/viewy-static/css/static.css' rel='stylesheet'>
+                <script type='module' src='{base_url}/viewy-static/js/app.js'></script>
                 <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
                 <meta name='apple-mobile-web-app-capable' content='yes'>
             </head>

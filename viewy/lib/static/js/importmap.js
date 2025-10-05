@@ -12,6 +12,7 @@
 ({
   "imports": {
     "morphdom": "https://ga.jspm.io/npm:morphdom@2.7.7/dist/morphdom-esm.js",
+    "floating-ui": "https://cdn.jsdelivr.net/npm/@floating-ui/dom@1.7.4/+esm"
   },
   "scopes": {
     "./": {

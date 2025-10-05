@@ -13,16 +13,6 @@ pub mod text;
 #[cfg(feature = "sortable-stack")]
 pub mod sortable_stack;
 
-pub fn get_all_scripts() -> Vec<&'static str> {
-    vec![
-        view::View::SCRIPT,
-        button::Button::SCRIPT,
-        popup::Popup::SCRIPT,
-        stack::VStack::SCRIPT,
-        stack::HStack::SCRIPT,
-    ]
-}
-
 pub const fn get_all_stylesheet() -> &'static [&'static str; 5] {
     &[
         view::View::STYLE,

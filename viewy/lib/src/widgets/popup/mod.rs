@@ -6,7 +6,7 @@ use crate::Widget;
 use uuid::{uuid, Uuid};
 
 #[derive(Widget, Attributable)]
-#[widget(style = "./style.scss", script = "./script.js")]
+#[widget(style = "./style.scss")]
 pub struct Popup {
     node: Node,
     window_content: Node,

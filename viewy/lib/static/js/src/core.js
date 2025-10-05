@@ -17,13 +17,9 @@ export async function load_injectable_content(url, injection_root) {
             "x-viewy-render-mode": "ContentOnly"
         }
     });
-    let injectable_content = await res.json();
-    injection_root.insertAdjacentHTML("beforeend", injectable_content.content);
+    let injectable_content = await res.text();
+    injection_root.insertAdjacentHTML("beforeend", injectable_content);
     startViewy(injection_root);
-
-    document.body.insertAdjacentHTML("beforeend", injectable_content.root_nodes);
-
-    //startViewy(template.content);
 }
 
 

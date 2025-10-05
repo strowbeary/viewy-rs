@@ -1,7 +1,6 @@
 use crate::core::modifiers::{Attributable, Classable};
 use crate::core::node::{Node, NodeType};
 use crate::core::widget::Widget;
-use crate::modifiers::PopupReceiver;
 use crate::prelude::actionnable::OnClickActionnable;
 
 /// Used to set a button's importance level.
@@ -27,7 +26,6 @@ pub struct Button {
     pub label: Option<String>,
     pub style: ButtonStyle,
 }
-impl PopupReceiver for Button {}
 
 impl Button {
     pub fn new(label: &str, style: ButtonStyle) -> Self {
