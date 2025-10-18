@@ -15,9 +15,9 @@ use rocket::response::stream::TextStream;
 use rocket::serde::uuid::Uuid;
 use viewy::bindings::rocket::static_assets::viewy_static_assets_fairing;
 use viewy::bindings::uri::Uri;
-use viewy::modifiers::Paddingable;
-use viewy::modifiers::OnClickActionnable;
 use viewy::modifiers::Action;
+use viewy::modifiers::OnClickActionnable;
+use viewy::modifiers::Paddingable;
 use viewy::prelude::*;
 use viewy::strum::IntoEnumIterator;
 use viewy::widgets::stack::{Alignment, HStack, Stack, VStack};
@@ -212,7 +212,6 @@ fn component() -> Page<'static> {
     })
 }
 
-
 #[launch]
 fn rocket() -> _ {
     rocket::build()
@@ -229,7 +228,6 @@ fn rocket() -> _ {
                 tabs::tab1,
                 tabs::tab2,
                 tabs::tab3,
-
             ],
         )
         .mount("/assets", FileServer::from(relative!("assets")))
