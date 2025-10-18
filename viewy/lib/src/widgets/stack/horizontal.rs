@@ -1,10 +1,9 @@
-
+use crate::Widget;
 use crate::modifiers::*;
-use crate::{ Widget};
 use crate::prelude::Node;
 use crate::widgets::stack::{Alignment, Stack, VStack};
 
-#[derive(Widget, Appendable, Colorable, Classable)]
+#[derive(Widget, Appendable, Colorable, Classable, Cardifiable)]
 #[widget(style = "./style.scss")]
 pub struct HStack {
     node: Node,
@@ -13,14 +12,18 @@ pub struct HStack {
 impl Stack for HStack {
     fn new(alignment: Alignment) -> Self {
         let mut stack = HStack {
-            node: Node::default()
+            node: Node::default(),
         };
-        stack.add_class("stack")
+        stack
+            .add_class("stack")
             .add_class("stack--horizontal")
-            .add_class(format!("stack--align-{:?}", alignment).to_lowercase().as_str());
+            .add_class(
+                format!("stack--align-{:?}", alignment)
+                    .to_lowercase()
+                    .as_str(),
+            );
         stack
     }
 }
-
 
 impl Paddingable for HStack {}

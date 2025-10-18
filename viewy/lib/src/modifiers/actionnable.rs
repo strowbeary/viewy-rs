@@ -1,22 +1,24 @@
-use short_uuid::short;
+use crate::bindings::uri::Uri;
 use crate::{core::widget::Widget, node::NodeType};
+use short_uuid::short;
 
 /// Describe the different actions that will be triggered
 pub enum Action<'a> {
     Navigate {
-        url: &'a str,
+        url: Uri,
     },
     OpenPopup {
-        popup_content_url: Option<&'a str>,
-        // display_window_controls: bool //Idée pour plus tard
+        popup_content_url: Uri,
+        display_window_controls: bool //Idée pour plus tard
     },
+    CloseParentPopup,
     OpenPopover {
-        popover_content_url: Option<&'a str>,
+        popover_content_url: Uri,
     },
     SubmitForm {
         form_name: &'a str,
         inject_into: Option<&'a str>,
-    }
+    },
 }
 
 impl Action<'_> {
@@ -32,21 +34,27 @@ impl Action<'_> {
                     .attributes
                     .insert("href".to_string(), url.to_string());
             }
-            Action::OpenPopup { popup_content_url } => {
+            Action::OpenPopup { popup_content_url, display_window_controls } => {
                 let popup_name = short!();
                 widget
                     .attributes
                     .insert(format!("data-v-on-{event}"), "open_popup".to_string());
-                widget.attributes.insert("data-v-target-popup".to_string(), format!("popup_{}",popup_name));
+                widget.attributes.insert(
+                    "data-v-target-popup".to_string(),
+                    format!("popup_{}", popup_name),
+                );
 
-                if let Some(url) = popup_content_url {
-                    widget
-                        .attributes
-                        .insert("data-v-url".to_string(), url.to_string());
-                }
 
+                widget.attributes.insert(
+                    "data-v-display-window-controls".to_string(),
+                    display_window_controls.to_string(),
+                );
+
+                widget
+                    .attributes
+                    .insert("data-v-url".to_string(), popup_content_url.to_string());
             }
-           /* Action::LoadDynamicContent {
+            /* Action::LoadDynamicContent {
                 dynamic_content_id,
                 url,
             } => {
@@ -62,21 +70,28 @@ impl Action<'_> {
                     .attributes
                     .insert("data-v-url".to_string(), url.to_string());
             }*/
-            Action::OpenPopover { popover_content_url } => {
+            Action::OpenPopover {
+                popover_content_url,
+            } => {
                 let popover_name = short!();
                 widget
                     .attributes
                     .insert(format!("data-v-on-{event}"), "open_popover".to_string());
-                widget.attributes.insert("data-v-target-popover".to_string(), format!("popover_{}",popover_name));
+                widget.attributes.insert(
+                    "data-v-target-popover".to_string(),
+                    format!("popover_{}", popover_name),
+                );
 
-                if let Some(url) = popover_content_url {
-                    widget
-                        .attributes
-                        .insert("data-v-url".to_string(), url.to_string());
-                }
-            },
-            Action::SubmitForm { form_name, .. } => {
-
+                widget
+                    .attributes
+                    .insert("data-v-url".to_string(), popover_content_url.to_string());
+            }
+            Action::SubmitForm { form_name, .. } => {}
+            Action::CloseParentPopup => {
+                widget.attributes.insert(
+                    format!("data-v-on-{event}"),
+                    "close_parent_popup".to_string(),
+                );
             }
         }
     }

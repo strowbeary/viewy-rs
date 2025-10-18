@@ -1,15 +1,14 @@
-use rocket::http::uri::{Absolute, Reference};
-use rocket::uri;
-use crate::core::modifiers::{Appendable, Attributable, Classable};
+use crate::bindings::uri::Uri;
+use crate::modifiers::{Appendable, Attributable, Classable, Cardifiable};
 use crate::core::node::Node;
 use crate::core::widget::Widget;
 use crate::node::NodeType;
+use rocket::uri;
 
 pub enum FormMethod {
     Get,
     Post,
 }
-
 
 /// A control that performs an action when triggered.
 /// ```rust
@@ -17,22 +16,22 @@ pub enum FormMethod {
 /// Button::new("Label", ButtonStyle::Filled)
 ///     .action("/") // Here create a link to "/"
 /// ```
-#[derive(Widget, Classable, Attributable, Appendable)]
+#[derive(Widget, Classable, Attributable, Appendable, Cardifiable)]
 #[widget(style = "./style.scss")]
 pub struct Form {
     node: Node,
-    uri: Option<Reference<'static>>,
+    uri: Uri,
     method: FormMethod,
 }
 
 impl Form {
-    pub fn new(method: FormMethod, uri: impl TryInto<Reference<'static>>) -> Self {
+    pub fn new(method: FormMethod, uri: impl Into<Uri>) -> Self {
         Form {
             node: Node {
                 node_type: NodeType::Normal("form"),
                 ..Node::default()
             },
-            uri: uri.try_into().ok(),
+            uri: uri.into(),
             method,
         }
     }
@@ -45,33 +44,6 @@ impl Form {
             }
         }
         self.add_class("form");
-        self.set_attr(
-            "action",
-            &match &self.uri {
-                Some(uri) => uri.to_string(),
-                None => String::new(),
-            },
-        );
-    }
-}
-
-pub trait FormComponent {
-    const METHOD: FormMethod;
-    const URI: Absolute<'static>;
-
-    fn handle() -> Result<(), ()>;
-
-}
-
-struct MyForm {
-
-}
-
-impl FormComponent for MyForm {
-    const METHOD: FormMethod = FormMethod::Get;
-    const URI: Absolute<'static> = uri!("https://google.com");
-
-    fn handle() -> Result<(), ()> {
-        todo!()
+        self.set_attr("action", &self.uri.to_string());
     }
 }

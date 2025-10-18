@@ -1,4 +1,4 @@
-import {computePosition, flip, shift, offset, autoPlacement} from 'floating-ui';
+import {computePosition, flip, shift, offset, autoUpdate} from 'floating-ui';
 
 import {load_injectable_content} from "viewy";
 
@@ -38,13 +38,16 @@ export const actions = {
             }
             popover.classList.add("visible");
 
-            computePosition(popover_opener, popover, {
-                placement: 'bottom',
-                middleware: [ shift({padding: 5}), offset(6), flip()],
-            }).then(({x, y}) => {
-                Object.assign(popover.style, {
-                    left: `${x}px`,
-                    top: `${y}px`,
+
+            autoUpdate(popover_opener, popover, () => {
+                computePosition(popover_opener, popover, {
+                    placement: 'bottom',
+                    middleware: [shift({padding: 5}), offset(6), flip(),],
+                }).then(({x, y}) => {
+                    Object.assign(popover.style, {
+                        left: `${x}px`,
+                        top: `${y}px`,
+                    });
                 });
             });
 

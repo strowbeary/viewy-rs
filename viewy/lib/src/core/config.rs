@@ -45,13 +45,23 @@ impl Into<Srgba<u8>> for HexColor {
 }
 impl Into<Srgba<f64>> for HexColor {
     fn into(self) -> Srgba<f64> {
-        Srgba::<f64>::from([self.0[0] as f64, self.0[1] as f64, self.0[2] as f64, self.0[3] as f64, ])
+        Srgba::<f64>::from([
+            self.0[0] as f64,
+            self.0[1] as f64,
+            self.0[2] as f64,
+            self.0[3] as f64,
+        ])
     }
 }
 
 impl Into<Srgba<f32>> for HexColor {
     fn into(self) -> Srgba<f32> {
-        Srgba::<f32>::from([self.0[0] as f32, self.0[1] as f32, self.0[2] as f32, self.0[3] as f32, ])
+        Srgba::<f32>::from([
+            self.0[0] as f32,
+            self.0[1] as f32,
+            self.0[2] as f32,
+            self.0[3] as f32,
+        ])
     }
 }
 

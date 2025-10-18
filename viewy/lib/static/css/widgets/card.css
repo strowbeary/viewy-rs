@@ -1,0 +1,22 @@
+.card {
+    --card-box-shadow: 0px 2px 3px 0px #656a761a, 0px 8px 16px -10px #656a7633;
+    border-radius: calc(8rem / 16);
+
+    &.card--outlined {
+        border: calc(1rem / 16) solid var(--border);
+    }
+
+    &.card--outlined-raised {
+        border: calc(1rem / 16) solid var(--border);
+        box-shadow: var(--card-box-shadow);
+    }
+
+    &.card--filled {
+        background: var(--surface);
+    }
+
+    &.card--filled-raised {
+        background: var(--surface);
+        box-shadow: var(--card-box-shadow);
+    }
+}

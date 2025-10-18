@@ -1,14 +1,17 @@
 use crate::core::node::Node;
 use crate::core::widget::Widget;
-use crate::widgets::popup::Popup;
-use uuid::Uuid;
 
-pub mod actionnable;
-pub mod box_stylable;
+mod actionnable;
+mod box_stylable;
+mod cardifiable;
 
 use crate::core::theme::Color;
 #[doc(inline)]
 pub use box_stylable::*;
+#[doc(inline)]
+pub use cardifiable::*;
+#[doc(inline)]
+pub use actionnable::*;
 
 pub trait Appendable: Widget {
     fn append_child<C>(&mut self, child: C) -> &mut Self
@@ -55,7 +58,6 @@ pub trait Attributable: Widget {
         self
     }
 }
-
 
 pub trait Colorable: Widget {
     fn color(&mut self, color: Color) -> &mut Self {

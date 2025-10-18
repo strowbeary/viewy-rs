@@ -1,5 +1,5 @@
 .popover {
-    --animation-duration: 150ms;
+    --animation-duration: 100ms;
     --border-radius: calc(8 / 16 * 1rem);
 
     width: max-content;
@@ -11,12 +11,11 @@
     background: var(--background);
     opacity: 0;
     transform: translateY(-10px);
-    transition:
-            visibility 0ms 250ms,
-            opacity var(--animation-duration) 0ms,
-            z-index var(--animation-duration) 0ms,
-            backdrop-filter var(--animation-duration) 0ms,
-            transform calc(var(--animation-duration) * 2) ease;
+    transition: visibility 0ms var(--animation-duration) cubic-bezier(.33, 1, .68, 1),
+    opacity var(--animation-duration) 0ms cubic-bezier(.33, 1, .68, 1),
+    z-index var(--animation-duration) 0ms cubic-bezier(.33, 1, .68, 1),
+    backdrop-filter var(--animation-duration) 0ms cubic-bezier(.33, 1, .68, 1),
+    transform calc(var(--animation-duration) * 2) cubic-bezier(.33, 1, .68, 1);
     box-shadow:  0px 6px 12px -3px #25292e0a, 0px 6px 18px 0px #25292e1f;
 
     &.visible {

@@ -1,15 +1,14 @@
 //! Implementations specific to Page struct
-use rocket::{debug, Request};
+use crate::core::page::{Page, RenderMode};
 use rocket::http::ContentType;
 use rocket::http::hyper::header::CACHE_CONTROL;
 use rocket::log::private::info;
 use rocket::response::Responder;
 use rocket::serde::json::json;
-use crate::core::page::{Page, RenderMode};
+use rocket::{Request, debug};
 
 impl<'r> Responder<'r, 'static> for Page<'_> {
     fn respond_to(self, request: &'r Request<'_>) -> rocket::response::Result<'static> {
-
         let render_mode = match request
             .headers()
             .get_one("x-viewy-render-mode")
@@ -26,7 +25,5 @@ impl<'r> Responder<'r, 'static> for Page<'_> {
         response.set_raw_header("Cache-Control", "max-age=3600, private");
         response.set_raw_header("Vary", "x-viewy-render-mode");
         Ok(response)
-
-
     }
 }

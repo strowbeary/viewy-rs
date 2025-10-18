@@ -1,11 +1,11 @@
-use std::collections::{HashMap};
+use std::collections::HashMap;
 use uuid::Uuid;
 
 use crate::core::config::Config;
 use crate::core::layout::Layout;
+use crate::core::page::html_page::get_full_html_page;
 use crate::core::theme::Theme;
 use crate::node::{Node, NodeType};
-use crate::core::page::html_page::get_full_html_page;
 
 mod html_page;
 
@@ -19,8 +19,6 @@ pub enum RenderMode {
     /// Not used for the moment
     LayoutOnly,
 }
-
-
 
 pub struct Page<'a> {
     pub content: Node,

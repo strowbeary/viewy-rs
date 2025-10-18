@@ -1,0 +1,43 @@
+.tab-container {
+  display: flex;
+  flex-direction: column;
+  border: sp(1) solid var(--border);
+  border-radius: sp(8);
+  overflow: hidden;
+
+  &__button-container {
+    display: flex;
+    flex-direction: row;
+    gap: sp(4);
+    padding: sp(4);
+    border-bottom: sp(1) solid var(--border);
+
+    &__tab {
+      appearance: none;
+      border: none;
+      background: none;
+      padding: sp(2) sp(8);
+      font-size: sp(14);
+      line-height: sp(20);
+      font-weight: 500;
+      transition: background 150ms ease, color 150ms ease;
+      border-radius: sp(6);
+      color: var(--on-background);
+
+      &:hover {
+        background: var(--surface-bright);
+        color: var(--on-surface);
+      }
+
+      &.active {
+        background: var(--surface-dim);
+        color: var(--on-surface);
+      }
+    }
+  }
+
+  &__tab-content {
+    min-height: sp(10);
+    overflow: auto;
+  }
+}

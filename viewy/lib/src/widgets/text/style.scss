@@ -1,3 +1,166 @@
-.text {
+$fw-thin: 100;
+$fw-extra-light: 200;
+$fw-light: 300;
+$fw-normal: 400;
+$fw-medium: 500;
+$fw-semi-bold: 600;
+$fw-bold: 700;
+$fw-extra-bold: 800;
+$fw-black: 900;
+$fw-extra-black: 950;
 
+.text {
+  letter-spacing: -0.0222998em;
+
+  &--largetitle {
+    font-size: sp(30);
+    line-height: sp(40);
+    font-weight: $fw-bold;
+    letter-spacing: sp(-0.021);
+
+    &::first-letter {
+      text-transform: uppercase;
+    }
+
+    @media screen and (max-width: 840px) {
+      font-size: sp(20);
+      line-height: sp(28);
+      font-weight: $fw-bold;
+      letter-spacing: sp(-0.017);
+    }
+  }
+
+  &--h1 {
+    font-size: sp(24);
+    line-height: sp(32);
+    font-weight: $fw-bold;
+    letter-spacing: sp(-0.019);
+    margin: 0;
+  }
+
+  &--subtitle1 {
+    font-size: sp(16);
+    line-height: sp(22);
+    font-weight: $fw-semi-bold;
+    letter-spacing: sp(-0.011);
+  }
+
+  &--h2 {
+    font-size: sp(20);
+    line-height: sp(28);
+    font-weight: $fw-semi-bold;
+    letter-spacing: sp(-0.017);
+    margin: 0;
+  }
+
+  &--subtitle2 {
+    font-size: sp(16);
+    line-height: sp(20);
+    font-weight: $fw-medium;
+    letter-spacing: sp(-0.0011);
+  }
+
+  &--h3 {
+    font-size: sp(18);
+    line-height: sp(25);
+    font-weight: $fw-medium;
+    letter-spacing: sp(-0.014);
+    margin: 0;
+  }
+
+  &--subtitle3 {
+    font-size: sp(14);
+    line-height: sp(20);
+    font-weight: $fw-normal;
+    letter-spacing: sp(-0.006);
+  }
+
+  &--headline {
+    font-size: sp(16);
+    line-height: sp(24);
+    font-weight: $fw-bold;
+    letter-spacing: sp(-0.011);
+  }
+
+  &--body {
+    font-size: sp(17);
+    line-height: sp(22);
+    letter-spacing: sp(-0.013);
+    font-weight: $fw-normal;
+
+    & > code {
+      font-family: "Fira Mono", monospace;
+      height: sp(20);
+      font-size: sp(15);
+      padding: 0 sp(4);
+      border: sp(1) solid var(--color-border-hover);
+      background: var(--color-hover);
+      border-radius: sp($border-radius / 2);
+    }
+
+    & > pre {
+      border: sp(1) solid var(--color-border-hover);
+      background: var(--color-hover);
+      border-radius: sp($border-radius / 2);
+      padding: 0 sp(4);
+
+      code {
+        font-family: "Fira Mono", monospace;
+        font-size: sp(15);
+      }
+    }
+
+    a {
+      color: var(--color-accent);
+      text-decoration: underline;
+    }
+
+    p {
+      margin: 0;
+
+      & + p {
+        margin-top: sp(16);
+      }
+    }
+  }
+
+  &--article {
+    font-weight: $fw-normal;
+    font-family: "Merriweather", serif;
+    font-size: sp(18);
+    line-height: sp(28);
+    letter-spacing: sp(-0.014);
+  }
+
+  &--label {
+    font-size: sp(14);
+    line-height: sp(20);
+    letter-spacing: sp(-0.006);
+    font-weight: $fw-semi-bold;
+  }
+
+  &--overline {
+    font-size: sp(12);
+    line-height: sp(17);
+    letter-spacing: sp(1);
+    font-weight: $fw-medium;
+    text-transform: uppercase;
+  }
+
+  &--caption {
+    font-size: sp(13);
+    line-height: sp(17);
+    letter-spacing: sp(-0.003);
+    font-weight: $fw-normal;
+  }
+
+  &--nowrap {
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+  }
+}
+
+h1.text, p.text {
+  margin: 0;
 }

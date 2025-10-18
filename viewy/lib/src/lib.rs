@@ -63,7 +63,6 @@ extern crate figment;
 extern crate serde;
 #[doc(inline)]
 pub use crate::core::component::*;
-pub use crate::core::modifiers;
 pub use crate::core::node;
 use crate::core::widget::Widget;
 use lazy_static::lazy_static;
@@ -78,6 +77,7 @@ pub mod bindings;
 pub mod widgets;
 
 mod helper_fn;
+pub mod modifiers;
 
 #[doc(inline)]
 pub use crate::helper_fn::*;
@@ -90,15 +90,16 @@ lazy_static! {
 pub mod prelude {
     pub use crate::core::component::Component;
     pub use crate::core::config::Config;
-    pub use crate::core::modifiers::*;
+    pub use crate::core::layout::*;
+    pub use crate::modifiers::*;
     pub use crate::core::node::*;
     pub use crate::core::page::*;
-    pub use crate::core::layout::*;
     pub use crate::core::theme::*;
     pub use crate::helper_fn::*;
     pub use crate::widgets::button::*;
-    pub use crate::widgets::popup::*;
     pub use crate::widgets::view::*;
+    pub use crate::widgets::stack::*;
+    pub use crate::widgets::text::*;
 }
 
 #[cfg(test)]
@@ -106,9 +107,9 @@ mod tests {
     use grass::{InputSyntax, Options, OutputStyle};
     use std::time::Instant;
 
-    use crate::core::modifiers::Appendable;
+    use crate::modifiers::Appendable;
     use crate::prelude::*;
-    use crate::router::{Page, RenderMode};
+    use crate::prelude::{Page, RenderMode};
 
     #[test]
     fn benchmark() {

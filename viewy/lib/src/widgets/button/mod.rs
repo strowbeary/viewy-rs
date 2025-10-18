@@ -1,7 +1,6 @@
-use crate::core::modifiers::{Attributable, Classable};
+use crate::modifiers::{Attributable, Classable, OnClickActionnable};
 use crate::core::node::{Node, NodeType};
 use crate::core::widget::Widget;
-use crate::prelude::actionnable::OnClickActionnable;
 
 /// Used to set a button's importance level.
 #[derive(Debug, Clone)]
@@ -67,8 +66,6 @@ impl Button {
         self.set_attr("disabled", "disabled")
     }
 
-
-
     /// Make the button close the popup it is in
     /// ```rust
     /// Popup::new()
@@ -89,10 +86,8 @@ impl Button {
     }
 }
 
-
 impl OnClickActionnable for Button {
-    fn on_click(&mut self, action: crate::prelude::actionnable::Action) -> &mut Self {
-
+    fn on_click(&mut self, action: crate::prelude::Action) -> &mut Self {
         action.apply("click", self);
 
         self

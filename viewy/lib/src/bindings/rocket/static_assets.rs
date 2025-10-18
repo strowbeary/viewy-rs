@@ -1,9 +1,9 @@
 use rocket::fairing::{AdHoc, Fairing, Info, Kind};
 use rocket::fs::{FileServer, Options};
 use rocket::http::Header;
+use rocket::response::content::RawCss;
 use rocket::{Request, Response, Rocket, get, routes};
 use std::path::Path;
-use rocket::response::content::RawCss;
 
 pub struct CacheFairing;
 

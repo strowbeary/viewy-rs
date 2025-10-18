@@ -18,6 +18,7 @@ build = "build.rs"
 viewy-codegen = { path = "../codegen" }
 uuid = { version = "1.6", features = ["v4"] }
 rocket = { version = "0.5.0", optional = true }
+axum = { version = "0.8.6", optional = true }
 figment = { version = "0.10", features = ["toml", "env"] }
 grass = "0.13"
 minifier = "0.3"
@@ -44,3 +45,4 @@ uuid = { version = "1.6", features = ["v4"] }
 rich-text-area = []
 sortable-stack = []
 rocket = ["dep:rocket"]
+axum = ["dep:axum"]

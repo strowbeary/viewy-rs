@@ -21,14 +21,15 @@
     backdrop-filter var(--animation-duration) 0ms;
     -webkit-backdrop-filter: blur(0px);
     backdrop-filter: blur(0px);
-    &__window {
+
+    .popup__window {
         position: relative;
-        transition: transform var(--animation-duration) * 2 ease;
+        transition: transform calc(var(--animation-duration) * 2) ease;
         transform: translateY(10px);
         pointer-events: none;
         margin: auto;
         background: var(--surface);
-        border-radius: sp($border-radius);
+        border-radius: calc(var(--border-radius) / 16 * 1rem);
         box-shadow: 0 4px 8px 0 var(--color-shadow);
         max-height: 95vh;
         max-width: 95vw;
@@ -39,15 +40,16 @@
         .titlebar {
             background: var(--surface);
         }
-        &__window-bar {
+
+        .popup__window__window-bar {
             background: var(--surface-dark);
             display: flex;
             flex-direction: row;
             align-items: center;
         }
-        &__window-content {
+
+        .popup__window__window-content {
             overflow: auto;
-            padding: sp(10);
         }
     }
 

@@ -1,4 +1,5 @@
 $border-radius: 8;
+$animation-duration: 80ms;
 
 @function sp($sp) {
   @return ($sp / 16) * 1rem;
@@ -6,6 +7,9 @@ $border-radius: 8;
 
 .button {
   font-size: sp(16);
+  letter-spacing: sp(0.75);
+  font-weight: 400;
+
   border: none;
   border-radius: sp($border-radius * (3/4));
   padding: sp(8) sp(16);
@@ -16,15 +20,17 @@ $border-radius: 8;
   justify-content: center;
   width: max-content;
   box-sizing: border-box;
-  transition: background 150ms, color 150ms, border 150ms;
+  transition: background $animation-duration, color $animation-duration, border $animation-duration;
   font-family: inherit;
   text-decoration: none;
   flex-wrap: nowrap;
   position: relative;
 
+
   &:disabled {
     cursor: not-allowed;
   }
+
 
 
   & > .badge {
@@ -209,10 +215,11 @@ $border-radius: 8;
   &--filled {
     color: var(--on-accent);
     background: var(--accent);
-    border: none;
+    border: 1px solid color-mix(in hsl, var(--accent), var(--on-background) 5%);
 
     @media (prefers-color-scheme: dark) {
       background: unquote("oklch(from var(--accent) calc(l - 0.2) c h)");
+      border: 1px solid color-mix(in hsl, unquote("oklch(from var(--accent) calc(l - 0.2) c h)"), var(--on-background) 5%);
     }
 
     .icon, .text {
@@ -234,15 +241,17 @@ $border-radius: 8;
     &:disabled {
       color: var(--on-destructive);
       background: var(--surface-dim);
+      border: 1px solid color-mix(in hsl, unquote("oklch(from var(--surface-dim) calc(l - 0.05) c h)"), var(--on-background) 5%);
     }
 
     &--destructive {
       color: var(--on-destructive);
       background: var(--destructive);
-      border: none;
+      border: 1px solid color-mix(in hsl, var(--destructive), var(--on-background) 5%);
 
       @media (prefers-color-scheme: dark) {
         background: unquote("oklch(from var(--destructive) calc(l - 0.2) c h)");
+        border: 1px solid color-mix(in hsl, unquote("oklch(from var(--destructive) calc(l - 0.2) c h)"), var(--on-background) 5%);
       }
 
       .icon, .text {
@@ -265,6 +274,7 @@ $border-radius: 8;
         background: none;
         color: var(--on-destructive);
         background: var(--destructive-surface);
+        border: 1px solid color-mix(in hsl, var(--destructive-surface), var(--on-background) 3%);
       }
     }
 

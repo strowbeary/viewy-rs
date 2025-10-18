@@ -15,11 +15,17 @@ pub enum TextStyle {
     Subtitle3,
     Body,
     Article,
-    Button,
     Label,
     Overline,
     Caption,
 }
+
+impl TextStyle {
+    pub fn with_content(self, content: &str) -> Text {
+        Text::new(content, self)
+    }
+}
+
 
 #[derive(Widget, Classable, Attributable)]
 #[widget(style = "./style.scss")]
@@ -46,9 +52,11 @@ impl Text {
             _ => self.node.node_type = NodeType::Normal("p"),
         }
 
-
         self.add_class(format!("text--{:?}", self.style).to_lowercase().as_str());
         self.node.text = Some(self.content.clone());
     }
 }
-fn test() {}
+fn test() {
+    TextStyle::Article.with_content("");
+    Text::new("", TextStyle::Article);
+}

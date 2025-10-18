@@ -22,23 +22,20 @@ pub fn widget_derive(input: TokenStream) -> TokenStream {
                         let value = meta.value()?;
                         let s: LitStr = value.parse()?;
                         style_value = Some(s.value());
-                        Ok(())
-                    } else if meta.path.is_ident("script") {
+                    }
+                    if meta.path.is_ident("script") {
                         let value = meta.value()?;
                         let s: LitStr = value.parse()?;
                         script_value = Some(s.value());
-                        Ok(())
-                    } else {
-                        Err(meta.error("unsupported attribute"))
                     }
+                    Ok(())
                 })
-                .expect("Can parse attribute widget, check syntax");
+                    .expect("Can't parse attribute widget, check syntax");
             }
         }
     }
 
     let style_str = style_value.expect("style is a mandatory attribute in widget macro");
-
 
     let generated_code = quote! {
         use std::ops::{Deref, DerefMut};
@@ -190,6 +187,24 @@ fn impl_dimensionable_macro(ast: &syn::DeriveInput) -> TokenStream {
     let name = &ast.ident;
     let generated_code = quote! {
         impl Dimensionable for #name {}
+    };
+    generated_code.into()
+}
+
+#[proc_macro_derive(Cardifiable)]
+pub fn cardifiable_derive(input: TokenStream) -> TokenStream {
+    // Construct a representation of Rust code as a syntax tree
+    // that we can manipulate
+    let ast = syn::parse(input).unwrap();
+
+    // Build the trait implementation
+    impl_cardifiable_macro(&ast)
+}
+
+fn impl_cardifiable_macro(ast: &syn::DeriveInput) -> TokenStream {
+    let name = &ast.ident;
+    let generated_code = quote! {
+        impl Cardifiable for #name {}
     };
     generated_code.into()
 }
