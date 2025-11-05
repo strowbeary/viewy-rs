@@ -1,10 +1,8 @@
 use short_uuid::ShortUuid;
+use std::collections::{BTreeMap, BTreeSet};
 use std::default::Default;
 use std::fmt::Write;
-use std::{
-    collections::{HashMap, HashSet},
-    hash::{Hash, Hasher},
-};
+use std::hash::{Hash, Hasher};
 use uuid::Uuid;
 
 #[derive(Clone, Debug)]
@@ -22,9 +20,9 @@ pub struct Node {
     pub node_type: NodeType,
     pub text: Option<String>,
     pub children: Vec<Node>,
-    pub class_list: HashSet<String>,
-    pub node_style: Vec<(String, String)>,
-    pub attributes: HashMap<String, String>,
+    pub class_list: BTreeSet<String>,
+    pub node_style: BTreeMap<String, String>,
+    pub attributes: BTreeMap<String, String>,
 }
 
 impl Eq for Node {}
@@ -48,9 +46,9 @@ impl Default for Node {
             node_type: NodeType::Normal("div"),
             text: None,
             children: vec![],
-            class_list: HashSet::new(),
-            node_style: vec![],
-            attributes: HashMap::default(),
+            class_list: BTreeSet::new(),
+            node_style: BTreeMap::new(),
+            attributes: BTreeMap::new(),
         }
     }
 }

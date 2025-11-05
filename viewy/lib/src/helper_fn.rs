@@ -1,5 +1,8 @@
+use grass_compiler::sass_value::{ArgumentResult, SassNumber, Unit, Value};
+use grass_compiler::{Visitor, Result as SassResult};
 use crate::core::color::RgbaColor;
 use palette::*;
+use crate::CONFIG;
 
 const PHI: f64 = 1.61803398875;
 
@@ -29,6 +32,8 @@ pub fn sp(value: i32) -> String {
     format!("{}rem", real_value / 16.0)
 }
 
+
+
 /// Scales a given value using the power of the golden ratio (PHI).
 ///
 /// This function raises the golden ratio (PHI) to the power of the provided scale (converted to a float)
@@ -51,7 +56,8 @@ pub fn sp(value: i32) -> String {
 /// ```
 pub fn scale(scale: i32) -> i32 {
     let real_scale = scale as f64;
-    real_scale.powf(PHI).ceil() as i32
+    let real_spacing_factor = CONFIG.shapes.spacing_factor as f64;
+    real_scale.powf(real_spacing_factor.sqrt()).ceil() as i32
 }
 
 /// Determines a contrasting text color (either black or white) based on the luminance of the input color.

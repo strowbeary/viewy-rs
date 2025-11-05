@@ -7,11 +7,11 @@ mod cardifiable;
 
 use crate::core::theme::Color;
 #[doc(inline)]
+pub use actionnable::*;
+#[doc(inline)]
 pub use box_stylable::*;
 #[doc(inline)]
 pub use cardifiable::*;
-#[doc(inline)]
-pub use actionnable::*;
 
 pub trait Appendable: Widget {
     fn append_child<C>(&mut self, child: C) -> &mut Self
@@ -63,24 +63,24 @@ pub trait Colorable: Widget {
     fn color(&mut self, color: Color) -> &mut Self {
         let node: &mut Node = self.deref_mut();
         node.node_style
-            .push(("color".to_string(), format!("var({})", color.as_str())));
+            .insert("color".to_string(), format!("var({})", color.as_str()));
         self
     }
 
     fn background_color(&mut self, color: Color) -> &mut Self {
         let node: &mut Node = self.deref_mut();
-        node.node_style.push((
+        node.node_style.insert(
             "background-color".to_string(),
             format!("var({})", color.as_str()),
-        ));
+        );
         self
     }
     fn border_color(&mut self, color: Color) -> &mut Self {
         let node: &mut Node = self.deref_mut();
-        node.node_style.push((
+        node.node_style.insert(
             "border-color".to_string(),
             format!("var({})", color.as_str()),
-        ));
+        );
         self
     }
 }

@@ -115,6 +115,7 @@ async fn actions() -> Page<'static> {
             main_stack
         })
 }
+
 #[get("/popover-content")]
 async fn popover_content() -> Page<'static> {
     Page::with_title("Viewy showcase – Actions").with_content({
@@ -156,31 +157,13 @@ fn benchmark() -> Page<'static> {
         stack
     })
 }
+
 fn layout(content: Node) -> Node {
     let mut layout = View::new();
     layout.append_child(content);
     layout.text = Some("Le Lorem Ipsum est simplement du faux texte employé dans la composition et la mise en page avant impression. Le Lorem Ipsum est le faux texte standard de l'imprimerie depuis les années 1500, quand un imprimeur anonyme assembla ensemble des morceaux de texte pour réaliser un livre spécimen de polices de texte. Il n'a pas fait que survivre cinq siècles, mais s'est aussi adapté à la bureautique informatique, sans que son contenu n'en soit modifié. Il a été popularisé dans les années 1960 grâce à la vente de feuilles Letraset contenant des passages du Lorem Ipsum, et, plus récemment, par son inclusion dans des applications de mise en page de texte, comme Aldus PageMaker.".to_string());
     layout.into()
 }
-
-/*
-#[get("/infinite-hellos?<n>")]
-fn hello(n: usize) -> RawHtml<TextStream![String]> {
-    let mut interval = interval(Duration::from_millis(10));
-    RawHtml(TextStream! {
-        let page_content = Page::with_title("Streaming")
-        .with_layout(&layout).compile(RenderMode::LayoutOnly);
-        let page = page_content.split("<!--VIEWY_CONTENT-->").collect::<Vec<&str>>();
-        yield page[0].to_string();
-        interval.tick().await;
-        for i in 0..n {
-        let node: Node = Button::new(&format!("Button {i}"), ButtonStyle::Filled).into();
-            yield node.render()
-        interval.tick().await;
-        }
-        yield page[1].to_string();
-    })
-}*/
 
 #[derive(Component, Clone)]
 struct MyPage {

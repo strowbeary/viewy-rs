@@ -1,7 +1,7 @@
 [app]
 name = "Viewy showcase"
 favicons = [
-    { rel = "shortcut icon", href="/assets/logo.svg"}
+    { rel = "shortcut icon", href="/assets/favicon.svg"}
 ]
 
 [colors]
@@ -14,10 +14,15 @@ warning = { light = "#FF9500", dark = "#FF9F0A" }
 
 [shapes]
 border-radius = 0
-spacing-factor = 4
-
-[fonts]
-roboto = { url = "https://fonts.googleapis.com/css2?family=Roboto&display=swap", role = "normal", default = true }
+spacing-factor = 3
 
 [icon-packs]
 lucide = { git = "https://github.com/lucide-icons/lucide.git", path = "icons", branch = "main" }
+
+[tokens]
+
+font_stack = [
+    { name = "roboto", url = "https://fonts.googleapis.com/css2?family=Roboto&display=swap" }
+
+]
+

@@ -4,7 +4,6 @@ use rocket::http::ContentType;
 use rocket::http::hyper::header::CACHE_CONTROL;
 use rocket::log::private::info;
 use rocket::response::Responder;
-use rocket::serde::json::json;
 use rocket::{Request, debug};
 
 impl<'r> Responder<'r, 'static> for Page<'_> {

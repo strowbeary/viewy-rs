@@ -6,7 +6,8 @@ use crate::node::Node;
 #[widget(style = "./style.scss")]
 pub struct Header {
     node: Node,
-
+    main_left_item: Node,
+    main_right_item: Node,
 }
 
 impl Header {

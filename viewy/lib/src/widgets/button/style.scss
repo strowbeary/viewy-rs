@@ -1,9 +1,6 @@
 $border-radius: 8;
 $animation-duration: 80ms;
 
-@function sp($sp) {
-  @return ($sp / 16) * 1rem;
-}
 
 .button {
   font-size: sp(16);
@@ -12,7 +9,7 @@ $animation-duration: 80ms;
 
   border: none;
   border-radius: sp($border-radius * (3/4));
-  padding: sp(8) sp(16);
+  padding: scale(3) scale(4);
   cursor: pointer;
   display: inline-flex;
   flex-direction: row;

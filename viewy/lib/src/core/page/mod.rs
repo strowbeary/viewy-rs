@@ -1,4 +1,3 @@
-use std::collections::HashMap;
 use uuid::Uuid;
 
 use crate::core::config::Config;
@@ -6,8 +5,15 @@ use crate::core::layout::Layout;
 use crate::core::page::html_page::get_full_html_page;
 use crate::core::theme::Theme;
 use crate::node::{Node, NodeType};
+use futures::Stream;
+use std::pin::Pin;
+use std::task::{Context, Poll};
+use std::vec;
 
 mod html_page;
+
+pub trait HtmlStream: Stream<Item = String> + Send {}
+impl<T> HtmlStream for T where T: Stream<Item = String> + Send {}
 
 /// `RenderMode` enum is used to determine how to render a `Page`.
 #[derive(Debug)]
@@ -63,6 +69,13 @@ impl<'a> Page<'a> {
         self
     }
 
+    pub fn render_stream(
+        self,
+        render_mode: RenderMode,
+    ) -> Pin<Box<dyn Stream<Item = String> + Send>> {
+        Box::pin(futures::stream::iter(vec![]))
+    }
+
     pub fn compile(self, render_mode: RenderMode) -> String {
         let theme_variant = self.theme.as_str();
         let mut html_buffer = String::new();
@@ -90,11 +103,7 @@ impl<'a> Page<'a> {
                     let mut content = (self.layout)(Node {
                         identifier: Uuid::NAMESPACE_OID,
                         node_type: NodeType::Comment("VIEWY_CONTENT"),
-                        text: None,
-                        children: vec![],
-                        class_list: Default::default(),
-                        node_style: vec![],
-                        attributes: HashMap::new(),
+                        ..Node::default()
                     });
 
                     content.render(&mut html_buffer);
