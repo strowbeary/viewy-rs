@@ -37,7 +37,7 @@ mod vstack;
 use std::ops::{Deref, DerefMut};
 
 pub use avatar::*;
-pub use badge::{Badge, BadgeModifiers, BadgeType};
+pub use badge::{Badge, BadgeModifiers, BadgeSupport, BadgeType};
 pub use button::{Button, ButtonStyle};
 pub use card::{Card, CardStyle};
 pub use checkbox::*;
