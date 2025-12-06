@@ -5,7 +5,8 @@ use crate::config::Config;
 
 fn get_stylesheets(config: &Config) -> Vec<String> {
     let mut styles = vec![
-        format!("
+        format!(
+            "
 @use \"sass:color\";
 @use \"sass:math\";
 
@@ -28,22 +29,22 @@ $success-dark: {success_dark};
 $on-success-light: {on_success_light};
 $on-success-dark: {on_success_dark};
             ",
-                accent_light = config.colors.accent.light,
-                accent_dark = config.colors.accent.dark,
-                destructive_light = config.colors.destructive.light,
-                on_destructive_light = config.colors.on_destructive.light,
-                destructive_dark = config.colors.destructive.dark,
-                on_destructive_dark = config.colors.on_destructive.dark,
-                success_light = config.colors.success.light,
-                on_success_light = config.colors.on_success.light,
-                success_dark = config.colors.success.dark,
-                on_success_dark = config.colors.on_success.dark,
-                on_accent = config.colors.on_accent.light,
-                border_radius = config.shapes.border_radius,
-                background_light = config.colors.background.light,
-                background_dark = config.colors.background.dark,
-                surface_light = config.colors.surface.light,
-                surface_dark = config.colors.surface.dark
+            accent_light = config.colors.accent.light,
+            accent_dark = config.colors.accent.dark,
+            destructive_light = config.colors.destructive.light,
+            on_destructive_light = config.colors.on_destructive.light,
+            destructive_dark = config.colors.destructive.dark,
+            on_destructive_dark = config.colors.on_destructive.dark,
+            success_light = config.colors.success.light,
+            on_success_light = config.colors.on_success.light,
+            success_dark = config.colors.success.dark,
+            on_success_dark = config.colors.on_success.dark,
+            on_accent = config.colors.on_accent.light,
+            border_radius = config.shapes.border_radius,
+            background_light = config.colors.background.light,
+            background_dark = config.colors.background.dark,
+            surface_light = config.colors.surface.light,
+            surface_dark = config.colors.surface.dark
         ),
         include_str!("../themes/luminance.scss").to_string(),
         include_str!("../themes/palette.scss").to_string(),
@@ -120,7 +121,6 @@ fn get_scripts(config: &Config) -> Vec<String> {
     scripts
 }
 
-
 /// At startup it compile theme and minify js sources.
 /// You have to use it to serve these assets to the client.
 ///
@@ -163,24 +163,16 @@ impl Assets {
         theme
     }
     fn compile_theme(config: &Config) -> String {
+        let mut output_style = OutputStyle::Compressed;
+        if cfg!(debug_assertions) {
+            output_style = OutputStyle::Expanded;
+        }
         print!("Compile theme");
         let stylesheets = get_stylesheets(&config).join("");
-        match grass::from_string(
-            stylesheets,
-            &grass::Options::default().style(OutputStyle::Expanded),
-        ) {
+        match grass::from_string(stylesheets, &grass::Options::default().style(output_style)) {
             Ok(css) => {
-                match Minifier::default().minify(&css, Level::One) {
-                    Ok(minified_css) => {
-                        println!(" [Done]");
-                        minified_css
-                    }
-                    Err(err) => {
-                        println!(" [Error]");
-                        println!("{:?}", err);
-                        css
-                    }
-                }
+                println!(" [Done]");
+                css
             }
             Err(err) => {
                 println!(" [Error]");

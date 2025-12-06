@@ -8,3 +8,6 @@ temp_dir = "./uploads"
 file = "2000 MiB"
 form = "3 MiB"
 data-form = "2000 MiB"
+
+[release]
+log_level = "normal"

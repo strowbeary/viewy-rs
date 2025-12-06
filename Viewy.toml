@@ -1,0 +1,38 @@
+[app]
+name = "Viewy showcase"
+favicons = [
+    { rel = "shortcut icon", href="/assets/square-logo.svg"}
+]
+
+[features]
+rich-text-editor = true
+sortable-stack = true
+
+[colors]
+accent = { light = "#0052cc", dark = "#3385ff" }
+on-accent = { light = "#ffffff", dark = "#ffffff" }
+
+background = { light = "#ffffff", dark = "#121212" }
+on-background =  { light = "#000000", dark = "#ffffff" }
+
+surface = { light = "#efefef", dark = "#181818" }
+on-surface = { light = "#000000", dark = "#ffffff" }
+
+destructive = { light = "#C70039 ", dark = "#ff0048" }
+on-destructive = { light = "#ffffff", dark = "#ffffff" }
+
+success = { light = "#3DA144 ", dark = "#3DA144" }
+on-success = { light = "#ffffff", dark = "#ffffff" }
+
+[shapes]
+border-radius = 8
+spacing-factor = 4
+
+[animations]
+time = "150ms"
+
+[typography]
+line-height-factor = 1.2
+
+
+[shadows]
