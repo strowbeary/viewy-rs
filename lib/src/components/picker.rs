@@ -1,3 +1,5 @@
+use std::default;
+
 use uuid::Uuid;
 
 use crate::Renderable;
@@ -50,6 +52,7 @@ pub struct Picker {
     is_disabled: bool,
     auto_submit: bool,
     required: bool,
+    multiple: bool,
     pub form: Option<String>,
 }
 
@@ -66,6 +69,7 @@ impl Picker {
             auto_submit: false,
             required: false,
             form: None,
+            multiple: false,
         }
     }
 
@@ -84,6 +88,12 @@ impl Picker {
     }
 
     pub fn multiple(&mut self) -> &mut Self {
+        match &self.style {
+            PickerStyle::Segmented => {
+                self.multiple = true;
+            }
+            _ => {}
+        }
         self
     }
 
@@ -156,7 +166,7 @@ impl Renderable for Picker {
                             let mut radio = View::new();
                             radio
                                 .tag("input")
-                                .set_attr("type", "radio")
+                                .set_attr("type", if self.multiple { "checkbox" } else { "radio" })
                                 .set_attr("name", self.name.as_str())
                                 .set_attr("value", option.value.as_str())
                                 .set_attr("id", radio_id.as_str())

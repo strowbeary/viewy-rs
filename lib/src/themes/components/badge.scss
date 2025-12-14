@@ -1,26 +1,31 @@
 .badge {
-  display: inline-block;
-  box-sizing: content-box;
-  border-radius: sp(30);
-  &--with-text {
-    padding: sp(3) sp(6);
-    line-height: sp(14);
-    min-width: sp(8);
-    min-height: sp(8);
-    font-size: sp(14);
-    text-align: center;
-  }
-  &--textless {
-    min-width: sp(12);
-    min-height: sp(12);
-  }
+    display: inline-block;
+    box-sizing: content-box;
+    border-radius: sp(30);
+    &--with-text {
+        padding: sp(3) sp(6);
+        line-height: sp(14);
+        min-width: sp(8);
+        min-height: sp(8);
+        font-size: sp(14);
+        text-align: center;
+    }
+    &--textless {
+        min-width: sp(12);
+        min-height: sp(12);
+    }
 
-  &--normal {
-    background: var(--color-accent);
-    color: var(--color-on-accent);
-  }
-  &--important {
-    background: var(--color-destructive);
-    color: var(--color-on-destructive);
-  }
+    &--normal {
+        background: var(--color-accent);
+        color: var(--color-on-accent);
+    }
+    &--important {
+        background: var(--color-destructive);
+        color: var(--color-on-destructive);
+    }
+}
+
+.menu-item--selected > .badge {
+    background: var(--color-on-accent);
+    color: var(--color-accent);
 }

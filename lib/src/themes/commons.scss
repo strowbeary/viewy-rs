@@ -1,61 +1,70 @@
-@import url('https://rsms.me/inter/inter.css');
-@import url('https://fonts.googleapis.com/css2?family=Fira+Mono&family=Merriweather&display=swap');
+@import url("https://rsms.me/inter/inter.css");
+@import url("https://fonts.googleapis.com/css2?family=Fira+Mono&family=Merriweather&display=swap");
 
 @mixin font-stack() {
-  @supports not (font-variation-settings: normal) {
-    font-family: Inter, sans-serif;
-  }
+    @supports not (font-variation-settings: normal) {
+        font-family: Inter, sans-serif;
+    }
 
-  @supports (font-variation-settings: normal) {
-    font-family: InterVariable, sans-serif;
-  }
+    @supports (font-variation-settings: normal) {
+        font-family: InterVariable, sans-serif;
+    }
 }
 
 * {
-  scroll-behavior: smooth;
+    scroll-behavior: smooth;
+}
+
+@view-transition {
+    navigation: auto;
+}
+
+::view-transition-old(root),
+::view-transition-new(root) {
+    animation-duration: 0.5s;
 }
 
 html {
-  text-rendering: optimizeLegibility;
-  @include font-stack;
+    text-rendering: optimizeLegibility;
+    @include font-stack;
 }
 
 body {
-  --border-radius: #{sp($border-radius)};
-  margin: 0;
-  font-size: sp(14);
-  background: var(--background);
-  color: var(--color-text);
-  height: 100dvh;
+    --border-radius: #{sp($border-radius)};
+    margin: 0;
+    font-size: sp(14);
+    background: var(--background);
+    color: var(--color-text);
+    height: 100dvh;
 }
 
 .app-themes {
-  &--auto {
-    @media (prefers-color-scheme: light) {
-      @include palette("light");
+    &--auto {
+        @media (prefers-color-scheme: light) {
+            @include palette("light");
+        }
+        @media (prefers-color-scheme: dark) {
+            @include palette("dark");
+        }
     }
-    @media (prefers-color-scheme: dark) {
-      @include palette("dark");
+
+    &--light {
+        @include palette("light");
     }
-  }
 
-  &--light {
-    @include palette("light");
-  }
-
-  &--dark {
-    @include palette("dark");
-  }
+    &--dark {
+        @include palette("dark");
+    }
 }
 
 #floating-element-wrapper {
-  display: block;
+    display: block;
 }
 
 a {
-  color: inherit;
-  text-decoration: none;
+    color: inherit;
+    text-decoration: none;
 }
 .icon {
-  display: block;
+    display: block;
 }
