@@ -132,7 +132,7 @@
             border-radius: sp($border-radius);
             padding: sp(8) sp(12);
             grid-gap: scale(3);
-            min-width: sp(200);
+            min-width: sp(100);
 
             &::after {
                 content: "";

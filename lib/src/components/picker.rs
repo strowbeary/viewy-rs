@@ -13,6 +13,7 @@ pub struct PickerOption {
     pub icon: Option<Box<dyn IconPack>>,
     pub label: String,
     pub value: String,
+    pub selected: Option<bool>,
 }
 
 impl PickerOption {
@@ -21,6 +22,7 @@ impl PickerOption {
             icon: None,
             label: label.to_string(),
             value: value.to_string(),
+            selected: None,
         }
     }
     /// Set picker's icon
@@ -29,6 +31,15 @@ impl PickerOption {
         T: 'static + IconPack,
     {
         self.icon = Some(Box::new(icon));
+        self
+    }
+
+    pub fn selected(&mut self) -> &mut Self {
+        self.selected = Some(true);
+        self
+    }
+    pub fn set_selected(&mut self, selected: bool) -> &mut Self {
+        self.selected = Some(selected);
         self
     }
 }
@@ -54,6 +65,7 @@ pub struct Picker {
     required: bool,
     multiple: bool,
     pub form: Option<String>,
+    disable_search_bar: bool,
 }
 
 impl Picker {
@@ -70,6 +82,7 @@ impl Picker {
             required: false,
             form: None,
             multiple: false,
+            disable_search_bar: false,
         }
     }
 
@@ -120,6 +133,11 @@ impl Picker {
 
     pub fn append_child(&mut self, child: PickerOption) -> &mut Self {
         self.options.push(child);
+        self
+    }
+
+    pub fn disable_dropdown_search_bar(&mut self) -> &mut Self {
+        self.disable_search_bar = true;
         self
     }
 }
@@ -175,8 +193,12 @@ impl Renderable for Picker {
                                 radio.set_attr("form", form_id);
                             }
 
-                            if self.value.eq(option.value.as_str()) {
+                            if self.multiple && option.selected.unwrap_or(false) {
                                 radio.set_attr("checked", "checked");
+                            } else {
+                                if self.value.eq(option.value.as_str()) {
+                                    radio.set_attr("checked", "checked");
+                                }
                             }
                             if self.required {
                                 radio.set_attr("required", "required");
@@ -255,6 +277,9 @@ impl Renderable for Picker {
                                             let mut field = Field::new("", FieldType::Search);
                                             field.add_class("picker--dropdown__dropdown__search-bar")
                                                 .placeholder("Recherche");
+                                            if self.disable_search_bar {
+                                                field.display("none");
+                                            }
                                             field
                                         })
                                         .append_child({
