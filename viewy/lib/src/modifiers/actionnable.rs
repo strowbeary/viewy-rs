@@ -11,8 +11,6 @@ pub enum Action<'a> {
         popup_content_url: Uri,
         display_window_controls: bool, //Idée pour plus tard
     },
-    CloseParentPopup,
-    CloseParentPopover,
     /// Close parent popup or popover
     CloseParentWindow,
     OpenPopover {
@@ -120,9 +118,14 @@ pub trait KeyboardActionnable: Widget {
     }
 }
 
-pub trait InputChangeActionnable: Widget {
+pub trait InputActionnable: Widget {
     fn on_change(&mut self, action: Action) -> &mut Self {
         action.apply("change", self);
+        self
+    }
+
+    fn on_focus(&mut self, action: Action) -> &mut Self {
+        action.apply("focus", self);
         self
     }
 }
