@@ -9,9 +9,12 @@ pub enum Action<'a> {
     },
     OpenPopup {
         popup_content_url: Uri,
-        display_window_controls: bool //Idée pour plus tard
+        display_window_controls: bool, //Idée pour plus tard
     },
     CloseParentPopup,
+    CloseParentPopover,
+    /// Close parent popup or popover
+    CloseParentWindow,
     OpenPopover {
         popover_content_url: Uri,
     },
@@ -34,7 +37,10 @@ impl Action<'_> {
                     .attributes
                     .insert("href".to_string(), url.to_string());
             }
-            Action::OpenPopup { popup_content_url, display_window_controls } => {
+            Action::OpenPopup {
+                popup_content_url,
+                display_window_controls,
+            } => {
                 let popup_name = short!();
                 widget
                     .attributes
@@ -43,7 +49,6 @@ impl Action<'_> {
                     "data-v-target-popup".to_string(),
                     format!("popup_{}", popup_name),
                 );
-
 
                 widget.attributes.insert(
                     "data-v-display-window-controls".to_string(),
@@ -87,10 +92,10 @@ impl Action<'_> {
                     .insert("data-v-url".to_string(), popover_content_url.to_string());
             }
             Action::SubmitForm { form_name, .. } => {}
-            Action::CloseParentPopup => {
+            Action::CloseParentWindow => {
                 widget.attributes.insert(
                     format!("data-v-on-{event}"),
-                    "close_parent_popup".to_string(),
+                    "close_parent_window".to_string(),
                 );
             }
         }

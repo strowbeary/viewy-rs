@@ -1,5 +1,5 @@
 [global]
-port = 8001
+port = 9856
 address = "0.0.0.0"
 secret_key = "hPRYygVRiMyxpw5sBB1XeCMN1kFsDCqKvBi2QJxBVHQk"
 temp_dir = "./uploads"

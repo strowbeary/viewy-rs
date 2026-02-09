@@ -1,293 +1,363 @@
 $border-radius: 8;
 $animation-duration: 80ms;
 
-
 .button {
-  font-size: sp(16);
-  letter-spacing: sp(0.75);
-  font-weight: 400;
+    font-size: sp(16);
+    letter-spacing: sp(0.75);
+    font-weight: 400;
 
-  border: none;
-  border-radius: sp($border-radius * (3/4));
-  padding: scale(3) scale(4);
-  cursor: pointer;
-  display: inline-flex;
-  flex-direction: row;
-  align-items: center;
-  justify-content: center;
-  width: max-content;
-  box-sizing: border-box;
-  transition: background $animation-duration, color $animation-duration, border $animation-duration;
-  font-family: inherit;
-  text-decoration: none;
-  flex-wrap: nowrap;
-  position: relative;
-
-
-  &:disabled {
-    cursor: not-allowed;
-  }
-
-
-
-  & > .badge {
-    position: absolute;
-    right: sp(-10);
-    top: sp(-10);
-  }
-
-  .icon {
-    margin: 0 sp(5) 0 0;
-  }
-
-  &--reversed {
-    flex-direction: row-reverse;
-
-    .icon {
-      margin: 0 0 0 sp(5);
-    }
-  }
-
-  &--link {
-    padding: sp(8) 0;
     border: none;
-    background: transparent;
-
-    color: var(--accent);
-
-    &:hover {
-      color: color-mix(in hsl, var(--accent) 80%, var(--on-accent));
-    }
-
-    &:active {
-      color: color-mix(in hsl, var(--accent) 60%, var(--on-accent));
-    }
-
-    &:focus-visible {
-      box-shadow: 0 0 0 sp(3) var(--accent);
-    }
-
-    &:disabled {
-      background: none;
-      color: color-mix(in hsl, var(--accent) 60%, var(--on-accent));
-    }
-
-    &--destructive {
-      color: var(--destructive);
-
-
-      &:hover {
-        color: color-mix(in hsl, var(--destructive) 80%, var(--on-destructive));
-      }
-
-      &:active {
-        color: color-mix(in hsl, var(--destructive) 60%, var(--on-destructive));
-      }
-
-      &:focus-visible {
-        box-shadow: 0 0 0 sp(3) var(--destructive);
-      }
-
-      &:disabled {
-        background: none;
-        color: color-mix(in hsl, var(--destructive) 60%, var(--on-destructive));
-      }
-    }
-
-  }
-
-  &--flat {
-    border: none;
-    background: var(--accentuated-surface-bright);
-    color: var(--accent);
-    @media (prefers-color-scheme: dark) {
-      color: unquote("oklch(from var(--accent) calc(l + 0.2) c h)");
-    }
-
-    &:hover {
-      background: var(--accentuated-surface);
-    }
-
-    &:active {
-      background: var(--accentuated-surface-dim);
-
-    }
-
-    &:focus-visible {
-      box-shadow: 0 0 0 sp(3) color-mix(in hsl, transparent 30%, var(--accent));
-
-    }
+    border-radius: sp($border-radius * (3/4));
+    padding: scale(3) scale(4);
+    cursor: pointer;
+    display: inline-flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    width: max-content;
+    box-sizing: border-box;
+    transition:
+        background $animation-duration,
+        color $animation-duration,
+        border $animation-duration;
+    font-family: inherit;
+    text-decoration: none;
+    flex-wrap: nowrap;
+    position: relative;
 
     &:disabled {
-      --background: color-mix(in hsl, transparent 50%, var(--accentuated-surface-bright));
-      background: var(--background);
-      color: color-mix(in hsl, var(--accent) 50%, var(--background));
-
+        cursor: not-allowed;
     }
-
-    &--destructive {
-      color: var(--destructive);
-      background: var(--destructive-surface-bright);
-      @media (prefers-color-scheme: dark) {
-        background: unquote("oklch(from var(--destructive-surface-bright) calc(l - 0.2) c h)");
-      }
-      &:hover {
-        background: var(--destructive-surface);
-      }
-
-      &:active {
-        background: var(--destructive-surface-dim);
-      }
-
-      &:focus-visible {
-        box-shadow: 0 0 0 sp(3) color-mix(in hsl, transparent 30%, var(--destructive));
-      }
-
-
-      &:disabled {
-        --background: color-mix(in hsl, transparent 50%, var(--destructive-surface-bright));
-        background: var(--background);
-        color: color-mix(in hsl, var(--destructive) 50%, var(--background));
-
-      }
-    }
-  }
-
-  &--outlined {
-    background: transparent;
-    border: 1px solid var(--border);
-    color: var(--accent);
-    @media (prefers-color-scheme: dark) {
-      color: unquote("oklch(from var(--accent) calc(l + 0.2) c h)");
-    }
-
-    &:hover {
-      background: var(--accentuated-surface-bright);
-      border: sp(1) solid color-mix(in hsl, var(--border) 85%, var(--accent));
-    }
-
-    &:active {
-      background: var(--accentuated-surface);
-      border: sp(1) solid color-mix(in hsl, var(--border) 80%, var(--accent));
-    }
-
-    &:focus-visible {
-      box-shadow: 0 0 0 sp(3) color-mix(in hsl, transparent 30%, var(--accent));
-    }
-
-    &:disabled {
-      background: none;
-      color: color-mix(in hsl, var(--on-background) 30%, var(--background));
-      border: sp(1) solid color-mix(in hsl, var(--border) 70%, var(--background));
-    }
-
-    &--destructive {
-
-      color: var(--destructive);
-
-
-      &:hover {
-        background: var(--destructive-surface-bright);
-        border: sp(1) solid color-mix(in hsl, var(--border) 80%, var(--destructive));
-      }
-
-      &:active {
-        background: var(--destructive-surface);
-        border: sp(1) solid color-mix(in hsl, var(--border) 75%, var(--destructive));
-      }
-
-      &:focus-visible {
-        box-shadow: 0 0 0 sp(3) color-mix(in hsl, transparent 30%, var(--destructive));
-      }
-
-      &:disabled {
-        background: none;
-        color: color-mix(in hsl, var(--destructive) 30%, var(--background));
-        border: sp(1) solid color-mix(in hsl, var(--border) 70%, var(--background));
-      }
-
-    }
-  }
-
-  &--filled {
-    color: var(--on-accent);
-    background: var(--accent);
-    border: 1px solid color-mix(in hsl, var(--accent), var(--on-background) 5%);
-
-    @media (prefers-color-scheme: dark) {
-      background: unquote("oklch(from var(--accent) calc(l - 0.2) c h)");
-      border: 1px solid color-mix(in hsl, unquote("oklch(from var(--accent) calc(l - 0.2) c h)"), var(--on-background) 5%);
-    }
-
-    .icon, .text {
-      color: currentColor;
-    }
-
-    &:hover {
-      background: color-mix(in hsl, var(--accent) 85%, var(--background));
-    }
-
-    &:active {
-      background: color-mix(in hsl, var(--accent) 70%, var(--background));
-    }
-
-    &:focus-visible {
-      box-shadow: 0 0 0 sp(3) var(--accent-dim);
-    }
-
-    &:disabled {
-      color: var(--on-destructive);
-      background: var(--surface-dim);
-      border: 1px solid color-mix(in hsl, unquote("oklch(from var(--surface-dim) calc(l - 0.05) c h)"), var(--on-background) 5%);
-    }
-
-    &--destructive {
-      color: var(--on-destructive);
-      background: var(--destructive);
-      border: 1px solid color-mix(in hsl, var(--destructive), var(--on-background) 5%);
-
-      @media (prefers-color-scheme: dark) {
-        background: unquote("oklch(from var(--destructive) calc(l - 0.2) c h)");
-        border: 1px solid color-mix(in hsl, unquote("oklch(from var(--destructive) calc(l - 0.2) c h)"), var(--on-background) 5%);
-      }
-
-      .icon, .text {
-        color: currentColor;
-      }
-
-      &:hover {
-        background: color-mix(in hsl, var(--destructive) 85%, var(--background));
-      }
-
-      &:active {
-        background: color-mix(in hsl, var(--destructive) 70%, var(--background));
-      }
-
-      &:focus-visible {
-        box-shadow: 0 0 0 sp(3) var(--color-focus);
-      }
-
-      &:disabled {
-        background: none;
-        color: var(--on-destructive);
-        background: var(--destructive-surface);
-        border: 1px solid color-mix(in hsl, var(--destructive-surface), var(--on-background) 3%);
-      }
-    }
-
-  }
-
-  &--icon-only {
-    padding: sp(4);
 
     & > .badge {
-      width: max-content;
-      top: sp(-10);
-      right: sp(-6);
+        position: absolute;
+        right: sp(-10);
+        top: sp(-10);
     }
 
     .icon {
-      margin: 0;
+        margin: 0 sp(5) 0 0;
     }
-  }
+
+    &--reversed {
+        flex-direction: row-reverse;
+
+        .icon {
+            margin: 0 0 0 sp(5);
+        }
+    }
+
+    &--link {
+        padding: sp(8) 0;
+        border: none;
+        background: transparent;
+
+        color: var(--accent);
+
+        &:hover {
+            color: color-mix(in hsl, var(--accent) 80%, var(--on-accent));
+        }
+
+        &:active {
+            color: color-mix(in hsl, var(--accent) 60%, var(--on-accent));
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 sp(3) var(--accent);
+        }
+
+        &:disabled {
+            background: none;
+            color: color-mix(in hsl, var(--accent) 60%, var(--on-accent));
+        }
+
+        &--destructive {
+            color: var(--destructive);
+
+            &:hover {
+                color: color-mix(
+                    in hsl,
+                    var(--destructive) 80%,
+                    var(--on-destructive)
+                );
+            }
+
+            &:active {
+                color: color-mix(
+                    in hsl,
+                    var(--destructive) 60%,
+                    var(--on-destructive)
+                );
+            }
+
+            &:focus-visible {
+                box-shadow: 0 0 0 sp(3) var(--destructive);
+            }
+
+            &:disabled {
+                background: none;
+                color: color-mix(
+                    in hsl,
+                    var(--destructive) 60%,
+                    var(--on-destructive)
+                );
+            }
+        }
+    }
+
+    &--flat {
+        border: none;
+        background: var(--accentuated-surface-bright);
+        color: var(--accent);
+        @media (prefers-color-scheme: dark) {
+            color: unquote("oklch(from var(--accent) calc(l + 0.2) c h)");
+        }
+
+        &:hover {
+            background: var(--accentuated-surface);
+        }
+
+        &:active {
+            background: var(--accentuated-surface-dim);
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 sp(3)
+                color-mix(in hsl, transparent 30%, var(--accent));
+        }
+
+        &:disabled {
+            --background: color-mix(
+                in hsl,
+                transparent 50%,
+                var(--accentuated-surface-bright)
+            );
+            background: var(--background);
+            color: color-mix(in hsl, var(--accent) 50%, var(--background));
+        }
+
+        &--destructive {
+            color: var(--destructive);
+            background: var(--destructive-surface-bright);
+            @media (prefers-color-scheme: dark) {
+                background: unquote(
+                    "oklch(from var(--destructive-surface-bright) calc(l - 0.2) c h)"
+                );
+            }
+            &:hover {
+                background: var(--destructive-surface);
+            }
+
+            &:active {
+                background: var(--destructive-surface-dim);
+            }
+
+            &:focus-visible {
+                box-shadow: 0 0 0 sp(3)
+                    color-mix(in hsl, transparent 30%, var(--destructive));
+            }
+
+            &:disabled {
+                --background: color-mix(
+                    in hsl,
+                    transparent 50%,
+                    var(--destructive-surface-bright)
+                );
+                background: var(--background);
+                color: color-mix(
+                    in hsl,
+                    var(--destructive) 50%,
+                    var(--background)
+                );
+            }
+        }
+    }
+
+    &--outlined {
+        background: transparent;
+        border: 1px solid var(--border);
+        color: var(--accent);
+        @media (prefers-color-scheme: dark) {
+            color: unquote("oklch(from var(--accent) calc(l + 0.2) c h)");
+        }
+
+        &:hover {
+            background: var(--accentuated-surface-bright);
+            border: sp(1) solid
+                color-mix(in hsl, var(--border) 85%, var(--accent));
+        }
+
+        &:active {
+            background: var(--accentuated-surface);
+            border: sp(1) solid
+                color-mix(in hsl, var(--border) 80%, var(--accent));
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 sp(3)
+                color-mix(in hsl, transparent 30%, var(--accent));
+        }
+
+        &:disabled {
+            background: none;
+            color: color-mix(
+                in hsl,
+                var(--on-background) 30%,
+                var(--background)
+            );
+            border: sp(1) solid
+                color-mix(in hsl, var(--border) 70%, var(--background));
+        }
+
+        &--destructive {
+            color: var(--destructive);
+
+            &:hover {
+                background: var(--destructive-surface-bright);
+                border: sp(1) solid
+                    color-mix(in hsl, var(--border) 80%, var(--destructive));
+            }
+
+            &:active {
+                background: var(--destructive-surface);
+                border: sp(1) solid
+                    color-mix(in hsl, var(--border) 75%, var(--destructive));
+            }
+
+            &:focus-visible {
+                box-shadow: 0 0 0 sp(3)
+                    color-mix(in hsl, transparent 30%, var(--destructive));
+            }
+
+            &:disabled {
+                background: none;
+                color: color-mix(
+                    in hsl,
+                    var(--destructive) 30%,
+                    var(--background)
+                );
+                border: sp(1) solid
+                    color-mix(in hsl, var(--border) 70%, var(--background));
+            }
+        }
+    }
+
+    &--filled {
+        color: var(--on-accent);
+        background: var(--accent);
+        border: 1px solid
+            color-mix(in hsl, var(--accent), var(--on-background) 5%);
+
+        @media (prefers-color-scheme: dark) {
+            background: unquote("oklch(from var(--accent) calc(l - 0.2) c h)");
+            border: 1px solid
+                color-mix(
+                    in hsl,
+                    unquote("oklch(from var(--accent) calc(l - 0.2) c h)"),
+                    var(--on-background) 5%
+                );
+        }
+
+        .icon,
+        .text {
+            color: currentColor;
+        }
+
+        &:hover {
+            background: color-mix(in hsl, var(--accent) 85%, var(--background));
+        }
+
+        &:active {
+            background: color-mix(in hsl, var(--accent) 70%, var(--background));
+        }
+
+        &:focus-visible {
+            box-shadow: 0 0 0 sp(3) var(--accent-dim);
+        }
+
+        &:disabled {
+            color: var(--on-destructive);
+            background: var(--surface-dim);
+            border: 1px solid
+                color-mix(
+                    in hsl,
+                    unquote(
+                        "oklch(from var(--surface-dim) calc(l - 0.05) c h)"
+                    ),
+                    var(--on-background) 5%
+                );
+        }
+
+        &--destructive {
+            color: var(--on-destructive);
+            background: var(--destructive);
+            border: 1px solid
+                color-mix(in hsl, var(--destructive), var(--on-background) 5%);
+
+            @media (prefers-color-scheme: dark) {
+                background: unquote(
+                    "oklch(from var(--destructive) calc(l - 0.2) c h)"
+                );
+                border: 1px solid
+                    color-mix(
+                        in hsl,
+                        unquote(
+                            "oklch(from var(--destructive) calc(l - 0.2) c h)"
+                        ),
+                        var(--on-background) 5%
+                    );
+            }
+
+            .icon,
+            .text {
+                color: currentColor;
+            }
+
+            &:hover {
+                background: color-mix(
+                    in hsl,
+                    var(--destructive) 85%,
+                    var(--background)
+                );
+            }
+
+            &:active {
+                background: color-mix(
+                    in hsl,
+                    var(--destructive) 70%,
+                    var(--background)
+                );
+            }
+
+            &:focus-visible {
+                box-shadow: 0 0 0 sp(3) var(--color-focus);
+            }
+
+            &:disabled {
+                background: none;
+                color: var(--on-destructive);
+                background: var(--destructive-surface);
+                border: 1px solid
+                    color-mix(
+                        in hsl,
+                        var(--destructive-surface),
+                        var(--on-background) 3%
+                    );
+            }
+        }
+    }
+
+    &--icon-only {
+        padding: sp(4);
+
+        & > .badge {
+            width: max-content;
+            top: sp(-10);
+            right: sp(-6);
+        }
+
+        .icon {
+            margin: 0;
+        }
+    }
 }

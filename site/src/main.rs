@@ -46,7 +46,12 @@ async fn home() -> Page<'static> {
     Page::with_title("Viewy showcase – Home").with_content({
         let mut main_stack = VStack::new(Alignment::Stretch);
 
-        main_stack.append_child(Button::new("Open popup", ButtonStyle::Filled));
+        main_stack.append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
+            Action::OpenPopup {
+                popup_content_url: Uri::from(uri!(popover_content())),
+                display_window_controls: true,
+            },
+        ));
 
         main_stack
             .gap(vec![scale(5)])
@@ -128,14 +133,14 @@ async fn popover_content() -> Page<'static> {
             .append_child(
                 HStack::new(Alignment::Center)
                     .gap(vec![scale(4)])
-                    .append_child(Button::new("Cancel", ButtonStyle::Outlined).on_click(
-                        Action::Navigate {
-                            url: Uri::from(uri!(popover_content())),
-                        },
-                    ))
+                    .append_child(
+                        Button::new("Cancel", ButtonStyle::Outlined)
+                            .on_click(Action::CloseParentWindow),
+                    )
                     .append_child(Button::new("Ok", ButtonStyle::Filled).on_click(
-                        Action::Navigate {
-                            url: Uri::from(uri!(popover_content())),
+                        Action::OpenPopup {
+                            popup_content_url: Uri::from(uri!(home())),
+                            display_window_controls: false,
                         },
                     )),
             );

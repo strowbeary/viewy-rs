@@ -4,6 +4,7 @@ use crate::core::widget::Widget;
 mod actionnable;
 mod box_stylable;
 mod cardifiable;
+mod sizable;
 
 use crate::core::theme::Color;
 #[doc(inline)]
@@ -12,6 +13,9 @@ pub use actionnable::*;
 pub use box_stylable::*;
 #[doc(inline)]
 pub use cardifiable::*;
+
+#[doc(inline)]
+pub use sizable::*;
 
 pub trait Appendable: Widget {
     fn append_child<C>(&mut self, child: C) -> &mut Self
