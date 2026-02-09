@@ -20,6 +20,7 @@ pub struct Node {
     pub node_type: NodeType,
     pub text: Option<String>,
     pub children: Vec<Node>,
+    pub html_id: Option<String>,
     pub class_list: BTreeSet<String>,
     pub node_style: BTreeMap<String, String>,
     pub attributes: BTreeMap<String, String>,
@@ -49,6 +50,7 @@ impl Default for Node {
             class_list: BTreeSet::new(),
             node_style: BTreeMap::new(),
             attributes: BTreeMap::new(),
+            html_id: None,
         }
     }
 }
@@ -79,6 +81,9 @@ impl Node {
 
     pub fn render(self, html_buffer: &mut String) {
         let mut attributes = self.attributes;
+        if let Some(html_id) = self.html_id {
+            attributes.insert("id".to_string(), html_id);
+        }
         if !self.node_style.is_empty() {
             attributes.insert(
                 "style".to_string(),
@@ -95,6 +100,7 @@ impl Node {
                 Vec::from_iter(self.class_list).join(" "),
             );
         }
+
         match &self.node_type {
             NodeType::Normal(tag) => {
                 write!(html_buffer, "<{}", tag).unwrap();
