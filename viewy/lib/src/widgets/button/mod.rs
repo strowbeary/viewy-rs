@@ -1,6 +1,7 @@
-use crate::modifiers::{Attributable, Classable, OnClickActionnable};
 use crate::core::node::{Node, NodeType};
 use crate::core::widget::Widget;
+use crate::modifiers::{Attributable, Classable, OnClickActionnable};
+use crate::prelude::{Icon, IconPack, Text, TextStyle};
 
 /// Used to set a button's importance level.
 #[derive(Debug, Clone)]
@@ -9,6 +10,7 @@ pub enum ButtonStyle {
     Flat,
     Outlined,
     Filled,
+    SmallLink,
 }
 
 /// A control that performs an action when triggered.
@@ -24,6 +26,7 @@ pub struct Button {
     /// Button label, If `None` it's an icon only button
     pub label: Option<String>,
     pub style: ButtonStyle,
+    pub icon: Option<Box<dyn IconPack>>,
 }
 
 impl Button {
@@ -36,6 +39,7 @@ impl Button {
             },
             label: Some(label.to_string()),
             style,
+            icon: None,
         }
     }
 
@@ -66,23 +70,40 @@ impl Button {
         self.set_attr("disabled", "disabled")
     }
 
-    /// Make the button close the popup it is in
-    /// ```rust
-    /// Popup::new()
-    ///    .append_child({
-    ///        Button::new("Submit", ButtonStyle::Filled)
-    ///            .close_popup()
-    ///     })
-    /// ```
-    pub fn close_popup(&mut self) -> &mut Self {
-        self.add_class("popup__window-controls")
+    /// Set button's icon
+    pub fn icon<T>(&mut self, icon: T) -> &mut Self
+    where
+        T: 'static + IconPack,
+    {
+        self.icon = Some(Box::new(icon));
+        self
     }
 
     fn render(&mut self) {
         let style = self.style.clone();
         self.add_class("button")
             .add_class(format!("button--{:?}", style).to_lowercase().as_str());
-        self.node.text = self.label.clone();
+        if let Some(icon_from_pack) = self.icon.clone() {
+            let mut icon = Icon::new(icon_from_pack);
+            icon.size(match self.style {
+                ButtonStyle::SmallLink => 14,
+                _ => 16,
+            });
+            if self.label.is_none() {
+                icon.size(match self.style {
+                    ButtonStyle::SmallLink => 16,
+                    _ => 24,
+                });
+                icon.stroke_width(2);
+            }
+            self.node.children.push(icon.into());
+        }
+        if let Some(label) = &self.label {
+            let mut text_node: Node = Text::new(label, TextStyle::Body).into();
+            text_node.node_type = NodeType::Normal("span");
+            text_node.class_list.clear();
+            self.node.children.push(text_node);
+        }
     }
 }
 

@@ -5,6 +5,7 @@ use crate::core::layout::Layout;
 use crate::core::page::html_page::get_full_html_page;
 use crate::core::theme::Theme;
 use crate::node::{Node, NodeType};
+use crate::widgets::icon::icons::sprite_from_icon_ids;
 use futures::Stream;
 use std::pin::Pin;
 use std::task::{Context, Poll};
@@ -36,6 +37,16 @@ pub struct Page<'a> {
 
 const fn default_layout(content: Node) -> Node {
     content
+}
+
+fn collect_used_icon_ids(node: &Node, icon_ids: &mut Vec<String>) {
+    if let Some(icon_id) = node.attributes.get("data-v-icon-id") {
+        icon_ids.push(icon_id.clone());
+    }
+
+    for child in &node.children {
+        collect_used_icon_ids(child, icon_ids);
+    }
 }
 
 impl<'a> Page<'a> {
@@ -80,38 +91,50 @@ impl<'a> Page<'a> {
         let theme_variant = self.theme.as_str();
         let mut html_buffer = String::new();
         match render_mode {
-            RenderMode::Complete => get_full_html_page(
-                &self.config,
-                self.title,
-                {
-                    let content = (self.layout)(self.content);
+            RenderMode::Complete => {
+                let content = (self.layout)(self.content);
+                let mut icon_ids = vec![];
+                collect_used_icon_ids(&content, &mut icon_ids);
+                let sprite = sprite_from_icon_ids(icon_ids.iter().map(|id| id.as_str()));
 
-                    content.render(&mut html_buffer);
-                    html_buffer
-                },
-                theme_variant.to_string(),
-                false,
-            ),
-            RenderMode::ContentOnly => {
-                self.content.render(&mut html_buffer);
-                html_buffer
+                content.render(&mut html_buffer);
+                get_full_html_page(
+                    &self.config,
+                    self.title,
+                    sprite,
+                    html_buffer,
+                    theme_variant.to_string(),
+                    false,
+                )
             }
-            RenderMode::LayoutOnly => get_full_html_page(
-                &self.config,
-                self.title,
-                {
-                    let mut content = (self.layout)(Node {
-                        identifier: Uuid::NAMESPACE_OID,
-                        node_type: NodeType::Comment("VIEWY_CONTENT"),
-                        ..Node::default()
-                    });
+            RenderMode::ContentOnly => {
+                let mut icon_ids = vec![];
+                collect_used_icon_ids(&self.content, &mut icon_ids);
+                let sprite = sprite_from_icon_ids(icon_ids.iter().map(|id| id.as_str()));
 
-                    content.render(&mut html_buffer);
-                    html_buffer
-                },
-                theme_variant.to_string(),
-                false,
-            ),
+                self.content.render(&mut html_buffer);
+                format!("{sprite}{html_buffer}")
+            }
+            RenderMode::LayoutOnly => {
+                let content = (self.layout)(Node {
+                    identifier: Uuid::NAMESPACE_OID,
+                    node_type: NodeType::Comment("VIEWY_CONTENT"),
+                    ..Node::default()
+                });
+                let mut icon_ids = vec![];
+                collect_used_icon_ids(&content, &mut icon_ids);
+                let sprite = sprite_from_icon_ids(icon_ids.iter().map(|id| id.as_str()));
+
+                content.render(&mut html_buffer);
+                get_full_html_page(
+                    &self.config,
+                    self.title,
+                    sprite,
+                    html_buffer,
+                    theme_variant.to_string(),
+                    false,
+                )
+            }
         }
     }
 }

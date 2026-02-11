@@ -49,12 +49,14 @@ async fn home() -> Page<'static> {
 
         main_stack.append_child(Text::new("Buttons", TextStyle::H1));
 
-        main_stack.append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
-            Action::OpenPopup {
-                popup_content_url: Uri::from(uri!(popover_content())),
-                display_window_controls: true,
-            },
-        ));
+        main_stack.append_child(
+            Button::new("Open popup", ButtonStyle::Filled)
+                .icon(Lucide::Plus)
+                .on_click(Action::OpenPopup {
+                    popup_content_url: Uri::from(uri!(popover_content())),
+                    display_window_controls: true,
+                }),
+        );
 
         main_stack
             .gap(vec![scale(5)])

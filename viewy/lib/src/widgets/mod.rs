@@ -1,8 +1,8 @@
-use crate::CONFIG;
 use crate::core::widget::Widget;
 
 pub mod button;
 pub mod form;
+pub mod icon;
 #[cfg(feature = "rich-text-area")]
 pub mod rich_text_area;
 pub mod stack;
@@ -29,10 +29,11 @@ pub mod tag;
 #[cfg(feature = "sortable-stack")]
 pub mod sortable_stack;
 
-pub const fn get_all_stylesheet() -> &'static [&'static str; 6] {
+pub const fn get_all_stylesheet() -> &'static [&'static str; 7] {
     &[
         view::View::STYLE,
         button::Button::STYLE,
+        icon::Icon::STYLE,
         stack::VStack::STYLE,
         stack::HStack::STYLE,
         text::Text::STYLE,

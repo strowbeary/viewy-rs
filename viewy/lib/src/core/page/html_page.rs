@@ -4,6 +4,7 @@ use std::env;
 pub fn get_full_html_page(
     config: &Config,
     title: String,
+    body_prefix: String,
     content: String,
     theme_variant: String,
     insert_base_element: bool,
@@ -51,11 +52,13 @@ pub fn get_full_html_page(
                 <meta name='apple-mobile-web-app-capable' content='yes'>
             </head>
             <body class='app-theme--{theme_variant}'>
+                {body_prefix}
                 {content}
             </body>
         </html>
     ",
         title = title,
+        body_prefix = body_prefix,
         content = content,
         theme_variant = theme_variant,
         base_elem = base_elem,

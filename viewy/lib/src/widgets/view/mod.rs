@@ -1,6 +1,6 @@
-use crate::modifiers::{Appendable, Classable, Colorable, Dimensionable, Cardifiable};
 use crate::core::node::Node;
 use crate::core::widget::Widget;
+use crate::modifiers::{Appendable, Cardifiable, Classable, Colorable, Dimensionable};
 
 #[derive(Widget, Appendable, Colorable, Classable, Dimensionable, Cardifiable)]
 #[widget(style = "./style.scss")]
