@@ -1,0 +1,345 @@
+.picker {
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-action: none;
+    touch-action: none;
+    width: max-content;
+    gap: calc(4 / 16 * 1rem);
+}
+
+.picker__label {
+    margin: 0;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    font-weight: 600;
+    color: var(--on-background);
+}
+
+.picker__groups {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    width: 100%;
+}
+
+.picker__group {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    min-width: 0;
+}
+
+.picker__group-legend {
+    margin-bottom: 0.5rem;
+    padding: 0;
+    font-size: 0.75rem;
+    line-height: 1rem;
+    font-weight: 600;
+    color: var(--on-surface);
+    opacity: 0.6;
+}
+
+.picker__options {
+    display: flex;
+    flex-direction: column;
+    gap: calc(6 / 16 * 1rem);
+}
+
+.picker__item {
+    position: relative;
+}
+
+.picker__item-input {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    margin: 0;
+    padding: 0;
+    border: 0;
+    clip-path: inset(50%);
+    overflow: hidden;
+    white-space: nowrap;
+}
+
+.picker__item-label {
+    border: calc(1 / 16 * 1rem) solid var(--border);
+    border-radius: calc(9 / 16 * 1rem);
+    background: var(--surface);
+    color: var(--accent);
+    min-height: 2.5rem;
+    padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
+    box-sizing: border-box;
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    width: 100%;
+    cursor: pointer;
+    transition:
+        background 150ms,
+        border 150ms;
+    appearance: none;
+}
+
+.picker__item-label .icon,
+.picker__item-label .text {
+    transition: color 150ms;
+    color: var(--accent);
+}
+
+.picker__item-label:hover {
+    background: var(--surface-bright);
+    border-color: var(--border);
+}
+
+.picker__item-input:focus-visible + .picker__item-label {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 calc(3 / 16 * 1rem)
+        color-mix(in srgb, var(--accent) 35%, transparent);
+}
+
+.picker__item-input:checked + .picker__item-label {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--on-accent);
+}
+
+.picker__item-input:checked + .picker__item-label .icon,
+.picker__item-input:checked + .picker__item-label .text {
+    color: var(--on-accent);
+}
+
+.picker__item-input:disabled + .picker__item-label {
+    cursor: not-allowed;
+    opacity: 0.65;
+}
+
+.picker__item-icon {
+    width: calc(18 / 16 * 1rem);
+    height: calc(18 / 16 * 1rem);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.picker__item-icon > .icon {
+    margin: 0;
+    color: inherit;
+}
+
+.picker__item-text {
+    display: block;
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+}
+
+/* Segmented variant */
+.picker--segmented .picker__item-input {
+    display: none;
+}
+
+.picker--segmented .picker__options {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0;
+}
+
+.picker--segmented .picker__item {
+    flex-grow: 1;
+}
+
+.picker--segmented .picker__item-label {
+    text-align: center;
+    justify-content: center;
+    background: transparent;
+    border-radius: 0;
+    border-left: none;
+    border-right: none;
+}
+
+.picker--segmented .picker__item:first-of-type .picker__item-label {
+    border-left: calc(1 / 16 * 1rem) solid var(--border);
+    border-radius: calc(9 / 16 * 1rem) 0 0 calc(9 / 16 * 1rem);
+}
+
+.picker--segmented .picker__item:last-of-type .picker__item-label {
+    border-right: calc(1 / 16 * 1rem) solid var(--border);
+    border-radius: 0 calc(9 / 16 * 1rem) calc(9 / 16 * 1rem) 0;
+}
+
+.picker--segmented .picker__item-label:hover {
+    border-color: var(--border);
+    background: color-mix(in srgb, var(--on-background) 6%, transparent);
+}
+
+.picker--segmented .picker__item-label:active {
+    background: color-mix(in srgb, var(--on-background) 10%, transparent);
+    border-color: var(--border);
+}
+
+.picker--segmented .picker__item-input:checked + .picker__item-label {
+    border-color: var(--accent);
+    background: var(--accent);
+    color: var(--on-accent);
+}
+
+.picker--segmented .picker__item-input:checked + .picker__item-label .icon,
+.picker--segmented .picker__item-input:checked + .picker__item-label .text {
+    color: var(--on-accent);
+}
+
+/* Segmented vertical variant */
+.picker--segmented.picker--segmented--vertical .picker__options {
+    flex-direction: column;
+    gap: 0;
+}
+
+.picker--segmented.picker--segmented--vertical .picker__item {
+    flex-grow: 1;
+}
+
+.picker--segmented.picker--segmented--vertical .picker__item-label {
+    justify-content: flex-start;
+    border-radius: 0;
+    border-top: none;
+    border-bottom: none;
+    border-left: calc(1 / 16 * 1rem) solid var(--border);
+    border-right: calc(1 / 16 * 1rem) solid var(--border);
+}
+
+.picker--segmented.picker--segmented--vertical
+    .picker__item:first-of-type
+    .picker__item-label {
+    border-top: calc(1 / 16 * 1rem) solid var(--border);
+    border-radius: calc(9 / 16 * 1rem) calc(9 / 16 * 1rem) 0 0;
+}
+
+.picker--segmented.picker--segmented--vertical
+    .picker__item:last-of-type
+    .picker__item-label {
+    border-bottom: calc(1 / 16 * 1rem) solid var(--border);
+    border-radius: 0 0 calc(9 / 16 * 1rem) calc(9 / 16 * 1rem);
+}
+
+.picker--segmented.picker--segmented--vertical
+    .picker__item-input:checked
+    + .picker__item-label {
+    border-top: calc(1 / 16 * 1rem) solid var(--accent);
+    border-bottom: calc(1 / 16 * 1rem) solid var(--accent);
+    border-left: calc(1 / 16 * 1rem) solid var(--accent);
+    border-right: calc(1 / 16 * 1rem) solid var(--accent);
+}
+
+.picker--segmented.picker--segmented--vertical
+    .picker__item:first-of-type
+    .picker__item-input:checked
+    + .picker__item-label {
+    border-top-color: var(--accent);
+}
+
+.picker--segmented.picker--segmented--vertical
+    .picker__item:last-of-type
+    .picker__item-input:checked
+    + .picker__item-label {
+    border-bottom-color: var(--accent);
+}
+
+/* Radiogroup variant */
+.picker--radiogroup {
+    overflow: visible;
+}
+
+.picker--radiogroup .picker__options {
+    flex-direction: column;
+}
+
+.picker--radiogroup label {
+    cursor: pointer;
+}
+
+.picker--radiogroup .picker__item {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+}
+
+.picker--radiogroup .picker__item-input {
+    cursor: pointer;
+    margin: 0;
+    -moz-appearance: none;
+    appearance: none;
+    background: none;
+    width: calc(20 / 16 * 1rem);
+    height: calc(20 / 16 * 1rem);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: calc(2 / 16 * 1rem) solid var(--border);
+    position: static;
+    clip-path: none;
+    overflow: visible;
+}
+
+.picker--radiogroup .picker__item-input:hover {
+    border: calc(2 / 16 * 1rem) solid var(--border);
+}
+
+.picker--radiogroup .picker__item-input:focus {
+    box-shadow: 0 0 0 calc(2 / 16 * 1rem)
+        color-mix(in srgb, var(--accent) 20%, transparent);
+}
+
+.picker--radiogroup .picker__item-input:checked {
+    background: var(--accent);
+}
+
+.picker--radiogroup .picker__item-input:checked::after {
+    display: block;
+    content: "";
+    width: calc(6 / 16 * 1rem);
+    height: calc(6 / 16 * 1rem);
+    border-radius: calc(3 / 16 * 1rem);
+    background: var(--on-accent);
+}
+
+.picker--radiogroup .picker__item-label {
+    border: 0;
+    background: transparent;
+    color: var(--on-background);
+    min-height: auto;
+    padding: 0;
+    width: auto;
+}
+
+.picker--radiogroup .picker__item-label:hover {
+    background: transparent;
+    border: 0;
+}
+
+.picker--radiogroup .picker__item-input:checked + .picker__item-label {
+    background: transparent;
+    border: 0;
+    color: var(--on-background);
+}
+
+.picker--disabled {
+    opacity: 0.75;
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .picker__item-label,
+    .picker__item-label .icon,
+    .picker__item-label .text {
+        transition: none;
+    }
+}

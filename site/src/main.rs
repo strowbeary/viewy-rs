@@ -25,6 +25,7 @@ use viewy::widgets::tabs::{Tab, TabContainer};
 use viewy::widgets::text::{Text, TextStyle};
 
 mod dynroutetest;
+mod picker_select;
 mod sheet;
 mod tabs;
 
@@ -48,6 +49,11 @@ async fn home() -> Page<'static> {
         let mut main_stack = VStack::new(Alignment::Stretch);
 
         main_stack.append_child(Text::new("Buttons", TextStyle::H1));
+        main_stack.append_child(
+            Button::new("Picker & Select demo", ButtonStyle::Outlined).on_click(Action::Navigate {
+                url: Uri::from(uri!(picker_select::picker_select_demo())),
+            }),
+        );
 
         main_stack.append_child(
             Button::new("Open popup", ButtonStyle::Filled)
@@ -226,7 +232,8 @@ fn rocket() -> _ {
                 tabs::tab2,
                 tabs::tab3,
                 sheet::sheet,
-                sheet::sheet_content
+                sheet::sheet_content,
+                picker_select::picker_select_demo
             ],
         )
         .mount("/assets", FileServer::from(relative!("assets")))

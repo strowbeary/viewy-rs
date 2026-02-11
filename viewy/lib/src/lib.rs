@@ -98,6 +98,8 @@ pub mod prelude {
     pub use crate::modifiers::*;
     pub use crate::widgets::button::*;
     pub use crate::widgets::icon::*;
+    pub use crate::widgets::picker::*;
+    pub use crate::widgets::select::*;
     pub use crate::widgets::sheet::*;
     pub use crate::widgets::stack::*;
     pub use crate::widgets::text::*;

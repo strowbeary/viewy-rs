@@ -2,4 +2,13 @@
 //
 // For a full list of overridable settings, and general information on folder-specific settings,
 // see the documentation: https://zed.dev/docs/configuring-zed#folder-specific-settings
-{}
+{
+  "context_servers": {
+    "postgres-context-server": {
+      "enabled": true,
+      "settings": {
+        "database_url": "postgresql://postgres:secret@localhost:5432/smart-booker",
+      },
+    },
+  },
+}

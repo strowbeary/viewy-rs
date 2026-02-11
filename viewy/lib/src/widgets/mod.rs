@@ -3,8 +3,10 @@ use crate::core::widget::Widget;
 pub mod button;
 pub mod form;
 pub mod icon;
+pub mod picker;
 #[cfg(feature = "rich-text-area")]
 pub mod rich_text_area;
+pub mod select;
 pub mod stack;
 pub mod tabs;
 pub mod view;
@@ -29,11 +31,13 @@ pub mod tag;
 #[cfg(feature = "sortable-stack")]
 pub mod sortable_stack;
 
-pub const fn get_all_stylesheet() -> &'static [&'static str; 7] {
+pub const fn get_all_stylesheet() -> &'static [&'static str; 9] {
     &[
         view::View::STYLE,
         button::Button::STYLE,
         icon::Icon::STYLE,
+        select::Select::STYLE,
+        picker::Picker::STYLE,
         stack::VStack::STYLE,
         stack::HStack::STYLE,
         text::Text::STYLE,

@@ -30,7 +30,7 @@
     min-width: var(--min-sheet-size);
     width: max-content;
     max-width: 80vw;
-    background: var(--background);
+    background: var(--surface);
     box-shadow: -8px 0 24px var(--color-shadow);
 
     transform: translateX(100%);

@@ -63,5 +63,14 @@ window.addEventListener("startViewy", (event) => {
       tabs.init(root);
     });
   }
+
+  if (
+    root.querySelector(".select, .picker") ||
+    (typeof root.matches === "function" && root.matches(".select, .picker"))
+  ) {
+    import("viewy/widgets/picker.js").then((picker) => {
+      picker.init(root);
+    });
+  }
   initActions(root);
 });
