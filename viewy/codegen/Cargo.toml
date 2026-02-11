@@ -1,10 +1,15 @@
 [package]
 name = "viewy-codegen"
-
 version.workspace = true
 edition.workspace = true
 authors.workspace = true
 rust-version.workspace = true
+keywords.workspace = true
+description.workspace = true
+readme = "../../README.md"
+repository.workspace = true
+license.workspace = true
+documentation.workspace = true
 
 [lib]
 proc-macro = true

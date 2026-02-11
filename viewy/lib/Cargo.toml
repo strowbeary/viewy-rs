@@ -6,7 +6,7 @@ authors.workspace = true
 rust-version.workspace = true
 keywords.workspace = true
 description.workspace = true
-readme = "../README.md"
+readme = "../../README.md"
 repository.workspace = true
 license.workspace = true
 documentation.workspace = true
@@ -15,7 +15,7 @@ build = "build.rs"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-viewy-codegen = { path = "../codegen" }
+viewy-codegen = { version = "3.0.0-alpha.0", path = "../codegen" }
 uuid = { version = "1.6", features = ["v4"] }
 rocket = { version = "0.5.0", optional = true }
 axum = { version = "0.8.6", optional = true }

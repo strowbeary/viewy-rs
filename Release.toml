@@ -14,7 +14,9 @@ push-options = []
 consolidate-commits = true
 pre-release-commit-message = "Viewy-rs release v{{version}} 🎉"
 pre-release-replacements = []
-pre-release-hook = ["git", "cliff", "-o", "CHANGELOG.md", "--tag", "{{version}}" ]
+# Hook exécuté au niveau du workspace pour générer un changelog global
+# Utilise sh -c pour s'exécuter uniquement depuis la racine du workspace
+pre-release-hook = ["sh", "-c", "if [ -f Cargo.toml ] && grep -q '\\[workspace\\]' Cargo.toml; then git cliff -o CHANGELOG.md --tag v{{version}}; fi"]
 tag-message = "Viewy-rs release v{{version}} 🎉"
 tag-name = "v{{version}}"
 tag = true
