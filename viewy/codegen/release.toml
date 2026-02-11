@@ -1,0 +1,3 @@
+# Configuration spécifique pour viewy-codegen
+# Pas de features à activer
+enable-features = []
