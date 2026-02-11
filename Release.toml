@@ -20,7 +20,8 @@ pre-release-hook = ["sh", "-c", "if [ -f Cargo.toml ] && grep -q '\\[workspace\\
 tag-message = "Viewy-rs release v{{version}} 🎉"
 tag-name = "v{{version}}"
 tag = true
-enable-features = []
+# Active la feature rocket par défaut pour la vérification
+enable-features = ["rocket"]
 enable-all-features = false
 dependent-version = "upgrade"
 metadata = "optional"

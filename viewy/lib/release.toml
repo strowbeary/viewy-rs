@@ -1,0 +1,3 @@
+# Configuration spécifique pour viewy
+# Active la feature rocket pour la vérification
+enable-features = ["rocket"]
