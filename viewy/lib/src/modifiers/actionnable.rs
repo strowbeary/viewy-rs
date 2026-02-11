@@ -18,8 +18,9 @@ pub enum Action<'a> {
         popover_content_url: Uri,
     },
     OpenSheet {
-        edge: SheetEdge,
         sheet_content_url: Uri,
+        edge: SheetEdge,
+        with_backdrop: bool,
     },
     SubmitForm {
         form_name: &'a str,
@@ -97,6 +98,7 @@ impl Action<'_> {
             Action::OpenSheet {
                 edge,
                 sheet_content_url,
+                with_backdrop,
             } => {
                 widget
                     .attributes
@@ -104,6 +106,11 @@ impl Action<'_> {
                 widget
                     .attributes
                     .insert("data-v-sheet-edge".to_string(), edge.to_string());
+                if *with_backdrop {
+                    widget
+                        .attributes
+                        .insert("data-v-sheet-with-backdrop".to_string(), "true".to_string());
+                }
 
                 widget
                     .attributes

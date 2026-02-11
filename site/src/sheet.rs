@@ -15,8 +15,9 @@ pub fn sheet() -> Page<'static> {
     Page::with_title("Test").with_content({
         let mut button = Button::new("Open sheet", ButtonStyle::Filled);
         button.on_click(Action::OpenSheet {
-            edge: SheetEdge::Left,
-            sheet_content_url: Uri::from(uri!(benchmark())),
+            edge: SheetEdge::Right,
+            sheet_content_url: Uri::from(uri!(sheet_content())),
+            with_backdrop: true,
         });
         button
     })
@@ -27,6 +28,12 @@ pub fn sheet_content() -> Page<'static> {
     Page::with_title("Sheet Content").with_content(
         VStack::new(viewy::prelude::Alignment::Stretch)
             .padding(vec![scale(5)])
+            .append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
+                Action::OpenPopup {
+                    popup_content_url: Uri::from(uri!(sheet_content)),
+                    display_window_controls: true,
+                },
+            ))
             .append_child(create_button_group(ButtonStyle::Filled)),
     )
 }

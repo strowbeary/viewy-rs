@@ -8,11 +8,7 @@
         system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
         "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-family: var(--system-ui);
-    --color-shadow: color-mix(
-        in hsl,
-        var(--on-background) 20%,
-        var(--background)
-    );
+    --color-shadow: rgba(0, 0, 0, 0.1);
 }
 
 body {
