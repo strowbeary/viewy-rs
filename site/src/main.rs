@@ -25,6 +25,7 @@ use viewy::widgets::tabs::{Tab, TabContainer};
 use viewy::widgets::text::{Text, TextStyle};
 
 mod dynroutetest;
+mod sheet;
 mod tabs;
 
 fn create_button_group(style: ButtonStyle) -> VStack {
@@ -46,6 +47,8 @@ async fn home() -> Page<'static> {
     Page::with_title("Viewy showcase – Home").with_content({
         let mut main_stack = VStack::new(Alignment::Stretch);
 
+        main_stack.append_child(Text::new("Buttons", TextStyle::H1));
+
         main_stack.append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
             Action::OpenPopup {
                 popup_content_url: Uri::from(uri!(popover_content())),
@@ -55,23 +58,27 @@ async fn home() -> Page<'static> {
 
         main_stack
             .gap(vec![scale(5)])
+            .padding(vec![scale(4)])
             .append_child(create_button_group(ButtonStyle::Filled))
             .append_child(create_button_group(ButtonStyle::Outlined))
             .append_child(create_button_group(ButtonStyle::Flat))
             .append_child(create_button_group(ButtonStyle::Link));
-
+        main_stack.append_child(Text::new("Colors", TextStyle::H1));
         let mut color_list = VStack::new(Alignment::Stretch);
-        color_list.gap(vec![scale(3)]);
+        color_list.gap(vec![scale(3)]).flex_wrap();
         for color in Color::iter() {
             let mut stack = HStack::new(Alignment::Center);
             stack.gap(vec![scale(3)]);
 
             let mut view = View::new();
-            view.width("50px").height("50px").background_color(color);
+            view.as_card(CardStyle::OutlinedRaised)
+                .width("25px")
+                .height("25px")
+                .background_color(color);
             stack.append_child(view);
 
             let mut view = View::new();
-            view.text = Some(color.as_str().to_string());
+            view.text = Some(format!("{:?}", color));
             stack.append_child(view);
 
             color_list.append_child(stack);
@@ -153,7 +160,7 @@ async fn popover_content() -> Page<'static> {
 fn benchmark() -> Page<'static> {
     Page::with_title("Benchmark viewy").with_content({
         let mut stack = VStack::new(Alignment::Center);
-        stack.gap(vec![scale(3)]);
+        stack.gap(vec![scale(3)]).padding(vec![scale(4)]);
         let buttons: Vec<Node> = (0..50000)
             .map(|i| Button::new(&format!("Button {i}"), ButtonStyle::Filled).into())
             .collect();
@@ -216,6 +223,8 @@ fn rocket() -> _ {
                 tabs::tab1,
                 tabs::tab2,
                 tabs::tab3,
+                sheet::sheet,
+                sheet::sheet_content
             ],
         )
         .mount("/assets", FileServer::from(relative!("assets")))

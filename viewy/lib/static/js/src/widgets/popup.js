@@ -29,13 +29,20 @@ export const actions = {
     }
 
     popover.close_all_popover();
-    popup.classList.add("visible");
+    popup.getBoundingClientRect();
+    requestAnimationFrame(() => {
+      popup.classList.add("visible");
+    });
 
     popup.addEventListener("click", (e) => {
       if (e.target === popup) {
-        popup.addEventListener("transitionend", () => {
-          popup.remove();
-        });
+        popup.addEventListener(
+          "transitionend",
+          () => {
+            popup.remove();
+          },
+          { once: true },
+        );
         popup.classList.remove("visible");
       }
     });

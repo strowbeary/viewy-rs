@@ -3,9 +3,9 @@ use crate::bindings::uri::Uri;
 use crate::modifiers::Appendable;
 use crate::node::{Node, NodeType};
 use crate::prelude::Classable;
-use crate::prelude::{Attributable, View};
+use crate::prelude::{Attributable, Cardifiable, View};
 
-#[derive(Widget, Classable, Attributable)]
+#[derive(Widget, Classable, Attributable, Cardifiable)]
 #[widget(style = "./style.scss")]
 pub struct TabContainer {
     node: Node,

@@ -6,6 +6,7 @@ use viewy::widgets::tabs::{Tab, TabContainer};
 pub fn tabs() -> Page<'static> {
     Page::with_title("Test").with_content({
         let mut tab_container = TabContainer::new();
+        tab_container.as_card(CardStyle::OutlinedRaised);
         tab_container.add_tab(Tab::new("Overview", Uri::from(uri!(tab1()))));
         tab_container.add_tab(Tab::new("Projects", Uri::from(uri!(tab2()))));
         tab_container.add_tab(Tab::new("Account", Uri::from(uri!(tab3()))));

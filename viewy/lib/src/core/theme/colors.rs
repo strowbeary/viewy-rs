@@ -9,7 +9,7 @@ use palette::{
 use strum::EnumIter;
 
 /// Describe UI colors
-#[derive(EnumIter, Copy, Clone)]
+#[derive(EnumIter, Copy, Clone, Debug)]
 pub enum Color {
     Accent,
     OnAccent,

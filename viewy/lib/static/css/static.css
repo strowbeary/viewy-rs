@@ -1,13 +1,21 @@
 @import "./widgets/popup.css";
 @import "./widgets/popover.css";
+@import "./widgets/sheet.css";
 @import "./widgets/card.css";
 
 :root {
-    --system-ui: system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif, "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
+    --system-ui:
+        system-ui, "Segoe UI", Roboto, Helvetica, Arial, sans-serif,
+        "Apple Color Emoji", "Segoe UI Emoji", "Segoe UI Symbol";
     font-family: var(--system-ui);
+    --color-shadow: color-mix(
+        in hsl,
+        var(--on-background) 20%,
+        var(--background)
+    );
 }
-
 
 body {
     background: var(--background);
+    margin: 0;
 }

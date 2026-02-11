@@ -18,21 +18,46 @@ export function init(root) {
             el.addEventListener(eventName, () => popover.actions[action](el));
           });
           break;
+        case "open_sheet":
+          import("viewy/widgets/sheet.js").then((sheet) => {
+            el.addEventListener(eventName, () => sheet.actions[action](el));
+          });
+          break;
         case "close_parent_window":
           el.addEventListener(eventName, () => {
             const popup = el.closest(".popup");
             const popover = el.closest(".popover");
+            const sheet = el.closest(".sheet");
             if (popup) {
-              popup.addEventListener("transitionend", () => {
-                popup.remove();
-              });
+              popup.addEventListener(
+                "transitionend",
+                () => {
+                  popup.remove();
+                },
+                { once: true },
+              );
               popup.classList.remove("visible");
             }
             if (popover) {
-              popover.addEventListener("transitionend", () => {
-                popover.remove();
-              });
+              popover.addEventListener(
+                "transitionend",
+                () => {
+                  popover.remove();
+                },
+                { once: true },
+              );
               popover.classList.remove("visible");
+            }
+            if (sheet) {
+              sheet.addEventListener(
+                "transitionend",
+                () => {
+                  sheet.remove();
+                },
+                { once: true },
+              );
+              sheet.classList.remove("visible");
+              sheet.classList.remove("sheet--loading");
             }
           });
 

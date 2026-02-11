@@ -1,0 +1,126 @@
+.sheet {
+    --animation-duration: 180ms;
+    --min-sheet-size: calc(360 / 16 * 1rem);
+    --sheet-shadow: 0 6px 24px 0 var(--color-shadow);
+
+    position: fixed;
+    inset: 0;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+        visibility 0ms 200ms,
+        opacity var(--animation-duration) 0ms;
+}
+
+.sheet__scrim {
+    position: absolute;
+    inset: 0;
+    opacity: 0;
+    transition: opacity var(--animation-duration) 0ms;
+    background: color-mix(in hsl, transparent 65%, black);
+}
+
+.sheet__panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    min-width: var(--min-sheet-size);
+    width: max-content;
+    max-width: 80vw;
+    background: var(--surface-bright);
+    box-shadow: -8px 0 24px var(--color-shadow);
+
+    transform: translateX(100%);
+    transition: transform calc(var(--animation-duration) * 2) ease;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    & > * {
+        flex-grow: 1;
+        overflow: auto;
+    }
+}
+
+.sheet__panel__loader {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    min-height: calc(180 / 16 * 1rem);
+}
+
+.sheet__panel__spinner {
+    width: calc(28 / 16 * 1rem);
+    height: calc(28 / 16 * 1rem);
+    border-radius: 999px;
+    border: calc(2 / 16 * 1rem) solid var(--border);
+    border-top-color: var(--accent);
+    animation: sheet-spin 700ms linear infinite;
+}
+
+.sheet__panel__content {
+    overflow: auto;
+}
+
+.sheet.sheet--edge-right .sheet__panel {
+    left: auto;
+    right: 0;
+    transform: translateX(100%);
+    border-radius: 1rem 0 0 1rem;
+}
+.sheet.sheet--edge-left .sheet__panel {
+    left: 0;
+    right: auto;
+    transform: translateX(-100%);
+    border-radius: 0 1rem 1rem 0;
+}
+
+.sheet.sheet--edge-bottom .sheet__panel {
+    top: auto;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: var(--sheet-size);
+    transform: translateY(100%);
+    border-radius: 1rem 1rem 0 0;
+}
+
+.sheet.sheet--loading .sheet__panel__loader {
+    display: flex;
+}
+
+.sheet.sheet--loading .sheet__panel__content {
+    opacity: 0;
+}
+
+.sheet.visible {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: all;
+    transition:
+        visibility var(--animation-duration) 0ms,
+        opacity var(--animation-duration) 0ms;
+}
+
+.sheet.visible .sheet__scrim {
+    opacity: 1;
+}
+
+.sheet.visible .sheet__panel {
+    transform: translateX(0);
+}
+
+.sheet.visible.sheet--edge-bottom .sheet__panel {
+    transform: translateY(0);
+}
+
+@keyframes sheet-spin {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}

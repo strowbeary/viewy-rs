@@ -1,7 +1,7 @@
 use crate::Widget;
 use crate::modifiers::*;
 use crate::prelude::Node;
-use crate::widgets::stack::{Alignment, Stack, VStack};
+use crate::widgets::stack::{Alignment, Stack};
 
 #[derive(Widget, Appendable, Colorable, Classable, Cardifiable)]
 #[widget(style = "./style.scss")]

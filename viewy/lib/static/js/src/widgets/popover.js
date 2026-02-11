@@ -2,6 +2,17 @@ import { computePosition, flip, shift, offset, autoUpdate } from "floating-ui";
 
 import { load_injectable_content } from "viewy";
 
+function close_popover(popover) {
+  popover.addEventListener(
+    "transitionend",
+    () => {
+      popover.remove();
+    },
+    { once: true },
+  );
+  popover.classList.remove("visible");
+}
+
 document.addEventListener("click", (e) => {
   document.querySelectorAll(".popover").forEach((popover) => {
     let popover_opener = document.querySelector(
@@ -13,7 +24,7 @@ document.addEventListener("click", (e) => {
       e.target !== popover_opener &&
       !popover_opener.contains(e.target)
     ) {
-      popover.remove();
+      close_popover(popover);
     }
   });
 });
@@ -21,7 +32,7 @@ document.addEventListener("click", (e) => {
 export const actions = {
   close_all_popover() {
     document.querySelectorAll(".popover").forEach((popover) => {
-      popover.remove();
+      close_popover(popover);
     });
   },
   async open_popover(popover_opener) {
@@ -29,7 +40,7 @@ export const actions = {
       popover_opener.dataset.vTargetPopover,
     );
     if (existing_popover) {
-      existing_popover.remove();
+      close_popover(existing_popover);
     } else {
       let popover = document.createElement("div");
       popover.classList.add("popover");
@@ -42,7 +53,10 @@ export const actions = {
       if (content_url) {
         await load_injectable_content(content_url, popover);
       }
-      popover.classList.add("visible");
+      popover.getBoundingClientRect();
+      requestAnimationFrame(() => {
+        popover.classList.add("visible");
+      });
 
       autoUpdate(popover_opener, popover, () => {
         computePosition(popover_opener, popover, {

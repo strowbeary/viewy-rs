@@ -91,15 +91,16 @@ pub mod prelude {
     pub use crate::core::component::Component;
     pub use crate::core::config::Config;
     pub use crate::core::layout::*;
-    pub use crate::modifiers::*;
     pub use crate::core::node::*;
     pub use crate::core::page::*;
     pub use crate::core::theme::*;
     pub use crate::helper_fn::*;
+    pub use crate::modifiers::*;
     pub use crate::widgets::button::*;
-    pub use crate::widgets::view::*;
+    pub use crate::widgets::sheet::*;
     pub use crate::widgets::stack::*;
     pub use crate::widgets::text::*;
+    pub use crate::widgets::view::*;
 }
 
 #[cfg(test)]

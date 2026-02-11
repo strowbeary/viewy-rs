@@ -1,4 +1,5 @@
 use crate::bindings::uri::Uri;
+use crate::prelude::SheetEdge;
 use crate::{core::widget::Widget, node::NodeType};
 use short_uuid::short;
 
@@ -15,6 +16,10 @@ pub enum Action<'a> {
     CloseParentWindow,
     OpenPopover {
         popover_content_url: Uri,
+    },
+    OpenSheet {
+        edge: SheetEdge,
+        sheet_content_url: Uri,
     },
     SubmitForm {
         form_name: &'a str,
@@ -88,6 +93,21 @@ impl Action<'_> {
                 widget
                     .attributes
                     .insert("data-v-url".to_string(), popover_content_url.to_string());
+            }
+            Action::OpenSheet {
+                edge,
+                sheet_content_url,
+            } => {
+                widget
+                    .attributes
+                    .insert(format!("data-v-on-{event}"), "open_sheet".to_string());
+                widget
+                    .attributes
+                    .insert("data-v-sheet-edge".to_string(), edge.to_string());
+
+                widget
+                    .attributes
+                    .insert("data-v-url".to_string(), sheet_content_url.to_string());
             }
             Action::SubmitForm { form_name, .. } => {}
             Action::CloseParentWindow => {
