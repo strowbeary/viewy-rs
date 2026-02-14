@@ -33,6 +33,7 @@ short-uuid = "0.1.2"
 grass_compiler = "0.13"
 futures = "0.3.31"
 dyn-clone = "1.0"
+inventory = "0.3"
 
 [build-dependencies]
 heck = "0.4"

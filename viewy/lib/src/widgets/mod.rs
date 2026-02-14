@@ -1,4 +1,4 @@
-use crate::core::widget::Widget;
+use std::sync::OnceLock;
 
 pub mod button;
 pub mod form;
@@ -16,8 +16,10 @@ pub mod text;
 pub mod breadcrumb;
 pub mod header;
 
+pub mod navigation_bar;
 pub mod sheet;
 pub mod tag;
+pub mod toolbar;
 
 /*
 *TODO
@@ -31,16 +33,13 @@ pub mod tag;
 #[cfg(feature = "sortable-stack")]
 pub mod sortable_stack;
 
-pub const fn get_all_stylesheet() -> &'static [&'static str; 9] {
-    &[
-        view::View::STYLE,
-        button::Button::STYLE,
-        icon::Icon::STYLE,
-        select::Select::STYLE,
-        picker::Picker::STYLE,
-        stack::VStack::STYLE,
-        stack::HStack::STYLE,
-        text::Text::STYLE,
-        tabs::TabContainer::STYLE,
-    ]
+static ALL_STYLESHEETS: OnceLock<Vec<&'static str>> = OnceLock::new();
+
+pub fn get_all_stylesheet() -> &'static [&'static str] {
+    ALL_STYLESHEETS
+        .get_or_init(|| {
+            let styles = crate::core::widget::iter_widget_styles().collect::<Vec<_>>();
+            styles.into_iter().map(|entry| entry.style).collect()
+        })
+        .as_slice()
 }

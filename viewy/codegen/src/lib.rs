@@ -30,7 +30,7 @@ pub fn widget_derive(input: TokenStream) -> TokenStream {
                     }
                     Ok(())
                 })
-                    .expect("Can't parse attribute widget, check syntax");
+                .expect("Can't parse attribute widget, check syntax");
             }
         }
     }
@@ -72,9 +72,15 @@ pub fn widget_derive(input: TokenStream) -> TokenStream {
         impl Widget for #name {
             const STYLE: &'static str = include_str!(#style_str);
             fn widget_name() -> &'static str {
-                "#name"
+                stringify!(#name)
             }
 
+        }
+
+        ::inventory::submit! {
+            crate::core::widget::WidgetStyleRegistration::new(
+                <#name as Widget>::STYLE,
+            )
         }
     };
     generated_code.into()
