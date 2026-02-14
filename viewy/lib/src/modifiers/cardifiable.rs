@@ -1,6 +1,6 @@
-use std::fmt::Display;
 use crate::core::widget::Widget;
 use crate::prelude::Classable;
+use std::fmt::Display;
 
 pub enum CardStyle {
     Outlined,
@@ -11,12 +11,16 @@ pub enum CardStyle {
 
 impl Display for CardStyle {
     fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
-        write!(f, "{}", match self {
-            CardStyle::Outlined => "outlined",
-            CardStyle::Filled => "filled",
-            CardStyle::OutlinedRaised => "outlined-raised",
-            CardStyle::FilledRaised => "filled-raised"
-        })
+        write!(
+            f,
+            "{}",
+            match self {
+                CardStyle::Outlined => "outlined",
+                CardStyle::Filled => "filled",
+                CardStyle::OutlinedRaised => "outlined-raised",
+                CardStyle::FilledRaised => "filled-raised",
+            }
+        )
     }
 }
 

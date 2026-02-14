@@ -72,5 +72,15 @@ window.addEventListener("startViewy", (event) => {
       picker.init(root);
     });
   }
+
+  if (
+    root.querySelector('[data-v-component-host="true"]') ||
+    (typeof root.matches === "function" &&
+      root.matches('[data-v-component-host="true"]'))
+  ) {
+    import("viewy/widgets/interactive_component.js").then((interactive) => {
+      interactive.init(root);
+    });
+  }
   initActions(root);
 });

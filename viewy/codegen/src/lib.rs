@@ -86,6 +86,108 @@ pub fn widget_derive(input: TokenStream) -> TokenStream {
     generated_code.into()
 }
 
+#[proc_macro_derive(InteractiveComponentMessage)]
+pub fn interactive_component_message_derive(input: TokenStream) -> TokenStream {
+    let input = syn::parse_macro_input!(input as syn::DeriveInput);
+    let name = &input.ident;
+
+    let generated_code = quote! {
+        impl ::viewy::InteractiveComponentMessage for #name {}
+    };
+
+    generated_code.into()
+}
+
+/// Derive macro that registers an interactive component in Viewy's
+/// Rocket single-route registry.
+///
+/// Usage:
+/// ```rust
+/// use rocket::serde::{Deserialize, Serialize};
+/// use viewy::prelude::*;
+///
+/// #[derive(Serialize, Deserialize, InteractiveComponentMessage)]
+/// #[serde(crate = "rocket::serde")]
+/// enum CounterMessage {
+///     Increment,
+/// }
+///
+/// #[derive(Serialize, Deserialize, InteractiveComponent)]
+/// #[serde(crate = "rocket::serde")]
+/// #[component(messages = CounterMessage)]
+/// struct CounterComponent {
+///     value: i32,
+/// }
+/// ```
+#[proc_macro_derive(InteractiveComponent, attributes(component))]
+pub fn interactive_component_derive(input: TokenStream) -> TokenStream {
+    let input = syn::parse_macro_input!(input as syn::DeriveInput);
+    let name = &input.ident;
+    let handler_name = syn::Ident::new(
+        format!("__viewy_interactive_component_handler_{}", name).as_str(),
+        name.span(),
+    );
+
+    let mut message_type: Option<syn::Type> = None;
+    for option in input.attrs.into_iter() {
+        if let Meta::List(ref list) = option.meta {
+            if list.path.is_ident("component") {
+                list.parse_nested_meta(|meta| {
+                    if meta.path.is_ident("messages") {
+                        let value = meta.value()?;
+                        let message_ty: syn::Type = value.parse()?;
+                        message_type = Some(message_ty);
+                    }
+                    Ok(())
+                })
+                .expect("Can't parse `component` attribute, check syntax");
+            }
+        }
+    }
+
+    let message_type =
+        message_type.expect("`messages` is a mandatory argument in #[component(...)]");
+
+    let generated_code = quote! {
+        #[allow(non_snake_case)]
+        fn #handler_name(
+            form: &::viewy::bindings::rocket::component::InteractiveComponentEventForm,
+        ) -> Result<::viewy::node::Node, String> {
+            let raw_state = form
+                .get("_v_component_state")
+                .ok_or_else(|| "Missing `_v_component_state` form field".to_string())?;
+            let component: #name =
+                ::viewy::bindings::rocket::component::decode_component_state(raw_state)?;
+
+            let raw_message = form
+                .get("_v_component_msg")
+                .ok_or_else(|| "Missing `_v_component_msg` form field".to_string())?;
+            let message: #message_type =
+                ::viewy::bindings::rocket::component::decode_component_message(raw_message)?;
+
+            let next_component =
+                <#name as ::viewy::InteractiveComponent>::on_message(
+                    component,
+                    message,
+                );
+            let content =
+                ::viewy::bindings::rocket::component::interactive_component_content(
+                    next_component,
+                )?;
+            Ok(content.into())
+        }
+
+        ::viewy::inventory::submit! {
+            ::viewy::bindings::rocket::component::InteractiveComponentRegistration::new(
+                concat!(module_path!(), "::", stringify!(#name)),
+                #handler_name,
+            )
+        }
+    };
+
+    generated_code.into()
+}
+
 #[proc_macro_derive(Component)]
 pub fn component_derive(input: TokenStream) -> TokenStream {
     // Construct a representation of Rust code as a syntax tree

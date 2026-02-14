@@ -38,8 +38,14 @@ static ALL_STYLESHEETS: OnceLock<Vec<&'static str>> = OnceLock::new();
 pub fn get_all_stylesheet() -> &'static [&'static str] {
     ALL_STYLESHEETS
         .get_or_init(|| {
-            let styles = crate::core::widget::iter_widget_styles().collect::<Vec<_>>();
-            styles.into_iter().map(|entry| entry.style).collect()
+            // Keep deterministic output so generated CSS stays cache-friendly
+            // across restarts/builds.
+            let mut styles = crate::core::widget::iter_widget_styles()
+                .map(|entry| entry.style)
+                .collect::<Vec<_>>();
+            styles.sort_unstable();
+            styles.dedup();
+            styles
         })
         .as_slice()
 }

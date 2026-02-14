@@ -25,6 +25,7 @@ use viewy::widgets::tabs::{Tab, TabContainer};
 use viewy::widgets::text::{Text, TextStyle};
 
 mod dynroutetest;
+mod interactive_component_poc;
 mod picker_select;
 mod sheet;
 mod tabs;
@@ -53,6 +54,13 @@ async fn home() -> Page<'static> {
             Button::new("Picker & Select demo", ButtonStyle::Outlined).on_click(Action::Navigate {
                 url: Uri::from(uri!(picker_select::picker_select_demo())),
             }),
+        );
+        main_stack.append_child(
+            Button::new("Interactive component PoC", ButtonStyle::Outlined).on_click(
+                Action::Navigate {
+                    url: Uri::from(uri!(interactive_component_poc::interactive_component_demo())),
+                },
+            ),
         );
 
         main_stack.append_child(
@@ -233,7 +241,8 @@ fn rocket() -> _ {
                 tabs::tab3,
                 sheet::sheet,
                 sheet::sheet_content,
-                picker_select::picker_select_demo
+                picker_select::picker_select_demo,
+                interactive_component_poc::interactive_component_demo
             ],
         )
         .mount("/assets", FileServer::from(relative!("assets")))
