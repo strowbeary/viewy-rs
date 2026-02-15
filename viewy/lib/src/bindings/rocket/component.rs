@@ -1,7 +1,7 @@
 //! Rocket helpers for interactive components handled through a single route.
 //!
 //! # Model
-//! - Component state is transported in HTML (`_v_component_state` hidden field).
+//! - Component state is transported in HTML (`data-v-component-state` attribute).
 //! - User actions send one encoded message (`data-v-component-msg`).
 //! - One Rocket endpoint dispatches to the right component implementation.
 //!
@@ -24,9 +24,7 @@
 //! No manual event route is required in your application.
 
 use crate::core::component::{InteractiveComponent, InteractiveComponentMessage};
-use crate::core::node::{Node, NodeType};
-use crate::modifiers::{Appendable, Attributable};
-use crate::widgets::view::View;
+use crate::core::node::Node;
 use rocket::form::Form;
 use rocket::http::Status;
 use rocket::post;
@@ -127,82 +125,65 @@ where
     serde_json::from_str(&json).map_err(|err| format!("Cannot deserialize component state: {err}"))
 }
 
-/// Build a host node for an interactive component instance.
-///
-/// The host carries runtime metadata; state is injected as hidden field
-/// named `_v_component_state`.
-///
-/// Use one shared event URL for all components (single-route architecture).
-pub fn interactive_component_content<C>(component: C) -> Result<View, String>
-where
-    C: InteractiveComponent,
-{
-    let serialized_state = encode_component_state(&component)?;
-
-    let mut content = View::new();
-    content
-        .append_child(component_hidden_field(
-            "_v_component_state",
-            &serialized_state,
-        ))
-        .append_child(component.render());
-
-    Ok(content)
-}
-
-/// Build a host node for an interactive component instance with an explicit id.
-pub fn interactive_component_host_with_id<C>(
+/// Build a host node for an interactive component instance with an explicit id/version.
+pub fn interactive_component_root_with_id_and_version<C>(
     component_id: &str,
+    component_version: u64,
     component: C,
-) -> Result<View, String>
+) -> Result<Node, String>
 where
     C: InteractiveComponent,
 {
     let component_name = std::any::type_name::<C>();
-    let content = interactive_component_content(component)?;
+    let serialized_state = encode_component_state(&component)?;
+    let mut root = component.render();
 
-    let mut host = View::new();
-    host.set_attr("data-v-component-host", "true")
-        .set_attr("data-v-component-mode", "hypermedia")
-        .set_attr("data-v-component-name", component_name)
-        .set_attr("data-v-component-id", component_id)
-        .set_attr(
-            "data-v-component-event-url",
-            INTERACTIVE_COMPONENT_EVENT_ROUTE,
-        )
-        .set_attr("data-v-component-version", "0")
-        .append_child(content);
+    root.attributes
+        .insert("data-v-component-host".to_string(), "true".to_string());
+    root.attributes.insert(
+        "data-v-component-mode".to_string(),
+        "hypermedia".to_string(),
+    );
+    root.attributes.insert(
+        "data-v-component-name".to_string(),
+        component_name.to_string(),
+    );
+    root.attributes
+        .insert("data-v-component-id".to_string(), component_id.to_string());
+    root.attributes.insert(
+        "data-v-component-event-url".to_string(),
+        INTERACTIVE_COMPONENT_EVENT_ROUTE.to_string(),
+    );
+    root.attributes.insert(
+        "data-v-component-version".to_string(),
+        component_version.to_string(),
+    );
+    root.attributes
+        .insert("data-v-component-state".to_string(), serialized_state);
 
-    Ok(host)
+    Ok(root)
+}
+
+/// Build a host node for an interactive component instance with an explicit id.
+pub fn interactive_component_root_with_id<C>(
+    component_id: &str,
+    component: C,
+) -> Result<Node, String>
+where
+    C: InteractiveComponent,
+{
+    interactive_component_root_with_id_and_version(component_id, 0, component)
 }
 
 /// Build a host node for an interactive component instance.
 ///
 /// A unique `data-v-component-id` is generated automatically.
-pub fn interactive_component_host<C>(component: C) -> Result<View, String>
+pub fn interactive_component_root<C>(component: C) -> Result<Node, String>
 where
     C: InteractiveComponent,
 {
     let component_id = uuid::Uuid::new_v4().to_string();
-    interactive_component_host_with_id(&component_id, component)
-}
-
-/// Build a hidden input node to store component state in HTML.
-pub fn component_hidden_field(name: &str, value: &str) -> Node {
-    let mut input = Node {
-        node_type: NodeType::SelfClosing("input"),
-        ..Node::default()
-    };
-    input
-        .attributes
-        .insert("type".to_string(), "hidden".to_string());
-    input
-        .attributes
-        .insert("name".to_string(), name.to_string());
-    input
-        .attributes
-        .insert("value".to_string(), value.to_string());
-    input
+    interactive_component_root_with_id(&component_id, component)
 }
 
 fn encode_component_state<S>(state: &S) -> Result<String, String>

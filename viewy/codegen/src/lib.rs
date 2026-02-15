@@ -164,17 +164,25 @@ pub fn interactive_component_derive(input: TokenStream) -> TokenStream {
                 .ok_or_else(|| "Missing `_v_component_msg` form field".to_string())?;
             let message: #message_type =
                 ::viewy::bindings::rocket::component::decode_component_message(raw_message)?;
+            let component_id = form
+                .get("_v_component_id")
+                .ok_or_else(|| "Missing `_v_component_id` form field".to_string())?;
+            let current_version = form
+                .get("_v_component_version")
+                .and_then(|raw| raw.parse::<u64>().ok())
+                .unwrap_or(0);
+            let next_version = current_version.saturating_add(1);
 
             let next_component =
                 <#name as ::viewy::InteractiveComponent>::on_message(
                     component,
                     message,
                 );
-            let content =
-                ::viewy::bindings::rocket::component::interactive_component_content(
-                    next_component,
-                )?;
-            Ok(content.into())
+            ::viewy::bindings::rocket::component::interactive_component_root_with_id_and_version(
+                component_id,
+                next_version,
+                next_component,
+            )
         }
 
         ::viewy::inventory::submit! {

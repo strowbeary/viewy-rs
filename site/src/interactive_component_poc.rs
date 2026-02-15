@@ -5,7 +5,7 @@ use viewy::prelude::*;
 #[serde(crate = "rocket::serde")]
 pub enum CounterMessage {
     Increment { amount: i64 },
-    Decrement,
+    Decrement { amount: i64 },
     Reset,
 }
 
@@ -22,7 +22,7 @@ impl viewy::prelude::InteractiveComponent for CounterComponent {
     fn on_message(mut self, message: Self::Message) -> Self {
         match message {
             CounterMessage::Increment { amount } => self.value += amount,
-            CounterMessage::Decrement => self.value -= 1,
+            CounterMessage::Decrement { amount } => self.value -= amount,
             CounterMessage::Reset => self.value = 0,
         }
         self
@@ -39,11 +39,16 @@ impl viewy::prelude::InteractiveComponent for CounterComponent {
             .append_child(
                 HStack::new(Alignment::Center)
                     .gap(vec![scale(2)])
-                    .append_child(
-                        Button::new("-1", ButtonStyle::Outlined)
-                            .on_click(Action::TriggerMessage(CounterMessage::Decrement)),
-                    )
+                    .append_child(Button::new("-5", ButtonStyle::Outlined).on_click(
+                        Action::TriggerMessage(CounterMessage::Decrement { amount: 5 }),
+                    ))
+                    .append_child(Button::new("-1", ButtonStyle::Outlined).on_click(
+                        Action::TriggerMessage(CounterMessage::Decrement { amount: 1 }),
+                    ))
                     .append_child(Button::new("+1", ButtonStyle::Filled).on_click(
+                        Action::TriggerMessage(CounterMessage::Increment { amount: 1 }),
+                    ))
+                    .append_child(Button::new("+5", ButtonStyle::Filled).on_click(
                         Action::TriggerMessage(CounterMessage::Increment { amount: 5 }),
                     ))
                     .append_child(
@@ -67,7 +72,7 @@ pub fn interactive_component_demo() -> Page<'static> {
                 TextStyle::H1,
             ))
             .append_child(Text::new(
-                "Une seule route gère tous les composants interactifs. L'état du composant est transporté en HTML via _v_component_state.",
+                "Une seule route gère tous les composants interactifs. L'état du composant est transporté en HTML via data-v-component-state.",
                 TextStyle::Body,
             ))
             .append_child(CounterComponent { value: 0 });

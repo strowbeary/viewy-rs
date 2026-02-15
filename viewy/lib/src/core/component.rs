@@ -30,7 +30,7 @@ pub trait Component: Into<Node> {
 /// Stateless interactive component contract.
 ///
 /// # Principle
-/// The component state is carried in HTML (hidden field) and sent back to the
+/// The component state is carried in HTML (`data-v-component-state`) and sent back to the
 /// server on each interaction. The server applies one message and returns the
 /// updated component HTML.
 ///
@@ -88,21 +88,19 @@ pub trait InteractiveComponent: Serialize + DeserializeOwned + Sized {
 
     /// Build a Rocket interactive host for this component.
     ///
-    /// The host includes runtime attributes and embeds `_v_component_state`.
+    /// The host includes runtime attributes and embeds
+    /// `data-v-component-state`.
     /// It targets the unique interactive route:
     /// `/interactive-components/event`.
     #[cfg(feature = "rocket")]
-    fn into_interactive_host(
-        self,
-        component_id: &str,
-    ) -> Result<crate::widgets::view::View, String> {
-        crate::bindings::rocket::component::interactive_component_host_with_id(component_id, self)
+    fn into_interactive_host(self, component_id: &str) -> Result<Node, String> {
+        crate::bindings::rocket::component::interactive_component_root_with_id(component_id, self)
     }
 
     /// Build a Rocket interactive host with an auto-generated component id.
     #[cfg(feature = "rocket")]
-    fn into_interactive_host_auto(self) -> Result<crate::widgets::view::View, String> {
-        crate::bindings::rocket::component::interactive_component_host(self)
+    fn into_interactive_host_auto(self) -> Result<Node, String> {
+        crate::bindings::rocket::component::interactive_component_root(self)
     }
 }
 
@@ -115,7 +113,6 @@ where
         value
             .into_interactive_host_auto()
             .unwrap_or_else(|err| panic!("Cannot build interactive component host: {err}"))
-            .into()
     }
 }
 

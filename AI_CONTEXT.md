@@ -2,6 +2,13 @@
 
 Dernière mise à jour: 14 février 2026.
 
+## Update récent (racine sans wrapper)
+- Les attributs `data-v-component-*` sont désormais posés sur **l'élément racine du composant**.
+- Suppression de l'encapsulation systématique par un `div` hôte Viewy.
+- Le state n'est plus injecté en `<input type=\"hidden\">`, il est stocké dans `data-v-component-state`.
+- Le runtime JS remplace maintenant le **nœud racine complet** du composant au retour serveur.
+- Le payload POST continue d'envoyer `_v_component_state` (rempli depuis `data-v-component-state`).
+
 ## Objectif implémenté
 - Passer d'un modèle manuel à un modèle **composants interactifs hypermédia**.
 - Le state UI est transporté en HTML (`_v_component_state`).

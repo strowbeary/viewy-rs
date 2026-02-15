@@ -12,8 +12,9 @@ function readHostContext(host) {
   const componentName = host.getAttribute("data-v-component-name");
   const componentId = host.getAttribute("data-v-component-id");
   const versionRaw = host.getAttribute("data-v-component-version") || "0";
+  const serializedState = host.getAttribute("data-v-component-state");
 
-  if (!eventUrl || !componentId || !componentName) {
+  if (!eventUrl || !componentId || !componentName || !serializedState) {
     throw new Error("Missing required interactive component host attributes");
   }
 
@@ -22,6 +23,7 @@ function readHostContext(host) {
     componentName,
     componentId,
     version: Number.parseInt(versionRaw, 10) || 0,
+    serializedState,
   };
 }
 
@@ -60,6 +62,18 @@ function collectHostFields(host) {
   return form;
 }
 
+function parseHostElementFromHtml(html) {
+  const template = document.createElement("template");
+  template.innerHTML = html.trim();
+  const host = template.content.firstElementChild;
+  if (!host) {
+    throw new Error(
+      "Interactive component response did not return a root element",
+    );
+  }
+  return host;
+}
+
 async function dispatchHypermediaComponentMessage(host, rawMessage) {
   const context = readHostContext(host);
   const form = collectHostFields(host);
@@ -67,6 +81,7 @@ async function dispatchHypermediaComponentMessage(host, rawMessage) {
   form.set("_v_component_id", context.componentId);
   form.set("_v_component_msg", rawMessage);
   form.set("_v_component_version", String(context.version));
+  form.set("_v_component_state", context.serializedState);
 
   const response = await fetch(context.eventUrl, {
     method: "POST",
@@ -81,9 +96,9 @@ async function dispatchHypermediaComponentMessage(host, rawMessage) {
   }
 
   const html = await response.text();
-  host.innerHTML = html;
-  host.setAttribute("data-v-component-version", String(context.version + 1));
-  startViewy(host);
+  const nextHost = parseHostElementFromHtml(html);
+  host.replaceWith(nextHost);
+  startViewy(nextHost);
 }
 
 function bindTrigger(trigger) {
