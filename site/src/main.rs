@@ -24,7 +24,9 @@ use viewy::widgets::stack::{Alignment, HStack, Stack, VStack};
 use viewy::widgets::tabs::{Tab, TabContainer};
 use viewy::widgets::text::{Text, TextStyle};
 
+mod core;
 mod dynroutetest;
+mod http;
 mod interactive_component_poc;
 mod picker_select;
 mod sheet;
