@@ -2,17 +2,10 @@
 extern crate rocket;
 #[macro_use]
 extern crate viewy;
-use rayon::prelude::*;
-use rocket::tokio::time::interval;
-use std::env;
-use std::fmt::format;
-use std::time::Duration;
 
 use rocket::fs::{FileServer, relative};
-use rocket::http::ext::IntoCollection;
-use rocket::response::content::{RawCss, RawHtml, RawJavaScript};
-use rocket::response::stream::TextStream;
 use rocket::serde::uuid::Uuid;
+use sheet::rocket_uri_macro_sheet;
 use viewy::bindings::rocket::static_assets::viewy_static_assets_fairing;
 use viewy::bindings::uri::Uri;
 use viewy::modifiers::Action;
@@ -64,6 +57,11 @@ async fn home() -> Page<'static> {
                 },
             ),
         );
+        main_stack.append_child(Button::new("Sheet", ButtonStyle::Outlined).on_click(
+            Action::Navigate {
+                url: Uri::from(uri!(sheet::sheet())),
+            },
+        ));
 
         main_stack.append_child(
             Button::new("Open popup", ButtonStyle::Filled)

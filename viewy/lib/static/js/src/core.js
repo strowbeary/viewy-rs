@@ -18,19 +18,45 @@ export function startViewy(root) {
   );
 }
 
-export async function load_injectable_content(url, injection_root) {
-  let res = await fetch(url, {
-    headers: {
-      "x-viewy-render-mode": "ContentOnly",
-    },
-  });
-  let injectable_content = await res.text();
-  let old_class_list = injection_root.classList;
-  let old_dataset = injection_root.dataset;
-  //injection_root.insertAdjacentHTML("beforeend", injectable_content);
-  let container = injection_root.cloneNode();
+function build_morph_target(injection_root, injectable_content) {
+  const template = document.createElement("template");
+  template.innerHTML = injectable_content.trim();
+
+  const first_element = template.content.firstElementChild;
+  const has_single_element =
+    first_element &&
+    template.content.childElementCount === 1 &&
+    template.content.textContent.trim() === "";
+
+  if (has_single_element) {
+    return first_element;
+  }
+
+  const container = injection_root.cloneNode();
   container.innerHTML = injectable_content;
-  let result = morphdom(injection_root, container, {
+  return container;
+}
+
+export async function load_injectable_content(
+  url,
+  injection_root,
+  request_options = {},
+) {
+  const headers = new Headers(request_options.headers || {});
+  if (!headers.has("x-viewy-render-mode")) {
+    headers.set("x-viewy-render-mode", "ContentOnly");
+  }
+
+  let res = await fetch(url, {
+    ...request_options,
+    headers,
+  });
+  if (!res.ok) {
+    throw new Error(`Request failed with status ${res.status}`);
+  }
+  let injectable_content = await res.text();
+  let morph_target = build_morph_target(injection_root, injectable_content);
+  let result = morphdom(injection_root, morph_target, {
     onElUpdated(el) {
       if (el.__hasListeners) {
         el.replaceWith(el.cloneNode(true));

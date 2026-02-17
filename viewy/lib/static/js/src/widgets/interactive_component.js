@@ -1,4 +1,4 @@
-import { startViewy } from "../core.js";
+import { load_injectable_content } from "../core.js";
 
 const COMPONENT_HOST_SELECTOR = '[data-v-component-host="true"]';
 const COMPONENT_MESSAGE_SELECTOR = "[data-v-component-msg]";
@@ -62,18 +62,6 @@ function collectHostFields(host) {
   return form;
 }
 
-function parseHostElementFromHtml(html) {
-  const template = document.createElement("template");
-  template.innerHTML = html.trim();
-  const host = template.content.firstElementChild;
-  if (!host) {
-    throw new Error(
-      "Interactive component response did not return a root element",
-    );
-  }
-  return host;
-}
-
 async function dispatchHypermediaComponentMessage(host, rawMessage) {
   const context = readHostContext(host);
   const form = collectHostFields(host);
@@ -82,23 +70,13 @@ async function dispatchHypermediaComponentMessage(host, rawMessage) {
   form.set("_v_component_msg", rawMessage);
   form.set("_v_component_version", String(context.version));
   form.set("_v_component_state", context.serializedState);
-
-  const response = await fetch(context.eventUrl, {
+  await load_injectable_content(context.eventUrl, host, {
     method: "POST",
     headers: {
       "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
     },
     body: form.toString(),
   });
-
-  if (!response.ok) {
-    throw new Error(`Component event failed with status ${response.status}`);
-  }
-
-  const html = await response.text();
-  const nextHost = parseHostElementFromHtml(html);
-  host.replaceWith(nextHost);
-  startViewy(nextHost);
 }
 
 function bindTrigger(trigger) {

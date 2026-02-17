@@ -8,7 +8,7 @@ use viewy::prelude::{
 use viewy::scale;
 
 use crate::create_button_group;
-use crate::rocket_uri_macro_benchmark;
+use crate::interactive_component_poc::rocket_uri_macro_interactive_component_demo;
 
 #[get("/sheet")]
 pub fn sheet() -> Page<'static> {
@@ -16,7 +16,7 @@ pub fn sheet() -> Page<'static> {
         let mut button = Button::new("Open sheet", ButtonStyle::Filled);
         button.on_click(Action::OpenSheet {
             edge: SheetEdge::Right,
-            sheet_content_url: Uri::from(uri!(sheet_content())),
+            sheet_content_url: Uri::from(uri!(interactive_component_demo())),
             with_backdrop: true,
         });
         button

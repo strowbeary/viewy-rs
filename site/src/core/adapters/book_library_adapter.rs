@@ -261,7 +261,27 @@ impl BookLibraryAdapter {
             },
             Book {
                 id: String::from("book-050"),
-                title: String::from("The Phoenix Project"),
+                title: String::from("The Phoenix Project 1"),
+                author: String::from("Gene Kim, Kevin Behr, George Spafford"),
+            },
+            Book {
+                id: String::from("book-051"),
+                title: String::from("The Phoenix Project 2"),
+                author: String::from("Gene Kim, Kevin Behr, George Spafford"),
+            },
+            Book {
+                id: String::from("book-052"),
+                title: String::from("The Phoenix Project 3"),
+                author: String::from("Gene Kim, Kevin Behr, George Spafford"),
+            },
+            Book {
+                id: String::from("book-053"),
+                title: String::from("The Phoenix Project 4"),
+                author: String::from("Gene Kim, Kevin Behr, George Spafford"),
+            },
+            Book {
+                id: String::from("book-054"),
+                title: String::from("The Phoenix Project 5"),
                 author: String::from("Gene Kim, Kevin Behr, George Spafford"),
             },
         ];
