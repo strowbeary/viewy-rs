@@ -40,6 +40,7 @@ pub trait Component: Into<Node> {
 ///
 /// Registration and routing are handled by:
 /// - `#[derive(InteractiveComponent)]`
+/// - `register_interactive_component!(Type<Concrete>)` for generic component definitions
 /// - `crate::bindings::rocket::component::handle_registered_component_event`
 ///
 /// # Example
@@ -56,7 +57,6 @@ pub trait Component: Into<Node> {
 ///
 /// #[derive(Serialize, Deserialize, InteractiveComponent)]
 /// #[serde(crate = "rocket::serde")]
-/// #[component(messages = CounterMessage)]
 /// struct CounterComponent {
 ///     value: i32,
 /// }
@@ -93,21 +93,35 @@ pub trait InteractiveComponent: Serialize + DeserializeOwned + Sized {
     /// It targets the unique interactive route:
     /// `/interactive-components/event`.
     #[cfg(feature = "rocket")]
-    fn into_interactive_host(self, component_id: &str) -> Result<Node, String> {
+    fn into_interactive_host(self, component_id: &str) -> Result<Node, String>
+    where
+        Self: InteractiveComponentMetadata,
+    {
         crate::bindings::rocket::component::interactive_component_root_with_id(component_id, self)
     }
 
     /// Build a Rocket interactive host with an auto-generated component id.
     #[cfg(feature = "rocket")]
-    fn into_interactive_host_auto(self) -> Result<Node, String> {
+    fn into_interactive_host_auto(self) -> Result<Node, String>
+    where
+        Self: InteractiveComponentMetadata,
+    {
         crate::bindings::rocket::component::interactive_component_root(self)
     }
+}
+
+/// Metadata required by the interactive component registry/runtime.
+///
+/// Implemented by interactive component macros to keep host runtime naming
+/// and registry naming aligned.
+pub trait InteractiveComponentMetadata {
+    const REGISTRATION_NAME: &'static str;
 }
 
 #[cfg(feature = "rocket")]
 impl<T> From<T> for Node
 where
-    T: InteractiveComponent,
+    T: InteractiveComponent + InteractiveComponentMetadata,
 {
     fn from(value: T) -> Self {
         value

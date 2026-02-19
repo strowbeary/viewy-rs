@@ -16,7 +16,6 @@ pub enum PaginationMessage {
 
 #[derive(Debug, Clone, Serialize, Deserialize, InteractiveComponent)]
 #[serde(crate = "rocket::serde")]
-#[component(messages = PaginationMessage)]
 pub struct BookListPaginated {
     pub page_idx: usize,
     pub displayed_books: Vec<Book>,

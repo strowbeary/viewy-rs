@@ -1,0 +1,256 @@
+$border-radius: 8;
+
+.select {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    cursor: pointer;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    -webkit-touch-action: none;
+    touch-action: none;
+    width: max-content;
+    gap: calc(4 / 16 * 1rem);
+
+    &__label {
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+        font-weight: 600;
+        color: var(--on-background);
+    }
+
+    &__trigger {
+        position: relative;
+        color: var(--on-background);
+        width: 100%;
+        cursor: pointer;
+        list-style: none;
+        display: flex;
+        align-items: center;
+        border: calc(1rem / 16) solid var(--border);
+        border-radius: sp($border-radius * (3 / 4));
+        padding: scale(3) scale(4);
+        gap: calc(11 / 16 * 1rem);
+        min-width: calc(100 / 16 * 1rem);
+        appearance: none;
+        background: var(--background);
+        font-size: sp(16);
+        letter-spacing: sp(0.75);
+        font-weight: 400;
+
+        &:disabled {
+            cursor: not-allowed;
+            background: none;
+            color: color-mix(
+                in hsl,
+                var(--on-background) 30%,
+                var(--background)
+            );
+            border: sp(1) solid
+                color-mix(in hsl, var(--border) 70%, var(--background));
+        }
+
+        &[aria-expanded="true"] .select__chevron {
+            transform: rotate(180deg);
+        }
+    }
+
+    &__value {
+        display: block;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 1rem;
+        line-height: 1.25rem;
+        flex: 1;
+    }
+
+    &__chevron {
+        flex-shrink: 0;
+        transition: transform 200ms cubic-bezier(0.33, 1, 0.68, 1);
+    }
+
+    &__panel {
+        --animation-duration: 100ms;
+        --border-radius: calc(12 / 16 * 1rem);
+
+        width: max-content;
+        min-width: 100%;
+        max-width: min(calc(400 / 16 * 1rem), 90vw);
+        position: absolute;
+        top: calc(100% + calc(6 / 16 * 1rem));
+        left: 0;
+        border: calc(1 / 16 * 1rem) solid var(--border);
+        border-radius: var(--border-radius);
+        background: var(--background);
+        padding: calc(14 / 16 * 1rem);
+        box-sizing: border-box;
+        opacity: 0;
+        transform: translateY(-10px);
+        transition:
+            visibility 0ms var(--animation-duration)
+                cubic-bezier(0.33, 1, 0.68, 1),
+            opacity var(--animation-duration) 0ms cubic-bezier(0.33, 1, 0.68, 1),
+            z-index var(--animation-duration) 0ms cubic-bezier(0.33, 1, 0.68, 1),
+            transform calc(var(--animation-duration) * 2)
+                cubic-bezier(0.33, 1, 0.68, 1);
+        box-shadow:
+            0px 6px 12px -3px #25292e0a,
+            0px 6px 18px 0px #25292e1f;
+        z-index: 40;
+        overflow: hidden;
+
+        &[hidden] {
+            display: none;
+        }
+
+        &:not([hidden]) {
+            transition:
+                visibility var(--animation-duration) 0ms,
+                opacity var(--animation-duration) 0ms,
+                z-index var(--animation-duration) 0ms,
+                transform calc(var(--animation-duration) * 2) ease;
+            opacity: 1;
+            transform: translateY(0px);
+        }
+    }
+
+    &__search {
+        width: 100%;
+        margin: 0 0 calc(14 / 16 * 1rem) 0;
+        border: calc(1 / 16 * 1rem) solid var(--border);
+        border-radius: calc(12 / 16 * 1rem);
+        background: var(--background);
+        color: var(--on-background);
+        padding: calc(9 / 16 * 1rem) calc(13 / 16 * 1rem);
+        box-sizing: border-box;
+        font-size: 1rem;
+        outline: none;
+        transition: border-color 150ms;
+        font-family: inherit;
+        resize: none;
+        overflow: hidden;
+        overflow-y: auto;
+
+        &:hover {
+            border-color: var(--border);
+        }
+
+        &:focus {
+            padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
+            border: calc(2 / 16 * 1rem) solid var(--accent);
+        }
+    }
+
+    &__listbox {
+        max-height: calc(400 / 16 * 1rem);
+        max-width: calc(400 / 16 * 1rem);
+        overflow: auto;
+        padding: 0;
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+    }
+
+    &__group {
+        display: flex;
+        flex-direction: column;
+        gap: 0;
+
+        &[hidden] {
+            display: none;
+        }
+    }
+
+    &__group-label {
+        font-size: 0.75rem;
+        line-height: 1rem;
+        font-weight: 600;
+        color: var(--on-surface);
+        opacity: 0.6;
+        padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem) calc(4 / 16 * 1rem);
+    }
+
+    &__option {
+        cursor: pointer;
+        padding: calc(8 / 16 * 1rem) calc(12 / 16 * 1rem);
+        border-radius: calc(10 / 16 * 1rem);
+        appearance: none;
+        border: none;
+        background: transparent;
+        color: var(--on-background);
+        display: grid;
+        grid-template-columns: auto minmax(0, 1fr) auto;
+        align-items: center;
+        gap: calc(8 / 16 * 1rem);
+        width: 100%;
+        text-align: left;
+        transition:
+            background 150ms,
+            color 150ms;
+
+        &:hover {
+            background: var(--accent);
+            color: var(--on-accent);
+        }
+
+        &:focus-visible {
+            outline: none;
+        }
+
+        &[aria-selected="true"] .select__check,
+        &.active .select__check {
+            visibility: visible;
+        }
+    }
+
+    &__option-icon {
+        width: calc(18 / 16 * 1rem);
+        height: calc(18 / 16 * 1rem);
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+
+        > .icon {
+            margin: 0;
+            color: inherit;
+            transition: color 150ms;
+        }
+    }
+
+    &__option-label {
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        font-size: 0.875rem;
+        line-height: 1.25rem;
+    }
+
+    &__check {
+        visibility: hidden;
+        color: inherit;
+        transition: color 150ms;
+    }
+
+    &--disabled {
+        opacity: 0.7;
+
+        .select__trigger {
+            cursor: not-allowed;
+        }
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .select {
+        &__trigger,
+        &__chevron,
+        &__check,
+        &__option,
+        &__option-icon > .icon {
+            transition: none;
+        }
+    }
+}
