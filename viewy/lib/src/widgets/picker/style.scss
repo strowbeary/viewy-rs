@@ -93,7 +93,7 @@ $animation-duration: 80ms;
 
     &__item-label {
         border: calc(1 / 16 * 1rem) solid var(--border);
-        border-radius: calc($border-radiusrem);
+        border-radius: calc($border-radius);
         background: var(--surface);
         color: var(--accent);
         min-height: 2.5rem;

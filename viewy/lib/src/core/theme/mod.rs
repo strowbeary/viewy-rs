@@ -115,29 +115,84 @@ pub fn grass_sp(mut args: ArgumentResult, visitor: &mut Visitor) -> SassResult<V
     }
 }
 
+fn parse_usize_after(haystack: &str, marker: &str) -> Option<usize> {
+    let start = haystack.find(marker)? + marker.len();
+    let digits = haystack[start..]
+        .chars()
+        .take_while(|ch| ch.is_ascii_digit())
+        .collect::<String>();
+    if digits.is_empty() {
+        None
+    } else {
+        digits.parse::<usize>().ok()
+    }
+}
+
+fn parse_grass_error_location(error_debug: &str) -> Option<(usize, usize)> {
+    let line = parse_usize_after(error_debug, "begin: LineCol { line: ")?;
+    let column = parse_usize_after(error_debug, "column: ")?;
+    Some((line, column))
+}
+
+fn scss_excerpt(source: &str, line: usize, column: usize, context_lines: usize) -> String {
+    let lines = source.lines().collect::<Vec<&str>>();
+    if lines.is_empty() {
+        return String::from("<empty stylesheet>");
+    }
+
+    let target_line = line.clamp(1, lines.len());
+    let from = target_line.saturating_sub(context_lines).max(1);
+    let to = (target_line + context_lines).min(lines.len());
+
+    let mut out = String::new();
+    for line_number in from..=to {
+        let prefix = if line_number == target_line {
+            ">>"
+        } else {
+            "  "
+        };
+        let content = lines[line_number - 1];
+        out.push_str(&format!("{prefix} {line_number:>5} | {content}\n"));
+        if line_number == target_line {
+            let caret_padding = " ".repeat(column.saturating_sub(1));
+            out.push_str(&format!("   {:>5} | {caret_padding}^\n", ""));
+        }
+    }
+    out
+}
+
+fn format_grass_compile_error(error: &grass::Error, source: &str) -> String {
+    let error_debug = format!("{error:?}");
+    if let Some((line, column)) = parse_grass_error_location(&error_debug) {
+        let excerpt = scss_excerpt(source, line, column, 3);
+        format!(
+            "Can't compile SCSS.\n{error}\nLocation: line {line}, column {column}\n\nSCSS excerpt:\n{excerpt}\nDebug:\n{error_debug}"
+        )
+    } else {
+        format!("Can't compile SCSS.\n{error}\nDebug:\n{error_debug}")
+    }
+}
+
 fn get_stylesheet_cached() -> &'static str {
     COMPILED_STYLESHEET
         .get_or_init(|| {
             let palette_style = generate_color_palette(Theme::Auto);
             let widget_style = get_all_stylesheet().join("");
+            let full_style = format!(
+                r#"
+        {palette_style}
+
+        {widget_style}
+        "#
+            );
+
             let options = grass::Options::default()
                 .style(OutputStyle::Compressed)
                 .add_custom_fn("sp", Builtin::new(grass_sp))
                 .add_custom_fn("scale", Builtin::new(grass_scale));
-            grass::from_string(
-                format!(
-                    r#"
-
-
-        {palette_style}
-
-
-        {widget_style}
-        "#
-                ),
-                &options,
-            )
-            .expect("Can't compile SCSS")
+            grass::from_string(full_style.clone(), &options).unwrap_or_else(|error| {
+                panic!("{}", format_grass_compile_error(&error, &full_style))
+            })
         })
         .as_str()
 }
