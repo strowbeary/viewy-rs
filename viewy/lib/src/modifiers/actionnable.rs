@@ -4,32 +4,127 @@ use crate::prelude::SheetEdge;
 use crate::{core::widget::Widget, node::NodeType};
 use short_uuid::short;
 
-/// Describe the different actions that will be triggered
+/// Actions that can be attached to widget events.
+///
+/// `Action::apply` translates each variant into `data-v-*` attributes
+/// consumed by the Viewy JavaScript runtime.
 pub enum Action<'a> {
-    Navigate {
-        url: Uri,
-    },
+    /// Navigate to a URL.
+    ///
+    /// Runtime effect:
+    /// - switches the widget root node to an `<a>`
+    /// - sets `href` to the target URL
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let action = Action::Navigate {
+    ///     url: uri!(books_index()),
+    /// };
+    /// ```
+    Navigate { url: Uri },
+    /// Open remote content in a popup window.
+    ///
+    /// Runtime attributes:
+    /// - `data-v-on-<event>=open_popup`
+    /// - `data-v-url=<popup_content_url>`
+    /// - `data-v-target-popup=<generated-popup-id>`
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let action = Action::OpenPopup {
+    ///     popup_content_url: uri!(popup_content()),
+    ///     display_window_controls: true,
+    /// };
+    /// ```
     OpenPopup {
         popup_content_url: Uri,
         display_window_controls: bool, //Idée pour plus tard
     },
-    /// Close parent popup or popover
+    /// Close parent popup or popover.
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let action = Action::CloseParentWindow;
+    /// ```
     CloseParentWindow,
-    OpenPopover {
-        popover_content_url: Uri,
-    },
+    /// Open remote content in a popover.
+    ///
+    /// Runtime attributes:
+    /// - `data-v-on-<event>=open_popover`
+    /// - `data-v-url=<popover_content_url>`
+    /// - `data-v-target-popover=<generated-popover-id>`
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let action = Action::OpenPopover {
+    ///     popover_content_url: uri!(popover_content()),
+    /// };
+    /// ```
+    OpenPopover { popover_content_url: Uri },
+    /// Open remote content in a sheet.
+    ///
+    /// Runtime attributes:
+    /// - `data-v-on-<event>=open_sheet`
+    /// - `data-v-url=<sheet_content_url>`
+    /// - `data-v-sheet-edge=<edge>`
+    /// - optional `data-v-sheet-with-backdrop=true`
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let action = Action::OpenSheet {
+    ///     sheet_content_url: uri!(sheet_content()),
+    ///     edge: SheetEdge::Bottom,
+    ///     with_backdrop: true,
+    /// };
+    /// ```
     OpenSheet {
         sheet_content_url: Uri,
         edge: SheetEdge,
         with_backdrop: bool,
     },
+    /// Submit a form by name.
+    ///
+    /// Note: the current `apply` implementation keeps this variant as a
+    /// reserved placeholder and does not inject attributes yet.
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let action = Action::SubmitForm {
+    ///     form_name: "book-form",
+    ///     inject_into: None,
+    /// };
+    /// ```
     SubmitForm {
         form_name: &'a str,
         inject_into: Option<&'a str>,
     },
-    TriggerMessagePayload {
-        encoded_message: String,
-    },
+    /// Trigger one interactive component message payload.
+    ///
+    /// Runtime attributes:
+    /// - `data-v-component-msg=<encoded-message>`
+    /// - optional `data-v-component-event=<event>` for non-click events
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let action = Action::TriggerMessagePayload {
+    ///     encoded_message: "hex:7b7d".to_string(),
+    /// };
+    /// ```
+    TriggerMessagePayload { encoded_message: String },
 }
 
 impl Action<'_> {
@@ -37,6 +132,16 @@ impl Action<'_> {
     ///
     /// The message is encoded for HTML transport and stored in
     /// `data-v-component-msg`.
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// #[derive(serde::Serialize, serde::Deserialize, InteractiveComponentMessage)]
+    /// enum Msg { Increment }
+    ///
+    /// let action = Action::trigger_message(&Msg::Increment).expect("encode");
+    /// ```
     pub fn trigger_message<M>(message: &M) -> Result<Action<'static>, String>
     where
         M: InteractiveComponentMessage,
@@ -50,6 +155,16 @@ impl Action<'_> {
     ///
     /// This enables API usage such as:
     /// `Action::TriggerMessage(MyMessage::Increment)`.
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// #[derive(serde::Serialize, serde::Deserialize, InteractiveComponentMessage)]
+    /// enum Msg { Increment }
+    ///
+    /// let action = Action::TriggerMessage(Msg::Increment);
+    /// ```
     #[allow(non_snake_case)]
     pub fn TriggerMessage<M>(message: M) -> Action<'static>
     where
@@ -169,15 +284,46 @@ impl Action<'_> {
 }
 
 pub trait OnClickActionnable: Widget {
+    /// Attach an action to the `click` event.
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let mut button = Button::new("Close", ButtonStyle::Filled);
+    /// button.on_click(Action::CloseParentWindow);
+    /// ```
     fn on_click(&mut self, action: Action) -> &mut Self {
         action.apply("click", self);
         self
     }
+
+    /// Attach an action to the `dblclick` event.
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let mut button = Button::new("Open", ButtonStyle::Filled);
+    /// button.on_dblclick(Action::CloseParentWindow);
+    /// ```
     fn on_dblclick(&mut self, action: Action) -> &mut Self {
         action.apply("dblclick", self);
         self
     }
 
+    /// Attach an interactive component message to the `click` event.
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// #[derive(serde::Serialize, serde::Deserialize, InteractiveComponentMessage)]
+    /// enum Msg { Next }
+    ///
+    /// let mut button = Button::new("Next", ButtonStyle::Filled);
+    /// button.on_click_message(&Msg::Next).expect("encode");
+    /// ```
     fn on_click_message<M>(&mut self, message: &M) -> Result<&mut Self, String>
     where
         M: InteractiveComponentMessage,
@@ -187,24 +333,65 @@ pub trait OnClickActionnable: Widget {
     }
 }
 
+/// Adds keyboard-triggered action helpers.
 pub trait KeyboardActionnable: Widget {
+    /// Attach an action to the `keypress` event.
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let mut input = Select::new("country", "");
+    /// input.on_keypress(Action::CloseParentWindow);
+    /// ```
     fn on_keypress(&mut self, action: Action) -> &mut Self {
         action.apply("keypress", self);
         self
     }
 }
 
+/// Adds input/focus-triggered action helpers.
 pub trait InputActionnable: Widget {
+    /// Attach an action to the `change` event.
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let mut input = Select::new("country", "");
+    /// input.on_change(Action::CloseParentWindow);
+    /// ```
     fn on_change(&mut self, action: Action) -> &mut Self {
         action.apply("change", self);
         self
     }
 
+    /// Attach an action to the `focus` event.
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// let mut input = Select::new("country", "");
+    /// input.on_focus(Action::CloseParentWindow);
+    /// ```
     fn on_focus(&mut self, action: Action) -> &mut Self {
         action.apply("focus", self);
         self
     }
 
+    /// Attach an interactive component message to the `change` event.
+    ///
+    /// # Example
+    /// ```rust,ignore
+    /// use viewy::prelude::*;
+    ///
+    /// #[derive(serde::Serialize, serde::Deserialize, InteractiveComponentMessage)]
+    /// enum Msg { Changed }
+    ///
+    /// let mut input = Select::new("country", "");
+    /// input.on_change_message(&Msg::Changed).expect("encode");
+    /// ```
     fn on_change_message<M>(&mut self, message: &M) -> Result<&mut Self, String>
     where
         M: InteractiveComponentMessage,

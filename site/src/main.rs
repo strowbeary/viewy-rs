@@ -7,7 +7,6 @@ use rocket::fs::{FileServer, relative};
 use rocket::serde::uuid::Uuid;
 use sheet::rocket_uri_macro_sheet;
 use viewy::bindings::rocket::static_assets::viewy_static_assets_fairing;
-use viewy::bindings::uri::Uri;
 use viewy::modifiers::Action;
 use viewy::modifiers::OnClickActionnable;
 use viewy::modifiers::Paddingable;
@@ -47,19 +46,19 @@ async fn home() -> Page<'static> {
         main_stack.append_child(Text::new("Buttons", TextStyle::H1));
         main_stack.append_child(
             Button::new("Picker & Select demo", ButtonStyle::Outlined).on_click(Action::Navigate {
-                url: Uri::from(uri!(picker_select::picker_select_demo())),
+                url: uri!(picker_select::picker_select_demo()),
             }),
         );
         main_stack.append_child(
             Button::new("Interactive component PoC", ButtonStyle::Outlined).on_click(
                 Action::Navigate {
-                    url: Uri::from(uri!(interactive_component_poc::interactive_component_demo())),
+                    url: uri!(interactive_component_poc::interactive_component_demo()),
                 },
             ),
         );
         main_stack.append_child(Button::new("Sheet", ButtonStyle::Outlined).on_click(
             Action::Navigate {
-                url: Uri::from(uri!(sheet::sheet())),
+                url: uri!(sheet::sheet()),
             },
         ));
 
@@ -67,7 +66,7 @@ async fn home() -> Page<'static> {
             Button::new("Open popup", ButtonStyle::Filled)
                 .icon(Lucide::Plus)
                 .on_click(Action::OpenPopup {
-                    popup_content_url: Uri::from(uri!(popover_content())),
+                    popup_content_url: uri!(popover_content()),
                     display_window_controls: true,
                 }),
         );
@@ -124,19 +123,19 @@ async fn actions() -> Page<'static> {
                 .padding(vec![scale(4)])
                 .append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
                     Action::OpenPopup {
-                        popup_content_url: Uri::from(uri!(popover_content())),
+                        popup_content_url: uri!(popover_content()),
                         display_window_controls: true,
                     },
                 ))
                 .append_child(Button::new("Benchmark", ButtonStyle::Filled).on_click(
                     Action::OpenPopup {
-                        popup_content_url: Uri::from(uri!(benchmark())),
+                        popup_content_url: uri!(benchmark()),
                         display_window_controls: true,
                     },
                 ))
                 .append_child(Button::new("Open popover", ButtonStyle::Filled).on_click(
                     Action::OpenPopover {
-                        popover_content_url: Uri::from(uri!(popover_content())),
+                        popover_content_url: uri!(popover_content()),
                     },
                 ));
 
@@ -162,7 +161,7 @@ async fn popover_content() -> Page<'static> {
                     )
                     .append_child(Button::new("Ok", ButtonStyle::Filled).on_click(
                         Action::OpenPopup {
-                            popup_content_url: Uri::from(uri!(home())),
+                            popup_content_url: uri!(home()),
                             display_window_controls: false,
                         },
                     )),

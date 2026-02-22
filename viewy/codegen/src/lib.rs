@@ -161,10 +161,14 @@ pub fn interactive_component_message_derive(input: TokenStream) -> TokenStream {
     generated_code.into()
 }
 
-/// Derive macro that registers an interactive component in Viewy's
-/// Rocket single-route registry.
+/// Derive macro for **concrete** interactive component types.
 ///
-/// Usage:
+/// This macro:
+/// - registers the component in the global interactive registry (`inventory`)
+/// - generates a request handler for the single interactive event route
+/// - binds component state decoding, message decoding and rerendering
+///
+/// # Usage
 /// ```rust
 /// use rocket::serde::{Deserialize, Serialize};
 /// use viewy::prelude::*;
@@ -181,6 +185,13 @@ pub fn interactive_component_message_derive(input: TokenStream) -> TokenStream {
 ///     value: i32,
 /// }
 /// ```
+///
+/// # Important
+/// - Use this derive only on non-generic structs.
+/// - Do not use `#[component(...)]` anymore (message type is read from
+///   `impl InteractiveComponent for YourType { type Message = ... }`).
+/// - For generic component definitions, use
+///   `register_interactive_component!(YourGeneric<ConcreteType>)`.
 #[proc_macro_derive(InteractiveComponent, attributes(component))]
 pub fn interactive_component_derive(input: TokenStream) -> TokenStream {
     let input = syn::parse_macro_input!(input as syn::DeriveInput);
@@ -242,13 +253,18 @@ Help: register one or more concrete instantiations at module level, for example:
 /// This is useful for generic component definitions where derive cannot infer
 /// which concrete instantiations must be registered.
 ///
-/// Usage:
+/// # Usage
 /// ```rust
 /// viewy::register_interactive_component!(
 ///     MyGenericComponent<Book>,
 ///     MyGenericComponent<Movie>,
 /// );
 /// ```
+///
+/// # When to use
+/// - Your component type is generic (`MyComponent<T>`)
+/// - You need one registration per concrete instantiation
+/// - You want the same static dispatch path as concrete derived components
 #[proc_macro]
 pub fn register_interactive_component(input: TokenStream) -> TokenStream {
     let parser = Punctuated::<syn::Type, Token![,]>::parse_terminated;

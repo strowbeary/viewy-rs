@@ -1,3 +1,83 @@
+//! # Interactive Components
+//!
+//! Interactive components in Viewy follow a hypermedia model:
+//! - component state is serialized into HTML (`data-v-component-state`)
+//! - one typed message is sent per user interaction
+//! - the server applies `on_message` and returns a fresh HTML fragment
+//!
+//! ## Why this model?
+//!
+//! - **Simple backend contract**: one route, one typed message, one render.
+//! - **No server-side session state required**: state is carried by the DOM.
+//! - **Predictable behavior**: each interaction is a pure state transition.
+//!
+//! ## Quick Start (Concrete Component)
+//!
+//! ```rust
+//! use rocket::serde::{Deserialize, Serialize};
+//! use viewy::prelude::*;
+//!
+//! #[derive(Serialize, Deserialize, InteractiveComponentMessage)]
+//! #[serde(crate = "rocket::serde")]
+//! enum CounterMessage {
+//!     Increment,
+//!     Decrement,
+//! }
+//!
+//! #[derive(Serialize, Deserialize, InteractiveComponent)]
+//! #[serde(crate = "rocket::serde")]
+//! struct CounterComponent {
+//!     value: i32,
+//! }
+//!
+//! impl InteractiveComponent for CounterComponent {
+//!     type Message = CounterMessage;
+//!
+//!     fn on_message(mut self, message: Self::Message) -> Self {
+//!         match message {
+//!             CounterMessage::Increment => self.value += 1,
+//!             CounterMessage::Decrement => self.value -= 1,
+//!         }
+//!         self
+//!     }
+//!
+//!     fn render(self) -> Node {
+//!         let mut root = View::new();
+//!         let mut inc = Button::new("+1", ButtonStyle::Filled);
+//!         inc.on_click(Action::TriggerMessage(CounterMessage::Increment));
+//!         root.append_child(inc);
+//!         root.into()
+//!     }
+//! }
+//! ```
+//!
+//! ## Generic Components
+//!
+//! For generic component definitions (`MyComponent<T>`), register concrete
+//! instantiations at compile time:
+//!
+//! ```rust,ignore
+//! use viewy::register_interactive_component;
+//!
+//! register_interactive_component!(
+//!     MyComponent<Book>,
+//!     MyComponent<Movie>,
+//! );
+//! ```
+//!
+//! Notes:
+//! - `#[derive(InteractiveComponent)]` is intended for concrete types.
+//! - `register_interactive_component!(...)` is intended for concrete generic instantiations.
+//!
+//! ## Common Compile Errors
+//!
+//! - `#[component(...)]` attribute on interactive components:
+//!   remove it and define only `type Message = ...` in `impl InteractiveComponent`.
+//! - derive on non-struct item:
+//!   move state into a `struct`.
+//! - generic derive:
+//!   use `register_interactive_component!(Type<Concrete>)`.
+//!
 use crate::core::node::Node;
 use serde::Serialize;
 use serde::de::DeserializeOwned;
