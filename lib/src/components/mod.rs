@@ -46,7 +46,7 @@ pub use complex_text::ComplexText;
 pub use disclosure::Disclosure;
 pub use divider::Divider;
 pub use dynamic_content::DynamicContent;
-pub use field::{Field, FieldType};
+pub use field::{AutoCapitalize, Field, FieldType};
 pub use file_input::*;
 pub use form::{Form, FormMethod};
 pub use gauge::{Gauge, GaugeStyle};
