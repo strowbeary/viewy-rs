@@ -59,6 +59,25 @@ pub enum FieldType {
     RichTextArea,
 }
 
+#[derive(Debug, Clone, Eq, PartialEq)]
+pub enum AutoCapitalize {
+    None,
+    Sentences,
+    Words,
+    Characters,
+}
+
+impl AutoCapitalize {
+    fn as_attr(&self) -> &'static str {
+        match self {
+            AutoCapitalize::None => "none",
+            AutoCapitalize::Sentences => "sentences",
+            AutoCapitalize::Words => "words",
+            AutoCapitalize::Characters => "characters",
+        }
+    }
+}
+
 #[derive(Debug, Clone)]
 pub struct Field {
     node: Node,
@@ -81,6 +100,10 @@ pub struct Field {
     pub multiple: Option<Vec<String>>,
     pub form: Option<String>,
     pub pattern: Option<String>,
+    pub autocomplete: Option<bool>,
+    pub autocapitalize: Option<AutoCapitalize>,
+    pub spellcheck: Option<bool>,
+    pub autocorrect: Option<bool>,
 }
 
 impl DefaultModifiers for Field {}
@@ -108,6 +131,10 @@ impl Field {
             multiple: None,
             form: None,
             pattern: None,
+            autocomplete: None,
+            autocapitalize: None,
+            spellcheck: None,
+            autocorrect: None,
         }
     }
 
@@ -218,6 +245,26 @@ impl Field {
     /// Défini l'attribut standard HTML pattern sur l'<input>
     pub fn pattern(&mut self, pattern: &str) -> &mut Self {
         self.pattern = Some(pattern.to_string());
+        self
+    }
+
+    pub fn autocomplete(&mut self, enabled: bool) -> &mut Self {
+        self.autocomplete = Some(enabled);
+        self
+    }
+
+    pub fn autocapitalize(&mut self, autocapitalize: AutoCapitalize) -> &mut Self {
+        self.autocapitalize = Some(autocapitalize);
+        self
+    }
+
+    pub fn spellcheck(&mut self, enabled: bool) -> &mut Self {
+        self.spellcheck = Some(enabled);
+        self
+    }
+
+    pub fn autocorrect(&mut self, enabled: bool) -> &mut Self {
+        self.autocorrect = Some(enabled);
         self
     }
 
@@ -500,6 +547,18 @@ impl Renderable for Field {
                     }
                     if let Some(pattern) = &self.pattern {
                         input.set_attr("pattern", pattern);
+                    }
+                    if let Some(autocomplete) = self.autocomplete {
+                        input.set_attr("autocomplete", if autocomplete { "on" } else { "off" });
+                    }
+                    if let Some(autocapitalize) = &self.autocapitalize {
+                        input.set_attr("autocapitalize", autocapitalize.as_attr());
+                    }
+                    if let Some(spellcheck) = self.spellcheck {
+                        input.set_attr("spellcheck", if spellcheck { "true" } else { "false" });
+                    }
+                    if let Some(autocorrect) = self.autocorrect {
+                        input.set_attr("autocorrect", if autocorrect { "on" } else { "off" });
                     }
 
                     if self.required {
