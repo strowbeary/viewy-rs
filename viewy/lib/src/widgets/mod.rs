@@ -16,7 +16,7 @@ pub mod text;
 pub mod breadcrumb;
 pub mod header;
 
-pub mod navigation_bar;
+pub mod nav;
 pub mod sheet;
 pub mod tag;
 pub mod toolbar;

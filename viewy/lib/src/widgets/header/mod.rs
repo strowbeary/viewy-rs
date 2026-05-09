@@ -1,7 +1,7 @@
 use crate::core::widget::Widget;
 use crate::node::Node;
 use crate::prelude::{Attributable, Button, Classable, IconPack};
-use crate::widgets::navigation_bar::NavigationBar;
+use crate::widgets::nav::Nav;
 use crate::widgets::toolbar::Toolbar;
 
 #[derive(Widget, Classable, Attributable)]
@@ -12,7 +12,7 @@ pub struct Header {
     icon: Option<Box<dyn IconPack>>,
     title: String,
     main_toolbar: Option<Toolbar>,
-    navigation_bar: Option<NavigationBar>,
+    navigation_bar: Option<Nav>,
 }
 
 impl Header {

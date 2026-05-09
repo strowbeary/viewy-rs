@@ -176,6 +176,7 @@ $animation-duration: 80ms;
             border-radius: 0;
             border-left: none;
             border-right: none;
+            padding: 0 sp(8);
 
             &:hover {
                 border-color: var(--border);

@@ -1,0 +1,38 @@
+.nav {
+    display: inline-flex;
+    gap: sp(8);
+    ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        display: contents;
+    }
+
+    &.nav-orientation {
+        &--horizontal {
+            flex-direction: row;
+            align-items: stretch;
+            &.nav-level {
+                &--primary {
+                    height: sp(32);
+                }
+                &--secondary {
+                }
+                &--tertiary {
+                }
+            }
+        }
+        &--vertical {
+            flex-direction: column;
+            align-items: stretch;
+            &.nav-level {
+                &--primary {
+                }
+                &--secondary {
+                }
+                &--tertiary {
+                }
+            }
+        }
+    }
+}

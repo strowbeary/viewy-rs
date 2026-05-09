@@ -108,5 +108,14 @@ window.addEventListener("startViewy", (event) => {
       interactive.init(root);
     });
   }
+
+  if (
+    root.querySelector(".nav") ||
+    (typeof root.matches === "function" && root.matches(".nav"))
+  ) {
+    import("viewy/widgets/nav.js").then((nav) => {
+      nav.init(root);
+    });
+  }
   initActions(root);
 });

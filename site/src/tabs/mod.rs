@@ -1,15 +1,135 @@
 use viewy::prelude::*;
+use viewy::widgets::nav::{Nav, NavItem};
 use viewy::widgets::tabs::{Tab, TabContainer};
 
 #[get("/tabs")]
 pub fn tabs() -> Page<'static> {
     Page::with_title("Test").with_content({
-        let mut tab_container = TabContainer::new();
-        tab_container.as_card(CardStyle::OutlinedRaised);
-        tab_container.add_tab(Tab::new("Overview", uri!(tab1())));
-        tab_container.add_tab(Tab::new("Projects", uri!(tab2())));
-        tab_container.add_tab(Tab::new("Account", uri!(tab3())));
-        tab_container
+        let mut stack = VStack::new(Alignment::Stretch);
+        stack
+            .append_child({
+                let mut tab_container = TabContainer::new();
+                tab_container.as_card(CardStyle::OutlinedRaised);
+                tab_container.add_tab(Tab::new("Overview", uri!(tab1())));
+                tab_container.add_tab(Tab::new("Projects", uri!(tab2())));
+                tab_container.add_tab(Tab::new("Account", uri!(tab3())));
+                tab_container
+            })
+            .append_child(
+                Nav::new(viewy::widgets::nav::NavOrientation::Horizontal)
+                    .level(viewy::widgets::nav::NavLevel::Primary)
+                    .add_item({
+                        let mut item = NavItem::new("Code", uri!(tabs()));
+                        item.icon(Lucide::Code);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Issues", uri!(tabs()));
+                        item.icon(Lucide::CircleDot);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Pull request", uri!(tabs()));
+                        item.icon(Lucide::GitPullRequestArrow);
+                        item
+                    }),
+            )
+            .append_child(
+                Nav::new(viewy::widgets::nav::NavOrientation::Vertical)
+                    .level(viewy::widgets::nav::NavLevel::Primary)
+                    .add_item({
+                        let mut item = NavItem::new("Code", uri!(tabs()));
+                        item.icon(Lucide::Code);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Issues", uri!(tabs()));
+                        item.icon(Lucide::CircleDot);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Pull request", uri!(tabs()));
+                        item.icon(Lucide::GitPullRequestArrow);
+                        item
+                    }),
+            )
+            .append_child(
+                Nav::new(viewy::widgets::nav::NavOrientation::Horizontal)
+                    .level(viewy::widgets::nav::NavLevel::Secondary)
+                    .add_item({
+                        let mut item = NavItem::new("Code", uri!(tabs()));
+                        item.icon(Lucide::Code);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Issues", uri!(tabs()));
+                        item.icon(Lucide::CircleDot);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Pull request", uri!(tabs()));
+                        item.icon(Lucide::GitPullRequestArrow);
+                        item
+                    }),
+            )
+            .append_child(
+                Nav::new(viewy::widgets::nav::NavOrientation::Vertical)
+                    .level(viewy::widgets::nav::NavLevel::Secondary)
+                    .add_item({
+                        let mut item = NavItem::new("Code", uri!(tabs()));
+                        item.icon(Lucide::Code);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Issues", uri!(tabs()));
+                        item.icon(Lucide::CircleDot);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Pull request", uri!(tabs()));
+                        item.icon(Lucide::GitPullRequestArrow);
+                        item
+                    }),
+            )
+            .append_child(
+                Nav::new(viewy::widgets::nav::NavOrientation::Horizontal)
+                    .level(viewy::widgets::nav::NavLevel::Tertiary)
+                    .add_item({
+                        let mut item = NavItem::new("Code", uri!(tabs()));
+                        item.icon(Lucide::Code);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Issues", uri!(tabs()));
+                        item.icon(Lucide::CircleDot);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Pull request", uri!(tabs()));
+                        item.icon(Lucide::GitPullRequestArrow);
+                        item
+                    }),
+            )
+            .append_child(
+                Nav::new(viewy::widgets::nav::NavOrientation::Vertical)
+                    .level(viewy::widgets::nav::NavLevel::Tertiary)
+                    .add_item({
+                        let mut item = NavItem::new("Code", uri!(tabs()));
+                        item.icon(Lucide::Code);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Issues", uri!(tabs()));
+                        item.icon(Lucide::CircleDot);
+                        item
+                    })
+                    .add_item({
+                        let mut item = NavItem::new("Pull request", uri!(tabs()));
+                        item.icon(Lucide::GitPullRequestArrow);
+                        item
+                    }),
+            );
+        stack
     })
 }
 
