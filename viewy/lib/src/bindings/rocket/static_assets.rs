@@ -1,8 +1,9 @@
+use crate::bindings::rocket::component::interactive_components_event;
 use rocket::fairing::{AdHoc, Fairing, Info, Kind};
-use rocket::fs::{FileServer, Options};
+use rocket::fs::FileServer;
 use rocket::http::Header;
 use rocket::response::content::RawCss;
-use rocket::{Request, Response, Rocket, get, routes};
+use rocket::{Request, Response, get, routes};
 use std::path::Path;
 
 pub struct CacheFairing;
@@ -39,5 +40,6 @@ pub fn viewy_static_assets_fairing() -> AdHoc {
                 FileServer::from(Path::new(env!("CARGO_MANIFEST_DIR")).join("static")),
             )
             .mount("/viewy-static", routes![get_stylesheet])
+            .mount("/", routes![interactive_components_event])
     })
 }

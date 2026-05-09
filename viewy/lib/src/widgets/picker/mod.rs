@@ -68,7 +68,7 @@ pub enum PickerStyle {
 }
 
 #[derive(Widget, Classable, Attributable)]
-#[widget(style = "./style.css")]
+#[widget(style = "./style.scss")]
 pub struct Picker {
     node: Node,
     style: PickerStyle,

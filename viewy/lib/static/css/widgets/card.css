@@ -1,5 +1,7 @@
 .card {
-    --card-box-shadow: 0px 2px 3px 0px #656a761a, 0px 8px 16px -10px #656a7633;
+    --card-box-shadow:
+        0px 2px 3px 0px var(--color-shadow),
+        0px 8px 16px -10px var(--color-shadow);
     border-radius: calc(8rem / 16);
 
     &.card--outlined {

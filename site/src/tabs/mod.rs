@@ -1,4 +1,3 @@
-use viewy::bindings::uri::Uri;
 use viewy::prelude::*;
 use viewy::widgets::tabs::{Tab, TabContainer};
 
@@ -7,9 +6,9 @@ pub fn tabs() -> Page<'static> {
     Page::with_title("Test").with_content({
         let mut tab_container = TabContainer::new();
         tab_container.as_card(CardStyle::OutlinedRaised);
-        tab_container.add_tab(Tab::new("Overview", Uri::from(uri!(tab1()))));
-        tab_container.add_tab(Tab::new("Projects", Uri::from(uri!(tab2()))));
-        tab_container.add_tab(Tab::new("Account", Uri::from(uri!(tab3()))));
+        tab_container.add_tab(Tab::new("Overview", uri!(tab1())));
+        tab_container.add_tab(Tab::new("Projects", uri!(tab2())));
+        tab_container.add_tab(Tab::new("Account", uri!(tab3())));
         tab_container
     })
 }
@@ -48,7 +47,7 @@ pub async fn tab2() -> Page<'static> {
                     .gap(vec![scale(4)])
                     .append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
                         Action::OpenPopup {
-                            popup_content_url: Uri::from(uri!(tabs())),
+                            popup_content_url: uri!(tabs()),
                             display_window_controls: false,
                         },
                     )),

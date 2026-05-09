@@ -60,11 +60,13 @@
 #[macro_use]
 extern crate viewy_codegen;
 extern crate figment;
+extern crate self as viewy;
 extern crate serde;
 #[doc(inline)]
 pub use crate::core::component::*;
 pub use crate::core::node;
 use crate::core::widget::Widget;
+pub use inventory;
 use lazy_static::lazy_static;
 #[doc(inline)]
 pub use viewy_codegen::*;
@@ -88,7 +90,9 @@ lazy_static! {
 }
 
 pub mod prelude {
-    pub use crate::core::component::Component;
+    pub use crate::core::component::{
+        Component, InteractiveComponent, InteractiveComponentMessage,
+    };
     pub use crate::core::config::Config;
     pub use crate::core::layout::*;
     pub use crate::core::node::*;
