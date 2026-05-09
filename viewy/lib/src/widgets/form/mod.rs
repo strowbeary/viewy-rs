@@ -1,7 +1,7 @@
 use crate::bindings::uri::Uri;
-use crate::modifiers::{Appendable, Attributable, Classable, Cardifiable};
 use crate::core::node::Node;
 use crate::core::widget::Widget;
+use crate::modifiers::{Appendable, Attributable, Cardifiable, Classable};
 use crate::node::NodeType;
 use rocket::uri;
 

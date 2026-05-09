@@ -26,7 +26,6 @@ impl TextStyle {
     }
 }
 
-
 #[derive(Widget, Classable, Attributable)]
 #[widget(style = "./style.scss")]
 pub struct Text {

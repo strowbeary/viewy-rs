@@ -26,6 +26,11 @@ pub trait Stack: Widget + Cardifiable {
             .insert("flex-wrap".to_string(), "wrap".to_string());
         self
     }
+    fn flex_grow(&mut self, grow: i32) -> &mut Self {
+        self.node_style
+            .insert("flex-grow".to_string(), grow.to_string());
+        self
+    }
     fn render(&mut self) {}
 }
 #[derive(Debug, Clone)]

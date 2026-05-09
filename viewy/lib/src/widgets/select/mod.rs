@@ -62,7 +62,7 @@ impl SelectGroup {
 }
 
 #[derive(Widget, Classable, Attributable)]
-#[widget(style = "./style.css")]
+#[widget(style = "./style.scss")]
 pub struct Select {
     node: Node,
     label: Option<String>,

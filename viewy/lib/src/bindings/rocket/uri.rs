@@ -1,3 +1,7 @@
-use rocket::http::uri::Reference;
+use rocket::http::uri::Origin;
 
-pub(in crate::bindings) type Uri = Reference<'static>;
+/// Rocket URI type used by Viewy action/navigation helpers.
+///
+/// Intended usage is with Rocket's `uri!()` macro so routes are checked at
+/// compile time.
+pub(in crate::bindings) type Uri = Origin<'static>;

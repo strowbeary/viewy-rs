@@ -8,6 +8,7 @@ $fw-bold: 700;
 $fw-extra-bold: 800;
 $fw-black: 900;
 $fw-extra-black: 950;
+$code-border-radius: 4;
 
 .text {
   letter-spacing: -0.0222998em;
@@ -95,13 +96,13 @@ $fw-extra-black: 950;
       padding: 0 sp(4);
       border: sp(1) solid var(--color-border-hover);
       background: var(--color-hover);
-      border-radius: sp($border-radius / 2);
+      border-radius: sp($code-border-radius);
     }
 
     & > pre {
       border: sp(1) solid var(--color-border-hover);
       background: var(--color-hover);
-      border-radius: sp($border-radius / 2);
+      border-radius: sp($code-border-radius);
       padding: 0 sp(4);
 
       code {

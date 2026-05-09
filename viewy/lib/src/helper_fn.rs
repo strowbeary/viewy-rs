@@ -1,8 +1,8 @@
-use grass_compiler::sass_value::{ArgumentResult, SassNumber, Unit, Value};
-use grass_compiler::{Visitor, Result as SassResult};
-use crate::core::color::RgbaColor;
-use palette::*;
 use crate::CONFIG;
+use crate::core::color::RgbaColor;
+use grass_compiler::sass_value::{ArgumentResult, SassNumber, Unit, Value};
+use grass_compiler::{Result as SassResult, Visitor};
+use palette::*;
 
 const PHI: f64 = 1.61803398875;
 
@@ -31,8 +31,6 @@ pub fn sp(value: i32) -> String {
     let real_value = value as f32;
     format!("{}rem", real_value / 16.0)
 }
-
-
 
 /// Scales a given value using the power of the golden ratio (PHI).
 ///
@@ -90,7 +88,7 @@ pub fn contrast_color(color_hex: &String) -> String {
         color.2 as f32 / 255.0,
         color.3 as f32 / 255.0,
     )
-        .into_color();
+    .into_color();
     if lcolor.luma > 0.5 {
         "#000000".to_string()
     } else {
@@ -128,7 +126,7 @@ pub fn harden_color(color_hex: &String) -> String {
         color.1 as f32 / 255.0,
         color.2 as f32 / 255.0,
     )
-        .mix(LinSrgb::new(1.0, 1.0, 1.0), 1.0 - alpha);
+    .mix(LinSrgb::new(1.0, 1.0, 1.0), 1.0 - alpha);
     format!(
         "#{:02x?}{:02x?}{:02x?}",
         (new_color.red * 255.0) as u8,

@@ -2,19 +2,11 @@
 extern crate rocket;
 #[macro_use]
 extern crate viewy;
-use rayon::prelude::*;
-use rocket::tokio::time::interval;
-use std::env;
-use std::fmt::format;
-use std::time::Duration;
 
 use rocket::fs::{FileServer, relative};
-use rocket::http::ext::IntoCollection;
-use rocket::response::content::{RawCss, RawHtml, RawJavaScript};
-use rocket::response::stream::TextStream;
 use rocket::serde::uuid::Uuid;
+use sheet::rocket_uri_macro_sheet;
 use viewy::bindings::rocket::static_assets::viewy_static_assets_fairing;
-use viewy::bindings::uri::Uri;
 use viewy::modifiers::Action;
 use viewy::modifiers::OnClickActionnable;
 use viewy::modifiers::Paddingable;
@@ -24,7 +16,10 @@ use viewy::widgets::stack::{Alignment, HStack, Stack, VStack};
 use viewy::widgets::tabs::{Tab, TabContainer};
 use viewy::widgets::text::{Text, TextStyle};
 
+mod core;
 mod dynroutetest;
+mod http;
+mod interactive_component_poc;
 mod picker_select;
 mod sheet;
 mod tabs;
@@ -51,15 +46,27 @@ async fn home() -> Page<'static> {
         main_stack.append_child(Text::new("Buttons", TextStyle::H1));
         main_stack.append_child(
             Button::new("Picker & Select demo", ButtonStyle::Outlined).on_click(Action::Navigate {
-                url: Uri::from(uri!(picker_select::picker_select_demo())),
+                url: uri!(picker_select::picker_select_demo()),
             }),
         );
+        main_stack.append_child(
+            Button::new("Interactive component PoC", ButtonStyle::Outlined).on_click(
+                Action::Navigate {
+                    url: uri!(interactive_component_poc::interactive_component_demo()),
+                },
+            ),
+        );
+        main_stack.append_child(Button::new("Sheet", ButtonStyle::Outlined).on_click(
+            Action::Navigate {
+                url: uri!(sheet::sheet()),
+            },
+        ));
 
         main_stack.append_child(
             Button::new("Open popup", ButtonStyle::Filled)
                 .icon(Lucide::Plus)
                 .on_click(Action::OpenPopup {
-                    popup_content_url: Uri::from(uri!(popover_content())),
+                    popup_content_url: uri!(popover_content()),
                     display_window_controls: true,
                 }),
         );
@@ -116,19 +123,19 @@ async fn actions() -> Page<'static> {
                 .padding(vec![scale(4)])
                 .append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
                     Action::OpenPopup {
-                        popup_content_url: Uri::from(uri!(popover_content())),
+                        popup_content_url: uri!(popover_content()),
                         display_window_controls: true,
                     },
                 ))
                 .append_child(Button::new("Benchmark", ButtonStyle::Filled).on_click(
                     Action::OpenPopup {
-                        popup_content_url: Uri::from(uri!(benchmark())),
+                        popup_content_url: uri!(benchmark()),
                         display_window_controls: true,
                     },
                 ))
                 .append_child(Button::new("Open popover", ButtonStyle::Filled).on_click(
                     Action::OpenPopover {
-                        popover_content_url: Uri::from(uri!(popover_content())),
+                        popover_content_url: uri!(popover_content()),
                     },
                 ));
 
@@ -154,7 +161,7 @@ async fn popover_content() -> Page<'static> {
                     )
                     .append_child(Button::new("Ok", ButtonStyle::Filled).on_click(
                         Action::OpenPopup {
-                            popup_content_url: Uri::from(uri!(home())),
+                            popup_content_url: uri!(home()),
                             display_window_controls: false,
                         },
                     )),
@@ -233,7 +240,8 @@ fn rocket() -> _ {
                 tabs::tab3,
                 sheet::sheet,
                 sheet::sheet_content,
-                picker_select::picker_select_demo
+                picker_select::picker_select_demo,
+                interactive_component_poc::interactive_component_demo
             ],
         )
         .mount("/assets", FileServer::from(relative!("assets")))

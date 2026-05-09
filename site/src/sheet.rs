@@ -1,6 +1,5 @@
 use std::iter::Scan;
 
-use viewy::bindings::uri::Uri;
 use viewy::prelude::{
     Action, Appendable, Button, ButtonStyle, OnClickActionnable, Paddingable, Page, SheetEdge,
     Stack, VStack,
@@ -8,7 +7,7 @@ use viewy::prelude::{
 use viewy::scale;
 
 use crate::create_button_group;
-use crate::rocket_uri_macro_benchmark;
+use crate::interactive_component_poc::rocket_uri_macro_interactive_component_demo;
 
 #[get("/sheet")]
 pub fn sheet() -> Page<'static> {
@@ -16,7 +15,7 @@ pub fn sheet() -> Page<'static> {
         let mut button = Button::new("Open sheet", ButtonStyle::Filled);
         button.on_click(Action::OpenSheet {
             edge: SheetEdge::Right,
-            sheet_content_url: Uri::from(uri!(sheet_content())),
+            sheet_content_url: uri!(interactive_component_demo()),
             with_backdrop: true,
         });
         button
@@ -30,7 +29,7 @@ pub fn sheet_content() -> Page<'static> {
             .padding(vec![scale(5)])
             .append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
                 Action::OpenPopup {
-                    popup_content_url: Uri::from(uri!(sheet_content)),
+                    popup_content_url: uri!(sheet_content),
                     display_window_controls: true,
                 },
             ))

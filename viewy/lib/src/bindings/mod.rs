@@ -21,5 +21,5 @@ pub mod uri {
     pub type Uri = crate::bindings::axum::uri::Uri;
 }
 
-#[cfg(any(all(feature = "rocket", feature = "axum"), ))]
+#[cfg(any(all(feature = "rocket", feature = "axum"),))]
 compile_error!("Features `rocket` and `axum` are mutually exclusive.");
