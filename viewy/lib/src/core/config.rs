@@ -79,6 +79,8 @@ impl<'de> Deserialize<'de> for HexColor {
 #[derive(Deserialize, Serialize, Debug)]
 pub struct AppSettings {
     pub name: String,
+    pub short_name: String,
+    pub description: String,
     pub favicons: Vec<Favicon>,
 }
 
@@ -119,6 +121,8 @@ pub struct Shapes {
 /// ```toml
 /// [app]
 /// name = "Viewy showcase"
+/// short_name = "Viewy"
+/// description = ""
 /// favicons = [
 ///     { rel = "shortcut icon", href="/static/favicon.svg"}
 /// ]
@@ -190,6 +194,10 @@ impl Config {
             .unwrap();
         config
     }
+
+    pub fn into_webmanifest(self) -> String {
+        todo!()
+    }
 }
 
 impl Default for Config {
@@ -198,6 +206,8 @@ impl Default for Config {
             app: AppSettings {
                 name: "My Viewy App".to_string(),
                 favicons: vec![],
+                short_name: "My App".to_string(),
+                description: String::new(),
             },
             colors: Colors {
                 accent: ThemedColor {

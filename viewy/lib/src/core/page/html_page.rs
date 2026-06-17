@@ -35,34 +35,37 @@ pub fn get_full_html_page(
         .collect::<Vec<String>>()
         .join("");
     format!(
-        r"
+        r#"
         <!doctype html>
         <html>
             <head>
-                <meta charset='utf-8' />
+                <meta charset="utf-8" />
                 <title>{title}</title>
-                <script type='text/javascript' src='{base_elem}/viewy-static/js/importmap.js'></script>
-                <link rel='preconnect' href='{base_url}'>
+                <script type="text/javascript" src="{base_elem}/viewy-static/js/importmap.js"></script>
+                <link rel="preconnect" href="{base_url}">
                 {base_elem}
                 {favicons}
-                <link href='{base_url}/viewy-static/app.css' rel='stylesheet'>
-                <link href='{base_url}/viewy-static/css/static.css' rel='stylesheet'>
-                <script type='module' src='{base_url}/viewy-static/js/app.js'></script>
-                <meta name='viewport' content='width=device-width, initial-scale=1.0, user-scalable=no'>
-                <meta name='apple-mobile-web-app-capable' content='yes'>
+                <link href="{base_url}/viewy-static/app.css" rel="stylesheet">
+                <link href="{base_url}/viewy-static/css/static.css" rel="stylesheet">
+                <script type="module" src="{base_url}/viewy-static/js/app.js"></script>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+                <meta name="apple-mobile-web-app-capable" content="yes">
+                <link rel="manifest" href="{base_url}/manifest.webmanifest">
+                <meta name="apple-mobile-web-app-title" content="Smart Booker">
+                <meta name="apple-mobile-web-app-status-bar-style" content="default">
             </head>
-            <body class='app-theme--{theme_variant}'>
+            <body class="app-theme--{theme_variant}">
                 {body_prefix}
                 {content}
             </body>
         </html>
-    ",
+    "#,
         title = title,
         body_prefix = body_prefix,
         content = content,
         theme_variant = theme_variant,
         base_elem = base_elem,
         favicons = favicons,
-        base_url = base_url,
+        base_url = base_url
     )
 }

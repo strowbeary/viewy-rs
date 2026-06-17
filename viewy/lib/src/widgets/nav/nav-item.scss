@@ -1,10 +1,281 @@
 .nav-item {
     list-style: none;
-    display: contents;
+    position: relative;
 
     a {
+        position: relative;
         display: flex;
-        gap: sp(6);
+        gap: sp(8);
         align-items: center;
+        min-height: sp(34);
+        padding: sp(5) sp(8);
+        border-radius: sp(6);
+        color: var(--on-background);
+        text-decoration: none;
+        transition:
+            background 150ms ease,
+            color 150ms ease,
+            box-shadow 150ms ease;
+
+        &:hover {
+            background: var(--surface-bright);
+            color: var(--on-surface);
+        }
+
+        &:active {
+            background: var(--surface-dim);
+        }
+
+        .text {
+            color: inherit;
+            font-weight: 300;
+        }
+
+        .icon {
+            width: sp(24);
+            height: sp(24);
+            min-width: sp(24);
+            min-height: sp(24);
+            stroke-width: 1.5;
+        }
+
+        &:focus-visible {
+            outline: none;
+            box-shadow: 0 0 0 sp(3)
+                unquote("oklch(from var(--accent) l calc(c * 0.55) h / 0.35)");
+        }
+    }
+
+    &.nav-item--active a,
+    a[aria-current="page"] {
+        color: var(--on-surface);
+
+        .text {
+            font-weight: 400;
+        }
+        .icon {
+            stroke-width: 2;
+        }
+    }
+}
+
+.nav.nav-orientation--horizontal {
+    .nav-item::after {
+        content: "";
+        position: absolute;
+        opacity: 0;
+        transition: opacity 150ms ease;
+        pointer-events: none;
+    }
+
+    &.nav-level--primary .nav-item a {
+        max-height: sp(34);
+        height: sp(34);
+        min-height: sp(34);
+        padding: sp(4) sp(8);
+        gap: sp(8);
+        border-radius: sp(6);
+
+        .text {
+            font-size: sp(17);
+            line-height: sp(22);
+        }
+    }
+
+    &.nav-level--primary .nav-item::after {
+        left: sp(8);
+        right: sp(8);
+        bottom: sp(-8.5);
+        height: sp(3);
+        border-radius: sp(99);
+        background: var(--accent);
+    }
+
+    &.nav-level--primary .nav-item--active a,
+    &.nav-level--primary a[aria-current="page"] {
+        background: unquote(
+            "oklch(from var(--surface-bright) calc(l - 0.01) c h)"
+        );
+    }
+
+    &.nav-level--primary .nav-item--active::after {
+        opacity: 1;
+    }
+
+    &.nav-level--secondary .nav-item a {
+        min-height: sp(33);
+        padding: sp(6) sp(6);
+        gap: sp(6);
+        border-radius: sp(6) sp(6) 0 0;
+
+        .text {
+            font-size: sp(14);
+            line-height: sp(20);
+        }
+
+        .icon {
+            width: sp(16);
+            height: sp(16);
+            min-width: sp(16);
+            min-height: sp(16);
+        }
+    }
+
+    &.nav-level--secondary .nav-item::after {
+        left: sp(6);
+        right: sp(6);
+        bottom: sp(-1.5);
+        height: sp(2);
+        border-radius: sp(99);
+        background: var(--accent);
+    }
+
+    &.nav-level--secondary .nav-item--active a,
+    &.nav-level--secondary a[aria-current="page"] {
+        background: unquote(
+            "oklch(from var(--surface-bright) calc(l - 0.015) c h)"
+        );
+    }
+
+    &.nav-level--secondary .nav-item--active::after {
+        opacity: 1;
+    }
+
+    &.nav-level--tertiary .nav-item a {
+        min-height: sp(29);
+        padding: sp(6) 0;
+        gap: sp(4);
+        border-radius: 0;
+
+        .text {
+            font-size: sp(11);
+            line-height: sp(17);
+        }
+
+        .icon {
+            width: sp(14);
+            height: sp(14);
+            min-width: sp(14);
+            min-height: sp(14);
+        }
+    }
+
+    &.nav-level--tertiary .nav-item::after {
+        left: 0;
+        right: 0;
+        bottom: sp(-1);
+        height: sp(1.5);
+        border-radius: sp(99);
+        background: var(--accent);
+    }
+
+    &.nav-level--tertiary .nav-item--active a,
+    &.nav-level--tertiary a[aria-current="page"] {
+        background: transparent;
+        color: var(--on-surface);
+    }
+
+    &.nav-level--tertiary .nav-item--active::after {
+        opacity: 1;
+    }
+}
+
+.nav.nav-orientation--vertical {
+    .nav-item a {
+        border-radius: sp(6);
+        width: 100%;
+    }
+
+    &.nav-level--primary .nav-item a {
+        min-height: sp(38);
+        padding: sp(4) sp(8);
+        gap: sp(8);
+
+        .text {
+            font-size: sp(17);
+            line-height: sp(22);
+        }
+    }
+
+    &.nav-level--primary .nav-item::before {
+        content: "";
+        position: absolute;
+        left: sp(-8.5);
+        top: sp(7);
+        bottom: sp(7);
+        width: sp(3);
+        border-radius: sp(99);
+        background: var(--accent);
+        opacity: 0;
+        transition: opacity 150ms ease;
+        pointer-events: none;
+    }
+
+    &.nav-level--primary .nav-item--active a,
+    &.nav-level--primary a[aria-current="page"] {
+        background: unquote(
+            "oklch(from var(--surface-bright) calc(l - 0.015) c h)"
+        );
+    }
+
+    &.nav-level--primary .nav-item--active::before {
+        opacity: 1;
+    }
+
+    &.nav-level--secondary .nav-item a {
+        min-height: sp(33);
+        padding: sp(6) sp(6);
+        gap: sp(6);
+
+        .text {
+            font-size: sp(14);
+            line-height: sp(20);
+        }
+
+        .icon {
+            width: sp(16);
+            height: sp(16);
+            min-width: sp(16);
+            min-height: sp(16);
+        }
+    }
+
+    &.nav-level--secondary .nav-item--active a,
+    &.nav-level--secondary a[aria-current="page"] {
+        background: unquote(
+            "oklch(from var(--surface-bright) calc(l - 0.02) c h)"
+        );
+        box-shadow: none;
+        color: var(--on-surface);
+    }
+
+    &.nav-level--secondary .nav-item a:hover {
+        background: unquote(
+            "oklch(from var(--surface-bright) calc(l - 0.01) c h)"
+        );
+    }
+
+    &.nav-level--tertiary .nav-item a {
+        min-height: sp(29);
+        padding: sp(6) 0;
+        gap: sp(4);
+
+        .text {
+            font-size: sp(11);
+            line-height: sp(17);
+        }
+
+        .icon {
+            width: sp(14);
+            height: sp(14);
+            min-width: sp(14);
+            min-height: sp(14);
+        }
+    }
+
+    &.nav-level--tertiary .nav-item--active a,
+    &.nav-level--tertiary a[aria-current="page"] {
+        background: transparent;
+        color: var(--on-surface);
     }
 }

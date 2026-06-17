@@ -20,6 +20,7 @@ mod core;
 mod dynroutetest;
 mod http;
 mod interactive_component_poc;
+mod nav_demo;
 mod picker_select;
 mod sheet;
 mod tabs;
@@ -59,6 +60,11 @@ async fn home() -> Page<'static> {
         main_stack.append_child(Button::new("Sheet", ButtonStyle::Outlined).on_click(
             Action::Navigate {
                 url: uri!(sheet::sheet()),
+            },
+        ));
+        main_stack.append_child(Button::new("Navigation demo", ButtonStyle::Outlined).on_click(
+            Action::Navigate {
+                url: uri!(nav_demo::nav_code()),
             },
         ));
 
@@ -234,6 +240,9 @@ fn rocket() -> _ {
                 component,
                 actions,
                 popover_content,
+                nav_demo::nav_code,
+                nav_demo::nav_issues,
+                nav_demo::nav_pull_requests,
                 tabs::tabs,
                 tabs::tab1,
                 tabs::tab2,

@@ -1,5 +1,8 @@
 [app]
 name = "Viewy showcase"
+short-name = "Viewy"
+description = "Viewy components and features showcase."
+
 favicons = [
     { rel = "shortcut icon", href="/assets/favicon.svg"}
 ]
@@ -9,7 +12,7 @@ accent = { light = "#026adb", dark = "#0A84FF" }
 background = { light = "#FFFFFF", dark = "#000000" }
 surface = { light = "#f2f2f7", dark = "#323236" }
 destructive = { light = "#d13128", dark = "#FF453A" }
-success = { light = "#34C759", dark = "#30D158" }
+success = { light = "#02a14c", dark = "#30D158" }
 warning = { light = "#FF9500", dark = "#FF9F0A" }
 
 [shapes]
@@ -25,4 +28,3 @@ font_stack = [
     { name = "roboto", url = "https://fonts.googleapis.com/css2?family=Roboto&display=swap" }
 
 ]
-

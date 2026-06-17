@@ -15,3 +15,7 @@ body {
     background: var(--background);
     margin: 0;
 }
+
+* {
+    box-sizing: border-box;
+}

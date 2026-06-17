@@ -1,37 +1,64 @@
 .nav {
     display: inline-flex;
-    gap: sp(8);
+    width: max-content;
+
     ul {
         list-style: none;
         margin: 0;
         padding: 0;
-        display: contents;
+        display: flex;
+        gap: sp(4);
     }
 
     &.nav-orientation {
         &--horizontal {
             flex-direction: row;
             align-items: stretch;
+            padding: sp(8);
+            padding-bottom: sp(6.5);
+            border-bottom: sp(1) solid var(--border);
+            width: 100%;
+
+            ul {
+                flex-direction: row;
+                align-items: stretch;
+            }
+
             &.nav-level {
                 &--primary {
-                    height: sp(32);
+                    ul {
+                        gap: sp(16);
+                    }
                 }
                 &--secondary {
+                    padding-bottom: 0;
+                    ul {
+                        gap: sp(8);
+                    }
                 }
                 &--tertiary {
+                    ul {
+                        gap: sp(14);
+                    }
                 }
             }
         }
+
         &--vertical {
             flex-direction: column;
             align-items: stretch;
+            padding: sp(8);
+            padding-left: sp(6.5);
+
+            ul {
+                flex-direction: column;
+                align-items: stretch;
+                gap: sp(6);
+            }
+
             &.nav-level {
-                &--primary {
-                }
-                &--secondary {
-                }
-                &--tertiary {
-                }
+                padding-left: 0;
+                border-left: none;
             }
         }
     }
