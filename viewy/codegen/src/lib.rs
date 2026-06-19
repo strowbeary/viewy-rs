@@ -6,6 +6,8 @@ use syn::parse::Parser;
 use syn::punctuated::Punctuated;
 use syn::{LitStr, Meta, Token};
 
+mod modifiers;
+
 fn viewy_path() -> proc_macro2::TokenStream {
     match crate_name("viewy") {
         Ok(FoundCrate::Itself) => quote!(crate),
@@ -329,107 +331,65 @@ fn impl_component_macro(ast: &syn::DeriveInput) -> TokenStream {
 
 #[proc_macro_derive(Appendable)]
 pub fn appendable_derive(input: TokenStream) -> TokenStream {
-    // Construct a representation of Rust code as a syntax tree
-    // that we can manipulate
     let ast = syn::parse(input).unwrap();
-
-    // Build the trait implementation
-    impl_appendable_macro(&ast)
-}
-
-fn impl_appendable_macro(ast: &syn::DeriveInput) -> TokenStream {
-    let name = &ast.ident;
-    let generated_code = quote! {
-        impl Appendable for #name {}
-    };
-    generated_code.into()
+    modifiers::derive_marker_trait(&ast, "Appendable")
 }
 
 #[proc_macro_derive(Attributable)]
 pub fn attributable_derive(input: TokenStream) -> TokenStream {
-    // Construct a representation of Rust code as a syntax tree
-    // that we can manipulate
     let ast = syn::parse(input).unwrap();
-
-    // Build the trait implementation
-    impl_attributable_macro(&ast)
-}
-
-fn impl_attributable_macro(ast: &syn::DeriveInput) -> TokenStream {
-    let name = &ast.ident;
-    let generated_code = quote! {
-        impl Attributable for #name {}
-    };
-    generated_code.into()
+    modifiers::derive_marker_trait(&ast, "Attributable")
 }
 
 #[proc_macro_derive(Classable)]
 pub fn classable_derive(input: TokenStream) -> TokenStream {
-    // Construct a representation of Rust code as a syntax tree
-    // that we can manipulate
     let ast = syn::parse(input).unwrap();
-
-    // Build the trait implementation
-    impl_classable_macro(&ast)
+    modifiers::derive_marker_trait(&ast, "Classable")
 }
 
-fn impl_classable_macro(ast: &syn::DeriveInput) -> TokenStream {
-    let name = &ast.ident;
-    let generated_code = quote! {
-        impl Classable for #name {}
-    };
-    generated_code.into()
-}
 #[proc_macro_derive(Colorable)]
 pub fn colorable_derive(input: TokenStream) -> TokenStream {
-    // Construct a representation of Rust code as a syntax tree
-    // that we can manipulate
     let ast = syn::parse(input).unwrap();
-
-    // Build the trait implementation
-    impl_colorable_macro(&ast)
+    modifiers::derive_marker_trait(&ast, "Colorable")
 }
 
-fn impl_colorable_macro(ast: &syn::DeriveInput) -> TokenStream {
-    let name = &ast.ident;
-    let generated_code = quote! {
-        impl Colorable for #name {}
-    };
-    generated_code.into()
+#[proc_macro_derive(Marginable)]
+pub fn marginable_derive(input: TokenStream) -> TokenStream {
+    let ast = syn::parse(input).unwrap();
+    let viewy = viewy_path();
+    modifiers::derive_qualified_trait(&ast, quote!(#viewy::modifiers::Marginable))
+}
+
+#[proc_macro_derive(Borderable)]
+pub fn borderable_derive(input: TokenStream) -> TokenStream {
+    let ast = syn::parse(input).unwrap();
+    let viewy = viewy_path();
+    modifiers::derive_qualified_trait(&ast, quote!(#viewy::modifiers::Borderable))
+}
+
+#[proc_macro_derive(Paddingable)]
+pub fn paddingable_derive(input: TokenStream) -> TokenStream {
+    let ast = syn::parse(input).unwrap();
+    let viewy = viewy_path();
+    modifiers::derive_qualified_trait(&ast, quote!(#viewy::modifiers::Paddingable))
 }
 
 #[proc_macro_derive(Dimensionable)]
 pub fn dimensionable_derive(input: TokenStream) -> TokenStream {
-    // Construct a representation of Rust code as a syntax tree
-    // that we can manipulate
     let ast = syn::parse(input).unwrap();
-
-    // Build the trait implementation
-    impl_dimensionable_macro(&ast)
+    let viewy = viewy_path();
+    modifiers::derive_qualified_trait(&ast, quote!(#viewy::modifiers::Dimensionable))
 }
 
-fn impl_dimensionable_macro(ast: &syn::DeriveInput) -> TokenStream {
-    let name = &ast.ident;
-    let generated_code = quote! {
-        impl Dimensionable for #name {}
-    };
-    generated_code.into()
+#[proc_macro_derive(BoxStylable)]
+pub fn box_stylable_derive(input: TokenStream) -> TokenStream {
+    let ast = syn::parse(input).unwrap();
+    let viewy = viewy_path();
+    modifiers::derive_box_stylable_bundle(&ast, &viewy)
 }
 
 #[proc_macro_derive(Cardifiable)]
 pub fn cardifiable_derive(input: TokenStream) -> TokenStream {
-    // Construct a representation of Rust code as a syntax tree
-    // that we can manipulate
     let ast = syn::parse(input).unwrap();
-
-    // Build the trait implementation
-    impl_cardifiable_macro(&ast)
-}
-
-fn impl_cardifiable_macro(ast: &syn::DeriveInput) -> TokenStream {
-    let name = &ast.ident;
-    let generated_code = quote! {
-        impl Cardifiable for #name {}
-    };
-    generated_code.into()
+    modifiers::derive_marker_trait(&ast, "Cardifiable")
 }

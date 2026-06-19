@@ -1,6 +1,7 @@
 .nav {
     display: inline-flex;
-    width: max-content;
+    min-width: max-content;
+    flex-grow: 1;
 
     ul {
         list-style: none;

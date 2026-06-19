@@ -322,6 +322,12 @@ pub trait Dimensionable: Widget {
             .insert("max-height".to_string(), value.to_string());
         self
     }
+
+    fn flex_grow(&mut self, grow: i32) -> &mut Self {
+        self.node_style
+            .insert("flex-grow".to_string(), grow.to_string());
+        self
+    }
 }
 
 /// Supported values for the CSS `position` property.

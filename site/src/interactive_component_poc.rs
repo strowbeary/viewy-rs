@@ -6,12 +6,14 @@ use viewy::prelude::*;
 use crate::core::adapters::book_library_adapter::BookLibraryAdapter;
 use crate::core::models::book::Book;
 use crate::core::ports::book_library_port::BookLibraryPort;
+use crate::ui::layouts::default_layout::default_layout;
 
 #[derive(Debug, Clone, Serialize, Deserialize, InteractiveComponentMessage)]
 #[serde(crate = "rocket::serde")]
 pub enum PaginationMessage {
     NextPage,
     PreviousPage,
+    NextPageWithMessage(String),
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize, InteractiveComponent)]
@@ -20,6 +22,7 @@ pub struct BookListPaginated {
     pub page_idx: usize,
     pub displayed_books: Vec<Book>,
     pub no_next_page: bool,
+    pub message: Option<String>,
 }
 
 impl viewy::prelude::InteractiveComponent for BookListPaginated {
@@ -28,11 +31,19 @@ impl viewy::prelude::InteractiveComponent for BookListPaginated {
     fn on_message(mut self, message: Self::Message) -> Self {
         let library = BookLibraryAdapter::new();
         match message {
-            PaginationMessage::NextPage => self.page_idx += 1,
+            PaginationMessage::NextPage => {
+                self.page_idx += 1;
+                self.message = None;
+            }
             PaginationMessage::PreviousPage => {
+                self.message = None;
                 if self.page_idx > 0 {
                     self.page_idx -= 1;
                 }
+            }
+            PaginationMessage::NextPageWithMessage(msg) => {
+                self.page_idx += 1;
+                self.message = Some(msg);
             }
         }
         self.displayed_books = library.list_books_paginated(self.page_idx, 10);
@@ -45,6 +56,10 @@ impl viewy::prelude::InteractiveComponent for BookListPaginated {
     fn render(self) -> Node {
         VStack::new(Alignment::Stretch)
             .gap(vec![scale(5)])
+            .append_child(Text::new(
+                self.message.as_deref().unwrap_or(""),
+                TextStyle::Body,
+            ))
             .append_child({
                 let mut book_list = VStack::new(Alignment::Stretch);
                 book_list.gap(vec![scale(4)]).flex_grow(1);
@@ -83,6 +98,18 @@ impl viewy::prelude::InteractiveComponent for BookListPaginated {
                             next_btn.disabled();
                         }
                         next_btn
+                    })
+                    .append_child({
+                        let mut next_btn = Button::new("Next with message", ButtonStyle::Filled);
+                        next_btn.reverse().icon(Lucide::ChevronRight).on_click(
+                            Action::TriggerMessage(PaginationMessage::NextPageWithMessage(
+                                "Hello, world!".to_string(),
+                            )),
+                        );
+                        if self.displayed_books.len() == 0 || self.no_next_page {
+                            next_btn.disabled();
+                        }
+                        next_btn
                     }),
             )
             .into()
@@ -92,9 +119,11 @@ impl viewy::prelude::InteractiveComponent for BookListPaginated {
 #[get("/interactive-component-poc")]
 pub fn interactive_component_demo() -> Page<'static> {
     let library = BookLibraryAdapter::new();
-    Page::with_title("Viewy showcase – Interactive Component PoC").with_content(
+    Page::with_title("Viewy showcase – Interactive Component PoC")
+        .with_layout(default_layout())
+        .with_content(
         VStack::new(Alignment::Stretch).gap(vec![scale(6)])
-            .padding(vec![scale(6)])
+
             .append_child(
                 VStack::new(Alignment::Stretch)
                     .gap(vec![scale(3)])
@@ -109,7 +138,7 @@ pub fn interactive_component_demo() -> Page<'static> {
                         )
                     )
             )
-            .append_child(BookListPaginated {page_idx:0,displayed_books:library.list_books_paginated(0,10), no_next_page: library
+            .append_child(BookListPaginated {message: None, page_idx:0,displayed_books:library.list_books_paginated(0,10), no_next_page: library
                 .list_books_paginated(1, 10)
                 .is_empty() })
     )

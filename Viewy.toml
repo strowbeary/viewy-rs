@@ -21,6 +21,7 @@ spacing-factor = 3
 
 [icon-packs]
 lucide = { git = "https://github.com/lucide-icons/lucide.git", path = "icons", branch = "main" }
+viewy-icons = { path = "site/assets"}
 
 [tokens]
 

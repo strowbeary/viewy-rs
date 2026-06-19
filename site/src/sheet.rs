@@ -8,18 +8,21 @@ use viewy::scale;
 
 use crate::create_button_group;
 use crate::interactive_component_poc::rocket_uri_macro_interactive_component_demo;
+use crate::ui::layouts::default_layout::default_layout;
 
 #[get("/sheet")]
 pub fn sheet() -> Page<'static> {
-    Page::with_title("Test").with_content({
-        let mut button = Button::new("Open sheet", ButtonStyle::Filled);
-        button.on_click(Action::OpenSheet {
-            edge: SheetEdge::Right,
-            sheet_content_url: uri!(interactive_component_demo()),
-            with_backdrop: true,
-        });
-        button
-    })
+    Page::with_title("Test")
+        .with_layout(default_layout())
+        .with_content({
+            let mut button = Button::new("Open sheet", ButtonStyle::Filled);
+            button.on_click(Action::OpenSheet {
+                edge: SheetEdge::Right,
+                sheet_content_url: uri!(interactive_component_demo()),
+                with_backdrop: true,
+            });
+            button
+        })
 }
 
 #[get("/sheet-content")]

@@ -3,15 +3,15 @@ use std::sync::OnceLock;
 pub mod button;
 pub mod form;
 pub mod icon;
+pub mod image;
 pub mod picker;
 #[cfg(feature = "rich-text-area")]
 pub mod rich_text_area;
 pub mod select;
 pub mod stack;
 pub mod tabs;
-pub mod view;
-
 pub mod text;
+pub mod view;
 
 pub mod breadcrumb;
 pub mod header;

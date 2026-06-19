@@ -16,6 +16,8 @@ use viewy::widgets::stack::{Alignment, HStack, Stack, VStack};
 use viewy::widgets::tabs::{Tab, TabContainer};
 use viewy::widgets::text::{Text, TextStyle};
 
+use crate::ui::layouts::default_layout::default_layout;
+
 mod core;
 mod dynroutetest;
 mod http;
@@ -24,6 +26,7 @@ mod nav_demo;
 mod picker_select;
 mod sheet;
 mod tabs;
+mod ui;
 
 fn create_button_group(style: ButtonStyle) -> VStack {
     let mut stack = VStack::new(Alignment::Start);
@@ -41,72 +44,76 @@ fn create_button_group(style: ButtonStyle) -> VStack {
 }
 #[get("/")]
 async fn home() -> Page<'static> {
-    Page::with_title("Viewy showcase – Home").with_content({
-        let mut main_stack = VStack::new(Alignment::Stretch);
+    Page::with_title("Viewy showcase – Home")
+        .with_layout(default_layout())
+        .with_content({
+            let mut main_stack = VStack::new(Alignment::Stretch);
 
-        main_stack.append_child(Text::new("Buttons", TextStyle::H1));
-        main_stack.append_child(
-            Button::new("Picker & Select demo", ButtonStyle::Outlined).on_click(Action::Navigate {
-                url: uri!(picker_select::picker_select_demo()),
-            }),
-        );
-        main_stack.append_child(
-            Button::new("Interactive component PoC", ButtonStyle::Outlined).on_click(
+            main_stack.append_child(Text::new("Buttons", TextStyle::H1));
+            main_stack.append_child(
+                Button::new("Picker & Select demo", ButtonStyle::Outlined).on_click(
+                    Action::Navigate {
+                        url: uri!(picker_select::picker_select_demo()),
+                    },
+                ),
+            );
+            main_stack.append_child(
+                Button::new("Interactive component PoC", ButtonStyle::Outlined).on_click(
+                    Action::Navigate {
+                        url: uri!(interactive_component_poc::interactive_component_demo()),
+                    },
+                ),
+            );
+            main_stack.append_child(Button::new("Sheet", ButtonStyle::Outlined).on_click(
                 Action::Navigate {
-                    url: uri!(interactive_component_poc::interactive_component_demo()),
+                    url: uri!(sheet::sheet()),
                 },
-            ),
-        );
-        main_stack.append_child(Button::new("Sheet", ButtonStyle::Outlined).on_click(
-            Action::Navigate {
-                url: uri!(sheet::sheet()),
-            },
-        ));
-        main_stack.append_child(Button::new("Navigation demo", ButtonStyle::Outlined).on_click(
-            Action::Navigate {
-                url: uri!(nav_demo::nav_code()),
-            },
-        ));
-
-        main_stack.append_child(
-            Button::new("Open popup", ButtonStyle::Filled)
-                .icon(Lucide::Plus)
-                .on_click(Action::OpenPopup {
-                    popup_content_url: uri!(popover_content()),
-                    display_window_controls: true,
+            ));
+            main_stack.append_child(
+                Button::new("Navigation demo", ButtonStyle::Outlined).on_click(Action::Navigate {
+                    url: uri!(nav_demo::nav_code()),
                 }),
-        );
+            );
 
-        main_stack
-            .gap(vec![scale(5)])
-            .padding(vec![scale(4)])
-            .append_child(create_button_group(ButtonStyle::Filled))
-            .append_child(create_button_group(ButtonStyle::Outlined))
-            .append_child(create_button_group(ButtonStyle::Flat))
-            .append_child(create_button_group(ButtonStyle::Link));
-        main_stack.append_child(Text::new("Colors", TextStyle::H1));
-        let mut color_list = VStack::new(Alignment::Stretch);
-        color_list.gap(vec![scale(3)]).flex_wrap();
-        for color in Color::iter() {
-            let mut stack = HStack::new(Alignment::Center);
-            stack.gap(vec![scale(3)]);
+            main_stack.append_child(
+                Button::new("Open popup", ButtonStyle::Filled)
+                    .icon(Lucide::Plus)
+                    .on_click(Action::OpenPopup {
+                        popup_content_url: uri!(popover_content()),
+                        display_window_controls: true,
+                    }),
+            );
 
-            let mut view = View::new();
-            view.as_card(CardStyle::OutlinedRaised)
-                .width("25px")
-                .height("25px")
-                .background_color(color);
-            stack.append_child(view);
+            main_stack
+                .gap(vec![scale(5)])
+                .padding(vec![scale(4)])
+                .append_child(create_button_group(ButtonStyle::Filled))
+                .append_child(create_button_group(ButtonStyle::Outlined))
+                .append_child(create_button_group(ButtonStyle::Flat))
+                .append_child(create_button_group(ButtonStyle::Link));
+            main_stack.append_child(Text::new("Colors", TextStyle::H1));
+            let mut color_list = VStack::new(Alignment::Stretch);
+            color_list.gap(vec![scale(3)]).flex_wrap();
+            for color in Color::iter() {
+                let mut stack = HStack::new(Alignment::Center);
+                stack.gap(vec![scale(3)]);
 
-            let mut view = View::new();
-            view.text = Some(format!("{:?}", color));
-            stack.append_child(view);
+                let mut view = View::new();
+                view.as_card(CardStyle::OutlinedRaised)
+                    .width("25px")
+                    .height("25px")
+                    .background_color(color);
+                stack.append_child(view);
 
-            color_list.append_child(stack);
-        }
-        main_stack.append_child(color_list);
-        main_stack
-    })
+                let mut view = View::new();
+                view.text = Some(format!("{:?}", color));
+                stack.append_child(view);
+
+                color_list.append_child(stack);
+            }
+            main_stack.append_child(color_list);
+            main_stack
+        })
 }
 
 #[get("/actions")]
