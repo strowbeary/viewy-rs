@@ -33,10 +33,15 @@ function isActiveLink(link, currentUrl) {
     return false;
   }
 
-  if (
-    normalizePathname(targetUrl.pathname) !==
-    normalizePathname(currentUrl.pathname)
-  ) {
+  const targetPath = normalizePathname(targetUrl.pathname);
+  const currentPath = normalizePathname(currentUrl.pathname);
+
+  const pathMatches =
+    targetPath === "/"
+      ? currentPath === "/"
+      : currentPath === targetPath || currentPath.startsWith(targetPath + "/");
+
+  if (!pathMatches) {
     return false;
   }
 

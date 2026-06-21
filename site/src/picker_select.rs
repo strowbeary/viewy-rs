@@ -8,7 +8,7 @@ pub fn picker_select_demo() -> Page<'static> {
         .with_layout(default_layout())
         .with_content({
             let mut page = VStack::new(Alignment::Stretch);
-            page.gap(vec![scale(5)]).padding(vec![scale(5)]);
+            page.gap(vec![scale(5)]);
 
             page.append_child(Text::new("Picker & Select", TextStyle::H1));
 

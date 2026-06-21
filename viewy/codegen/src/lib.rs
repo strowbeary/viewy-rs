@@ -393,3 +393,15 @@ pub fn cardifiable_derive(input: TokenStream) -> TokenStream {
     let ast = syn::parse(input).unwrap();
     modifiers::derive_marker_trait(&ast, "Cardifiable")
 }
+
+#[proc_macro_derive(Scrollable)]
+pub fn scrollable_derive(input: TokenStream) -> TokenStream {
+    let ast = syn::parse(input).unwrap();
+    modifiers::derive_marker_trait(&ast, "Scrollable")
+}
+
+#[proc_macro_derive(Positionnable)]
+pub fn positionnable_derive(input: TokenStream) -> TokenStream {
+    let ast = syn::parse(input).unwrap();
+    modifiers::derive_marker_trait(&ast, "Positionnable")
+}

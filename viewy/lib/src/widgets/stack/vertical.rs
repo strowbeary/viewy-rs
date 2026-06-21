@@ -1,9 +1,10 @@
 use crate::Widget;
 use crate::modifiers::*;
 use crate::node::Node;
+use crate::prelude::*;
 use crate::widgets::stack::{Alignment, Stack};
 
-#[derive(Widget, Appendable, Colorable, Classable, Cardifiable, BoxStylable)]
+#[derive(Widget, Appendable, Colorable, Classable, Cardifiable, Positionnable, BoxStylable)]
 #[widget(style = "./style.scss")]
 pub struct VStack {
     node: Node,

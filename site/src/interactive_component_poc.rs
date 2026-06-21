@@ -103,7 +103,10 @@ impl viewy::prelude::InteractiveComponent for BookListPaginated {
                         let mut next_btn = Button::new("Next with message", ButtonStyle::Filled);
                         next_btn.reverse().icon(Lucide::ChevronRight).on_click(
                             Action::TriggerMessage(PaginationMessage::NextPageWithMessage(
-                                "Hello, world!".to_string(),
+                                self.displayed_books
+                                    .first()
+                                    .map(|book| book.title.to_string())
+                                    .unwrap_or_default(),
                             )),
                         );
                         if self.displayed_books.len() == 0 || self.no_next_page {

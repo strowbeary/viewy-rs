@@ -368,6 +368,7 @@ pub enum Position {
     /// let position = Position::Fixed;
     /// ```
     Fixed,
+    Sticky,
 }
 
 /// Adds CSS positioning helpers.
@@ -390,6 +391,61 @@ pub trait Positionnable: Widget {
                 Position::Relative => "relative",
                 Position::Absolute => "absolute",
                 Position::Fixed => "fixed",
+                Position::Sticky => "sticky",
+            }
+            .to_string(),
+        );
+        self
+    }
+
+    fn left(&mut self, left: impl Into<String>) -> &mut Self {
+        let node: &mut Node = self.deref_mut();
+
+        node.node_style.insert("left".to_string(), left.into());
+        self
+    }
+    fn right(&mut self, right: impl Into<String>) -> &mut Self {
+        let node: &mut Node = self.deref_mut();
+
+        node.node_style.insert("right".to_string(), right.into());
+        self
+    }
+
+    fn top(&mut self, top: impl Into<String>) -> &mut Self {
+        let node: &mut Node = self.deref_mut();
+
+        node.node_style.insert("top".to_string(), top.into());
+        self
+    }
+
+    fn bottom(&mut self, bottom: impl Into<String>) -> &mut Self {
+        let node: &mut Node = self.deref_mut();
+
+        node.node_style.insert("bottom".to_string(), bottom.into());
+        self
+    }
+}
+
+pub enum Overflow {
+    Hidden,
+    Scroll,
+    ScrollX,
+    ScrollY,
+    Auto,
+}
+
+pub trait Scrollable: Widget {
+    fn overflow(&mut self, overflow: Overflow) -> &mut Self {
+        let node: &mut Node = self.deref_mut();
+
+        node.node_style.insert(
+            "overflow".to_string(),
+            match overflow {
+                Overflow::Hidden => "hidden",
+                Overflow::Scroll => "scroll",
+                Overflow::ScrollX => "scroll-x",
+                Overflow::ScrollY => "scroll-y",
+                Overflow::Auto => "auto",
             }
             .to_string(),
         );
@@ -398,6 +454,6 @@ pub trait Positionnable: Widget {
 }
 
 /// Convenience trait bundling common box styling traits.
-pub trait BoxStylable: Marginable + Borderable + Paddingable + Dimensionable {
+pub trait BoxStylable: Marginable + Borderable + Paddingable + Dimensionable + Scrollable {
     // ... potentially some additional common methods or overarching properties here ...
 }

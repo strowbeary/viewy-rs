@@ -1,5 +1,8 @@
+use rocket::response::Redirect;
 use viewy::prelude::*;
 use viewy::widgets::nav::{Nav, NavItem, NavLevel, NavOrientation};
+
+use crate::ui::layouts::default_layout::default_layout;
 
 #[derive(Clone, Copy)]
 enum NavSection {
@@ -68,11 +71,10 @@ fn build_nav(orientation: NavOrientation, level: NavLevel, section: &NavSection)
 }
 
 fn nav_demo_page(section: NavSection) -> Page<'static> {
-    Page::with_title("Nav demo").with_content({
+    Page::with_title("Nav demo").with_layout(default_layout()).with_content({
         let mut stack = VStack::new(Alignment::Stretch);
         stack
             .gap(vec![scale(5)])
-            .padding(vec![scale(5)])
             .append_child(Text::new("Navigation", TextStyle::H1))
             .append_child(Text::new(
                 "This example uses three distinct routes so the active state can be observed during real page navigation.",
@@ -94,6 +96,10 @@ fn nav_demo_page(section: NavSection) -> Page<'static> {
     })
 }
 
+#[get("/nav")]
+pub fn nav_default() -> Redirect {
+    Redirect::to(uri!(nav_code()))
+}
 #[get("/nav/code")]
 pub fn nav_code() -> Page<'static> {
     nav_demo_page(NavSection::Code)

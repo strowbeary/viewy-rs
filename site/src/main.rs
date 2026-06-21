@@ -50,30 +50,6 @@ async fn home() -> Page<'static> {
             let mut main_stack = VStack::new(Alignment::Stretch);
 
             main_stack.append_child(Text::new("Buttons", TextStyle::H1));
-            main_stack.append_child(
-                Button::new("Picker & Select demo", ButtonStyle::Outlined).on_click(
-                    Action::Navigate {
-                        url: uri!(picker_select::picker_select_demo()),
-                    },
-                ),
-            );
-            main_stack.append_child(
-                Button::new("Interactive component PoC", ButtonStyle::Outlined).on_click(
-                    Action::Navigate {
-                        url: uri!(interactive_component_poc::interactive_component_demo()),
-                    },
-                ),
-            );
-            main_stack.append_child(Button::new("Sheet", ButtonStyle::Outlined).on_click(
-                Action::Navigate {
-                    url: uri!(sheet::sheet()),
-                },
-            ));
-            main_stack.append_child(
-                Button::new("Navigation demo", ButtonStyle::Outlined).on_click(Action::Navigate {
-                    url: uri!(nav_demo::nav_code()),
-                }),
-            );
 
             main_stack.append_child(
                 Button::new("Open popup", ButtonStyle::Filled)
@@ -86,7 +62,6 @@ async fn home() -> Page<'static> {
 
             main_stack
                 .gap(vec![scale(5)])
-                .padding(vec![scale(4)])
                 .append_child(create_button_group(ButtonStyle::Filled))
                 .append_child(create_button_group(ButtonStyle::Outlined))
                 .append_child(create_button_group(ButtonStyle::Flat))
@@ -247,6 +222,7 @@ fn rocket() -> _ {
                 component,
                 actions,
                 popover_content,
+                nav_demo::nav_default,
                 nav_demo::nav_code,
                 nav_demo::nav_issues,
                 nav_demo::nav_pull_requests,

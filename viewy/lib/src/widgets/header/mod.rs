@@ -1,6 +1,6 @@
 use crate::core::widget::Widget;
 use crate::node::Node;
-use crate::prelude::{Attributable, Button, Classable, IconPack};
+use crate::prelude::*;
 use crate::widgets::nav::Nav;
 use crate::widgets::toolbar::Toolbar;
 

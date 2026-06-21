@@ -2,8 +2,7 @@ use crate::Widget;
 use crate::bindings::uri::Uri;
 use crate::modifiers::Appendable;
 use crate::node::{Node, NodeType};
-use crate::prelude::Classable;
-use crate::prelude::{Attributable, Cardifiable, View};
+use crate::prelude::*;
 
 #[derive(Widget, Classable, Attributable, Cardifiable)]
 #[widget(style = "./style.scss")]

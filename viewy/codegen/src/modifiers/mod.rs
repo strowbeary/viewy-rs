@@ -32,6 +32,7 @@ pub fn derive_box_stylable_bundle(
         impl #viewy::modifiers::Borderable for #name {}
         impl #viewy::modifiers::Paddingable for #name {}
         impl #viewy::modifiers::Dimensionable for #name {}
+        impl #viewy::modifiers::Scrollable for #name {}
         impl #viewy::modifiers::BoxStylable for #name {}
     }
     .into()

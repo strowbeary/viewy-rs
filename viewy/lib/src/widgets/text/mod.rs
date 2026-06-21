@@ -1,7 +1,6 @@
 use crate::Widget;
 use crate::node::{Node, NodeType};
-use crate::prelude::Attributable;
-use crate::prelude::Classable;
+use crate::prelude::*;
 
 #[derive(Debug)]
 pub enum TextStyle {

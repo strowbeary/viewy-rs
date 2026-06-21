@@ -12,8 +12,11 @@ pub fn default_layout<'a>() -> Layout<'a> {
             .height("100vh")
             .padding(vec![scale(6)])
             .gap(vec![scale(6)])
+            .overflow(Overflow::Auto)
             .append_child(
                 VStack::new(Alignment::Stretch)
+                    .position(Position::Sticky)
+                    .top("0")
                     .gap(vec![scale(6)])
                     .height("100%")
                     .min_width(&sp(200))
@@ -25,6 +28,10 @@ pub fn default_layout<'a>() -> Layout<'a> {
                             .append_child(
                                 Nav::new(viewy::widgets::nav::NavOrientation::Vertical)
                                     .add_item(NavItem::new("Home", uri!(crate::home())))
+                                    .add_item(NavItem::new(
+                                        "Navigation",
+                                        uri!(crate::nav_demo::nav_default()),
+                                    ))
                                     .add_item(NavItem::new(
                                         "Forms",
                                         uri!(crate::picker_select::picker_select_demo()),
