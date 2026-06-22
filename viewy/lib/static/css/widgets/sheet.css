@@ -62,7 +62,6 @@
 
 .sheet__panel__content {
     overflow: auto;
-    padding: calc(23 / 16 * 1rem);
 }
 
 .sheet.sheet--edge-right .sheet__panel {

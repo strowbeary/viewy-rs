@@ -18,29 +18,45 @@ export function startViewy(root) {
   );
 }
 
-function build_morph_target(injection_root, injectable_content) {
+function build_morph_target(injection_root, injectable_content, replaceRoot) {
+  if (!replaceRoot) {
+    const container = injection_root.cloneNode();
+    container.innerHTML = injectable_content;
+    return container;
+  }
+
   const template = document.createElement("template");
   template.innerHTML = injectable_content.trim();
 
   const first_element = template.content.firstElementChild;
+  const has_only_one_top_level_element = Array.from(
+    template.content.childNodes,
+  ).every((node) => {
+    if (node.nodeType === Node.ELEMENT_NODE) {
+      return node === first_element;
+    }
+
+    return (node.textContent || "").trim() === "";
+  });
   const has_single_element =
     first_element &&
     template.content.childElementCount === 1 &&
-    template.content.textContent.trim() === "";
+    has_only_one_top_level_element;
 
-  if (has_single_element) {
-    return first_element;
+  if (!has_single_element) {
+    throw new Error(
+      "replaceRoot requires injectable content with a single root element",
+    );
   }
 
-  const container = injection_root.cloneNode();
-  container.innerHTML = injectable_content;
-  return container;
+  return first_element;
 }
 
 export async function load_injectable_content(
   url,
   injection_root,
   request_options = {},
+  replaceRoot = false,
 ) {
   const headers = new Headers(request_options.headers || {});
   if (!headers.has("x-viewy-render-mode")) {
@@ -55,7 +71,11 @@ export async function load_injectable_content(
     throw new Error(`Request failed with status ${res.status}`);
   }
   let injectable_content = await res.text();
-  let morph_target = build_morph_target(injection_root, injectable_content);
+  let morph_target = build_morph_target(
+    injection_root,
+    injectable_content,
+    replaceRoot,
+  );
   let result = morphdom(injection_root, morph_target, {
     onElUpdated(el) {
       if (el.__hasListeners) {
@@ -104,7 +124,7 @@ window.addEventListener("startViewy", (event) => {
     (typeof root.matches === "function" &&
       root.matches('[data-v-component-host="true"]'))
   ) {
-    import("viewy/widgets/interactive_component.js").then((interactive) => {
+    import("./interactive_component.js").then((interactive) => {
       interactive.init(root);
     });
   }

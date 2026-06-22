@@ -32,8 +32,12 @@ impl Nav {
         self
     }
 
-    pub fn add_item(&mut self, item: NavItem) -> &mut Self {
-        self.nav_items.push(item);
+    pub fn add_item<C>(&mut self, item: C) -> &mut Self
+    where
+        C: Into<NavItem>,
+    {
+        self.nav_items.push(item.into());
+
         self
     }
 

@@ -1,4 +1,4 @@
-import { load_injectable_content } from "../core.js";
+import { load_injectable_content } from "./core.js";
 
 const COMPONENT_HOST_SELECTOR = '[data-v-component-host="true"]';
 const COMPONENT_MESSAGE_SELECTOR = "[data-v-component-msg]";
@@ -70,13 +70,18 @@ async function dispatchHypermediaComponentMessage(host, rawMessage) {
   form.set("_v_component_msg", rawMessage);
   form.set("_v_component_version", String(context.version));
   form.set("_v_component_state", context.serializedState);
-  await load_injectable_content(context.eventUrl, host, {
-    method: "POST",
-    headers: {
-      "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
+  await load_injectable_content(
+    context.eventUrl,
+    host,
+    {
+      method: "POST",
+      headers: {
+        "content-type": "application/x-www-form-urlencoded;charset=UTF-8",
+      },
+      body: form.toString(),
     },
-    body: form.toString(),
-  });
+    true,
+  );
 }
 
 function bindTrigger(trigger) {

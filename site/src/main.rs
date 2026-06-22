@@ -3,6 +3,8 @@ extern crate rocket;
 #[macro_use]
 extern crate viewy;
 
+use std::default;
+
 use rocket::fs::{FileServer, relative};
 use rocket::serde::uuid::Uuid;
 use sheet::rocket_uri_macro_sheet;
@@ -94,41 +96,8 @@ async fn home() -> Page<'static> {
 #[get("/actions")]
 async fn actions() -> Page<'static> {
     Page::with_title("Viewy showcase – Actions")
-        .with_layout(&|content: Node| {
-            VStack::new(Alignment::Center)
-                .gap(vec![scale(5)])
-                .append_child(Text::new("Layout", TextStyle::Body))
-                .append_child(content)
-                .into()
-        })
-        .with_content({
-            let mut main_stack = VStack::new(Alignment::Stretch);
-            let popup_id = Uuid::new_v4();
-
-            main_stack
-                .as_card(CardStyle::FilledRaised)
-                .gap(vec![scale(4)])
-                .padding(vec![scale(4)])
-                .append_child(Button::new("Open popup", ButtonStyle::Filled).on_click(
-                    Action::OpenPopup {
-                        popup_content_url: uri!(popover_content()),
-                        display_window_controls: true,
-                    },
-                ))
-                .append_child(Button::new("Benchmark", ButtonStyle::Filled).on_click(
-                    Action::OpenPopup {
-                        popup_content_url: uri!(benchmark()),
-                        display_window_controls: true,
-                    },
-                ))
-                .append_child(Button::new("Open popover", ButtonStyle::Filled).on_click(
-                    Action::OpenPopover {
-                        popover_content_url: uri!(popover_content()),
-                    },
-                ));
-
-            main_stack
-        })
+        .with_layout(default_layout())
+        .with_content(ui::views::actions::actions())
 }
 
 #[get("/popover-content")]
@@ -163,7 +132,11 @@ async fn popover_content() -> Page<'static> {
 fn benchmark() -> Page<'static> {
     Page::with_title("Benchmark viewy").with_content({
         let mut stack = VStack::new(Alignment::Center);
-        stack.gap(vec![scale(3)]).padding(vec![scale(4)]);
+
+        stack
+            .gap(vec![scale(3)])
+            .padding(vec![scale(4)])
+            .overflow(Overflow::Auto);
         let buttons: Vec<Node> = (0..50000)
             .map(|i| Button::new(&format!("Button {i}"), ButtonStyle::Filled).into())
             .collect();
@@ -210,6 +183,13 @@ fn component() -> Page<'static> {
     })
 }
 
+#[get("/texts")]
+fn texts() -> Page<'static> {
+    Page::with_title("Text Styles")
+        .with_layout(default_layout())
+        .with_content({ ui::views::texts::texts() })
+}
+
 #[launch]
 fn rocket() -> _ {
     rocket::build()
@@ -230,6 +210,7 @@ fn rocket() -> _ {
                 tabs::tab1,
                 tabs::tab2,
                 tabs::tab3,
+                texts,
                 sheet::sheet,
                 sheet::sheet_content,
                 picker_select::picker_select_demo,

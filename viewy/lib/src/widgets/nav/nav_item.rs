@@ -6,7 +6,7 @@ use crate::widgets::icon::{Icon, IconPack};
 use crate::widgets::text::{Text, TextStyle};
 use crate::widgets::view::View;
 
-#[derive(Widget)]
+#[derive(Widget, Clone)]
 #[widget(style = "./nav-item.scss")]
 pub struct NavItem {
     node: Node,
@@ -64,5 +64,11 @@ impl NavItem {
         link.append_child(Text::new(&self.label, TextStyle::Body));
 
         self.node.children.push(link.into());
+    }
+}
+
+impl Into<NavItem> for &mut NavItem {
+    fn into(self) -> NavItem {
+        self.clone()
     }
 }

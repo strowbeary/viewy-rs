@@ -16,6 +16,7 @@ pub mod view;
 pub mod breadcrumb;
 pub mod header;
 
+pub mod field;
 pub mod nav;
 pub mod sheet;
 pub mod tag;
