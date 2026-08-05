@@ -49,10 +49,10 @@ impl NavItem {
 
         let mut link = View::new();
 
-        Action::Navigate {
+        let action: Action = Action::Navigate {
             url: self.url.clone(),
-        }
-        .apply("click", &mut link);
+        };
+        action.apply("click", &mut link);
 
         if let Some(icon_from_pack) = self.icon.clone() {
             let mut icon = Icon::new(icon_from_pack);

@@ -107,10 +107,4 @@ impl Button {
     }
 }
 
-impl OnClickActionnable for Button {
-    fn on_click(&mut self, action: crate::prelude::Action) -> &mut Self {
-        action.apply("click", self);
-
-        self
-    }
-}
+impl OnClickActionnable for Button {}

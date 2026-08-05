@@ -110,7 +110,7 @@ pub enum Action<'a> {
         form_name: &'a str,
         inject_into: Option<&'a str>,
     },
-    /// Trigger one interactive component message payload.
+    /// Trigger one interactive component message.
     ///
     /// Runtime attributes:
     /// - `data-v-component-msg=<encoded-message>`
@@ -120,41 +120,22 @@ pub enum Action<'a> {
     /// ```rust,ignore
     /// use viewy::prelude::*;
     ///
-    /// let action = Action::TriggerMessagePayload {
-    ///     encoded_message: "hex:7b7d".to_string(),
-    /// };
-    /// ```
-    TriggerMessagePayload { encoded_message: String },
-}
-
-impl Action<'_> {
-    /// Build an interactive action that triggers a component message.
-    ///
-    /// The message is encoded for HTML transport and stored in
-    /// `data-v-component-msg`.
-    ///
-    /// # Example
-    /// ```rust,ignore
-    /// use viewy::prelude::*;
-    ///
     /// #[derive(serde::Serialize, serde::Deserialize, InteractiveComponentMessage)]
     /// enum Msg { Increment }
     ///
-    /// let action = Action::trigger_message(&Msg::Increment).expect("encode");
+    /// let action = Action::TriggerMessage(Msg::Increment);
     /// ```
-    pub fn trigger_message<M>(message: &M) -> Result<Action<'static>, String>
-    where
-        M: InteractiveComponentMessage,
-    {
-        Ok(Action::TriggerMessagePayload {
-            encoded_message: message.encode_for_transport()?,
-        })
-    }
+    #[doc(hidden)]
+    ComponentMessage { encoded_message: String },
+}
 
-    /// Ergonomic constructor for interactive messages.
+impl Action<'_> {
+    /// Build an action that triggers one interactive component message.
     ///
-    /// This enables API usage such as:
-    /// `Action::TriggerMessage(MyMessage::Increment)`.
+    /// The message must be JSON-serializable. Serialization failures are
+    /// programmer errors for UI messages, so this constructor panics with a
+    /// concrete explanation instead of pushing `Result` through every widget
+    /// action helper.
     ///
     /// # Example
     /// ```rust,ignore
@@ -170,8 +151,14 @@ impl Action<'_> {
     where
         M: InteractiveComponentMessage,
     {
-        Action::trigger_message(&message)
-            .unwrap_or_else(|err| panic!("Cannot encode interactive component message: {err}"))
+        let encoded_message = message.encode_for_transport().unwrap_or_else(|err| {
+            panic!(
+                "Cannot encode interactive component message. \
+InteractiveComponentMessage types must be JSON-serializable. Error: {err}"
+            )
+        });
+
+        Action::ComponentMessage { encoded_message }
     }
 
     /// Apply necessary modification depending on the action so the javascript can act accordingly
@@ -261,8 +248,8 @@ impl Action<'_> {
                     .attributes
                     .insert("data-v-url".to_string(), sheet_content_url.to_string());
             }
-            Action::SubmitForm { form_name, .. } => {}
-            Action::TriggerMessagePayload { encoded_message } => {
+            Action::SubmitForm { .. } => {}
+            Action::ComponentMessage { encoded_message } => {
                 widget.attributes.insert(
                     "data-v-component-msg".to_string(),
                     encoded_message.to_string(),
@@ -311,26 +298,6 @@ pub trait OnClickActionnable: Widget {
         action.apply("dblclick", self);
         self
     }
-
-    /// Attach an interactive component message to the `click` event.
-    ///
-    /// # Example
-    /// ```rust,ignore
-    /// use viewy::prelude::*;
-    ///
-    /// #[derive(serde::Serialize, serde::Deserialize, InteractiveComponentMessage)]
-    /// enum Msg { Next }
-    ///
-    /// let mut button = Button::new("Next", ButtonStyle::Filled);
-    /// button.on_click_message(&Msg::Next).expect("encode");
-    /// ```
-    fn on_click_message<M>(&mut self, message: &M) -> Result<&mut Self, String>
-    where
-        M: InteractiveComponentMessage,
-    {
-        let action = Action::trigger_message(message)?;
-        Ok(self.on_click(action))
-    }
 }
 
 /// Adds keyboard-triggered action helpers.
@@ -378,25 +345,5 @@ pub trait InputActionnable: Widget {
     fn on_focus(&mut self, action: Action) -> &mut Self {
         action.apply("focus", self);
         self
-    }
-
-    /// Attach an interactive component message to the `change` event.
-    ///
-    /// # Example
-    /// ```rust,ignore
-    /// use viewy::prelude::*;
-    ///
-    /// #[derive(serde::Serialize, serde::Deserialize, InteractiveComponentMessage)]
-    /// enum Msg { Changed }
-    ///
-    /// let mut input = Select::new("country", "");
-    /// input.on_change_message(&Msg::Changed).expect("encode");
-    /// ```
-    fn on_change_message<M>(&mut self, message: &M) -> Result<&mut Self, String>
-    where
-        M: InteractiveComponentMessage,
-    {
-        let action = Action::trigger_message(message)?;
-        Ok(self.on_change(action))
     }
 }

@@ -81,10 +81,10 @@
     top: auto;
     left: 0;
     right: 0;
-    width: 100%;
     height: var(--sheet-size);
     transform: translateY(100%);
     border-radius: 1rem 1rem 0 0;
+    margin: auto;
 }
 
 .sheet.sheet--loading .sheet__panel__loader {
