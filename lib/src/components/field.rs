@@ -30,7 +30,7 @@ fn multi_value_row(
             input
         })
         .append_child({
-            let mut btn = Button::icon_only(Lucide::Trash2, ButtonStyle::Flat);
+            let mut btn = Button::icon_only(Lucide::Trash, ButtonStyle::Flat);
             btn.destructive();
             btn
         });

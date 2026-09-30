@@ -1,7 +1,7 @@
 use std::ops::DerefMut;
 
 use node::Node;
-use viewy::components::icons::Lucide;
+use viewy::components::icons::{Lucide, SimpleIcons};
 use viewy::components::*;
 use viewy::*;
 
@@ -65,7 +65,7 @@ pub fn default_layout() -> Layout {
                             HStack::new(Alignment::Center)
                                 .append_child(
                                     Button::new("Sources", ButtonStyle::Flat)
-                                        .icon(Lucide::Github)
+                                        .icon(SimpleIcons::IconGithub)
                                         .action("https://github.com/strowbeary/viewy-rs"),
                                 )
                                 .append_child(
